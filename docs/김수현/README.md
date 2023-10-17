@@ -194,3 +194,8 @@ https://colab.research.google.com/drive/1zGPrh-qxscYU2mvhiv8rrjqEn0WHnOOF?usp=sh
 # 📌UCC 아이디어
 
 - 클론대결(선글라스 쓴 슬호 vs 노말 슬호) - 이기고 나서 사라져라, 가짜
+
+### 23-10-17
+
+## 페이지 흐름도
+![image.png](./image.png)
