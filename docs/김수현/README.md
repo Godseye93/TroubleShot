@@ -212,3 +212,11 @@ https://colab.research.google.com/drive/1zGPrh-qxscYU2mvhiv8rrjqEn0WHnOOF?usp=sh
 ### 주제 아이디어
 트러블 슈팅을 간편하게 올릴 수 있는 플러그 인 및 서비스 개발
 
+### 23-10-19
+
+## 기능 명세서
+https://www.notion.so/1fdbbd9475194fa68e6cd5728dc22635?v=abaad4be70844361bbf7c293bb5e918f
+
+## 아키텍처
+![image-1.png](./image-1.png)
+
