@@ -13,7 +13,6 @@ import lombok.Setter;
 import lombok.ToString;
 
 
-@ToString
 @Getter
 @Setter
 @AllArgsConstructor
@@ -46,9 +45,9 @@ public class MemberDTO extends BaseDTO {
 			.nickname(nickname)
 			.password(password)
 			.profileImg(profileImg)
-			.createTime(createTime)
-			.updateTime(updateTime)
-			.deleteTime(deleteTime)
+			.locale(locale)
 			.build();
 	}
+
+
 }

@@ -12,6 +12,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Getter
@@ -26,28 +27,39 @@ public class MemberEntity extends BaseEntity {
 	private String locale;
 
 	@Builder
-	public MemberEntity(String email, String password, String profileImg, String locale,Long seq,String nickname,
-		LocalDateTime createTime, LocalDateTime updateTime, LocalDateTime deleteTime){
+	public MemberEntity(String email, String password, String profileImg, String locale,String nickname){
 		this.email = email;
 		this.password = password;
 		this.nickname = nickname;
 		this.locale = locale;
 		this.profileImg = profileImg;
-		this.createTime = createTime;
-		this.updateTime = updateTime;
-		this.deleteTime = deleteTime;
 	}
 
 	public MemberDTO toMemberDTO(){
 		return MemberDTO.builder()
+			.seq(getSeq())
 			.email(email)
-			.password(password)
 			.nickname(nickname)
 			.locale(locale)
 			.profileImg(profileImg)
-			.createTime(createTime)
-			.deleteTime(deleteTime)
-			.updateTime(updateTime)
+			.createTime(getCreateTime())
+			.deleteTime(getDeleteTime())
+			.updateTime(getUpdateTime())
 			.build();
+	}
+
+	@Override
+	public String toString() {
+		return "MemberEntity{" +
+			"email='" + email + '\'' +
+			", password='" + password + '\'' +
+			", profileImg='" + profileImg + '\'' +
+			", nickname='" + nickname + '\'' +
+			", locale='" + locale + '\'' +
+			", seq='" + getSeq() + '\'' +
+			", createTime='" + getCreateTime() + '\'' +
+			", updateTime='" + getUpdateTime() + '\'' +
+			", deleteTime='" + getDeleteTime() + '\'' +
+			'}';
 	}
 }

@@ -1,5 +1,6 @@
 package com.orientalSalad.troubleShot.global.dto;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import org.springframework.data.annotation.CreatedDate;
@@ -20,7 +21,7 @@ import lombok.ToString;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class BaseDTO {
+public class BaseDTO  implements Serializable {
 	public Long seq;
 	public LocalDateTime createTime;
 	public LocalDateTime updateTime;

@@ -4,29 +4,35 @@ import java.time.LocalDateTime;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name="base")
 @Inheritance(strategy = InheritanceType.JOINED)
+@Getter
+@Setter
 @NoArgsConstructor
+@EntityListeners(AuditingEntityListener.class)	//@CreateDate, @LastModifiedDate를 위한 어노테이션
 public class BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	public Long seq;
+	private Long seq;
 
 	@CreatedDate
-	public LocalDateTime createTime;
+	private LocalDateTime createTime;
 	@LastModifiedDate
-	public LocalDateTime updateTime;
-	public LocalDateTime deleteTime;
+	private LocalDateTime updateTime;
+	private LocalDateTime deleteTime;
 }
