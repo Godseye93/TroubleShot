@@ -1,7 +1,5 @@
 package com.orientalSalad.troubleShot.login.controller;
 
-import org.apache.coyote.Response;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,11 +27,21 @@ public class LoginController {
 	public ResponseEntity<?> login(@RequestBody LoginDTO loginDTO, HttpSession httpSession){
 		log.info("=== 로그인 시작 ===");
 		MemberDTO memberDTO = memberService.findMemberByEmailAndPassword(loginDTO);
-
+		
+		//유저가 없는 경우
 		if(memberDTO == null){
 			ResultDTO resultDTO = ResultDTO.builder()
 				.success(false)
 				.message("아이디 또는 비밀번호가 존재하지 않거나 일치하지 않습니다.")
+				.build();
+
+			return new ResponseEntity<ResultDTO>(resultDTO, HttpStatus.ACCEPTED);
+		}
+		//탈퇴한 유저인 경우
+		else if(memberDTO.getDeleteTime() != null){
+			ResultDTO resultDTO = ResultDTO.builder()
+				.success(false)
+				.message("이미 탈퇴한 회원입니다.")
 				.build();
 
 			return new ResponseEntity<ResultDTO>(resultDTO, HttpStatus.ACCEPTED);
@@ -75,6 +83,10 @@ public class LoginController {
 		log.info(memberDTO);
 
 		//로그아웃 성공
+
+		//세션 삭제
+		httpSession.invalidate();;
+
 		String msg = seq+"번 유저의 로그아웃이 성공했습니다.";
 
 		ResultDTO resultDTO = ResultDTO.builder()

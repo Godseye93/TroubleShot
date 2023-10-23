@@ -46,6 +46,9 @@ dependencies {
 	runtimeOnly 'org.postgresql:postgresql'
 	//junit
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	//이메일
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
+
 }
 
 tasks.named('test') {
