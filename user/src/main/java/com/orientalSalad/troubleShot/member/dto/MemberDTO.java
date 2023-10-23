@@ -23,14 +23,16 @@ public class MemberDTO extends BaseDTO {
 	private String password;
 	private String profileImg;
 	private String nickname;
+	private String locale;
 
 	@Builder
-	public MemberDTO(String email, String password, String profileImg, Long seq, String nickname,
+	public MemberDTO(String email, String password, String nickname, String profileImg, String locale, Long seq,
 		 LocalDateTime createTime, LocalDateTime updateTime, LocalDateTime deleteTime){
 		this.email = email;
 		this.password = password;
-		this.nickname = nickname;
 		this.profileImg = profileImg;
+		this.nickname = nickname;
+		this.locale = locale;
 		this.seq = seq;
 		this.createTime = createTime;
 		this.updateTime = updateTime;
@@ -41,8 +43,8 @@ public class MemberDTO extends BaseDTO {
 	public MemberEntity toMemberEntity(){
 		return MemberEntity.builder()
 			.email(email)
-			.password(password)
 			.nickname(nickname)
+			.password(password)
 			.profileImg(profileImg)
 			.createTime(createTime)
 			.updateTime(updateTime)

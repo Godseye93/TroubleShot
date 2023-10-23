@@ -23,13 +23,15 @@ public class MemberEntity extends BaseEntity {
 	private String password;
 	private String profileImg;
 	private String nickname;
+	private String locale;
 
 	@Builder
-	public MemberEntity(String email, String password, String profileImg, Long seq,String nickname,
+	public MemberEntity(String email, String password, String profileImg, String locale,Long seq,String nickname,
 		LocalDateTime createTime, LocalDateTime updateTime, LocalDateTime deleteTime){
 		this.email = email;
 		this.password = password;
 		this.nickname = nickname;
+		this.locale = locale;
 		this.profileImg = profileImg;
 		this.createTime = createTime;
 		this.updateTime = updateTime;
@@ -41,6 +43,7 @@ public class MemberEntity extends BaseEntity {
 			.email(email)
 			.password(password)
 			.nickname(nickname)
+			.locale(locale)
 			.profileImg(profileImg)
 			.createTime(createTime)
 			.deleteTime(deleteTime)

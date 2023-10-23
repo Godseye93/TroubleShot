@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 public class HashEncrypt {
 	public String hashWithSHA256(String textToHash) {
 		try {
-			// sha-256으로 메시지 다이제스트 생성 	
+			// sha-256으로 메시지 다이제스트 생성기 객체 생성
 			MessageDigest md = MessageDigest.getInstance("SHA-256");
 
 			//해싱
