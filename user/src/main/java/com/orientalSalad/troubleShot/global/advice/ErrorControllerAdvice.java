@@ -19,7 +19,7 @@ public class ErrorControllerAdvice {
 		e.printStackTrace();;
 
 		ResultDTO resultDTO = ResultDTO.builder()
-							.success("false")
+							.success(false)
 							.message(e.getMessage())
 							.build();
 

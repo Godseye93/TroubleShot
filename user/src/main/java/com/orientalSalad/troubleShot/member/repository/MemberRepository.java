@@ -7,6 +7,7 @@ import com.orientalSalad.troubleShot.member.entity.MemberEntity;
 
 @Repository
 public interface MemberRepository extends JpaRepository<MemberEntity,Long> {
-	public MemberEntity findMemberEntityBySeq(Long seq);
-	public MemberEntity findMemberEntityByEmailAndPassword(String email, String password);
+	MemberEntity findMemberEntityBySeq(Long seq);
+	Long countMemberEntityByEmail(String email);
+	MemberEntity findMemberEntityByEmailAndPassword(String email, String password);
 }

@@ -49,5 +49,14 @@ public class MemberDTO extends BaseDTO {
 			.build();
 	}
 
-
+	@Override
+	public String toString() {
+		return "MemberDTO{" +
+			"seq=" + seq +
+			", createTime=" + createTime +
+			", updateTime=" + updateTime +
+			", deleteTime=" + deleteTime +
+			", locale='" + locale + '\'' +
+			'}';
+	}
 }

@@ -1,7 +1,5 @@
 package com.orientalSalad.troubleShot.member.entity;
 
-import java.time.LocalDateTime;
-
 import com.orientalSalad.troubleShot.global.entity.BaseEntity;
 import com.orientalSalad.troubleShot.member.dto.MemberDTO;
 
@@ -12,12 +10,9 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 @Entity
-@Getter
 @Table(name="member")
-@DiscriminatorValue("member")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MemberEntity extends BaseEntity {
 	private String email;
