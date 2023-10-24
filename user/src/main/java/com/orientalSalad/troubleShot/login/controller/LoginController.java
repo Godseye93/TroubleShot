@@ -56,7 +56,8 @@ public class LoginController {
 		return new ResponseEntity<ResultDTO>(resultDTO, HttpStatus.ACCEPTED);
 	}
 
-	@Operation(summary = "로그아웃 API")
+	@Operation(summary = "로그아웃 API",
+		description = "로그아웃 할 유저 pk 하나만 보내면 됨")
 	@PostMapping("/logout")
 	public ResponseEntity<?> logout(@RequestBody Long seq, HttpSession session) throws Exception {
 		log.info("=== 로그아웃 시작 ===");

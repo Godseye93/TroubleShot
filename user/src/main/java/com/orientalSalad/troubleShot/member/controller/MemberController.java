@@ -63,7 +63,7 @@ public class MemberController {
 	@Operation(summary = "유저 pk로 유저의 정보를 가져오는 API")
 	@GetMapping("/{userSeq}")
 	public ResponseEntity<?> findMemberBySeq (
-		@PathVariable(name = "userSeq")Long userSeq){
+		@PathVariable(name = "userSeq") Long userSeq){
 		log.info("==== 유저 찾기 시작 ====");
 
 		MemberDTO memberDTO = memberService.findMemberBySeq(userSeq);

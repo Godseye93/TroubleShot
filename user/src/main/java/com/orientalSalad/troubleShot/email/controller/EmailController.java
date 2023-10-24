@@ -23,7 +23,9 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class EmailController {
 	private final EmailService emailService;
-	@Operation(summary = "이메일 인증 번호 전송 API")
+	@Operation(summary = "이메일 인증 번호 전송 API",
+		description = "이메일 하나 보내면 됨"
+	)
 	@PostMapping("/email/send")
 	public ResponseEntity<?> sendAuthCodeEmail(@RequestBody String email,HttpSession session) throws MessagingException {
 		// 이메일 발신될 데이터 적재
