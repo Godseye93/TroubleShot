@@ -2,51 +2,71 @@ package com.orientalSalad.troubleShot.email.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.orientalSalad.troubleShot.email.dto.AuthCodeDTO;
 import com.orientalSalad.troubleShot.email.service.EmailService;
 import com.orientalSalad.troubleShot.global.dto.ResultDTO;
-import com.orientalSalad.troubleShot.global.utill.CodeMaker;
 
 import jakarta.mail.MessagingException;
-import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
 @RestController
-@RequestMapping(path = "/email")
+@RequestMapping(path = "/auth")
 @RequiredArgsConstructor
 @Log4j2
 public class EmailController {
-	private final JavaMailSender javaMailSender;
 	private final EmailService emailService;
 
-	@PostMapping("/auth/send")
-	public ResponseEntity<?> login(@RequestBody String email, HttpSession httpSession) throws MessagingException {
+	@PostMapping("/email/send")
+	public ResponseEntity<?> sendAuthCodeEmail(@RequestBody String email,HttpSession session) throws MessagingException {
 		// 이메일 발신될 데이터 적재
-		MimeMessage message = javaMailSender.createMimeMessage();
-		MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
-		helper.setFrom("khnemu@naver.com");
-		helper.setTo(email);
-		helper.setSubject("[TroubleShot] 인증 코드 메일");
+		log.info("====인증 이메일 발송 시작====");
+		log.info(email);
 
-		String emailContext = emailService.getAuthEmail();
-		helper.setText(emailContext, true);
+		AuthCodeDTO authCodeDTO = emailService.sendAuthEmail(email);
 
-		// 이메일 발신
-		javaMailSender.send(message);
+		session.setAttribute("auth-"+email,authCodeDTO);
 
 		ResultDTO resultDTO = ResultDTO.builder()
 			.success(true)
 			.message(email+"로 이메일 발송이 성공했습니다.")
 			.build();
 
+		log.info("====인증 이메일 발송 끝====");
+		return new ResponseEntity<ResultDTO>(resultDTO, HttpStatus.ACCEPTED);
+	}
+	@PostMapping("/email/confirm")
+	public ResponseEntity<?> confirmAuthCodeEmail(@RequestBody AuthCodeDTO authCodeDTO, HttpSession session) throws
+		Exception {
+		log.info("====인증 코드 확인 시작====");
+		log.info(authCodeDTO);
+
+		AuthCodeDTO sessionAuthCode = (AuthCodeDTO)session.getAttribute("auth-"+authCodeDTO.getEmail());
+
+		log.info(sessionAuthCode.toString());
+
+		ResultDTO resultDTO = null;
+
+		if(authCodeDTO.getCode().equals(sessionAuthCode.getCode())){
+			session.removeAttribute("auth-"+authCodeDTO.getEmail());
+			resultDTO = ResultDTO.builder()
+				.message("인증을 성공했습니다.")
+				.success(true)
+				.build();
+		}else{
+			resultDTO = ResultDTO.builder()
+				.message("인증을 실패했습니다.")
+				.success(false)
+				.build();
+		}
+
+		log.info("====인증 코드 확인 끝====");
 		return new ResponseEntity<ResultDTO>(resultDTO, HttpStatus.ACCEPTED);
 	}
 }

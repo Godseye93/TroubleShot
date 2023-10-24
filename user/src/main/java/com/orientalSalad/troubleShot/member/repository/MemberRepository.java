@@ -9,5 +9,5 @@ import com.orientalSalad.troubleShot.member.entity.MemberEntity;
 public interface MemberRepository extends JpaRepository<MemberEntity,Long> {
 	MemberEntity findMemberEntityBySeq(Long seq);
 	Long countMemberEntityByEmail(String email);
-	MemberEntity findMemberEntityByEmailAndPassword(String email, String password);
+	MemberEntity findMemberEntityByEmailAndPasswordAndDeleteTimeIsNull(String email, String password);
 }

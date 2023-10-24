@@ -26,7 +26,6 @@ public class MemberService {
 		//이미 이메일이 존재하면
 		if(exist > 0){
 			log.info(memberDTO.getEmail()+"은 이미 존재하는 이메일 입니다.");
-
 			return false;
 		}
 		
@@ -54,7 +53,7 @@ public class MemberService {
 		//sha-256으로 비밀번호 해싱
 		loginDTO.setPassword(hashEncrypt.hashWithSHA256(loginDTO.getPassword()));
 
-		MemberEntity memberEntity = memberRepository.findMemberEntityByEmailAndPassword(loginDTO.getEmail(),loginDTO.getPassword());
+		MemberEntity memberEntity = memberRepository.findMemberEntityByEmailAndPasswordAndDeleteTimeIsNull(loginDTO.getEmail(),loginDTO.getPassword());
 
 		//없는 유저인 경우
 		if(memberEntity == null){
