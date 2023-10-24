@@ -1,4 +1,4 @@
-package com.orientalSalad.troubleShot.login.DTO;
+package com.orientalSalad.troubleShot.login.dto;
 
 import lombok.Builder;
 import lombok.Getter;

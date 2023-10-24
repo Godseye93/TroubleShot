@@ -1,4 +1,4 @@
-package com.orientalSalad.troubleShot.global.encrypt;
+package com.orientalSalad.troubleShot.global.utill;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

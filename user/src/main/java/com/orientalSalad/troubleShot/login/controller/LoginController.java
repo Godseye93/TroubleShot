@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.orientalSalad.troubleShot.global.dto.ResultDTO;
-import com.orientalSalad.troubleShot.login.DTO.LoginDTO;
+import com.orientalSalad.troubleShot.login.dto.LoginDTO;
 import com.orientalSalad.troubleShot.member.dto.MemberDTO;
 import com.orientalSalad.troubleShot.member.service.MemberService;
 
