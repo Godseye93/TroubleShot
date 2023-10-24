@@ -13,6 +13,9 @@ import com.orientalSalad.troubleShot.global.dto.ResultDTO;
 import com.orientalSalad.troubleShot.member.dto.MemberDTO;
 import com.orientalSalad.troubleShot.member.service.MemberService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
@@ -23,10 +26,18 @@ import lombok.extern.log4j.Log4j2;
 public class MemberController {
 	private final MemberService memberService;
 
+	@Operation(summary = "회원가입 API",
+		description = "필수 값 : "
+			+ "이메일, 비밀번호, 닉네임, 국적")
 	@PostMapping()
-	public ResponseEntity<?> insertMember(@RequestBody MemberDTO memberDTO){
+	public ResponseEntity<?> insertMember(@RequestBody MemberDTO memberDTO) throws Exception{
 		log.info("==== 유저 회원가입 시작 ====");
 		log.info(memberDTO);
+
+		if(!memberDTO.validate()){
+			throw new Exception("올바르지 않은 필드 값입니다.");
+		}
+
 		Boolean success = memberService.insertMember(memberDTO);
 		
 		//회원가입이 실패하면(이메일 중복)
@@ -48,8 +59,11 @@ public class MemberController {
 		log.info("==== 유저 회원가입 끝 ====");
 		return new ResponseEntity<>("success", HttpStatus.ACCEPTED);
 	}
+
+	@Operation(summary = "유저 pk로 유저의 정보를 가져오는 API")
 	@GetMapping("/{userSeq}")
-	public ResponseEntity<?> findMemberBySeq (@PathVariable(name = "userSeq")Long userSeq){
+	public ResponseEntity<?> findMemberBySeq (
+		@PathVariable(name = "userSeq")Long userSeq){
 		log.info("==== 유저 찾기 시작 ====");
 
 		MemberDTO memberDTO = memberService.findMemberBySeq(userSeq);

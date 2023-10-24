@@ -11,6 +11,7 @@ import com.orientalSalad.troubleShot.email.dto.AuthCodeDTO;
 import com.orientalSalad.troubleShot.email.service.EmailService;
 import com.orientalSalad.troubleShot.global.dto.ResultDTO;
 
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class EmailController {
 	private final EmailService emailService;
-
+	@Operation(summary = "이메일 인증 번호 전송 API")
 	@PostMapping("/email/send")
 	public ResponseEntity<?> sendAuthCodeEmail(@RequestBody String email,HttpSession session) throws MessagingException {
 		// 이메일 발신될 데이터 적재
@@ -41,6 +42,7 @@ public class EmailController {
 		log.info("====인증 이메일 발송 끝====");
 		return new ResponseEntity<ResultDTO>(resultDTO, HttpStatus.ACCEPTED);
 	}
+	@Operation(summary = "이메일 인증 번호 확인 API")
 	@PostMapping("/email/confirm")
 	public ResponseEntity<?> confirmAuthCodeEmail(@RequestBody AuthCodeDTO authCodeDTO, HttpSession session) throws
 		Exception {

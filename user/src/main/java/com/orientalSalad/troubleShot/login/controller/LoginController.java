@@ -12,6 +12,7 @@ import com.orientalSalad.troubleShot.login.dto.LoginDTO;
 import com.orientalSalad.troubleShot.login.service.LoginService;
 import com.orientalSalad.troubleShot.member.dto.MemberDTO;
 
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -23,6 +24,7 @@ import lombok.extern.log4j.Log4j2;
 public class LoginController {
 	private final LoginService loginService;
 
+	@Operation(summary = "로그인 API")
 	@PostMapping("/login")
 	public ResponseEntity<?> login(@RequestBody LoginDTO loginDTO,HttpSession session) throws Exception{
 		log.info("=== 로그인 시작 ===");
@@ -54,6 +56,7 @@ public class LoginController {
 		return new ResponseEntity<ResultDTO>(resultDTO, HttpStatus.ACCEPTED);
 	}
 
+	@Operation(summary = "로그아웃 API")
 	@PostMapping("/logout")
 	public ResponseEntity<?> logout(@RequestBody Long seq, HttpSession session) throws Exception {
 		log.info("=== 로그아웃 시작 ===");
