@@ -14,6 +14,10 @@ const config: Config = {
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
     },
+    // font-SUITERegular를 사용하여 테일윈드 방식으로 폰트 변경 가능해짐
+    fontFamily: {
+      SUITERegular: ["SUITE-Regular"],
+    },
   },
   plugins: [],
 }
