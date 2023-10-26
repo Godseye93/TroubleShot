@@ -11,7 +11,7 @@ export default function Header() {
                 <Link href="/trouble/1" className='me-5 text-black'>내 트러블 슈팅</Link>
                 <Link href="/community" className='me-5 text-black'>커뮤니티</Link>
             </div>
-            <div className="p-3">
+            <div className="w-2/12 h-2/12">
             <button className="bg-yellow-400 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">로그인</button>
             </div>
         </div>
