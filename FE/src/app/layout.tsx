@@ -1,5 +1,8 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import Link from "next/link";
+import Image from "next/image";
+import trous_logo_origin from "/public/logo/trous_logo_origin.png";
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -13,7 +16,18 @@ export default function RootLayout({
 }) {
   return (
     <html>
-      <body>{children}</body>
+      <body>
+        <nav>
+          <div className='bg-white rounded-lg flex space-x-5 m-3 px-5 py-2 items-center text-xl justify-between'>
+            <div className='flex items-center'>
+              <Link href="/"><Image src={trous_logo_origin} alt="" className='w-52 me-16' /></Link>
+              <Link href="/trouble/1" className='me-5'>내 트러블 슈팅</Link>
+              <Link href="/community" className='me-5'>커뮤니티</Link>
+            </div>
+            <Link href="/login" className=' bg-yellow-300 rounded-lg px-3 py-1'>Log in</Link>
+          </div>
+        </nav>
+        {children}</body>
     </html>
   );
 }
