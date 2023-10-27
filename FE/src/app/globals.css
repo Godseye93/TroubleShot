@@ -17,3 +17,10 @@
     font-weight: 400;
     font-style: normal;
 }
+.fcc{
+    @apply flex items-center justify-center
+}
+
+.hvc{
+    @apply hover:bg-main transition-colors duration-300
+}
