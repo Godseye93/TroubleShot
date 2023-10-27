@@ -13,7 +13,29 @@
         "command": "create.trouble.shooting",
         "title": "Create Trouble shooting"
       }
-    ]
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "trouble-shot",
+          "title": "Trouble Shot",
+          "icon": "assets/trous_favicon_white.png"
+        }
+      ]
+    },
+    "views": {
+      "trouble-shot": [
+        {
+          "id": "my-trouble-list",
+          "name": "My Trouble List",
+          "when": "isLogin"
+        },
+        {
+          "id": "nodeDependencies",
+          "name": "Node Dependencies"
+        }
+      ]
+    }
   },
   "scripts": {
     "install:all": "npm install && cd webview-ui && npm install",
