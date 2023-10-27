@@ -36,7 +36,7 @@ export default function CategoryBtn({ categorys }: Props) {
         <div className="mt-3 pb-3">
           {categorys.map((category, idx) => (
             <Link href="#" key={idx}>
-              <div className="h-8 ps-[3.5rem]  line-clamp-1 pe-2 hover:bg-slate-200 rounded-full hover:shadow-sm ">
+              <div className="h-8 ps-[3.5rem]  line-clamp-1 pe-2 hover:bg-slate-200 transition-colors duration-200 rounded-full hover:shadow-sm ">
                 {category}
               </div>
             </Link>

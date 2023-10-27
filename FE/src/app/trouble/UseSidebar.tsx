@@ -15,7 +15,7 @@ export default function UseSidebar() {
       <IoHomeSharp /> <p className="ms-3 line-clamp-1">전체글</p>
     </Link>,
     <Link
-      className={`${path === "/trouble/bookmark" && "bg-main shadow-md"} menu-btn line-clamp-1`}
+      className={`${path === "/trouble/bookmark" && "bg-softmain shadow-md"} menu-btn line-clamp-1`}
       href="/trouble/bookmark"
     >
       <BsFillBookmarkStarFill /> <p className="ms-3 line-clamp-1">북마크</p>
