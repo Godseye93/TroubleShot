@@ -21,6 +21,62 @@
     @apply flex items-center justify-center
 }
 
-.hvc{
-    @apply hover:bg-main transition-colors duration-300
+.hvc, .menu-btn{
+    @apply hover:bg-main  duration-300 transition-all hover:shadow-lg
 }
+
+
+/* 스크롤바 전체 기본 꾸미기 */
+::-webkit-scrollbar {
+    width: 10px;  /* 세로축 스크롤바 폭 너비 */
+    height: 20px;  /* 가로축 스크롤바 폭 너비 */
+  }
+  
+  /* 스크롤바 막대 꾸미기 */
+  ::-webkit-scrollbar-thumb {
+    @apply bg-gray-600;
+    @apply border-main;
+    border-radius: 12px 12px 12px 12px;
+  }
+  
+  /* 스크롤바 트랙 꾸미기 */
+  ::-webkit-scrollbar-track {
+    @apply bg-gray-300
+  }
+  
+  .menu-btn{
+    @apply flex items-center ps-6 h-10 rounded-full
+  }
+  @keyframes waterfall {
+    0% {
+        opacity: 0;
+        transform: translate(0, -50%) scaleY(0);
+
+        
+    }
+    to {
+        opacity: 1;
+        transform: translateZ(0) scaleY(1);
+    }
+  }
+  @keyframes waterfallre {
+      0% {
+          opacity: 1;
+          transform: translateZ(0) scaleY(1);
+      }
+    to {
+        opacity: 0;
+        transform: translate(0, -50%) scaleY(0);
+
+        
+    }
+  }
+  .menu-anim-on{
+    animation-duration: 0.2s;
+    animation-name: waterfall;
+  }
+  .menu-anim-off{
+    animation-duration: 0.2s;
+    animation-name: waterfallre;
+    animation-fill-mode: forwards;
+  }

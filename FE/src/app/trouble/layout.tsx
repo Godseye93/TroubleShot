@@ -1,7 +1,16 @@
+import UseSidebar from "./UseSidebar";
 interface Props {
   children: React.ReactNode;
 }
 
 export default function Layout({ children }: Props) {
-  return <div className="pt-12 px-2">{children}</div>;
+  return (
+    <>
+      <div className="h-12"></div>
+      <div className="px-2 flex">
+        <UseSidebar />
+        {children}
+      </div>
+    </>
+  );
 }
