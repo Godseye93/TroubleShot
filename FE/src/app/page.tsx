@@ -7,6 +7,8 @@ import vscode_logo from "/public/logo/vscode_logo.png";
 import styles from "../styles/Home.module.css";
 import Link from "next/link";
 
+import FeatureIntro from "../components/FeatureIntro";
+
 export default function Home() {
   return (
     <div className="bg-gradient-to-b from-black">
@@ -45,23 +47,9 @@ export default function Home() {
             with Chrome <Image src={chrome_logo} alt="chrome_logo" className=" w-10 ml-5" />
           </Link>
         </div>
-        <div className="flex flex-col w-full items-center">
-          <h1 className=" mt-32 text-7xl">트러블 샷의 주요 기능</h1>
-          <div className="flex w-full justify-center">
-            <section className="flex flex-col w-3/12">
-              <div className="bg-orange-300 hover:bg-orange-600 w-4/12 text-2xl">
-                <button>기능 1</button>
-              </div>
-              <div className="bg-orange-300 hover:bg-orange-600 w-4/12 text-2xl">
-                <button>기능 2</button>
-              </div>
-              <div className="bg-orange-300 hover:bg-orange-600 w-4/12 text-2xl">
-                <button>기능 3</button>
-              </div>
-            </section>
-            <div className=" bg-orange-300" />
-          </div>
-        </div>
+
+        <FeatureIntro></FeatureIntro>
+
         <div className="flex flex-col items-center">
           <h1 className="mt-32 mb-10 text-3xl">트러블 슈팅의 완벽한 파트너</h1>
           <Image src={main_logo} alt="trouble-shot" className=" w-9/12" />
@@ -75,6 +63,7 @@ export default function Home() {
             with Chrome <Image src={chrome_logo} alt="chrome_logo" className=" w-10 ml-5" />
           </Link>
         </div>
+        
         <div className="flex flex-col items-center">
           <h1 className="mt-32 mb-10 text-3xl">트러블 슈팅의 완벽한 파트너</h1>
           <Image src={main_logo} alt="trouble-shot" className=" w-9/12" />
