@@ -8,10 +8,32 @@
   },
   "main": "./out/extension.js",
   "contributes": {
+    "viewsWelcome": [
+      {
+        "view": "login-to-trouble-shot",
+        "contents": "Login to Trouble shot\n[Log in](command:nodeDependencies.addEntry)"
+      },
+      {
+        "view": "my-trouble-list-without-login",
+        "contents": "No Trouble shooting found\n[Create New Trouble Shooting](command:create.trouble.shooting)"
+      },
+      {
+        "view": "my-trouble-list",
+        "contents": "No Trouble shooting found\n[Create New Trouble Shooting](command:create.trouble.shooting)"
+      }
+    ],
     "commands": [
       {
         "command": "create.trouble.shooting",
         "title": "Create Trouble shooting"
+      },
+      {
+        "command": "node.dependencies.refreshEntry",
+        "title": "Refresh",
+        "icon": {
+          "dark": "assets/refresh-white.svg",
+          "light": "assets/refresh-black.svg"
+        }
       }
     ],
     "viewsContainers": {
@@ -26,13 +48,46 @@
     "views": {
       "trouble-shot": [
         {
+          "id": "my-trouble-list-without-login",
+          "name": "My Trouble List Without Login",
+          "when": "!isLogin"
+        },
+        {
+          "id": "login-to-trouble-shot",
+          "name": "Login To Trouble Shot",
+          "when": "!isLogin"
+        },
+        {
           "id": "my-trouble-list",
           "name": "My Trouble List",
           "when": "isLogin"
         },
         {
-          "id": "nodeDependencies",
+          "id": "team-trouble-list",
+          "name": "Team Trouble List",
+          "when": "isLogin"
+        },
+        {
+          "id": "community-trouble-list",
+          "name": "Community Trouble List",
+          "when": "isLogin"
+        },
+        {
+          "id": "node-dependencies",
           "name": "Node Dependencies"
+        },
+        {
+          "id": "more-info",
+          "name": "More Info"
+        }
+      ]
+    },
+    "menus": {
+      "view/title": [
+        {
+          "command": "node.dependencies.refreshEntry",
+          "when": "view == node-dependencies",
+          "group": "navigation"
         }
       ]
     }
