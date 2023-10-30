@@ -59,9 +59,10 @@
         </constraints>
         <properties>
           <model>
-            <item value="Wirite Trouble"/>
+            <item value="Write Trouble"/>
             <item value="Write Solution"/>
             <item value="My Trouble List"/>
+            <item value="Login"/>
           </model>
         </properties>
       </component>

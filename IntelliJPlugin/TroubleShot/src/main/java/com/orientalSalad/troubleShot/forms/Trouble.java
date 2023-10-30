@@ -2,8 +2,8 @@ package com.orientalSalad.troubleShot.forms;
 
 import javax.swing.*;
 
-public class TroubleShooting {
-
+public class Trouble {
+	private JPanel panel;
 	private JPanel troubleMain;
 
 	private JLabel title;
@@ -28,7 +28,15 @@ public class TroubleShooting {
 	private JRadioButton publicButton;
 	private JRadioButton privateButton;
 	private JRadioButton teamButton;
+	private JButton cancleButton;
+	private JButton shootButton;
+	private JButton markDown복사Button;
+	private JButton troubleButton;
 
+	public Trouble() {
+		panel = new JPanel();
+		panel.add(troubleMain);
+	}
 	public void setPublicScope() {
 		this.publicScopeGroup = new ButtonGroup();
 		this.publicScopeGroup.add(publicButton);
@@ -36,5 +44,8 @@ public class TroubleShooting {
 		this.publicScopeGroup.add(teamButton);
 	}
 
+	public JPanel getPanel() {
+		return panel;
+	}
 
 }
