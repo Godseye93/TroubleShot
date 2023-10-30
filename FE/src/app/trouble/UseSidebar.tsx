@@ -8,7 +8,6 @@ import Sidebar from "@/components/Sidebar";
 
 export default function UseSidebar() {
   const path = usePathname();
-  console.log(path);
   const categorys = ["낙서장", "javascript", "react", "typescript", "nextjs", "vuejs", "긴놈오오오오오ㅗ옹오오오오옴"];
   const menus = [
     <Link className={`${path === "/trouble" && "bg-softmain shadow-md"} menu-btn line-clamp-1`} href="/trouble">

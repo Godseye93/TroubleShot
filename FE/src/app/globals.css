@@ -24,8 +24,35 @@
 .hvc, .menu-btn{
     @apply hover:bg-main  duration-300 transition-all hover:shadow-lg
 }
+.tagbox{
+    position: relative;
+}
+
+.tag-scroll::-webkit-scrollbar{
+overflow-x: scroll;
+width: 100%;
+height: 10px;
+}
 
 
+.cover-bar{
+  width:100%;
+  height:10px;
+  position:absolute;
+  bottom:0;
+  right:0;
+  -webkit-transition: all .5s;
+  opacity: 1;
+  /* 배경색을 상자색과 똑같이 맞춰준다 */
+  background-color:white;
+}
+
+/* 중요한 부분 */
+.tagbox:hover .cover-bar {
+   opacity: 0;
+   visibility: hidden;
+  -webkit-transition: all .5s;
+}
 /* 스크롤바 전체 기본 꾸미기 */
 ::-webkit-scrollbar {
     width: 10px;  /* 세로축 스크롤바 폭 너비 */
