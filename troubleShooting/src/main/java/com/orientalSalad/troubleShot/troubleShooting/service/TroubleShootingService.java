@@ -24,4 +24,9 @@ public class TroubleShootingService {
 
 		return true;
 	}
+	public TroubleShootingDTO selectTroubleShootingBySeq(long seq){
+		TroubleShootingDTO troubleShootingDTO = troubleShootingMapper.selectTroubleShootingBySeq(seq);
+
+		return troubleShootingDTO;
+	}
 }

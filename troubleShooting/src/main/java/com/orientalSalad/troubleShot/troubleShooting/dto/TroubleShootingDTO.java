@@ -2,6 +2,7 @@ package com.orientalSalad.troubleShot.troubleShooting.dto;
 
 import com.orientalSalad.troubleShot.global.dto.BaseDTO;
 import com.orientalSalad.troubleShot.member.dto.MemberDTO;
+import com.orientalSalad.troubleShot.member.dto.SimpleMemberDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,7 +19,7 @@ import lombok.experimental.SuperBuilder;
 public class TroubleShootingDTO extends BaseDTO {
 	private String title;
 	private String context;
-	private MemberDTO writer;
+	private SimpleMemberDTO writer;
 	private boolean solved;
 	private int views;
 }
