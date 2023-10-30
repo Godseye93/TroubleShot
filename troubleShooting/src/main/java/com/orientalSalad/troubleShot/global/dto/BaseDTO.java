@@ -13,12 +13,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
 @ToString
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@SuperBuilder
 public class BaseDTO  implements Serializable {
 	public Long seq;
 	@JsonSerialize(using = LocalDateTimeSerializer.class)
