@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name="member")
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MemberEntity extends BaseEntity {
 	private String email;
@@ -28,19 +29,6 @@ public class MemberEntity extends BaseEntity {
 		this.nickname = nickname;
 		this.locale = locale;
 		this.profileImg = profileImg;
-	}
-
-	public MemberDTO toMemberDTO(){
-		return MemberDTO.builder()
-			.seq(getSeq())
-			.email(email)
-			.nickname(nickname)
-			.locale(locale)
-			.profileImg(profileImg)
-			.createTime(getCreateTime())
-			.deleteTime(getDeleteTime())
-			.updateTime(getUpdateTime())
-			.build();
 	}
 
 	@Override

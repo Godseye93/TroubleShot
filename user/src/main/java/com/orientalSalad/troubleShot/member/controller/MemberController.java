@@ -10,12 +10,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.orientalSalad.troubleShot.global.dto.ResultDTO;
+import com.orientalSalad.troubleShot.global.utill.Validation;
 import com.orientalSalad.troubleShot.member.dto.MemberDTO;
 import com.orientalSalad.troubleShot.member.service.MemberService;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Parameters;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
@@ -25,6 +24,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class MemberController {
 	private final MemberService memberService;
+	private final Validation memberValidation;
 
 	@Operation(summary = "회원가입 API",
 		description = "필수 값 : "
@@ -34,7 +34,7 @@ public class MemberController {
 		log.info("==== 유저 회원가입 시작 ====");
 		log.info(memberDTO);
 
-		if(!memberDTO.validate()){
+		if(!memberValidation.validate(memberDTO)){
 			throw new Exception("올바르지 않은 필드 값입니다.");
 		}
 
