@@ -1,13 +1,13 @@
-package com.orientalSalad.troubleShot.member.mapper;
+package com.orientalSalad.troubleShot.member.converter;
 
 import org.springframework.stereotype.Component;
 
-import com.orientalSalad.troubleShot.global.utill.ObjectMapper;
+import com.orientalSalad.troubleShot.global.utill.ObjectConverter;
 import com.orientalSalad.troubleShot.member.dto.MemberDTO;
 import com.orientalSalad.troubleShot.member.entity.MemberEntity;
 
 @Component
-public class MemberMapper implements ObjectMapper<MemberDTO, MemberEntity> {
+public class MemberConverter implements ObjectConverter<MemberDTO, MemberEntity> {
 	@Override
 	public MemberEntity toEntity(MemberDTO memberDTO) {
 		return MemberEntity.builder()
