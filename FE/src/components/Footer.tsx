@@ -3,7 +3,7 @@ import blackLogo from "../../public/logo/trous_withoutLogo_black.png"
 
 export default function Footer() {
   return (
-    <div className="flex w-full border-t-2 border-gray-400">
+    <div id="footer" className="flex w-full border-t-2 border-gray-400">
       <ul>
         <li><Image src={blackLogo} alt="" className="w-2/12"/></li>
         <li><Image src={blackLogo} alt="" className="w-2/12"/></li>
