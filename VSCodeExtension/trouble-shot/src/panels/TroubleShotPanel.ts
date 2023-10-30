@@ -1,6 +1,11 @@
 import { Disposable, Webview, WebviewPanel, window, Uri, ViewColumn } from "vscode";
 import { getUri } from "../utilities/getUri";
 import { getNonce } from "../utilities/getNonce";
+import * as vscode from "vscode";
+
+type Trouble = 0;
+type Solution = 1;
+type TroubleShootingType = Trouble | Solution;
 
 /**
  * This class manages the state and behavior of HelloWorld webview panels.
@@ -16,6 +21,8 @@ export class TroubleShotPanel {
   public static currentPanel: TroubleShotPanel | undefined;
   private readonly _panel: WebviewPanel;
   private _disposables: Disposable[] = [];
+  private readonly _isLogin: boolean;
+  private readonly _troubleShootingType: TroubleShootingType;
 
   /**
    * The HelloWorldPanel class private constructor (called only from the render method).
@@ -23,7 +30,12 @@ export class TroubleShotPanel {
    * @param panel A reference to the webview panel
    * @param extensionUri The URI of the directory containing the extension
    */
-  private constructor(panel: WebviewPanel, extensionUri: Uri) {
+  private constructor(
+    panel: WebviewPanel,
+    extensionUri: Uri,
+    isLogin: boolean,
+    troubleShootingType: TroubleShootingType
+  ) {
     this._panel = panel;
 
     // Set an event listener to listen for when the panel is disposed (i.e. when the user closes
@@ -35,6 +47,11 @@ export class TroubleShotPanel {
 
     // Set an event listener to listen for messages passed from the webview context
     this._setWebviewMessageListener(this._panel.webview);
+
+    // Set the isLogin property
+    this._isLogin = isLogin;
+
+    this._troubleShootingType = troubleShootingType;
   }
 
   /**
@@ -43,7 +60,11 @@ export class TroubleShotPanel {
    *
    * @param extensionUri The URI of the directory containing the extension.
    */
-  public static render(extensionUri: Uri) {
+  public static render(
+    extensionUri: Uri,
+    isLogin: boolean,
+    troubleShootingType: TroubleShootingType
+  ) {
     if (TroubleShotPanel.currentPanel) {
       // If the webview panel already exists reveal it
       TroubleShotPanel.currentPanel._panel.reveal(ViewColumn.One);
@@ -68,7 +89,12 @@ export class TroubleShotPanel {
         }
       );
 
-      TroubleShotPanel.currentPanel = new TroubleShotPanel(panel, extensionUri);
+      TroubleShotPanel.currentPanel = new TroubleShotPanel(
+        panel,
+        extensionUri,
+        isLogin,
+        troubleShootingType
+      );
     }
   }
 
@@ -139,12 +165,15 @@ export class TroubleShotPanel {
     webview.onDidReceiveMessage(
       (message: any) => {
         const command = message.command;
-        const text = message.text;
 
         switch (command) {
-          case "hello":
+          case "getStatus":
             // Code that should run in response to the hello message command
-            window.showInformationMessage(text);
+            webview.postMessage({
+              command: "getStatus",
+              isLogin: this._isLogin,
+              troubleShootingType: this._troubleShootingType,
+            });
             return;
           // Add more switch case statements here as more webview message commands
           // are created within the webview context (i.e. inside media/main.js)

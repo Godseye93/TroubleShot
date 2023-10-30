@@ -5,6 +5,8 @@ export class Trouble extends vscode.TreeItem {
     public readonly label: string,
     private createTime: string,
     private timeAgo: string,
+    private isSolved: boolean,
+    private creator: string,
     public readonly collapsibleState: vscode.TreeItemCollapsibleState
   ) {
     super(label, collapsibleState);

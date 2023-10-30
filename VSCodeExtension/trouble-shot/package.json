@@ -15,21 +15,21 @@
       },
       {
         "view": "my-trouble-list-without-login",
-        "contents": "No Trouble shooting found\n[Create New Trouble Shooting](command:create.trouble.shooting)"
+        "contents": "No Trouble shooting found\n[Create New Trouble Shooting](command:create.trouble)"
       },
       {
         "view": "my-trouble-list",
-        "contents": "No Trouble shooting found\n[Create New Trouble Shooting](command:create.trouble.shooting)"
+        "contents": "No Trouble shooting found\n[Create New Trouble Shooting](command:create.trouble)"
       }
     ],
     "commands": [
       {
-        "command": "create.trouble.shooting",
-        "title": "Create Trouble shooting"
+        "command": "create.trouble",
+        "title": "Trouble Shot : Create Trouble"
       },
       {
         "command": "node.dependencies.refreshEntry",
-        "title": "Refresh",
+        "title": "Trouble Shot : Refresh",
         "icon": {
           "dark": "assets/refresh-white.svg",
           "light": "assets/refresh-black.svg"
