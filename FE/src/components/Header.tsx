@@ -9,10 +9,10 @@ export default function Header() {
         <Link href="/" className=" w-2/12 h-2/12 mx-3">
           <Image src={trous_logo_origin} alt="" />
         </Link>
-        <Link href="/trouble" className="me-5 text-black">
+        <Link href="/trouble" className="me-5 text-black hover:text-main duration-200 transition-colors">
           내 트러블 슈팅
         </Link>
-        <Link href="/community" className="me-5 text-black">
+        <Link href="/community" className="me-5 text-black hover:text-main duration-200 transition-colors">
           커뮤니티
         </Link>
       </div>
