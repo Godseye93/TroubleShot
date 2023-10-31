@@ -1,13 +1,17 @@
 package com.orientalSalad.troubleShot.troubleShooting.mapper;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.SelectProvider;
 
+import com.orientalSalad.troubleShot.troubleShooting.dto.SearchTroubleShootingDTO;
 import com.orientalSalad.troubleShot.troubleShooting.dto.TroubleShootingDTO;
-
-import io.lettuce.core.dynamic.annotation.Param;
+import com.orientalSalad.troubleShot.troubleShooting.sql.TroubleShootingSQLProvider;
 
 @Mapper
 public interface TroubleShootingMapper {
@@ -35,4 +39,23 @@ public interface TroubleShootingMapper {
 		@Result(property = "writer.profileImg",column = "writer_profile_img")
 	})
 	public TroubleShootingDTO selectTroubleShootingBySeq(@Param("seq") long seq);
+
+	@SelectProvider(type = TroubleShootingSQLProvider.class, method = "findTroubleShootingList")
+	@Results({
+		@Result(property = "seq", column = "seq"),
+		@Result(property = "title",column = "title"),
+		@Result(property = "context",column = "context"),
+		@Result(property = "viewCount",column = "view_count"),
+		@Result(property = "likeCount",column = "like_count"),
+		@Result(property = "replyCount",column = "reply_count"),
+		@Result(property = "solved",column = "solved"),
+		@Result(property = "createTime",column = "create_time"),
+		@Result(property = "updateTime",column = "update_time"),
+		@Result(property = "deleteTime",column = "delete_time"),
+		@Result(property = "writer.seq",column = "writer_seq"),
+		@Result(property = "writer.nickname",column = "writer_nickname"),
+		@Result(property = "writer.email",column = "writer_email"),
+		@Result(property = "writer.profileImg",column = "writer_profile_img")
+	})
+	public List<TroubleShootingDTO> selectTroubleShootingList(@Param("searchParam") SearchTroubleShootingDTO searchParam);
 }

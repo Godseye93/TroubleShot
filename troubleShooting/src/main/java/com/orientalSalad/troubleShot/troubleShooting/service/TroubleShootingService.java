@@ -1,9 +1,12 @@
 package com.orientalSalad.troubleShot.troubleShooting.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.orientalSalad.troubleShot.global.utill.ObjectConverter;
 import com.orientalSalad.troubleShot.troubleShooting.converter.TroubleShootingConverter;
+import com.orientalSalad.troubleShot.troubleShooting.dto.SearchTroubleShootingDTO;
 import com.orientalSalad.troubleShot.troubleShooting.dto.TroubleShootingDTO;
 import com.orientalSalad.troubleShot.troubleShooting.entity.TroubleShootingEntity;
 import com.orientalSalad.troubleShot.troubleShooting.mapper.TroubleShootingMapper;
@@ -26,7 +29,7 @@ public class TroubleShootingService {
 		return true;
 	}
 
-	public TroubleShootingDTO selectTroubleShootingBySeq(long seq) throws Exception {
+	public TroubleShootingDTO findTroubleShootingBySeq(long seq) throws Exception {
 		TroubleShootingDTO troubleShootingDTO = troubleShootingMapper.selectTroubleShootingBySeq(seq);
 
 		TroubleShootingEntity troubleShootingEntity = troubleShootingRepository.findById(seq).orElse(null);
@@ -40,5 +43,11 @@ public class TroubleShootingService {
 		troubleShootingRepository.save(troubleShootingEntity);
 
 		return troubleShootingDTO;
+	}
+	public List<TroubleShootingDTO> findTroubleShootingList(SearchTroubleShootingDTO searchParam) throws Exception {
+		List<TroubleShootingDTO> troubleShootingDTOList
+			= troubleShootingMapper.selectTroubleShootingList(searchParam);
+
+		return troubleShootingDTOList;
 	}
 }

@@ -3,7 +3,6 @@ package com.orientalSalad.troubleShot.troubleShooting.converter;
 import org.springframework.stereotype.Component;
 
 import com.orientalSalad.troubleShot.global.utill.ObjectConverter;
-import com.orientalSalad.troubleShot.member.dto.MemberDTO;
 import com.orientalSalad.troubleShot.member.dto.SimpleMemberDTO;
 import com.orientalSalad.troubleShot.troubleShooting.dto.TroubleShootingDTO;
 import com.orientalSalad.troubleShot.troubleShooting.entity.TroubleShootingEntity;
@@ -22,7 +21,9 @@ public class TroubleShootingConverter implements ObjectConverter<TroubleShooting
 		return TroubleShootingEntity.builder()
 			.title(troubleShootingDTO.getTitle())
 			.context(troubleShootingDTO.getContext())
-			.views(troubleShootingDTO.getViews())
+			.viewCount(troubleShootingDTO.getViewCount())
+			.likeCount(troubleShootingDTO.getLikeCount())
+			.replyCount(troubleShootingDTO.getReplyCount())
 			.solved(troubleShootingDTO.isSolved())
 			.writerSeq(troubleShootingDTO.getWriter().getSeq())
 			.build();

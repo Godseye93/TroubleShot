@@ -1,6 +1,7 @@
 package com.orientalSalad.troubleShot.troubleShooting.controller;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,7 +45,7 @@ public class TroubleShootingController {
 	@GetMapping("/{seq}")
 	public ResponseEntity<?> findTroubleShooting(@PathVariable(name = "seq") long seq) throws Exception {
 		log.info("====== 트러블 슈팅 문서 pk 탐색 시작 =====");
-		TroubleShootingDTO troubleShootingDTO = troubleShootingService.selectTroubleShootingBySeq(seq);
+		TroubleShootingDTO troubleShootingDTO = troubleShootingService.findTroubleShootingBySeq(seq);
 
 		log.info(troubleShootingDTO);
 
@@ -60,14 +61,17 @@ public class TroubleShootingController {
 		return new ResponseEntity<ResponseTroubleShootingDTO>(resultDTO, HttpStatus.ACCEPTED);
 	}
 	@GetMapping("")
-	public ResponseEntity<?> findTroubleShootingList(@ModelAttribute SearchTroubleShootingDTO SearchParam){
+	public ResponseEntity<?> findTroubleShootingList(@ModelAttribute SearchTroubleShootingDTO searchParam) throws
+		Exception {
 		log.info("====== 트러블 슈팅 문서 목록 검색 시작 =====");
-		log.info(SearchParam);
+		log.info(searchParam);
+
+		List<TroubleShootingDTO> troubleShootingDTOList = troubleShootingService.findTroubleShootingList(searchParam);
 
 		ResponseTroubleShootingDTO resultDTO = ResponseTroubleShootingDTO.builder()
 			.success(true)
 			.message("트러블 슈팅 문서 목록 검색을 성공했습니다.")
-			.troubleShootingDTOList(new ArrayList<>())
+			.troubleShootingDTOList(troubleShootingDTOList)
 			.build();
 
 		log.info("====== 트러블 슈팅 문서 목록 검색 끝 =====");
