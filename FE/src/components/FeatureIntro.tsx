@@ -32,7 +32,7 @@ export default function FeatureIntro() {
 
 
     return (
-        <div className="flex flex-col w-full items-center">
+        <div id='featureIntro' className="flex flex-col items-center">
             <h1 className=" mt-32 text-7xl">트러블 샷의 주요 기능</h1>
             <div className="flex w-full h-96 justify-center mt-24">
                 <section className="flex flex-col items-center justify-between w-3/12">

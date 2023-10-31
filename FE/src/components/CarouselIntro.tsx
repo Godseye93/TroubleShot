@@ -31,7 +31,7 @@ export default function CarouselIntro() {
   };
 
   return (
-    <div className="w-9/12 bg-main rounded-lg mt-80 ">
+    <div id='carouselIntor' className="w-9/12 bg-main rounded-lg mt-80 ">
       <div className='flex'>
       <button className=' hover:scale-150 h-fit' onClick={prevHandler}><IoArrowBackCircleSharp/></button>
       <div className=" w-5/12 me-5">

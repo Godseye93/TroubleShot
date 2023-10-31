@@ -10,7 +10,6 @@
     "test": "jest"
   },
   "dependencies": {
-    "@fullpage/react-fullpage": "^0.1.40",
     "@types/react-slick": "^0.23.11",
     "fullpage.js": "^4.0.20",
     "next": "13.5.6",

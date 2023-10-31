@@ -1,113 +1,98 @@
 "use client"
-import React, { useState } from "react";
-import ReactFullpage, { fullpageOptions } from "@fullpage/react-fullpage";
-import Footer from "../../components/Footer";
+import Buttons from "./buttons";
+import Section from "./Section";
+import Head from "next/head";
+import { useEffect, useRef, useState } from "react";
 
-interface Section {
-  text: string;
-  id?: number;
+export interface IPageObj {
+  pageNum: number;
+  bgColor: string;
 }
 
-const originalColors = [
-  "blue",
-  "#0798ec",
-  "#fc6c7c",
-  "#435b71",
-  "orange",
-  "blue",
-  "purple",
-  "yellow",
+const pageObjArray = [
+  { pageNum: 1, bgColor: "bg-[#ffeaa7]" },
+  { pageNum: 2, bgColor: "bg-[#fab1a0]" },
+  { pageNum: 3, bgColor: "bg-[#fdcb6e]" },
+  { pageNum: 4, bgColor: "bg-[#e17055]" },
 ];
 
-type Credits = {
-  enabled?: boolean;
-  label?: string;
-  position?: "left" | "right";
-};
+const Home = () => {
+  const [windowObj, setWindowObj] = useState<Window>();
+  const [currentPageNum, setCurrentPageNum] = useState<number>(1);
+  const totalNum = pageObjArray.length;
+  // 👇 console 찍어보면 length가 5이고 0번 인덱스는 undefined가 출력됨. (이 배열 핸들링할때 1번 인덱스부터 시작해야함)
+  const pageRefs = useRef<HTMLDivElement[]>([]); 
 
-const pluginWrapper = () => {
-  /*
-   * require('../static/fullpage.scrollHorizontally.min.js'); // Optional. Required when using the "scrollHorizontally" extension.
-   */
-};
+  useEffect(() => {
+    if (window !== undefined) {
+      setWindowObj(window);
+    }
+  }, []);
 
-const FullpageJsExample = () => {
-  const [sectionsColor, setSectionsColor] = useState([...originalColors]);
-  const [fullpages, setFullpages] = useState<Section[]>([
-    {
-      text: "Section 1",
-    },
-    {
-      text: "Section 2",
-    },
-    {
-      text: "Section 3",
-    },
-  ]);
-
-  const onLeave = (origin: any, destination: any, direction: any) => {
-    console.log("onLeave", { origin, destination, direction });
+  // 페이지 변경 함수
+  const handlePageChange = (event: Event) => {
+    let scroll = windowObj?.scrollY!;
+    for (let i = 1; i <= totalNum+1; i++) {
+      // 스크롤이 해당 섹션에 진입했는지 판단 && 해당 스크롤이 해당 섹션에 머물러 있는지
+      if (
+        scroll > pageRefs.current[i].offsetTop - windowObj!.outerHeight / 3 &&
+        scroll <
+          pageRefs.current[i].offsetTop -
+            windowObj!.outerHeight / 3 +
+            pageRefs.current[i].offsetHeight
+      ) {
+        setCurrentPageNum(i);
+        break;
+      }
+    }
   };
 
-  const handleChangeColors = () => {
-    const newColors =
-      sectionsColor[0] === "yellow" ? [...originalColors] : ["yellow", "blue", "white"];
-    setSectionsColor(newColors);
-  };
-
-  const handleAddSection = () => {
-    setFullpages((prevFullpages) => [
-      ...prevFullpages,
-      {
-        text: `section ${prevFullpages.length + 1}`,
-        id: Math.random(),
-      },
-    ]);
-  };
-
-  const handleRemoveSection = () => {
-    setFullpages((prevFullpages) => {
-      const newPages = [...prevFullpages];
-      newPages.pop();
-      return newPages;
+  // 버튼 클릭
+  const handlePointClick = (pageNum: number) => {
+    windowObj?.scrollTo({
+      top: pageRefs.current[pageNum].offsetTop,
+      behavior: "smooth",
     });
   };
 
-  if (!fullpages.length) {
-    return null;
-  }
-
-  
-  const credits: Credits = {
-    enabled: false,
-    label: "-",
-    position: "right",
-  };
+  useEffect(() => {
+    windowObj?.addEventListener("scroll", handlePageChange);
+    return () => {
+      windowObj?.removeEventListener("scroll", handlePageChange);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [windowObj]);
 
   return (
-    <div className="App">
-      <ReactFullpage
-        // licenseKey={"OPEN-SOURCE-GPLV3-LICENSE"}
-        // navigation
-        // onLeave={onLeave}
-        sectionsColor={sectionsColor}
-        // pluginWrapper={pluginWrapper}
-        debug={false}
-        credits={credits}
-        fixedElements= '#footer'
-        render={() => (
-          <ReactFullpage.Wrapper>
-            {fullpages.map(({ text }) => (
-              <div key={text} className="section">
-                <h1>{text}</h1>
-                <Footer></Footer>
-              </div>
-            ))}
-          </ReactFullpage.Wrapper>
-        )}
-      />
-    </div>
+    <>
+      <Head>
+        <title>Full Page App</title>
+      </Head>
+      <main className="relative">
+        {pageObjArray.map((item, index) => {
+          return (
+            <Section
+              key={index}
+              pageNum={item.pageNum}
+              bgColor={item.bgColor}
+              window={windowObj!}
+              pageRefs={pageRefs}
+            />
+          );
+        })}
+        <span className="fixed top-0 right-0 mx-auto text-4xl">
+          현재 페이지는 {currentPageNum} 입니다.
+        </span>
+        <div className="flex flex-col space-y-4 fixed top-96 right-10 z-10">
+          <Buttons
+            pageObjArray={pageObjArray}
+            currentPageNum={currentPageNum}
+            handlePointClick={handlePointClick}
+          />
+        </div>
+      </main>
+    </>
   );
 };
 
-export default FullpageJsExample;
+export default Home;
