@@ -38,10 +38,12 @@ public class UserTroubleShootingController {
 		log.info(searchParam);
 
 		List<TroubleShootingDTO> troubleShootingDTOList = troubleShootingService.findTroubleShootingListByUserSeq(searchParam,userSeq);
+		long totalCount = troubleShootingService.countTroubleShootingListByUserSeq(searchParam,userSeq);
 
 		ResponseTroubleShootingDTO resultDTO = ResponseTroubleShootingDTO.builder()
 			.success(true)
-			.message("트러블 슈팅 문서 목록 검색을 성공했습니다.")
+			.message(userSeq+"번 유저의 트러블 슈팅 문서 목록 검색을 성공했습니다.")
+			.totalCount(totalCount)
 			.troubleShootingDTOList(troubleShootingDTOList)
 			.build();
 

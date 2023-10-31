@@ -129,4 +129,71 @@ public class TroubleShootingSQLProvider {
 
 		return sql;
 	}
+
+	public String countTroubleShootingList(final SearchTroubleShootingDTO searchParam){
+		String sql = new SQL(){{
+			SELECT("count(*) ");
+			FROM("trouble_shooting ts, member m");
+			WHERE("ts.writer_seq = m.seq");
+
+			//작성자 검색
+			if(searchParam.getWriter() != null){
+				WHERE("m.nickname LIKE CONCAT('%',#{searchParam.writer},'%')");
+			}
+
+			//해결된건지 확인
+			if(searchParam.getSolved() != null){
+				WHERE("ts.solved = #{searchParam.solved}");
+			}
+
+			//검색어 추가
+			if(searchParam.getKeyword() != null){
+				System.out.println("키워드 검색");
+				WHERE("ts.title LIKE CONCAT('%','"+searchParam.getKeyword()+"','%')");
+				WHERE("ts.context LIKE CONCAT('%','"+searchParam.getKeyword()+"','%')");
+			}
+
+			if(searchParam.getStartTime() != null){
+				WHERE("ts.create_time >= #{searchParam.startTime}");
+			}
+			if(searchParam.getEndTime() != null){
+				WHERE("ts.create_time <= #{searchParam.endTime}");
+			}
+		}}.toString();
+
+		System.out.println(sql);
+
+		return sql;
+	}
+	public String countTroubleShootingListByUserSeq(final SearchTroubleShootingDTO searchParam,final Long userSeq){
+		String sql = new SQL(){{
+			SELECT("count(*) ");
+			FROM("trouble_shooting ts, member m");
+			WHERE("ts.writer_seq = #{userSeq}");
+			WHERE("ts.writer_seq = m.seq");
+
+			//해결된건지 확인
+			if(searchParam.getSolved() != null){
+				WHERE("ts.solved = #{searchParam.solved}");
+			}
+
+			//검색어 추가
+			if(searchParam.getKeyword() != null){
+				System.out.println("키워드 검색");
+				WHERE("ts.title LIKE CONCAT('%','"+searchParam.getKeyword()+"','%')");
+				WHERE("ts.context LIKE CONCAT('%','"+searchParam.getKeyword()+"','%')");
+			}
+
+			if(searchParam.getStartTime() != null){
+				WHERE("ts.create_time >= #{searchParam.startTime}");
+			}
+			if(searchParam.getEndTime() != null){
+				WHERE("ts.create_time <= #{searchParam.endTime}");
+			}
+		}}.toString();
+
+		System.out.println(sql);
+
+		return sql;
+	}
 }

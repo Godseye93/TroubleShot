@@ -17,4 +17,5 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 public class ResponseTroubleShootingDTO extends ResultDTO {
 	List<TroubleShootingDTO> troubleShootingDTOList;
+	long totalCount;
 }

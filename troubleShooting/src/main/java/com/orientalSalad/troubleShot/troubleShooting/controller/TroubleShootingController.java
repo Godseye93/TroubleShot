@@ -67,10 +67,12 @@ public class TroubleShootingController {
 		log.info(searchParam);
 
 		List<TroubleShootingDTO> troubleShootingDTOList = troubleShootingService.findTroubleShootingList(searchParam);
+		Long totalCount = troubleShootingService.countTroubleShootingList(searchParam);
 
 		ResponseTroubleShootingDTO resultDTO = ResponseTroubleShootingDTO.builder()
 			.success(true)
 			.message("트러블 슈팅 문서 목록 검색을 성공했습니다.")
+			.totalCount(totalCount)
 			.troubleShootingDTOList(troubleShootingDTOList)
 			.build();
 

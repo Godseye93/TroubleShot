@@ -79,4 +79,12 @@ public interface TroubleShootingMapper {
 	public List<TroubleShootingDTO> selectTroubleShootingListByUserSeq(
 		@Param("searchParam") SearchTroubleShootingDTO searchParam,
 		@Param("userSeq") Long userSeq);
+
+	@SelectProvider(type = TroubleShootingSQLProvider.class, method = "countTroubleShootingList")
+	public long countTroubleShootingList(@Param("searchParam") SearchTroubleShootingDTO searchParam);
+
+	@SelectProvider(type = TroubleShootingSQLProvider.class, method = "countTroubleShootingListByUserSeq")
+	public long countTroubleShootingListByUserSeq(
+		@Param("searchParam") SearchTroubleShootingDTO searchParam,
+		@Param("userSeq") Long userSeq);
 }

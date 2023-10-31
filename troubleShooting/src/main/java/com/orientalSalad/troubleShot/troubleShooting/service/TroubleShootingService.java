@@ -50,10 +50,21 @@ public class TroubleShootingService {
 
 		return troubleShootingDTOList;
 	}
+	public Long countTroubleShootingList(SearchTroubleShootingDTO searchParam) throws Exception {
+		Long count = troubleShootingMapper.countTroubleShootingList(searchParam);
+
+		return count;
+	}
 	public List<TroubleShootingDTO> findTroubleShootingListByUserSeq(SearchTroubleShootingDTO searchParam,Long userSeq) throws Exception {
 		List<TroubleShootingDTO> troubleShootingDTOList
 			= troubleShootingMapper.selectTroubleShootingListByUserSeq(searchParam,userSeq);
 
 		return troubleShootingDTOList;
+	}
+
+	public Long countTroubleShootingListByUserSeq(SearchTroubleShootingDTO searchParam,Long userSeq) throws Exception {
+		Long count = troubleShootingMapper.countTroubleShootingListByUserSeq(searchParam,userSeq);
+
+		return count;
 	}
 }
