@@ -9,7 +9,7 @@ interface Props {
 
 export default function Sidebar({ menus, categorys }: Props) {
   return (
-    <div className="w-[14%] h-[91vh] bg-white shadow-lg mt-2 rounded-lg pt-5 flex flex-col justify-between text-lg">
+    <div className="w-[14%] h-[91vh] bg-white shadow-lg mt-4 rounded-lg pt-5 flex flex-col justify-between text-lg">
       <div>
         {menus.map((menu, idx) => (
           <div key={idx}>{menu}</div>
