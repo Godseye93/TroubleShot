@@ -1,5 +1,4 @@
-import { IPageObj } from "./page";
-import { PageObjArray } from "../page"
+import { PageObjArray } from "../../app/page"
 import { cls } from "./cls";
 
 interface IButtonsProps {
@@ -17,7 +16,7 @@ const Buttons = (props: IButtonsProps) => {
             key={item.pageNum}
             className={cls(
               "w-4 h-4  rounded-full cursor-pointer transition-all",
-              props.currentPageNum === item.pageNum ? "bg-main" : "bg-gray-400"
+              props.currentPageNum === item.pageNum ? "bg-sub" : "bg-gray-400"
             )}
             onClick={() => {
               props.handlePointClick(item.pageNum);

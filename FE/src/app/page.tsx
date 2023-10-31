@@ -1,127 +1,156 @@
 "use client"
-import React, { useState, useRef, useEffect, useLayoutEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import styles from "../styles/Home.module.css";
 
-import FirstIntro from "../components/FirstIntro";
-import FeatureIntro from "../components/FeatureIntro";
-import CarouselIntro from "../components/CarouselIntro";
-import HomeOutro from "../components/HomeOutro";
-
-import Buttons from "./example/Buttons";
-
-export type PageObjArray = Array<{
-  component: JSX.Element;
-  pageNum: number;
-}>;
-
-type Star = {
-  top: string;
-  left: string;
-  animationDelay: string;
-};
+import Dots from "../components/home/dots"
+import FirstIntro from "../components/home/FirstIntro";
+import FeatureIntro from "../components/home/FeatureIntro";
+import CarouselIntro from "../components/home/CarouselIntro";
+import HomeOutro from "../components/home/HomeOutro";
 
 export default function Home() {
-  const [currentPageNum, setCurrentPageNum] = useState<number>(0);
-  const pageRefs = useRef<HTMLDivElement[]>([]);
-  
-  const pageObjArray: PageObjArray = [
-    { component: <FirstIntro />, pageNum: 0,  },
-    { component: <FeatureIntro />, pageNum: 1 },
-    { component: <CarouselIntro />, pageNum: 2 },
-    { component: <HomeOutro />, pageNum: 3 },
-  ];
-  
-  const totalNum = pageObjArray.length;
-  
-  // 버튼 페이지 변경 함수
-  const handlePageChange = (event: Event) => {
-    let scroll = window?.scrollY!;
-    for (let i = 0; i < totalNum; i++) {
-      // 스크롤이 해당 섹션에 진입했는지 판단 && 해당 스크롤이 해당 섹션에 머물러 있는지
-      if (
-        scroll > pageRefs.current[i].offsetTop - window!.outerHeight / 3 &&
-        scroll <
-          pageRefs.current[i].offsetTop -
-            window!.outerHeight / 3 +
-            pageRefs.current[i].offsetHeight
-      ) {
-        setCurrentPageNum(i);
-        break;
-      }
-    }
-  };
+  const outerDivRef = useRef<any>();
+  // useRef 타입 명시
 
-  
-  // 버튼 클릭
-  const handlePointClick = (pageNum: number) => {
-    window?.scrollTo({
-      top: pageRefs.current[pageNum].offsetTop,
-      behavior: "smooth",
-    });
-  };
+  const [scrollIndex, setScrollIndex] = useState(1);
 
+  // scrollTo로 이동할 때 정확히 해당 위치가 아닌 조금 위로 이동하게 되어서 오차가 생김
+  // 오차 방지하기 위해
+  const DIVIDER_HEIGHT = 5;
 
 
   useEffect(() => {
-    if (window){
-    window?.addEventListener("scroll", handlePageChange);
+    const wheelHandler = (e: any) => {
+      // event type 명시
+      e.preventDefault();
+      // 스크롤 행동 구현
+      const {deltaY} = e; // e에서 deltaY 추출, 마우스 휠 스크롤 양
+      const {scrollTop} = outerDivRef.current; // 스크롤 위쪽 끝부분
+      const pageHeight = window.innerHeight; // 화면 세로길이
+
+      if (deltaY > 0) {
+        // 스크롤 내릴 때
+
+        if (scrollTop >= 0 && scrollTop < pageHeight) {
+          // 현재 1페이지면
+          // 2페이지 이동
+          console.log("현재 1페이지, down");
+          outerDivRef.current.scrollTo({
+            top: pageHeight + DIVIDER_HEIGHT,
+            left: 0,
+            behavior: "smooth",
+          });
+          setScrollIndex(2);
+
+        } else if (scrollTop >= pageHeight && scrollTop < pageHeight * 2) {
+          // 현재 2페이지면
+          // 3페이지 이동
+          console.log("현재 2페이지, down");
+          outerDivRef.current.scrollTo({
+            top: pageHeight * 2 + DIVIDER_HEIGHT,
+            left: 0,
+            behavior: "smooth",
+          });
+          setScrollIndex(3);
+
+
+        } else if (scrollTop >= pageHeight * 2 && scrollTop < pageHeight * 3) {
+          // 현재 3페이지면
+          // 4페이지 이동
+          console.log("현재 3페이지, down");
+          outerDivRef.current.scrollTo({
+            top: pageHeight * 3 + DIVIDER_HEIGHT,
+            left: 0,
+            behavior: "smooth",
+          });
+          setScrollIndex(4);
+
+
+        } else {
+          // 현재 4페이지
+          // 4페이지 이동
+          console.log("현재 4페이지, down");
+          outerDivRef.current.scrollTo({
+            top: pageHeight * 3 + DIVIDER_HEIGHT,
+            left: 0,
+            behavior: "smooth",
+          });
+          setScrollIndex(4);
+        }
+
+
+
+      } else {
+        // 스크롤 올릴 때
+
+        if (scrollTop >= 0 && scrollTop < pageHeight) {
+          // 현재 1페이지
+          // 1페이지 이동
+          console.log("현재 1페이지, up");
+          outerDivRef.current.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: "smooth",
+          });
+          setScrollIndex(1);
+
+
+        } else if (scrollTop >= pageHeight && scrollTop < pageHeight * 2) {
+          // 현재 2페이지
+          // 1페이지 이동
+          console.log("현재 2페이지, up");
+          outerDivRef.current.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: "smooth",
+          });
+          setScrollIndex(1);
+
+
+        } else if (scrollTop >= pageHeight * 2 && scrollTop < pageHeight * 3) {
+          // 현재 3페이지
+          // 2페이지 이동
+          console.log("현재 3페이지, up");
+          outerDivRef.current.scrollTo({
+            top: pageHeight + DIVIDER_HEIGHT,
+            left: 0,
+            behavior: "smooth",
+          });
+          setScrollIndex(2);
+
+        } else {
+          // 4페이지 이동
+          // 현재 3페이지
+          console.log("현재 4페이지, up");
+          outerDivRef.current.scrollTo({
+            top: pageHeight * 2 + DIVIDER_HEIGHT,
+            left: 0,
+            behavior: "smooth",
+          });
+          setScrollIndex(3);
+        }
+      }
+
+    };
+    const outerDivRefCurrent = outerDivRef.current;
+    outerDivRefCurrent.addEventListener("wheel", wheelHandler);
     return () => {
-      window?.removeEventListener("scroll", handlePageChange);
-    };}
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+      outerDivRefCurrent.removeEventListener("wheel", wheelHandler);
+    };
   }, []);
-
   
-  // 배경 별 랜덤 배치를 위함
-  const [stars, setStars] = useState<Star[]>([]);
-  
-  // useLayoutEffect를 사용하여 클라이언트 사이드에서만 랜더링 되도록 했다.
-  useLayoutEffect(() => {
-    const stars : Star[] = Array.from({ length: 50 }).map(() => ({
-      top: `${Math.random() * 100}%`,
-      left: `${Math.random() * 100}%`,
-      animationDelay: `${Math.random() * 10}s`,
-    }));
-    setStars(stars);
-  }, []);
-
   return (
-    <div className="bg-gradient-to-b from-black">
-      <main className="flex flex-col items-center gap-4 text-white">
-        <div className={styles.starContainer}>
-        {stars.map((star, i) => (
-          <div
-            key={i}
-            className={`${styles.star} `}
-            style={{
-              top: star.top,
-              left: star.left,
-              animationDelay: star.animationDelay,
-            }}
-          />
-        ))}
-        </div>
-
-        {pageObjArray.map((item, index) => (
-          <div 
-          key={index} 
-          ref={(element) => {
-            pageRefs.current[index] = element!
-          }} 
-          className="w-screen h-screen"
-          >
-            {item.component}
-          </div>
-        ))}
-
-        <div className="flex flex-col space-y-4 fixed top-96 right-10 z-10">
-          <Buttons
-            pageObjArray={pageObjArray}
-            currentPageNum={currentPageNum}
-            handlePointClick={handlePointClick}
-          />
-        </div>
+    <div className="">
+      <main ref={outerDivRef} className={styles.outer}>
+        <Dots scrollIndex={scrollIndex} />
+        <div className={styles.inner}><FirstIntro></FirstIntro></div>
+        <div className={styles.divider}></div>
+        <div className={styles.inner}><FeatureIntro></FeatureIntro></div>
+        <div className={styles.divider}></div>
+        <div className={styles.inner}><CarouselIntro></CarouselIntro></div>
+        <div className={styles.divider}></div>
+        <div className={styles.inner}><HomeOutro></HomeOutro></div>
       </main>
     </div>
-  );
+  )
 }
