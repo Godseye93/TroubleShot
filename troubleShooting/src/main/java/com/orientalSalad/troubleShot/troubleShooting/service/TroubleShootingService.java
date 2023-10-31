@@ -50,4 +50,10 @@ public class TroubleShootingService {
 
 		return troubleShootingDTOList;
 	}
+	public List<TroubleShootingDTO> findTroubleShootingListByUserSeq(SearchTroubleShootingDTO searchParam,Long userSeq) throws Exception {
+		List<TroubleShootingDTO> troubleShootingDTOList
+			= troubleShootingMapper.selectTroubleShootingListByUserSeq(searchParam,userSeq);
+
+		return troubleShootingDTOList;
+	}
 }

@@ -58,4 +58,25 @@ public interface TroubleShootingMapper {
 		@Result(property = "writer.profileImg",column = "writer_profile_img")
 	})
 	public List<TroubleShootingDTO> selectTroubleShootingList(@Param("searchParam") SearchTroubleShootingDTO searchParam);
+
+	@SelectProvider(type = TroubleShootingSQLProvider.class, method = "findTroubleShootingListByUserSeq")
+	@Results({
+		@Result(property = "seq", column = "seq"),
+		@Result(property = "title",column = "title"),
+		@Result(property = "context",column = "context"),
+		@Result(property = "viewCount",column = "view_count"),
+		@Result(property = "likeCount",column = "like_count"),
+		@Result(property = "replyCount",column = "reply_count"),
+		@Result(property = "solved",column = "solved"),
+		@Result(property = "createTime",column = "create_time"),
+		@Result(property = "updateTime",column = "update_time"),
+		@Result(property = "deleteTime",column = "delete_time"),
+		@Result(property = "writer.seq",column = "writer_seq"),
+		@Result(property = "writer.nickname",column = "writer_nickname"),
+		@Result(property = "writer.email",column = "writer_email"),
+		@Result(property = "writer.profileImg",column = "writer_profile_img")
+	})
+	public List<TroubleShootingDTO> selectTroubleShootingListByUserSeq(
+		@Param("searchParam") SearchTroubleShootingDTO searchParam,
+		@Param("userSeq") Long userSeq);
 }
