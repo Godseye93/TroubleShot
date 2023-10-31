@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.orientalSalad.troubleShot.global.dto.ResultDTO;
 import com.orientalSalad.troubleShot.troubleShooting.dto.ResponseTroubleShootingDTO;
+import com.orientalSalad.troubleShot.troubleShooting.dto.SearchTroubleShootingDTO;
 import com.orientalSalad.troubleShot.troubleShooting.dto.TroubleShootingDTO;
 import com.orientalSalad.troubleShot.troubleShooting.service.TroubleShootingService;
 
@@ -40,7 +42,7 @@ public class TroubleShootingController {
 		return new ResponseEntity<ResultDTO>(resultDTO, HttpStatus.ACCEPTED);
 	}
 	@GetMapping("/{seq}")
-	public ResponseEntity<?> insertTroubleShooting(@PathVariable(name = "seq") long seq){
+	public ResponseEntity<?> findTroubleShooting(@PathVariable(name = "seq") long seq) throws Exception {
 		log.info("====== 트러블 슈팅 문서 pk 탐색 시작 =====");
 		TroubleShootingDTO troubleShootingDTO = troubleShootingService.selectTroubleShootingBySeq(seq);
 
@@ -55,6 +57,20 @@ public class TroubleShootingController {
 		resultDTO.getTroubleShootingDTOList().add(troubleShootingDTO);
 		
 		log.info("====== 트러블 슈팅 문서 pk 탐색 끝 =====");
+		return new ResponseEntity<ResponseTroubleShootingDTO>(resultDTO, HttpStatus.ACCEPTED);
+	}
+	@GetMapping("")
+	public ResponseEntity<?> findTroubleShootingList(@ModelAttribute SearchTroubleShootingDTO SearchParam){
+		log.info("====== 트러블 슈팅 문서 목록 검색 시작 =====");
+		log.info(SearchParam);
+
+		ResponseTroubleShootingDTO resultDTO = ResponseTroubleShootingDTO.builder()
+			.success(true)
+			.message("트러블 슈팅 문서 목록 검색을 성공했습니다.")
+			.troubleShootingDTOList(new ArrayList<>())
+			.build();
+
+		log.info("====== 트러블 슈팅 문서 목록 검색 끝 =====");
 		return new ResponseEntity<ResponseTroubleShootingDTO>(resultDTO, HttpStatus.ACCEPTED);
 	}
 }

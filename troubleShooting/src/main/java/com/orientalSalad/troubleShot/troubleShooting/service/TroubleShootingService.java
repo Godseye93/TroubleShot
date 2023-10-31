@@ -9,6 +9,7 @@ import com.orientalSalad.troubleShot.troubleShooting.entity.TroubleShootingEntit
 import com.orientalSalad.troubleShot.troubleShooting.mapper.TroubleShootingMapper;
 import com.orientalSalad.troubleShot.troubleShooting.repository.TroubleShootingRepository;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -24,8 +25,19 @@ public class TroubleShootingService {
 
 		return true;
 	}
-	public TroubleShootingDTO selectTroubleShootingBySeq(long seq){
+
+	public TroubleShootingDTO selectTroubleShootingBySeq(long seq) throws Exception {
 		TroubleShootingDTO troubleShootingDTO = troubleShootingMapper.selectTroubleShootingBySeq(seq);
+
+		TroubleShootingEntity troubleShootingEntity = troubleShootingRepository.findById(seq).orElse(null);
+
+		if(troubleShootingEntity == null){
+			throw new Exception(seq+"번 게시물은 없습니다.");
+		}
+
+		troubleShootingEntity.updateViews();
+
+		troubleShootingRepository.save(troubleShootingEntity);
 
 		return troubleShootingDTO;
 	}

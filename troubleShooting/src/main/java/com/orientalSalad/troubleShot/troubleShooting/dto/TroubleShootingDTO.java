@@ -21,5 +21,7 @@ public class TroubleShootingDTO extends BaseDTO {
 	private String context;
 	private SimpleMemberDTO writer;
 	private boolean solved;
-	private int views;
+	private int viewCount;
+	private int likeCount;
+	private int replyCount;
 }
