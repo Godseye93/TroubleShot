@@ -10,8 +10,8 @@ import vscode_logo from "/public/logo/vscode_logo.png";
 
 export default function FirstIntro() {
   return (
-    <div id="firstIntro" className="flex flex-col items-center">
-          <h1 className="mt-32 mb-10 text-3xl">트러블 슈팅의 완벽한 파트너</h1>
+    <div id="firstIntro" className="flex flex-col items-center mt-28">
+          <h1 className=" mb-10 text-3xl">트러블 슈팅의 완벽한 파트너</h1>
           <Image src={main_logo} alt="trouble-shot" className=" w-9/12" />
           <Link
             href="#"

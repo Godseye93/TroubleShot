@@ -1,5 +1,4 @@
-import { IPageObj } from "./page";
-import { PageObjArray } from "../page"
+import { PageObjArray } from "../../app/page"
 import { cls } from "./cls";
 
 interface IButtonsProps {
