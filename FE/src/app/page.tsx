@@ -8,8 +8,9 @@ import FirstIntro from "../components/home/FirstIntro";
 import FeatureIntro from "../components/home/FeatureIntro";
 import CarouselIntro from "../components/home/CarouselIntro";
 import HomeOutro from "../components/home/HomeOutro";
+import Footer from "../components/Footer"
 
-export default function Home() {
+export default function Page() {
   const outerDivRef = useRef<any>();
   // useRef 타입 명시
 
@@ -60,7 +61,7 @@ export default function Home() {
           // 4페이지 이동
           // console.log("현재 3페이지, down");
           outerDivRef.current.scrollTo({
-            top: pageHeight * 3 + DIVIDER_HEIGHT,
+            top: pageHeight * 3 + DIVIDER_HEIGHT * 4,
             left: 0,
             behavior: "smooth",
           });
@@ -72,7 +73,7 @@ export default function Home() {
           // 4페이지 이동
           // console.log("현재 4페이지, down");
           outerDivRef.current.scrollTo({
-            top: pageHeight * 3 + DIVIDER_HEIGHT,
+            top: pageHeight * 3 + DIVIDER_HEIGHT * 4,
             left: 0,
             behavior: "smooth",
           });
