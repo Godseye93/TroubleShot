@@ -8,7 +8,7 @@ export default function Searchbar() {
   const [isChanged, setIsChanged] = useState(false);
   return (
     <div
-      className={`w-full bg-white rounded-lg shadow-md px-10 py-5 pb-20 relative
+      className={`w-full bg-white rounded-lg shadow-md px-10 py-5
       ${showOptions ? "big-on" : isChanged ? "small-on" : "max-h-[5rem]"}
       `}
     >
@@ -40,7 +40,7 @@ export default function Searchbar() {
             >
               <RiEqualizerLine />
             </button>
-            <button className=" hover:shadow-inner rounded-lg shadow-md hover:bg-main ms-5 flex justify-center items-center w-12 bg-softmain h-10">
+            <button className=" hover:shadow-inner rounded-lg shadow-md hover:bg-main ms-5 flex justify-center transition-all duration-200 items-center w-12 bg-softmain h-10">
               검색
             </button>
           </div>
@@ -51,14 +51,16 @@ export default function Searchbar() {
           }
         </div>
       </div>
-      {showOptions && (
-        <div className="absolute flex items-center gap-2 bottom-5 right-5">
-          <button className="bg-sub text-white rounded-full py-1 px-2 shadow-md" onClick={() => setShowOptions(false)}>
-            닫기
-          </button>
-          <button className="bg-main rounded-full py-1 px-2 shadow-md">적용</button>
-        </div>
-      )}
+      <div
+        className={`flex justify-end mt-5 items-center gap-2 bottom-5 right-5 transition-opacity duration-300 ${
+          !showOptions && "opacity-0"
+        }`}
+      >
+        <button className="bg-sub text-white rounded-full py-1 px-2 shadow-md" onClick={() => setShowOptions(false)}>
+          닫기
+        </button>
+        <button className="bg-main rounded-full py-1 px-2 shadow-md">적용</button>
+      </div>
     </div>
   );
 }
