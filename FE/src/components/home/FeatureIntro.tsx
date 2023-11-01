@@ -32,17 +32,17 @@ export default function FeatureIntro() {
 
 
     return (
-        <div id='featureIntro' className="flex flex-col items-center mt-28">
-            <h1 className="text-5xl">트러블 샷의 주요 기능</h1>
-            <div className="flex w-full h-96 justify-center mt-20">
-                <section className="flex flex-col items-center justify-between w-3/12">
+        <div id='featureIntro' className="w-full flex flex-col items-center">
+            <h1 className="text-4xl">트러블 샷의 주요 기능</h1>
+            <div className="flex mt-16 w-full justify-center">
+                <div className="w-3/12 flex flex-col items-center">
                     <div 
-                    className="bg-main hover:bg-orange-600 duration-300 w-5/12 h-[70px] text-2xl rounded-lg fcc"
+                    className="bg-main hover:bg-orange-600 duration-300 w-5/12 h-[70px] text-2xl rounded-lg fcc mb-10"
                     onClick={() => setContent(MY_TAB.기능1)}>
                         <div>기능 1</div>
                     </div>
                     <div 
-                    className="bg-main hover:bg-orange-600 duration-300 w-5/12 h-[70px] text-2xl rounded-lg fcc"
+                    className="bg-main hover:bg-orange-600 duration-300 w-5/12 h-[70px] text-2xl rounded-lg fcc mb-10"
                     onClick={() => setContent(MY_TAB.기능2)}>
                         <div>기능 2</div>
                     </div>
@@ -51,8 +51,8 @@ export default function FeatureIntro() {
                     onClick={() => setContent(MY_TAB.기능3)}>
                         <div>기능 3</div>
                     </div>
-                </section>
-                <div className=" bg-main w-6/12 rounded-lg fcc"><Image src={contentsFile} alt=''/><div>기능 소개 영상 들어가야 함</div></div>
+                </div>
+                <div className=" bg-main w-5/12 rounded-lg fcc"><Image src={contentsFile} alt=''/><div>기능 소개 영상 들어가야 함</div></div>
             </div>
         </div>
     );

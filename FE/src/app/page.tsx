@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import styles from "../styles/Home.module.css";
 
 import Dots from "../components/home/dots"
+import Stars from "@/components/home/stars";
 import FirstIntro from "../components/home/FirstIntro";
 import FeatureIntro from "../components/home/FeatureIntro";
 import CarouselIntro from "../components/home/CarouselIntro";
@@ -34,7 +35,7 @@ export default function Home() {
         if (scrollTop >= 0 && scrollTop < pageHeight) {
           // 현재 1페이지면
           // 2페이지 이동
-          console.log("현재 1페이지, down");
+          // console.log("현재 1페이지, down");
           outerDivRef.current.scrollTo({
             top: pageHeight + DIVIDER_HEIGHT,
             left: 0,
@@ -45,7 +46,7 @@ export default function Home() {
         } else if (scrollTop >= pageHeight && scrollTop < pageHeight * 2) {
           // 현재 2페이지면
           // 3페이지 이동
-          console.log("현재 2페이지, down");
+          // console.log("현재 2페이지, down");
           outerDivRef.current.scrollTo({
             top: pageHeight * 2 + DIVIDER_HEIGHT,
             left: 0,
@@ -57,7 +58,7 @@ export default function Home() {
         } else if (scrollTop >= pageHeight * 2 && scrollTop < pageHeight * 3) {
           // 현재 3페이지면
           // 4페이지 이동
-          console.log("현재 3페이지, down");
+          // console.log("현재 3페이지, down");
           outerDivRef.current.scrollTo({
             top: pageHeight * 3 + DIVIDER_HEIGHT,
             left: 0,
@@ -69,7 +70,7 @@ export default function Home() {
         } else {
           // 현재 4페이지
           // 4페이지 이동
-          console.log("현재 4페이지, down");
+          // console.log("현재 4페이지, down");
           outerDivRef.current.scrollTo({
             top: pageHeight * 3 + DIVIDER_HEIGHT,
             left: 0,
@@ -86,7 +87,7 @@ export default function Home() {
         if (scrollTop >= 0 && scrollTop < pageHeight) {
           // 현재 1페이지
           // 1페이지 이동
-          console.log("현재 1페이지, up");
+          // console.log("현재 1페이지, up");
           outerDivRef.current.scrollTo({
             top: 0,
             left: 0,
@@ -98,7 +99,7 @@ export default function Home() {
         } else if (scrollTop >= pageHeight && scrollTop < pageHeight * 2) {
           // 현재 2페이지
           // 1페이지 이동
-          console.log("현재 2페이지, up");
+          // console.log("현재 2페이지, up");
           outerDivRef.current.scrollTo({
             top: 0,
             left: 0,
@@ -110,7 +111,7 @@ export default function Home() {
         } else if (scrollTop >= pageHeight * 2 && scrollTop < pageHeight * 3) {
           // 현재 3페이지
           // 2페이지 이동
-          console.log("현재 3페이지, up");
+          // console.log("현재 3페이지, up");
           outerDivRef.current.scrollTo({
             top: pageHeight + DIVIDER_HEIGHT,
             left: 0,
@@ -121,7 +122,7 @@ export default function Home() {
         } else {
           // 4페이지 이동
           // 현재 3페이지
-          console.log("현재 4페이지, up");
+          // console.log("현재 4페이지, up");
           outerDivRef.current.scrollTo({
             top: pageHeight * 2 + DIVIDER_HEIGHT,
             left: 0,
@@ -140,17 +141,16 @@ export default function Home() {
   }, []);
   
   return (
-    <div className="">
-      <main ref={outerDivRef} className={styles.outer}>
-        <Dots scrollIndex={scrollIndex} />
-        <div className={styles.inner}><FirstIntro></FirstIntro></div>
-        <div className={styles.divider}></div>
-        <div className={styles.inner}><FeatureIntro></FeatureIntro></div>
-        <div className={styles.divider}></div>
-        <div className={styles.inner}><CarouselIntro></CarouselIntro></div>
-        <div className={styles.divider}></div>
-        <div className={styles.inner}><HomeOutro></HomeOutro></div>
-      </main>
-    </div>
+    <main ref={outerDivRef} className={styles.outer}>
+      <Dots scrollIndex={scrollIndex} />
+      <Stars/>
+      <div className={`${styles.inner} bg-black text-white`}><FirstIntro/></div>
+      <div className={styles.divider}></div>
+      <div className={`${styles.inner} relative`}><FeatureIntro/></div>
+      <div className={styles.divider}></div>
+      <div className={`${styles.inner} relative`}><CarouselIntro/></div>
+      <div className={styles.divider}></div>
+      <div className={`${styles.inner} bg-black text-white`}><HomeOutro/></div>
+    </main>
   )
 }

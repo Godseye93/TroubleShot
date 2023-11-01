@@ -43,10 +43,10 @@ export default function CarouselIntro() {
   };
 
   return (
-    <div id='carouselIntor' className='fcc mt-36 bg-main'>
-      <div className="w-9/12">
+    <div id='carouselIntor' className='fcc mt-36 bg-softmain w-full'>
+      <div className="w-9/12 mt-8">
         <div className='flex justify-between items-center'>
-          <button className=' hover:scale-150' onClick={prevHandler}><IoArrowBackCircleSharp/></button>
+          <button className='hover:scale-150' onClick={prevHandler}><IoArrowBackCircleSharp/></button>
             {imageList.map((item, index) => (
             <div className=" w-5/12 fcc" key={index} style={{ display: index === current ? 'block' : 'none' }}>
               <Image className='w-3/6 h-[300px] rounded-lg' src={item.Image} alt={item.text} />

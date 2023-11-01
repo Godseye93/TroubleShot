@@ -6,17 +6,7 @@ type DotProps = {
 
 const Dot = ({ num, scrollIndex }: DotProps) => {
     return (
-        <div
-          style={{
-            width: 10,
-            height: 10,
-            border: "1px solid black",
-            borderRadius: 999,
-            backgroundColor: scrollIndex === num ? "black" : "transparent",
-            // transitionDuration: 1000,
-            transition: "background-color 0.5s",
-          }}
-        ></div>
+        <div className={`${scrollIndex === num ? "bg-sub" : "bg-softestmain"} w-4 h-4  rounded-full transition-all`}></div>
       );
 };
 
@@ -26,16 +16,9 @@ type DotsProps = {
 
 const Dots = ({ scrollIndex } : DotsProps) => {
     return (
-      <div style={{ position: "fixed", top: "50%", right: 100 }}>
+      <div className="fixed top-[50%] right-[40px] z-50">
         <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "space-between",
-            alignItems: "center",
-            width: 20,
-            height: 100,
-          }}
+          className="flex flex-col justify-between items-center w-20 h-[100px]"
         >
           <Dot num={1} scrollIndex={scrollIndex}></Dot>
           <Dot num={2} scrollIndex={scrollIndex}></Dot>
