@@ -17,7 +17,7 @@ const Buttons = (props: IButtonsProps) => {
             key={item.pageNum}
             className={cls(
               "w-4 h-4  rounded-full cursor-pointer transition-all",
-              props.currentPageNum === item.pageNum ? "bg-main" : "bg-gray-400"
+              props.currentPageNum === item.pageNum ? "bg-main" : "bg-softestmain"
             )}
             onClick={() => {
               props.handlePointClick(item.pageNum);
