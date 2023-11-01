@@ -18,9 +18,7 @@ import lombok.extern.log4j.Log4j2;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class LoginDTO implements Serializable {
-	@Schema(description = "이메일")
-	String email;
-	@Schema(description = "비밀번호")
-	String password;
+public class LogOutDTO implements Serializable {
+	@Schema(description = "유저 pk")
+	Long seq;
 }

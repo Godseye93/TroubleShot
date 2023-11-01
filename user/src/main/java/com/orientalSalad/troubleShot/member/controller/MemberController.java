@@ -67,6 +67,7 @@ public class MemberController {
 		log.info("==== 유저 찾기 시작 ====");
 
 		MemberDTO memberDTO = memberService.findMemberBySeq(userSeq);
+		memberDTO.setPassword("");
 
 		log.info(memberDTO);
 
