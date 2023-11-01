@@ -17,6 +17,7 @@ const config: Config = {
         sub: "#DF2F5D",
         softmain: "#FFD17C",
         softestmain: "#FBE8C4",
+        silver: "#E9EBF2",
       },
     },
     // font-SUITERegular를 사용하여 테일윈드 방식으로 폰트 변경 가능해짐
