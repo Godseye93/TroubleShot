@@ -9,7 +9,7 @@ interface Props {
 
 export default function Sidebar({ menus, categorys }: Props) {
   return (
-    <div className="w-[14%] h-[91vh] bg-white shadow-lg mt-4 rounded-lg pt-5 flex flex-col justify-between text-lg">
+    <div className="w-[14%] h-[91vh] bg-white shadow-lg mt-4 rounded-lg pt-5  flex-col justify-between text-lg md:flex hidden">
       <div>
         {menus.map((menu, idx) => (
           <div key={idx}>{menu}</div>
@@ -25,7 +25,7 @@ export default function Sidebar({ menus, categorys }: Props) {
           <div className="w-full fcc">
             <button className="fcc bg-sub text-white rounded-full w-3/4 h-10  shadow-red-600 shadow-md mb-5 flex hover:shadow-md hover:bg-red-600 transition-all">
               <AiFillPlusCircle />
-              <p className="ms-2">카테고리 추가</p>
+              <p className="ms-2 line-clamp-1">카테고리 추가</p>
             </button>
           </div>
         )}
