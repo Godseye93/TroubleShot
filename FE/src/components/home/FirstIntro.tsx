@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import Stars from "@/components/home/stars";
 import main_logo from "/public/logo/logo-no-background.png";
 import chrome_logo from "/public/logo/chrome_logo.png";
 import intelliJ_logo from "/public/logo/intelliJ_logo.png";
@@ -10,8 +11,9 @@ import vscode_logo from "/public/logo/vscode_logo.png";
 
 export default function FirstIntro() {
   return (
-    <div className="flex flex-col items-center mb-10 w-10/12">
-          <h1 className="mt-32 mb-10 text-3xl">트러블 슈팅의 완벽한 파트너</h1>
+    <div id="firstIntro" className="flex flex-col items-center mt-28">
+          <Stars/>
+          <h1 className=" mb-10 text-3xl">트러블 슈팅의 완벽한 파트너</h1>
           <Image src={main_logo} alt="trouble-shot" className=" w-9/12" />
           <Link
             href="#"
