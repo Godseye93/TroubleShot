@@ -1,6 +1,6 @@
-import CardContent from "@/components/CardContentS";
+import CardContentL from "@/components/CardContentL";
 
-export default function Rsidebar() {
+export default function Contents() {
   const tmpkeyword = "javascript";
   const tempdata = [
     {
@@ -67,10 +67,11 @@ export default function Rsidebar() {
       date: "2023-01-31",
     },
   ];
-
   return (
-    <div className="mt-4 lg:block hidden">
-      <CardContent keyword={tmpkeyword} contents={tempdata} />
+    <div className="mt-2">
+      <p className="text-xl font-semibold my-2">자주 이용한 태그</p>
+      <CardContentL keyword={tmpkeyword} contents={tempdata} />
+      <p className="text-xl font-semibold my-2">현재 인기글</p>
     </div>
   );
 }
