@@ -15,25 +15,37 @@
       },
       {
         "view": "my-trouble-list-without-login",
-        "contents": "No Trouble shooting found\n[Create New Trouble Shooting](command:create.trouble)"
+        "contents": "No Trouble shooting found\n[Create New Trouble](command:create.trouble)"
       },
       {
         "view": "my-trouble-list",
-        "contents": "No Trouble shooting found\n[Create New Trouble Shooting](command:create.trouble)"
+        "contents": "No Trouble shooting found\n[Create New Trouble](command:create.trouble)"
+      },
+      {
+        "view": "node-dependencies",
+        "contents": "No nodeDependencies found"
       }
     ],
     "commands": [
       {
         "command": "create.trouble",
-        "title": "Trouble Shot : Create Trouble"
+        "title": "Trouble Shot : Create Trouble",
+        "icon": "assets/create.png"
+      },
+      {
+        "command": "delete.trouble",
+        "title": "Trouble Shot : Delete Trouble",
+        "icon": "assets/delete.png"
+      },
+      {
+        "command": "refresh.trouble",
+        "title": "Trouble Shot : Refresh",
+        "icon": "assets/refresh.svg"
       },
       {
         "command": "node.dependencies.refreshEntry",
         "title": "Trouble Shot : Refresh",
-        "icon": {
-          "dark": "assets/refresh-white.svg",
-          "light": "assets/refresh-black.svg"
-        }
+        "icon": "assets/refresh.svg"
       }
     ],
     "viewsContainers": {
@@ -68,11 +80,6 @@
           "when": "isLogin"
         },
         {
-          "id": "community-trouble-list",
-          "name": "Community Trouble List",
-          "when": "isLogin"
-        },
-        {
           "id": "node-dependencies",
           "name": "Node Dependencies"
         },
@@ -88,6 +95,23 @@
           "command": "node.dependencies.refreshEntry",
           "when": "view == node-dependencies",
           "group": "navigation"
+        },
+        {
+          "command": "create.trouble",
+          "when": "view == my-trouble-list-without-login || view == my-trouble-list || view == team-trouble-list || view == community-trouble-list",
+          "group": "navigation"
+        },
+        {
+          "command": "refresh.trouble",
+          "when": "view == my-trouble-list-without-login || view == my-trouble-list || view == team-trouble-list || view == community-trouble-list",
+          "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "delete.trouble",
+          "when": "view == my-trouble-list-without-login || view == my-trouble-list || view == team-trouble-list || view == community-trouble-list",
+          "group": "inline"
         }
       ]
     }
@@ -113,5 +137,11 @@
     "prettier": "^2.2.1",
     "typescript": "^4.1.3",
     "vscode-test": "^1.5.0"
+  },
+  "dependencies": {
+    "@types/uuid": "^9.0.6",
+    "marked": "^9.1.4",
+    "timeago.js": "^4.0.0-beta.3",
+    "uuid": "^9.0.1"
   }
 }

@@ -15,12 +15,13 @@ class Dependency extends vscode.TreeItem {
 }
 
 export class NodeDependenciesProvider implements vscode.TreeDataProvider<Dependency> {
-  constructor(private workspaceRoot: string | undefined) {}
+  constructor(private readonly workspaceRoot: string | undefined) {}
 
   private _onDidChangeTreeData: vscode.EventEmitter<Dependency | undefined | null | void> =
     new vscode.EventEmitter<Dependency | undefined | null | void>();
   readonly onDidChangeTreeData: vscode.Event<Dependency | undefined | null | void> =
     this._onDidChangeTreeData.event;
+  public static allDependencies: Dependency[] = [];
 
   refresh(): void {
     this._onDidChangeTreeData.fire();
@@ -76,11 +77,18 @@ export class NodeDependenciesProvider implements vscode.TreeDataProvider<Depende
             toDep(dep, packageJson.dependencies[dep])
           )
         : [];
+
       const devDeps = packageJson.devDependencies
         ? Object.keys(packageJson.devDependencies).map((dep) =>
             toDep(dep, packageJson.devDependencies[dep])
           )
         : [];
+
+      NodeDependenciesProvider.allDependencies = {
+        ...packageJson.dependencies,
+        ...packageJson.devDependencies,
+      };
+
       return deps.concat(devDeps);
     } else {
       return [];

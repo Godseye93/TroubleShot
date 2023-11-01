@@ -4,5 +4,5 @@ export default {
   theme: {
     extend: {},
   },
-  plugins: [require("@githubocto/tailwind-vscode")],
+  plugins: [],
 };

@@ -2,10 +2,11 @@ import { Disposable, Webview, WebviewPanel, window, Uri, ViewColumn } from "vsco
 import { getUri } from "../utilities/getUri";
 import { getNonce } from "../utilities/getNonce";
 import * as vscode from "vscode";
+import { NodeDependenciesProvider } from "../TreeDataProvider/NodeDependenciesProvider";
+import { Trouble } from "../TreeDataProvider/MyTroubleListProvider";
+import { v4 as uuidv4 } from "uuid";
 
-type Trouble = 0;
-type Solution = 1;
-type TroubleShootingType = Trouble | Solution;
+type TroubleShootingType = 0 | 1;
 
 /**
  * This class manages the state and behavior of HelloWorld webview panels.
@@ -23,6 +24,7 @@ export class TroubleShotPanel {
   private _disposables: Disposable[] = [];
   private readonly _isLogin: boolean;
   private readonly _troubleShootingType: TroubleShootingType;
+  private readonly _globalState: vscode.Memento;
 
   /**
    * The HelloWorldPanel class private constructor (called only from the render method).
@@ -34,7 +36,8 @@ export class TroubleShotPanel {
     panel: WebviewPanel,
     extensionUri: Uri,
     isLogin: boolean,
-    troubleShootingType: TroubleShootingType
+    troubleShootingType: TroubleShootingType,
+    globalState: vscode.Memento
   ) {
     this._panel = panel;
 
@@ -52,6 +55,8 @@ export class TroubleShotPanel {
     this._isLogin = isLogin;
 
     this._troubleShootingType = troubleShootingType;
+
+    this._globalState = globalState;
   }
 
   /**
@@ -63,7 +68,8 @@ export class TroubleShotPanel {
   public static render(
     extensionUri: Uri,
     isLogin: boolean,
-    troubleShootingType: TroubleShootingType
+    troubleShootingType: TroubleShootingType,
+    globalState: vscode.Memento
   ) {
     if (TroubleShotPanel.currentPanel) {
       // If the webview panel already exists reveal it
@@ -93,7 +99,8 @@ export class TroubleShotPanel {
         panel,
         extensionUri,
         isLogin,
-        troubleShootingType
+        troubleShootingType,
+        globalState
       );
     }
   }
@@ -163,7 +170,7 @@ export class TroubleShotPanel {
    */
   private _setWebviewMessageListener(webview: Webview) {
     webview.onDidReceiveMessage(
-      (message: any) => {
+      async (message: any) => {
         const command = message.command;
 
         switch (command) {
@@ -173,7 +180,38 @@ export class TroubleShotPanel {
               command: "getStatus",
               isLogin: this._isLogin,
               troubleShootingType: this._troubleShootingType,
+              defaultSkills: NodeDependenciesProvider.allDependencies,
             });
+            return;
+          case "inValidTitle":
+            vscode.window.showErrorMessage("Title length should be between 2 and 25 characters!");
+            return;
+          case "successCopyMarkdown":
+            vscode.window.showInformationMessage("Copied to clipboard!");
+            return;
+          case "failCopyMarkdown":
+            vscode.window.showErrorMessage("Failed to copy to clipboard!");
+            return;
+          case "addTrouble":
+            try {
+              const newTrouble = new Trouble(
+                message.articleInfo.title,
+                message.articleInfo.createTime,
+                message.articleInfo.isSolved,
+                "my",
+                message.articleInfo.content,
+                uuidv4()
+              );
+              const prevTroubleList = this._globalState.get<Trouble[]>("troubleList");
+              await this._globalState.update(
+                "troubleList",
+                prevTroubleList ? [...prevTroubleList, newTrouble] : [newTrouble]
+              );
+              vscode.commands.executeCommand("refresh.trouble");
+              vscode.window.showInformationMessage("Added to trouble list!");
+            } catch (error) {
+              vscode.window.showErrorMessage("Failed to add to trouble list!");
+            }
             return;
           // Add more switch case statements here as more webview message commands
           // are created within the webview context (i.e. inside media/main.js)

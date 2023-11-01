@@ -1,26 +1,39 @@
-// import * as vscode from "vscode";
-// import { Trouble } from "./Trouble";
+import * as vscode from "vscode";
+import { format } from "timeago.js";
 
-// export class MyTroubleListProvider implements vscode.TreeDataProvider<Trouble> {
-//   constructor(private isLogin: boolean) {}
+export class Trouble extends vscode.TreeItem {
+  constructor(
+    public readonly title: string,
+    private createTime: Date,
+    private isSolved: boolean,
+    private creator: string,
+    public content: string,
+    readonly id: string
+  ) {
+    super(title);
+    this.tooltip = `${this.title}, ${format(this.createTime)} (${this.createTime})`;
+    this.description = format(this.createTime);
+    this.command = {
+      command: "view.trouble",
+      title: "View trouble shooting",
+      arguments: [this.id],
+    };
+  }
+}
 
-//   private _onDidChangeTreeData: vscode.EventEmitter<Trouble | undefined | null | void> =
-//     new vscode.EventEmitter<Trouble | undefined | null | void>();
-//   readonly onDidChangeTreeData: vscode.Event<Trouble | undefined | null | void> =
-//     this._onDidChangeTreeData.event;
+export abstract class MyTroubleListProvider implements vscode.TreeDataProvider<Trouble> {
+  private _onDidChangeTreeData: vscode.EventEmitter<Trouble | undefined | null | void> =
+    new vscode.EventEmitter<Trouble | undefined | null | void>();
+  readonly onDidChangeTreeData: vscode.Event<Trouble | undefined | null | void> =
+    this._onDidChangeTreeData.event;
 
-//   refresh(): void {
-//     this._onDidChangeTreeData.fire();
-//   }
+  refresh(): void {
+    this._onDidChangeTreeData.fire();
+  }
 
-//   getTreeItem(element: Trouble): vscode.TreeItem {
-//     return element;
-//   }
+  getTreeItem(element: Trouble): vscode.TreeItem {
+    return element;
+  }
 
-//   getChildren(element?: Trouble): Thenable<Trouble[]> {
-//     if (!this.isLogin) {
-//       vscode.window.showInformationMessage("No dependency in empty workspace");
-//       return Promise.resolve([]);
-//     }
-//   }
-// }
+  abstract getChildren(): Thenable<Trouble[]>;
+}
