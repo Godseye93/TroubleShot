@@ -18,13 +18,11 @@ import lombok.extern.log4j.Log4j2;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class LoginDTO implements Serializable {
-	@Schema(description = "이메일")
-	String email;
-	@Schema(description = "비밀번호")
-	String password;
-	@Schema(hidden = true)
+public class LogOutDTO implements Serializable {
+	@Schema(description = "유저 pk")
+	Long seq;
+	@Schema(description = "ip",hidden = true)
 	String ip;
-	@Schema(description = "로그인 방식 (0 : 웹, 1 : intellij, 2 : vscode, 3: 크롬 확장)")
+	@Schema(description = "로그인할 기기 0 : 웹, 1 : 인텔리제이, 2: vscode, 3: 크롬 확장")
 	Long type;
 }

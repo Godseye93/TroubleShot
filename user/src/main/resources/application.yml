@@ -1,0 +1,8 @@
+spring:
+  profiles:
+    active: prod
+  application:
+    name: member
+  config:
+    import: configserver:http://k9d205.p.ssafy.io:9090
+
