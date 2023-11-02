@@ -30,7 +30,7 @@ export default function Sidebar({ menus, categorys }: Props) {
           </div>
         )}
         <Link
-          href="#"
+          href="/create"
           className="fcc bg-main rounded-full h-10 w-3/4 shadow-orange-700 shadow-md mb-10 flex hover:shadow-md hover:bg-yellow-500 transition-all"
         >
           <FaPen />

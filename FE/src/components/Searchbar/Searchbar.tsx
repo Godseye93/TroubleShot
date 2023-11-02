@@ -44,13 +44,13 @@ export default function Searchbar() {
               검색
             </button>
           </div>
-          {
-            <div className={showOptions ? "menu-anim-on" : isChanged ? "menu-anim-off" : "hidden"}>
-              <Options />
-            </div>
-          }
         </div>
       </div>
+      {
+        <div className={`w-full  ${showOptions ? "menu-anim-on" : isChanged ? "menu-anim-off" : "hidden"}`}>
+          <Options />
+        </div>
+      }
       <div
         className={`flex justify-end mt-5 items-center gap-2 bottom-5 right-5 transition-opacity duration-300 ${
           !showOptions && "opacity-0"
