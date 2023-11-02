@@ -17,4 +17,8 @@ public class Login {
     public JPanel getPanel() {
         return panel;
     }
+
+//    email, pw, 어디에서 로그인했는지(1) -> json으로 만들어서 보내기
+//    https://k9d205.p.ssay.io:8101/login/login POST
+//    return : memberDTO  -> SEQ값 저장
 }
