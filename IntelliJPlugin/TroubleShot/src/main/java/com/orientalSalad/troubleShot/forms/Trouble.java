@@ -1,6 +1,8 @@
 package com.orientalSalad.troubleShot.forms;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class Trouble {
 	private JPanel panel;
@@ -31,16 +33,34 @@ public class Trouble {
 	private JButton cancleButton;
 	private JButton shootButton;
 	private JButton markDown복사Button;
+	private JComboBox teamComboBox;
 
 	public Trouble() {
+
+//		setRadioGroup();
 		panel = new JPanel();
 		panel.add(troubleMain);
-	}
-	public void setPublicScope() {
-		this.publicScopeGroup = new ButtonGroup();
-		this.publicScopeGroup.add(publicButton);
-		this.publicScopeGroup.add(privateButton);
-		this.publicScopeGroup.add(teamButton);
+
+		// 공개 범위 단일 선택
+		publicScopeGroup = new ButtonGroup();
+		publicScopeGroup.add(publicButton);
+		publicScopeGroup.add(privateButton);
+		publicScopeGroup.add(teamButton);
+
+		// 팀 콤보 상자 비활성화
+		teamComboBox.setEnabled(false);
+		publicButton.addActionListener(e -> {
+				teamComboBox.setEnabled(false);
+		});
+		privateButton.addActionListener(e -> {
+			teamComboBox.setEnabled(false);
+		});
+
+		// teamButton 선택 시, 팀 콤보 상자 활성화
+		teamButton.addActionListener(e -> {
+			teamComboBox.setEnabled(true);
+		});
+
 	}
 
 	public JPanel getPanel() {

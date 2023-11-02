@@ -23,17 +23,22 @@ public class TroubleShotMain {
         panel = new JPanel();
 
         // trouble 판넬 구성
-        Trouble trouble = new Trouble();
-        JPanel troublePanel = trouble.getPanel();
+
         // solution 판넬 구성
-        Solution solution = new Solution();
-        JPanel solutionPanel = solution.getPanel();
+
 
         // detail에 trouble, solution 배치
         CardLayout cardLayout = new CardLayout();
         JPanel detailPanel = new JPanel(cardLayout);
-        detailPanel.add(troublePanel, "Write Trouble");
-        detailPanel.add(solutionPanel, "Write Solution");
+
+        Trouble trouble = new Trouble();
+        detailPanel.add(trouble.getPanel(), "Write Trouble");
+
+        Solution solution = new Solution();
+        detailPanel.add(solution.getPanel(), "Write Solution");
+
+        Login login = new Login();
+        detailPanel.add(login.getPanel(), "Login");
 
         // list에 선택한 경우
         mainList.addListSelectionListener(e -> {
