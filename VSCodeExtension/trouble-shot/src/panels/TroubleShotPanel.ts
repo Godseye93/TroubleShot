@@ -5,8 +5,9 @@ import * as vscode from "vscode";
 import { NodeDependenciesProvider } from "../TreeDataProvider/NodeDependenciesProvider";
 import { Trouble } from "../TreeDataProvider/MyTroubleListProvider";
 import { v4 as uuidv4 } from "uuid";
+import { TROUBLE_SHOOTING_TYPE } from "../extension";
 
-type TroubleShootingType = 0 | 1;
+type TroubleShootingType = typeof TROUBLE_SHOOTING_TYPE[keyof typeof TROUBLE_SHOOTING_TYPE];
 
 /**
  * This class manages the state and behavior of HelloWorld webview panels.
@@ -22,9 +23,10 @@ export class TroubleShotPanel {
   public static currentPanel: TroubleShotPanel | undefined;
   private readonly _panel: WebviewPanel;
   private _disposables: Disposable[] = [];
-  private readonly _isLogin: boolean;
+  private readonly _sessionId: number;
   private readonly _troubleShootingType: TroubleShootingType;
   private readonly _globalState: vscode.Memento;
+  private readonly _troubleId?: string;
 
   /**
    * The HelloWorldPanel class private constructor (called only from the render method).
@@ -35,9 +37,10 @@ export class TroubleShotPanel {
   private constructor(
     panel: WebviewPanel,
     extensionUri: Uri,
-    isLogin: boolean,
+    sessionId: number,
     troubleShootingType: TroubleShootingType,
-    globalState: vscode.Memento
+    globalState: vscode.Memento,
+    troubleId?: string
   ) {
     this._panel = panel;
 
@@ -52,11 +55,13 @@ export class TroubleShotPanel {
     this._setWebviewMessageListener(this._panel.webview);
 
     // Set the isLogin property
-    this._isLogin = isLogin;
+    this._sessionId = sessionId;
 
     this._troubleShootingType = troubleShootingType;
 
     this._globalState = globalState;
+
+    this._troubleId = troubleShootingType === 1 ? troubleId : undefined;
   }
 
   /**
@@ -67,9 +72,10 @@ export class TroubleShotPanel {
    */
   public static render(
     extensionUri: Uri,
-    isLogin: boolean,
+    sessionId: number,
     troubleShootingType: TroubleShootingType,
-    globalState: vscode.Memento
+    globalState: vscode.Memento,
+    troubleId?: string
   ) {
     if (TroubleShotPanel.currentPanel) {
       // If the webview panel already exists reveal it
@@ -98,9 +104,10 @@ export class TroubleShotPanel {
       TroubleShotPanel.currentPanel = new TroubleShotPanel(
         panel,
         extensionUri,
-        isLogin,
+        sessionId,
         troubleShootingType,
-        globalState
+        globalState,
+        troubleId
       );
     }
   }
@@ -174,33 +181,47 @@ export class TroubleShotPanel {
         const command = message.command;
 
         switch (command) {
-          case "getStatus":
-            // Code that should run in response to the hello message command
-            webview.postMessage({
-              command: "getStatus",
-              isLogin: this._isLogin,
-              troubleShootingType: this._troubleShootingType,
-              defaultSkills: NodeDependenciesProvider.allDependencies,
-            });
+          case "getInitialStatus":
+            if (this._troubleShootingType === TROUBLE_SHOOTING_TYPE.TROUBLE) {
+              webview.postMessage({
+                command: "getInitialStatus",
+                troubleShootingType: this._troubleShootingType,
+                sessionId: this._sessionId,
+                defaultSkills: NodeDependenciesProvider.allDependencies,
+              });
+            }
+            if (this._troubleShootingType === TROUBLE_SHOOTING_TYPE.SOLUTION) {
+              webview.postMessage({
+                command: "getInitialStatus",
+                troubleShootingType: this._troubleShootingType,
+                sessionId: this._sessionId,
+                troubleId: this._troubleId,
+              });
+            }
+            if (this._troubleShootingType === TROUBLE_SHOOTING_TYPE.LOGIN_FORM) {
+              webview.postMessage({
+                command: "getInitialStatus",
+                troubleShootingType: this._troubleShootingType,
+              });
+            }
             return;
-          case "inValidTitle":
-            vscode.window.showErrorMessage("Title length should be between 2 and 25 characters!");
-            return;
-          case "successCopyMarkdown":
-            vscode.window.showInformationMessage("Copied to clipboard!");
-            return;
-          case "failCopyMarkdown":
-            vscode.window.showErrorMessage("Failed to copy to clipboard!");
+          case "showMessage":
+            if (message.type === "error") {
+              vscode.window.showErrorMessage(message.content);
+            }
+            if (message.type === "info") {
+              vscode.window.showInformationMessage(message.content);
+            }
             return;
           case "addTrouble":
             try {
               const newTrouble = new Trouble(
                 message.articleInfo.title,
                 message.articleInfo.createTime,
-                message.articleInfo.isSolved,
                 "my",
                 message.articleInfo.content,
-                uuidv4()
+                uuidv4(),
+                "unSolved"
               );
               const prevTroubleList = this._globalState.get<Trouble[]>("troubleList");
               await this._globalState.update(
@@ -209,8 +230,28 @@ export class TroubleShotPanel {
               );
               vscode.commands.executeCommand("refresh.trouble");
               vscode.window.showInformationMessage("Added to trouble list!");
+              this.dispose();
             } catch (error) {
               vscode.window.showErrorMessage("Failed to add to trouble list!");
+            }
+            return;
+          case "solveTrouble":
+            try {
+              const prevTroubleList = this._globalState.get<Trouble[]>("troubleList");
+              const newTroubleList = prevTroubleList?.map((trouble) => {
+                if (trouble.id === message.articleInfo.troubleId) {
+                  trouble.content += "\n\n";
+                  trouble.content += message.articleInfo.content;
+                  trouble.contextValue = "solved";
+                }
+                return trouble;
+              });
+              await this._globalState.update("troubleList", newTroubleList);
+              vscode.commands.executeCommand("refresh.trouble");
+              vscode.window.showInformationMessage("Trouble solved!");
+              this.dispose();
+            } catch (error) {
+              vscode.window.showErrorMessage("Failed to solve!");
             }
             return;
           // Add more switch case statements here as more webview message commands

@@ -1,19 +1,21 @@
 import * as vscode from "vscode";
 import { TroubleShotPanel } from "./panels/TroubleShotPanel";
-import { getLoginStatus } from "./utilities/getLoginStatus";
+import { getSessionId } from "./utilities/getSessionId";
 import { NodeDependenciesProvider } from "./TreeDataProvider/NodeDependenciesProvider";
 import { getRootPath } from "./utilities/getRootPath";
 import { MyTroubleListProviderWithoutLogin } from "./TreeDataProvider/MyTroubleListProviderWithoutLogin";
-import { getWebviewContent } from "./panels/getWebviewContent";
+import { getMarkdownView } from "./panels/getMarkdownView";
 import { Trouble } from "./TreeDataProvider/MyTroubleListProvider";
 
 export const TROUBLE_SHOOTING_TYPE = {
   TROUBLE: 0 as const,
   SOLUTION: 1 as const,
+  LOGIN_FORM: 2 as const,
 };
 
 export async function activate(context: vscode.ExtensionContext) {
-  const isLogin = await getLoginStatus(context);
+  const sessionId = await getSessionId(context);
+  const isLogin = sessionId !== -1;
   vscode.commands.executeCommand("setContext", "isLogin", isLogin);
 
   // trouble webview panel
@@ -21,8 +23,43 @@ export async function activate(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand("create.trouble", () => {
       TroubleShotPanel.render(
         context.extensionUri,
-        isLogin,
+        sessionId,
         TROUBLE_SHOOTING_TYPE.TROUBLE,
+        context.globalState
+      );
+    })
+  );
+
+  // trouble webview panel
+  context.subscriptions.push(
+    vscode.commands.registerCommand("solve.trouble", (trouble) => {
+      TroubleShotPanel.render(
+        context.extensionUri,
+        sessionId,
+        TROUBLE_SHOOTING_TYPE.SOLUTION,
+        context.globalState,
+        trouble.id
+      );
+    })
+  );
+
+  context.subscriptions.push(
+    vscode.commands.registerCommand("copy.markdown", (trouble) => {
+      try {
+        vscode.env.clipboard.writeText(trouble.content);
+        vscode.window.showInformationMessage("Copied to clipboard!");
+      } catch (error) {
+        vscode.window.showErrorMessage("Failed to copy to clipboard!");
+      }
+    })
+  );
+
+  context.subscriptions.push(
+    vscode.commands.registerCommand("login.trouble.shot", () => {
+      TroubleShotPanel.render(
+        context.extensionUri,
+        sessionId,
+        TROUBLE_SHOOTING_TYPE.LOGIN_FORM,
         context.globalState
       );
     })
@@ -78,7 +115,7 @@ export async function activate(context: vscode.ExtensionContext) {
           enableScripts: true,
         }
       );
-      panel.webview.html = getWebviewContent(trouble.content);
+      panel.webview.html = getMarkdownView(trouble.content, context.extensionUri);
     })
   );
 }

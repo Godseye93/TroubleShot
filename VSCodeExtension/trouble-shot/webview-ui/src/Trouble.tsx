@@ -11,15 +11,15 @@ import { VscCopy } from "react-icons/vsc";
 import { BiUpload } from "react-icons/bi";
 import { useEffect, useState } from "react";
 import { vscode } from "./utilities/vscode";
-import { skill } from "./App";
 
 interface Props {
-  isLogin: boolean;
-  defaultSkills: skill;
+  sessionId: number;
+  defaultSkills: string;
 }
 
-const Trouble = ({ isLogin, defaultSkills }: Props) => {
+const Trouble = ({ sessionId, defaultSkills }: Props) => {
   const [isTeamOpen, setIsTeamOpen] = useState(false);
+
   const [articleInfo, setArticleInfo] = useState({
     title: "",
     skill: "",
@@ -30,17 +30,16 @@ const Trouble = ({ isLogin, defaultSkills }: Props) => {
 
   function onChange(e: any) {
     const { name, value } = e.target;
-    setArticleInfo({
-      ...articleInfo,
-      [name]: value,
-    });
+    setArticleInfo((prev) => ({ ...prev, [name]: value }));
   }
 
   function checkValid() {
     const { title } = articleInfo;
     if (title.trim().length < 2 || title.trim().length > 20) {
       vscode.postMessage({
-        command: "inValidTitle",
+        command: "showMessage",
+        type: "error",
+        content: "Title is too short or too long!",
       });
       return false;
     }
@@ -51,10 +50,12 @@ const Trouble = ({ isLogin, defaultSkills }: Props) => {
     const { title, skill, code, console, description } = articleInfo;
 
     let markdownText = `# ${title}\n\n`;
-    markdownText += `## 사용 기술 및 의존성\n\`${skill}\`\n\n`;
-    markdownText += `## 문제 코드\n\`\`\`\n${code}\n\`\`\`\n\n`;
-    markdownText += `## 콘솔 로그\n\`${console}\`\n\n`;
-    markdownText += `## 상세 설명\n${description}\n\n`;
+    markdownText += `## TROUBLE\n\n`;
+    markdownText += `---------------------------------------\n\n`;
+    markdownText += `### 사용 기술 및 의존성\n\`${skill}\`\n\n`;
+    markdownText += `### 문제 코드\n\`\`\`\n${code}\n\`\`\`\n\n`;
+    markdownText += `### 콘솔 로그\n\`${console}\`\n\n`;
+    markdownText += `### 문제 설명\n${description}\n\n`;
 
     return markdownText;
   }
@@ -64,11 +65,15 @@ const Trouble = ({ isLogin, defaultSkills }: Props) => {
     try {
       await navigator.clipboard.writeText(onCreateMarkdown());
       vscode.postMessage({
-        command: "successCopyMarkdown",
+        command: "showMessage",
+        type: "info",
+        content: "Copied to clipboard!",
       });
     } catch (error) {
       vscode.postMessage({
-        command: "failCopyMarkdown",
+        command: "showMessage",
+        type: "error",
+        content: "Failed to copy to clipboard!",
       });
     }
   }
@@ -78,31 +83,27 @@ const Trouble = ({ isLogin, defaultSkills }: Props) => {
       command: "addTrouble",
       articleInfo: {
         title: articleInfo.title,
-        createTime: new Date(),
-        isSolved: false,
-        creator: "my",
+        createTime: new Date().toLocaleString(),
         content: onCreateMarkdown(),
       },
     });
   }
 
   useEffect(() => {
-    setArticleInfo({
-      ...articleInfo,
-      skill: JSON.stringify(defaultSkills),
-    });
+    setArticleInfo((prev) => ({ ...prev, skill: defaultSkills }));
   }, [defaultSkills]);
 
   const { title, skill, code, console, description } = articleInfo;
+  const isLogin = sessionId !== -1;
 
   return (
-    <section className="flex flex-col gap-1 ">
+    <section className="flex flex-col w-2/3 gap-1 ">
       <VSCodeTextField value={title} onInput={onChange} name="title" className="w-2/3 ">
         제목
       </VSCodeTextField>
       {isLogin && (
         <VSCodeRadioGroup>
-          <VSCodeRadio slot="label">공개 범위</VSCodeRadio>
+          <label slot="label">공개 범위</label>
           <VSCodeRadio>비공개</VSCodeRadio>
           <VSCodeRadio>전체 공개</VSCodeRadio>
           <VSCodeRadio checked={isTeamOpen}>팀 공개</VSCodeRadio>
@@ -114,16 +115,16 @@ const Trouble = ({ isLogin, defaultSkills }: Props) => {
         </VSCodeRadioGroup>
       )}
 
-      <VSCodeTextArea value={skill} name="skill">
+      <VSCodeTextArea value={skill} name="skill" onInput={onChange}>
         사용 기술 스택
       </VSCodeTextArea>
       <VSCodeTextArea value={code} onInput={onChange} name="code">
         문제 코드
       </VSCodeTextArea>
-      <VSCodeTextArea value={console} name="console">
+      <VSCodeTextArea value={console} name="console" onInput={onChange}>
         콘솔 로그
       </VSCodeTextArea>
-      <VSCodeTextArea value={description} name="description">
+      <VSCodeTextArea value={description} name="description" onInput={onChange}>
         상세 설명
       </VSCodeTextArea>
       <div className="flex items-center justify-center gap-5 mt-5">

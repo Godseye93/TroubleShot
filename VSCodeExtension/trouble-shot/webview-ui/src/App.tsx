@@ -2,11 +2,16 @@ import "./index.css";
 import { vscode } from "./utilities/vscode";
 import Trouble from "./Trouble";
 import { useEffect, useState } from "react";
+import Solution from "./Solution";
+import LoginForm from "./LoginForm";
 
 export const TROUBLE_SHOOTING_TYPE = {
+  LOADING: -1 as const,
   TROUBLE: 0 as const,
   SOLUTION: 1 as const,
+  LOGIN_FORM: 2 as const,
 };
+
 type TroubleShootingType = typeof TROUBLE_SHOOTING_TYPE[keyof typeof TROUBLE_SHOOTING_TYPE];
 
 export interface skill {
@@ -14,51 +19,62 @@ export interface skill {
 }
 interface Message {
   command: string;
-  isLogin: boolean;
+  sessionId: number;
   troubleShootingType: TroubleShootingType;
-  defaultSkills: skill;
+  defaultSkills?: skill;
+  troubleId?: string;
 }
 
 function App() {
-  const [isLogin, setIsLogin] = useState<boolean>(false);
+  const [sessionId, setSessionId] = useState<number>(-1);
   const [troubleShootingType, setTroubleShootingType] = useState<TroubleShootingType>(
-    TROUBLE_SHOOTING_TYPE.TROUBLE
+    TROUBLE_SHOOTING_TYPE.LOADING
   );
-  const [defaultSkills, setDefaultSkills] = useState<any>({});
+  const [defaultSkills, setDefaultSkills] = useState<any>();
+  const [troubleId, setTroubleId] = useState<string>();
+
   useEffect(() => {
-    window.addEventListener("message", onHandleMessage);
+    window.addEventListener("message", onHandleInitMessage);
     return () => {
-      window.removeEventListener("message", onHandleMessage);
+      window.removeEventListener("message", onHandleInitMessage);
     };
   }, []);
 
   useEffect(() => {
     vscode.postMessage({
-      command: "getStatus",
+      command: "getInitialStatus",
     });
   }, []);
 
-  function onHandleMessage(event: MessageEvent<Message>) {
+  function onHandleInitMessage(event: MessageEvent<Message>) {
     const message = event.data;
     switch (message.command) {
-      case "getStatus":
-        setIsLogin(message.isLogin);
+      case "getInitialStatus":
         setTroubleShootingType(message.troubleShootingType);
-        setDefaultSkills(message.defaultSkills);
-        break;
-      default:
+
+        if (message.troubleShootingType === TROUBLE_SHOOTING_TYPE.TROUBLE) {
+          setDefaultSkills(message.defaultSkills);
+          setSessionId(message.sessionId);
+        }
+        if (message.troubleShootingType === TROUBLE_SHOOTING_TYPE.SOLUTION) {
+          setTroubleId(message.troubleId);
+          setSessionId(message.sessionId);
+        }
+
         break;
     }
   }
 
   return (
-    <main>
+    <main className="flex items-center justify-center">
       {troubleShootingType === TROUBLE_SHOOTING_TYPE.TROUBLE ? (
-        <Trouble isLogin={isLogin} defaultSkills={defaultSkills} />
+        <Trouble sessionId={sessionId} defaultSkills={JSON.stringify(defaultSkills)} />
       ) : troubleShootingType === TROUBLE_SHOOTING_TYPE.SOLUTION ? (
-        <div>SOLUTION</div>
+        <Solution sessionId={sessionId} troubleId={troubleId} />
+      ) : troubleShootingType === TROUBLE_SHOOTING_TYPE.LOGIN_FORM ? (
+        <LoginForm />
       ) : (
-        <div>ERROR</div>
+        <div>LOADING</div>
       )}
     </main>
   );

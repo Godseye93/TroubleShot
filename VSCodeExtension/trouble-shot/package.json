@@ -11,7 +11,7 @@
     "viewsWelcome": [
       {
         "view": "login-to-trouble-shot",
-        "contents": "Login to Trouble shot\n[Log in](command:nodeDependencies.addEntry)"
+        "contents": "Login to Trouble shot\n[Log in](command:login.trouble.shot)"
       },
       {
         "view": "my-trouble-list-without-login",
@@ -28,24 +28,38 @@
     ],
     "commands": [
       {
+        "command": "copy.markdown",
+        "title": "Copy Markdown",
+        "icon": "assets/copy.png"
+      },
+      {
+        "command": "login.trouble.shot",
+        "title": "Login to Trouble Shot"
+      },
+      {
+        "command": "solve.trouble",
+        "title": "Solve trouble",
+        "icon": "assets/solved.png"
+      },
+      {
         "command": "create.trouble",
         "title": "Trouble Shot : Create Trouble",
         "icon": "assets/create.png"
       },
       {
         "command": "delete.trouble",
-        "title": "Trouble Shot : Delete Trouble",
+        "title": "Delete Trouble",
         "icon": "assets/delete.png"
       },
       {
         "command": "refresh.trouble",
         "title": "Trouble Shot : Refresh",
-        "icon": "assets/refresh.svg"
+        "icon": "assets/refresh.png"
       },
       {
         "command": "node.dependencies.refreshEntry",
         "title": "Trouble Shot : Refresh",
-        "icon": "assets/refresh.svg"
+        "icon": "assets/refresh.png"
       }
     ],
     "viewsContainers": {
@@ -109,7 +123,17 @@
       ],
       "view/item/context": [
         {
+          "command": "solve.trouble",
+          "when": "viewItem == unSolved",
+          "group": "inline"
+        },
+        {
           "command": "delete.trouble",
+          "when": "view == my-trouble-list-without-login || view == my-trouble-list || view == team-trouble-list || view == community-trouble-list",
+          "group": "inline"
+        },
+        {
+          "command": "copy.markdown",
           "when": "view == my-trouble-list-without-login || view == my-trouble-list || view == team-trouble-list || view == community-trouble-list",
           "group": "inline"
         }
@@ -140,6 +164,7 @@
   },
   "dependencies": {
     "@types/uuid": "^9.0.6",
+    "@vscode/webview-ui-toolkit": "^1.2.2",
     "marked": "^9.1.4",
     "timeago.js": "^4.0.0-beta.3",
     "uuid": "^9.0.1"
