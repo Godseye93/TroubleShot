@@ -23,4 +23,8 @@ public class LoginDTO implements Serializable {
 	String email;
 	@Schema(description = "비밀번호")
 	String password;
+	@Schema(hidden = true)
+	String ip;
+	@Schema(description = "로그인 방식 (0 : 웹, 1 : intellij, 2 : vscode, 3: 크롬 확장)")
+	Long type;
 }

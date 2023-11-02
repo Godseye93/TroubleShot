@@ -36,8 +36,6 @@ public class MemberService {
 
 		MemberEntity memberEntity = memberConverter.toEntity(memberDTO);
 
-		log.info(memberEntity.toString());
-
 		memberRepository.save(memberEntity);
 
 		return true;

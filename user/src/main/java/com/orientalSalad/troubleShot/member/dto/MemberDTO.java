@@ -20,7 +20,7 @@ public class MemberDTO extends BaseDTO {
 	@Schema(description = "이메일")
 	private String email;
 	@Schema(description = "비밀번호")
-	private String password;
+	private String password ;
 	@Schema(description = "프로필 사진")
 	private String profileImg;
 	@Schema(description = "닉네임")

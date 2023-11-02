@@ -1,9 +1,7 @@
 package com.orientalSalad.troubleShot.member.entity;
 
 import com.orientalSalad.troubleShot.global.entity.BaseEntity;
-import com.orientalSalad.troubleShot.member.dto.MemberDTO;
 
-import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
@@ -22,6 +20,7 @@ public class MemberEntity extends BaseEntity {
 	private String nickname;
 	private String locale;
 
+
 	@Builder
 	public MemberEntity(String email, String password, String profileImg, String locale,String nickname){
 		this.email = email;
@@ -35,7 +34,6 @@ public class MemberEntity extends BaseEntity {
 	public String toString() {
 		return "MemberEntity{" +
 			"email='" + email + '\'' +
-			", password='" + password + '\'' +
 			", profileImg='" + profileImg + '\'' +
 			", nickname='" + nickname + '\'' +
 			", locale='" + locale + '\'' +
