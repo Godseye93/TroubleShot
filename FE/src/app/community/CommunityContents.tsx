@@ -1,6 +1,6 @@
 import CardContentL from "@/components/CardContentL";
 
-export default function Contents() {
+export default function CommunityContents() {
   const tmpkeyword = "javascript";
   const tempdata = [
     {

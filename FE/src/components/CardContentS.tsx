@@ -17,7 +17,7 @@ interface props {
 
 export default function CardContentS({ keyword, contents }: props) {
   return (
-    <div className="rounded-lg w-56 bg-white shadow-md">
+    <div className="rounded-lg w-52 bg-white shadow-md">
       <div className="w-full h-7 px-2 bg-main rounded-t-lg flex items-center justify-between">
         <p>{keyword}</p>
         <Link href={""}>
@@ -28,7 +28,7 @@ export default function CardContentS({ keyword, contents }: props) {
         {contents.map((content, idx) => (
           <div className="mt-2 w-[95%] border-b-2 " key={idx}>
             <div className=" flex items-center justify-between">
-              <p className="text-base font-semibold flex-1 me-1">
+              <p className="text-base font-semibold flex-1 me-13 line-clamp-1">
                 {idx + 1}. {content.title}
               </p>
               <p className="text-xs">{content.date}</p>
@@ -44,8 +44,9 @@ export default function CardContentS({ keyword, contents }: props) {
               </div>
               <div className="cover-bar"></div>
             </div>
-
-            <IconBox likes={content.likes} views={content.views} comments={content.comments} />
+            <div className="text-sm">
+              <IconBox likes={content.likes} views={content.views} comments={content.comments} />
+            </div>
           </div>
         ))}
       </div>
