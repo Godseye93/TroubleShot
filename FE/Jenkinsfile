@@ -20,7 +20,7 @@ pipeline {
 
         stage('Build image') {
             steps {
-                dir('user') {
+                dir('FE') {
                     sh 'ls -al'
                     sh 'npm install'
                     sh 'npm run build'
