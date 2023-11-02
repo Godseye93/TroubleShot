@@ -3,6 +3,7 @@ package com.orientalSalad.troubleShot.member.service;
 import org.springframework.stereotype.Service;
 
 import com.orientalSalad.troubleShot.global.utill.HashEncrypt;
+import com.orientalSalad.troubleShot.global.utill.ObjectConverter;
 import com.orientalSalad.troubleShot.login.dto.LoginDTO;
 import com.orientalSalad.troubleShot.member.dto.MemberDTO;
 import com.orientalSalad.troubleShot.member.entity.MemberEntity;
@@ -18,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 public class MemberService {
 	private final MemberRepository memberRepository;
 	private final HashEncrypt hashEncrypt;
+	private final ObjectConverter<MemberDTO,MemberEntity> memberConverter;
 
 	@Transactional
 	public Boolean insertMember(MemberDTO memberDTO){
@@ -32,9 +34,7 @@ public class MemberService {
 		//sha-256으로 비밀번호 해싱
 		memberDTO.setPassword(hashEncrypt.hashWithSHA256(memberDTO.getPassword()));
 
-		MemberEntity memberEntity = memberDTO.toMemberEntity();
-
-		log.info(memberEntity.toString());
+		MemberEntity memberEntity = memberConverter.toEntity(memberDTO);
 
 		memberRepository.save(memberEntity);
 
@@ -44,7 +44,7 @@ public class MemberService {
 	public MemberDTO findMemberBySeq(Long seq){
 		MemberEntity memberEntity = memberRepository.findMemberEntityBySeq(seq);
 
-		MemberDTO memberDTO = memberEntity.toMemberDTO();
+		MemberDTO memberDTO = memberConverter.toDTO(memberEntity);
 
 		return memberDTO;
 	}
@@ -60,7 +60,7 @@ public class MemberService {
 			return null;
 		}
 
-		MemberDTO memberDTO = memberEntity.toMemberDTO();
+		MemberDTO memberDTO = memberConverter.toDTO(memberEntity);
 
 		return memberDTO;
 	}
