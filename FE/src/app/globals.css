@@ -17,3 +17,135 @@
     font-weight: 400;
     font-style: normal;
 }
+.fcc{
+    @apply flex items-center justify-center
+}
+
+.hvc, .menu-btn{
+    @apply hover:bg-main  duration-300 transition-all hover:shadow-lg
+}
+.tagbox{
+    position: relative;
+}
+
+.tag-scroll::-webkit-scrollbar{
+overflow-x: scroll;
+width: 100%;
+height: 10px;
+}
+
+
+.cover-bar{
+  width:100%;
+  height:10px;
+  position:absolute;
+  bottom:0;
+  right:0;
+  -webkit-transition: all .5s;
+  opacity: 1;
+  /* 배경색을 상자색과 똑같이 맞춰준다 */
+  background-color:white;
+}
+
+/* 중요한 부분 */
+.tagbox:hover .cover-bar {
+   opacity: 0;
+   visibility: hidden;
+  -webkit-transition: all .5s;
+}
+/* 스크롤바 전체 기본 꾸미기 */
+::-webkit-scrollbar {
+    width: 10px;  /* 세로축 스크롤바 폭 너비 */
+    height: 20px;  /* 가로축 스크롤바 폭 너비 */
+  }
+  
+  /* 스크롤바 막대 꾸미기 */
+  ::-webkit-scrollbar-thumb {
+    @apply bg-gray-600;
+    @apply border-main;
+    border-radius: 12px 12px 12px 12px;
+  }
+  
+  /* 스크롤바 트랙 꾸미기 */
+  ::-webkit-scrollbar-track {
+    @apply bg-gray-300
+  }
+  
+  .menu-btn{
+    @apply flex items-center ps-6 h-10 rounded-full
+  }
+  @keyframes waterfall {
+    0% {
+        opacity: 0;
+        transform: translate(0, -50%) scaleY(0);
+        max-height: 0;
+        
+        
+    }
+    to {
+        opacity: 1;
+        transform: translateZ(0) scaleY(1);
+        max-height: 20rem;
+    }
+}
+@keyframes waterfallre {
+    0% {
+        opacity: 1;
+        transform: translateZ(0) scaleY(1);
+        max-height: 20rem;
+    }
+    to {
+        opacity: 0;
+        transform: translate(0, -50%) scaleY(0);
+        max-height: 0;
+    }
+  }
+  .menu-anim-on{
+    animation-duration: 0.35s;
+    animation-name: waterfall;
+  }
+  .menu-anim-off{
+    animation-duration: 0.35s;
+    animation-name: waterfallre;
+    animation-fill-mode: forwards;
+  }
+
+  @keyframes big {
+    from{
+        max-height: 5rem;
+    }
+    to{
+        max-height: 100vh;
+    }
+  }
+  @keyframes onsmall {
+    from{
+        max-height: 100vh;
+    }
+    to{
+    max-height: 5rem;   
+
+}
+  }
+/* 서치바 박스 켰다껐다 */
+  .big-on{
+    animation-name: big;
+    animation-duration: 0.4s;
+    animation-fill-mode: forwards;
+  }
+  .small-on{
+    animation-name: onsmall;
+    animation-duration: 0.4s;
+    animation-fill-mode: forwards;
+  }
+
+  .option-btn{
+    @apply hover:bg-softestmain duration-300 px-2 h-7 rounded-full transition-colors
+  }
+  .react-datepicker__header, .react-datepicker__day-names, .react-datepicker__header {
+    @apply bg-main
+    !important
+  }
+  .react-datepicker__triangle{
+    @apply hidden
+  }
