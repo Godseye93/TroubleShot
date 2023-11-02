@@ -32,7 +32,7 @@ export default function Header() {
         </Link>
       </div>
       <Link href="/login" className="w-2/12 h-2/12 flex items-center justify-end">
-        <button className="bg-main hover:bg-yellow-700 duration-300 line-clamp-1  text-white font-bold py-2 px-4 rounded h-5/6 fcc me-2">
+        <button className="bg-main hover:bg-yellow-700 duration-300 line-clamp-1  text-white font-bold w-20 p-1 rounded fcc me-2">
           로그인
         </button>
       </Link>
