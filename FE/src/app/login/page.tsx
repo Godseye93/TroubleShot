@@ -12,22 +12,22 @@ export default function Page() {
       <div className="bg-white rounded p-10 text-center shadow-md">
         <h1 className="text-3xl border-b border-main">로그인</h1>
         <div className="my-4 text-left">
-          <label className="text-gray-900">Email:</label>
+          <label className="text-gray-900">아이디</label>
           <input
             type="text"
-            className="border block w-full p-2 mt-2 rounded"
+            className="border block w-full p-2 rounded"
             id="email"
-            placeholder="Enter Email"
+            placeholder="이메일을 입력하세요."
           />
         </div>
 
         <div className="my-4 text-left">
-          <label className="text-gray-900">Password:</label>
+          <label className="text-gray-900">비밀번호</label>
           <input
             type="password"
-            className="border block w-full p-2 mt-2 rounded"
+            className="border block w-full p-2 rounded"
             id="password"
-            placeholder="Enter Password"
+            placeholder="비밀번호를 입력하세요"
             // onChange={(e)=>{}}
           />
         </div>
@@ -48,7 +48,7 @@ export default function Page() {
         </div>
 
         <Link 
-        href="#"
+        href="/signUp"
         className="">
           <p>트러블 샷이 처음이신가요?</p>
         </Link>
