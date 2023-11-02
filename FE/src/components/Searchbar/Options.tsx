@@ -14,11 +14,11 @@ export default function Options() {
   return (
     <div>
       <div className="mt-7 flex gap-2">
-        <div className="max-w-[50%] border-r-2 pe-2">
+        <div className="w-[50%] border-r-2 pe-2">
           <Duration />
           <InputTag setTags={setTags} />
         </div>
-        <div className="max-w-[25%] ps-2 border-r-2 pe-2">
+        <div className="w-[25%] ps-2 border-r-2 pe-2">
           <SetOptions
             title="해결여부"
             options={anwerOption}
@@ -26,7 +26,7 @@ export default function Options() {
             setSelectedOption={setSelectAnswer}
           />
         </div>
-        <div className="max-w-[25%] ps-2">
+        <div className="w-[25%] ps-2">
           <SetOptions
             title="정렬 기준"
             options={sortOption}

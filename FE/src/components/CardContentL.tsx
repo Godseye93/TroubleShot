@@ -1,4 +1,3 @@
-import { AiFillTag } from "react-icons/ai";
 import IconBox from "./IconBox";
 import Link from "next/link";
 import Tagbox from "./TagBox";
@@ -42,7 +41,7 @@ export default function CardContentL({ keyword, contents }: props) {
               <div className="line-clamp-2 mt-2 text-sm">{content.content}</div>
 
               <Tagbox tags={content.tags} />
-              <div className="mt-3 mb-2">
+              <div className="mt-3 mb-2 text-sm">
                 <IconBox likes={content.likes} views={content.views} comments={content.comments} />
               </div>
             </div>
