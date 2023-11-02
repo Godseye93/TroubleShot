@@ -10,7 +10,6 @@ public class Solution {
     private JTextArea textArea1;
     private JTextArea textArea2;
     private JButton cancleButton;
-    private JButton solutionButton;
     private JButton shootButton1;
     private JButton markDown복사Button;
 

@@ -17,19 +17,28 @@
 
   <depends>com.intellij.modules.platform</depends>
 
-  <extensions defaultExtensionNs="  com.intellij">
+    <extensions defaultExtensionNs="com.intellij">
+        <toolWindow id="MyCustomToolWindow"
+                    anchor="right"
+                    factoryClass="com.orientalSalad.troubleShot.actions.MyToolWindowFactory">
+        </toolWindow>
+    </extensions>
 
-  </extensions>
+
+    <!--  <extensions defaultExtensionNs="com.intellij">-->
+<!--      <toolWindow id="ToolWindow.TroubleShotAction" anchor="right" factoryClass="com.orientalSalad.troubleShot.actions.TroubleShotToolWindow">-->
+<!--          <title>Trouble Shot</title>-->
+<!--  </extensions>-->
 
 
     <actions>
     <!-- add-to-group : 기존 메뉴에 버튼, 마우스 단축, 키보드 단축키 등 추가할때 사용
             group-id: 버튼을 추가할 그룹, anchor: 버튼 순서(위치)-->
-        <action id="Custom.MenuAction" class="com.orientalSalad.troubleShot.actions.TroubleShotAction" text="메뉴 입력">
-            <add-to-group group-id="GenerateGroup" anchor="first"/>
+        <action id="EditorPopupMenu.TroubleShotAction"
+                class="com.orientalSalad.troubleShot.actions.TroubleShotAction"
+                text="Trouble Shot">
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+            <keyboard-shortcut first-keystroke="shift T" keymap="$default"/>
         </action>
-<!--        <action id="TroubleShotAction" class="com.orientalSalad.troubleShot.actions.TroubleShotAction" text="Trouble Shot" >-->
-<!--            <keyboard-shortcut first-keystroke="alt 1" keymap="$default"/>-->
-<!--        </action>-->
     </actions>
 </idea-plugin>

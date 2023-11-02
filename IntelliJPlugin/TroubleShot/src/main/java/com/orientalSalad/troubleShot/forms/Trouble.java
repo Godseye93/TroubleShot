@@ -31,7 +31,6 @@ public class Trouble {
 	private JButton cancleButton;
 	private JButton shootButton;
 	private JButton markDown복사Button;
-	private JButton troubleButton;
 
 	public Trouble() {
 		panel = new JPanel();

@@ -15,48 +15,42 @@ public class TroubleShotMain {
     private JButton nextButton;
     private JPanel detailPanel;
 
-    private Map<String, JPanel> inputDataMap;
     public TroubleShotMain() {
 
-        System.out.println("로그 시작: TroubleShotMain");
+        System.out.println("TroubleShotMain 시작");
+
+        // main 판넬 구성
         panel = new JPanel();
+
+        // trouble 판넬 구성
         Trouble trouble = new Trouble();
+        JPanel troublePanel = trouble.getPanel();
+        // solution 판넬 구성
         Solution solution = new Solution();
+        JPanel solutionPanel = solution.getPanel();
 
-        // 리스트 구성
-        panel.setLayout(new BorderLayout());
-        panel.add(new JScrollPane(mainList), BorderLayout.WEST);
+        // detail에 trouble, solution 배치
+        CardLayout cardLayout = new CardLayout();
+        JPanel detailPanel = new JPanel(cardLayout);
+        detailPanel.add(troublePanel, "Write Trouble");
+        detailPanel.add(solutionPanel, "Write Solution");
 
-        // 디테일 구성
-        panel.add(new JScrollPane(trouble.getPanel()), BorderLayout.CENTER);
-
-        // 입력 데이터 저장
-        inputDataMap = new HashMap<>();
-        inputDataMap.put("Write Trouble", trouble.getPanel());
-        inputDataMap.put("Write Solution", solution.getPanel());
-
-        mainList.addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                if (!e.getValueIsAdjusting()) {
-                    String selectedValue = mainList.getSelectedValue();
-                    System.out.println("selectedValue : " + selectedValue);
-                    updatedContent(selectedValue);
-                }
+        // list에 선택한 경우
+        mainList.addListSelectionListener(e -> {
+            // 선택이 변경된 경우
+            if (!e.getValueIsAdjusting()) {
+                String selectedValue = mainList.getSelectedValue();
+                cardLayout.show(detailPanel, selectedValue);
+                System.out.println("selectedValue : " + selectedValue);
             }
         });
 
-        System.out.println("로그 끝");
-    }
+        // main에 list, detail 배치
+        panel.setLayout(new BorderLayout());
+        panel.add(new JScrollPane(mainList), BorderLayout.WEST);
+        panel.add(new JScrollPane(detailPanel), BorderLayout.CENTER);
 
-    private void updatedContent(String selectedValue) {
-        if (selectedValue != null) {
-            System.out.println("selectedValue" + selectedValue);
-            JPanel selectedPanel = inputDataMap.get(selectedValue);
-            if (selectedPanel != null) {
-                detailPanel = selectedPanel;
-            }
-        }
+        System.out.println("TroubleShotMain 끝");
     }
 
     public JPanel getPanel() {
