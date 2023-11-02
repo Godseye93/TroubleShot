@@ -1,0 +1,53 @@
+pipeline {
+    agent any
+    environment {
+        DOCKER = 'sudo docker'
+    }
+
+    stages {
+        stage('Check directory') {
+            steps {
+                sh 'ls -al'
+            }
+        }
+
+        stage('Clone Repository') {
+            steps {
+                checkout scm
+                echo 'Checkout Scm'
+            }
+        }
+
+        stage('Build image') {
+            steps {
+                dir('troubleShooting') {
+                    sh 'ls -al'
+                    sh 'chmod +x ./gradlew'
+                    sh './gradlew build'
+                    sh 'docker login -u godseye93 -p wjdtmfgh123'
+                    sh 'docker build -t godseye93/troubleshooting:latest .'
+                }
+                echo 'Build image...'
+            }
+        }
+
+        stage('Remove Previous image') {
+            steps {
+                script {
+                    try {
+                        sh 'docker stop troubleshooting'
+                        sh 'docker rm troubleshooting'
+                    } catch (e) {
+                        echo 'fail to stop and remove container'
+                    }
+                }
+            }
+        }
+        stage('Run New image') {
+            steps {
+                sh 'docker run --name troubleshooting -d -p 8104:8104 godseye93/troubleshooting:latest'
+                echo 'Run New member image'
+            }
+        }
+    }
+}

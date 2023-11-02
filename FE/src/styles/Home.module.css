@@ -1,0 +1,46 @@
+@keyframes twinkling {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.star {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background-color: #fff;
+    border-radius: 50%;
+    animation: twinkling 1s infinite;
+}
+
+/* body {
+    margin: 0;
+    overflow: hidden;
+} */
+
+.outer {
+    height: 100vh;
+    overflow-y: auto;
+}
+
+.outer::-webkit-scrollbar {
+    display: none;
+}
+
+.inner {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* font-size: 100px; */
+}
+
+.divider {
+    width: 100%;
+    height: 5px;
+    /* background-color: gray; */
+  }
