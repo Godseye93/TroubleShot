@@ -1,0 +1,147 @@
+{
+  "name": "trouble-shot",
+  "displayName": "trouble shot",
+  "description": "make trouble shooting docs easily",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "main": "./out/extension.js",
+  "contributes": {
+    "viewsWelcome": [
+      {
+        "view": "login-to-trouble-shot",
+        "contents": "Login to Trouble shot\n[Log in](command:nodeDependencies.addEntry)"
+      },
+      {
+        "view": "my-trouble-list-without-login",
+        "contents": "No Trouble shooting found\n[Create New Trouble](command:create.trouble)"
+      },
+      {
+        "view": "my-trouble-list",
+        "contents": "No Trouble shooting found\n[Create New Trouble](command:create.trouble)"
+      },
+      {
+        "view": "node-dependencies",
+        "contents": "No nodeDependencies found"
+      }
+    ],
+    "commands": [
+      {
+        "command": "create.trouble",
+        "title": "Trouble Shot : Create Trouble",
+        "icon": "assets/create.png"
+      },
+      {
+        "command": "delete.trouble",
+        "title": "Trouble Shot : Delete Trouble",
+        "icon": "assets/delete.png"
+      },
+      {
+        "command": "refresh.trouble",
+        "title": "Trouble Shot : Refresh",
+        "icon": "assets/refresh.svg"
+      },
+      {
+        "command": "node.dependencies.refreshEntry",
+        "title": "Trouble Shot : Refresh",
+        "icon": "assets/refresh.svg"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "trouble-shot",
+          "title": "Trouble Shot",
+          "icon": "assets/trous_favicon_white.png"
+        }
+      ]
+    },
+    "views": {
+      "trouble-shot": [
+        {
+          "id": "my-trouble-list-without-login",
+          "name": "My Trouble List Without Login",
+          "when": "!isLogin"
+        },
+        {
+          "id": "login-to-trouble-shot",
+          "name": "Login To Trouble Shot",
+          "when": "!isLogin"
+        },
+        {
+          "id": "my-trouble-list",
+          "name": "My Trouble List",
+          "when": "isLogin"
+        },
+        {
+          "id": "team-trouble-list",
+          "name": "Team Trouble List",
+          "when": "isLogin"
+        },
+        {
+          "id": "node-dependencies",
+          "name": "Node Dependencies"
+        },
+        {
+          "id": "more-info",
+          "name": "More Info"
+        }
+      ]
+    },
+    "menus": {
+      "view/title": [
+        {
+          "command": "node.dependencies.refreshEntry",
+          "when": "view == node-dependencies",
+          "group": "navigation"
+        },
+        {
+          "command": "create.trouble",
+          "when": "view == my-trouble-list-without-login || view == my-trouble-list || view == team-trouble-list || view == community-trouble-list",
+          "group": "navigation"
+        },
+        {
+          "command": "refresh.trouble",
+          "when": "view == my-trouble-list-without-login || view == my-trouble-list || view == team-trouble-list || view == community-trouble-list",
+          "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "delete.trouble",
+          "when": "view == my-trouble-list-without-login || view == my-trouble-list || view == team-trouble-list || view == community-trouble-list",
+          "group": "inline"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "install:all": "npm install && cd webview-ui && npm install",
+    "start:webview": "cd webview-ui && npm run start",
+    "build:webview": "cd webview-ui && npm run build",
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts"
+  },
+  "devDependencies": {
+    "@types/glob": "^7.1.3",
+    "@types/node": "^12.11.7",
+    "@types/vscode": "^1.46.0",
+    "@typescript-eslint/eslint-plugin": "^4.14.1",
+    "@typescript-eslint/parser": "^4.14.1",
+    "eslint": "^7.19.0",
+    "glob": "^7.1.6",
+    "prettier": "^2.2.1",
+    "typescript": "^4.1.3",
+    "vscode-test": "^1.5.0"
+  },
+  "dependencies": {
+    "@types/uuid": "^9.0.6",
+    "marked": "^9.1.4",
+    "timeago.js": "^4.0.0-beta.3",
+    "uuid": "^9.0.1"
+  }
+}
