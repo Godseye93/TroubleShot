@@ -14,7 +14,9 @@ public class ShowCustomPanelAction extends AnAction {
         Project project = e.getProject();
         if (project != null) {
             ToolWindowManager toolWindowManager = ToolWindowManager.getInstance(project);
-            MyCustomPanel customPanel = new MyCustomPanel(e.getData(CommonDataKeys.EDITOR));
+            MyCustomPanel customPanel = null;
+            customPanel = new MyCustomPanel(e.getData(CommonDataKeys.EDITOR));
+
             toolWindowManager.getToolWindow("MyCustomToolWindow").getContentManager().addContent((Content) customPanel);
         }
     }

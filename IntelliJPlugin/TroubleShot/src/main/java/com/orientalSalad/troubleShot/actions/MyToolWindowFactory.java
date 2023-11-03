@@ -11,7 +11,12 @@ public class MyToolWindowFactory implements ToolWindowFactory {
     @Override
     public void createToolWindowContent(Project project, ToolWindow toolWindow) {
         // 사용자 정의 패널을 툴 윈도우에 추가하는 코드
-        MyCustomPanel customPanel = new MyCustomPanel(null);
+        MyCustomPanel customPanel = null;
+        try {
+            customPanel = new MyCustomPanel(null);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
         Content content = contentFactory.createContent(customPanel, "", false);
         toolWindow.getContentManager().addContent(content);
