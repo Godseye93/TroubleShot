@@ -1,14 +1,14 @@
-"use client"
+"use client";
 import { useEffect, useRef, useState } from "react";
 import styles from "../styles/Home.module.css";
 
-import Dots from "../components/home/dots"
+import Dots from "../components/home/dots";
 import Stars from "@/components/home/stars";
 import FirstIntro from "../components/home/FirstIntro";
 import FeatureIntro from "../components/home/FeatureIntro";
 import CarouselIntro from "../components/home/CarouselIntro";
 import HomeOutro from "../components/home/HomeOutro";
-import Footer from "../components/Footer"
+import Footer from "../components/Footer";
 
 export default function Page() {
   const outerDivRef = useRef<any>();
@@ -20,14 +20,13 @@ export default function Page() {
   // 오차 방지하기 위해
   const DIVIDER_HEIGHT = 5;
 
-
   useEffect(() => {
     const wheelHandler = (e: any) => {
       // event type 명시
       e.preventDefault();
       // 스크롤 행동 구현
-      const {deltaY} = e; // e에서 deltaY 추출, 마우스 휠 스크롤 양
-      const {scrollTop} = outerDivRef.current; // 스크롤 위쪽 끝부분
+      const { deltaY } = e; // e에서 deltaY 추출, 마우스 휠 스크롤 양
+      const { scrollTop } = outerDivRef.current; // 스크롤 위쪽 끝부분
       const pageHeight = window.innerHeight; // 화면 세로길이
 
       if (deltaY > 0) {
@@ -43,7 +42,6 @@ export default function Page() {
             behavior: "smooth",
           });
           setScrollIndex(2);
-
         } else if (scrollTop >= pageHeight && scrollTop < pageHeight * 2) {
           // 현재 2페이지면
           // 3페이지 이동
@@ -54,8 +52,6 @@ export default function Page() {
             behavior: "smooth",
           });
           setScrollIndex(3);
-
-
         } else if (scrollTop >= pageHeight * 2 && scrollTop < pageHeight * 3) {
           // 현재 3페이지면
           // 4페이지 이동
@@ -66,8 +62,6 @@ export default function Page() {
             behavior: "smooth",
           });
           setScrollIndex(4);
-
-
         } else {
           // 현재 4페이지
           // 4페이지 이동
@@ -79,9 +73,6 @@ export default function Page() {
           });
           setScrollIndex(4);
         }
-
-
-
       } else {
         // 스크롤 올릴 때
 
@@ -95,8 +86,6 @@ export default function Page() {
             behavior: "smooth",
           });
           setScrollIndex(1);
-
-
         } else if (scrollTop >= pageHeight && scrollTop < pageHeight * 2) {
           // 현재 2페이지
           // 1페이지 이동
@@ -107,8 +96,6 @@ export default function Page() {
             behavior: "smooth",
           });
           setScrollIndex(1);
-
-
         } else if (scrollTop >= pageHeight * 2 && scrollTop < pageHeight * 3) {
           // 현재 3페이지
           // 2페이지 이동
@@ -119,7 +106,6 @@ export default function Page() {
             behavior: "smooth",
           });
           setScrollIndex(2);
-
         } else {
           // 4페이지 이동
           // 현재 3페이지
@@ -132,7 +118,6 @@ export default function Page() {
           setScrollIndex(3);
         }
       }
-
     };
     const outerDivRefCurrent = outerDivRef.current;
     outerDivRefCurrent.addEventListener("wheel", wheelHandler);
@@ -140,18 +125,26 @@ export default function Page() {
       outerDivRefCurrent.removeEventListener("wheel", wheelHandler);
     };
   }, []);
-  
+
   return (
     <main ref={outerDivRef} className={styles.outer}>
       <Dots scrollIndex={scrollIndex} />
-      <Stars/>
-      <div className={`${styles.inner} bg-black text-white`}><FirstIntro/></div>
+      <Stars />
+      <div className={`${styles.inner} bg-black text-white`}>
+        <FirstIntro />
+      </div>
       <div className={styles.divider}></div>
-      <div className={`${styles.inner} relative`}><FeatureIntro/></div>
+      <div className={`${styles.inner} relative`}>
+        <FeatureIntro />
+      </div>
       <div className={styles.divider}></div>
-      <div className={`${styles.inner} relative`}><CarouselIntro/></div>
+      <div className={`${styles.inner} relative`}>
+        <CarouselIntro />
+      </div>
       <div className={styles.divider}></div>
-      <div className={`${styles.inner} bg-black text-white`}><HomeOutro/></div>
+      <div className={`${styles.inner} bg-black text-white`}>
+        <HomeOutro />
+      </div>
     </main>
-  )
+  );
 }
