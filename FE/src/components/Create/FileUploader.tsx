@@ -2,13 +2,13 @@
 import { ContextStore, commands } from "@uiw/react-md-editor";
 import { useState } from "react";
 import { ImgUpload } from "@/constants/ImgUpload";
-type Handle = {
+interface Handle {
   close: () => void;
   execute: () => void;
   getState?: (() => false | commands.TextState) | undefined;
   textApi?: commands.TextAreaTextApi | undefined;
   dispatch?: React.Dispatch<ContextStore> | undefined;
-};
+}
 
 export default function FileUploader({ handle }: { handle: Handle }) {
   const [howUpload, seHowUpload] = useState(ImgUpload.FILE);

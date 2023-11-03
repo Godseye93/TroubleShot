@@ -1,7 +1,8 @@
 import IconBox from "./IconBox";
 import Link from "next/link";
 import Tagbox from "./TagBox";
-interface content {
+import Image from "next/image";
+interface Content {
   seq: number;
   title: string;
   tags: string[];
@@ -12,12 +13,12 @@ interface content {
   img?: string;
   date: string;
 }
-interface props {
+interface Props {
   keyword: string;
-  contents: content[];
+  contents: Content[];
 }
 
-export default function CardContentL({ keyword, contents }: props) {
+export default function CardContentL({ keyword, contents }: Props) {
   return (
     <div className="rounded-lg w-full bg-white shadow-md">
       <div className="w-full bg-main rounded-t-lg text-start px-3 py-2 font-semibold text-lg flex justify-between items-center">
@@ -47,7 +48,13 @@ export default function CardContentL({ keyword, contents }: props) {
             </div>
             {content.img && (
               <div className="flex items-center w-1/3 h-full mb-2">
-                <img className="rounded-md" src={content.img} alt="이미지가 준비되지 않았습니다" />
+                <Image
+                  className="rounded-md"
+                  width={0}
+                  height={0}
+                  src={content.img}
+                  alt="이미지가 준비되지 않았습니다"
+                />
               </div>
             )}
           </div>

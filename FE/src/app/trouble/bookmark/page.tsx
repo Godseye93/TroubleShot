@@ -1,5 +1,4 @@
 import CommonComponent from "@/components/CommonComponent";
-import Sidebar from "@/components/Sidebar";
 
 export default function Page() {
   return (

@@ -7,7 +7,7 @@ import backgroundImage from "../../../public/background/loginBackground4.jpg";
 
 import { emailCert } from "@/api/account";
 
-export default function page() {
+export default function Page() {
   const [email, setEmail] = useState<string>("");
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -16,7 +16,13 @@ export default function page() {
 
   return (
     <div className="fcc w-full h-[100vh]">
-      <Image src={backgroundImage} alt="backgroundImage" className="bg-cover h-screen absolute w-full -z-10" />
+      <Image
+        src={backgroundImage}
+        width={0}
+        height={0}
+        alt="backgroundImage"
+        className="bg-cover h-screen absolute w-full -z-10"
+      />
       <div className="bg-white rounded p-10 text-center shadow-md">
         <h1 className="text-3xl border-b border-main">회원 가입</h1>
 
