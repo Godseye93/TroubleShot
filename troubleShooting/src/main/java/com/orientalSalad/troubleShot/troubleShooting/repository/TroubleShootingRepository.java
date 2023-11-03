@@ -7,4 +7,5 @@ import com.orientalSalad.troubleShot.troubleShooting.entity.TroubleShootingEntit
 
 @Repository
 public interface TroubleShootingRepository extends JpaRepository<TroubleShootingEntity,Long> {
+	TroubleShootingEntity findBySeq(Long seq);
 }

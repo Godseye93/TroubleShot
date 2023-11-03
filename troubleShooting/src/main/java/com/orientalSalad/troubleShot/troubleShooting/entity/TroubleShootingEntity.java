@@ -8,11 +8,13 @@ import jakarta.persistence.Table;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Table(name= "trouble_shooting")
 @Entity
 @Getter
 @NoArgsConstructor
+@ToString
 public class TroubleShootingEntity extends BaseEntity {
 	@Column(columnDefinition = "TEXT")
 	private String title;

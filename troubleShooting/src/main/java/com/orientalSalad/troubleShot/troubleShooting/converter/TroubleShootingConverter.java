@@ -31,6 +31,17 @@ public class TroubleShootingConverter implements ObjectConverter<TroubleShooting
 
 	@Override
 	public TroubleShootingDTO toDTO(TroubleShootingEntity troubleShootingEntity) {
-		return null;
+		return TroubleShootingDTO.builder()
+			.seq(troubleShootingEntity.getSeq())
+			.context(troubleShootingEntity.getContext())
+			.title(troubleShootingEntity.getTitle())
+			.likeCount(troubleShootingEntity.getLikeCount())
+			.replyCount(troubleShootingEntity.getReplyCount())
+			.viewCount(troubleShootingEntity.getViewCount())
+			.solved(troubleShootingEntity.isSolved())
+			.createTime(troubleShootingEntity.getCreateTime())
+			.updateTime(troubleShootingEntity.getUpdateTime())
+			.deleteTime(troubleShootingEntity.getDeleteTime())
+			.build();
 	}
 }
