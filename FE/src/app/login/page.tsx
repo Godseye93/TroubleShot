@@ -47,7 +47,7 @@ export default function Page() {
       <Image
         src={backgroundImage}
         alt="backgroundImage"
-        className={`bg-cover h-screen absolute w-full -z-10`}
+        className="bg-cover h-screen absolute w-full -z-10"
         style={{
           filter: `blur(${blurValue}px)`,
         }}
