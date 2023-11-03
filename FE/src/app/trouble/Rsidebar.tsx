@@ -1,6 +1,9 @@
+"use client";
 import CardContent from "@/components/CardContentS";
+import { usePathname } from "next/navigation";
 
 export default function Rsidebar() {
+  const path = usePathname();
   const tmpkeyword = "javascript";
   const tempdata = [
     {
@@ -69,7 +72,7 @@ export default function Rsidebar() {
   ];
 
   return (
-    <div className="mt-4 lg:block hidden">
+    <div className={`mt-4 ${!path.includes("create") && "lg:block"} hidden`}>
       <CardContent keyword={tmpkeyword} contents={tempdata} />
     </div>
   );
