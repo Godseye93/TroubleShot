@@ -1,4 +1,4 @@
-import { EmailCertResponse, EmailCode, SignUpType } from "@/types/CommonType";
+import { CommonType, EmailCertResponse, EmailCode, SignUpType } from "@/types/CommonType";
 import { apiInstance } from ".";
 
 
@@ -14,7 +14,8 @@ export const emailcodeCheck = async (params:EmailCode):Promise<EmailCertResponse
     return data
 };
 
-export const signUpSubmit = async (params:SignUpType):Promise<EmailCertResponse | undefined> => {
+export const signUpSubmit = async (params:SignUpType):Promise<CommonType | undefined> => {
     const {data} = await api.post("members", params);
     return data
 }
+

@@ -80,9 +80,9 @@ export default function page() {
   };
   
   // 회원가입 요청
-  const handleSubmit = async (event: React.FormEvent) => {
+  const handleSubmit = async () => {
+    console.log("실행됨")
     if (!isEmailRequest || !isCodeCorrect || !isMatch) {
-      event.preventDefault();
       if (!isEmailRequest) {
         SubmitFail()
         return
@@ -98,6 +98,7 @@ export default function page() {
       }
     } else {
       // 제출 로직 구현
+      console.log("실행됨2")
       try {
         const res = await signUpSubmit({
           email: email,
@@ -105,7 +106,7 @@ export default function page() {
           nickname: nickname,
           locale: "Korea",
         })
-        if (res?.success) {
+        if (res === "success") {
           console.log("회원가입 성공 !")
           SignUpSuccess()
           setisCodeCorrect(true)
