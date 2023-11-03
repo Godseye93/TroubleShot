@@ -19,5 +19,11 @@
         "format": ["PascalCase"]
       }
     ]
+  },
+  "settings": {
+    "next": {
+      "rootDir": "FE"
+    }
   }
+
 }
