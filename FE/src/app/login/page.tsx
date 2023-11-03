@@ -1,14 +1,20 @@
-"use client"
+"use client";
+import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
-import backgroundImage from "../../../public/background/loginBackground4.jpg"
+import backgroundImage from "../../../public/background/loginBackground4.jpg";
 
 export default function Page() {
+  const [password, setPassword] = useState<string>(""); // 비밀번호
+  const handlePasswordInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value);
+  };
+  const blurValue = 20;
 
   return (
-    <main className="fcc w-full h-[100vh]" >
-      <Image src={backgroundImage} alt="backgroundImage" className="bg-cover h-screen absolute w-full -z-10"/>
+    <main className="fcc w-full h-[100vh]">
+      <Image src={backgroundImage} alt="backgroundImage" className={`bg-cover h-screen absolute w-full -z-10`} />
       <div className="bg-white rounded p-10 text-center shadow-md">
         <h1 className="text-3xl border-b border-main">로그인</h1>
         <div className="my-4 text-left">
@@ -28,32 +34,23 @@ export default function Page() {
             className="border block w-full p-2 rounded"
             id="password"
             placeholder="비밀번호를 입력하세요"
-            // onChange={(e)=>{}}
+            onChange={handlePasswordInputChange}
           />
         </div>
 
         <div id="submitBox" className="flex justify-around mt-6 mb-4">
-          <button
-            className="bg-main text-white py-2 inline-block w-5/12 rounded"
-            type="submit"
-          >
+          <button className="bg-main text-white py-2 inline-block w-5/12 rounded" type="submit">
             Submit
           </button>
-          <button
-            className="bg-black text-white py-2 inline-block w-5/12 rounded"
-            type="submit"
-          >
+          <button className="bg-black text-white py-2 inline-block w-5/12 rounded" type="submit">
             git hub
           </button>
         </div>
 
-        <Link 
-        href="/signUp"
-        className="">
+        <Link href="/signUp" className="">
           <p>트러블 샷이 처음이신가요?</p>
         </Link>
-
       </div>
     </main>
-  )
+  );
 }
