@@ -16,13 +16,7 @@ export default function Page() {
 
   return (
     <div className="fcc w-full h-[100vh]">
-      <Image
-        src={backgroundImage}
-        width={0}
-        height={0}
-        alt="backgroundImage"
-        className="bg-cover h-screen absolute w-full -z-10"
-      />
+      <Image src={backgroundImage} alt="backgroundImage" className="bg-cover h-screen absolute w-full -z-10" />
       <div className="bg-white rounded p-10 text-center shadow-md">
         <h1 className="text-3xl border-b border-main">회원 가입</h1>
 

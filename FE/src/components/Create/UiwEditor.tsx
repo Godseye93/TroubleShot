@@ -32,6 +32,7 @@ export default function UiwEditor() {
         />
         <div className="shadow-md">
           <MDEditor
+            height={500}
             value={markdown}
             commands={[
               commands.bold,

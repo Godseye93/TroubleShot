@@ -1,7 +1,7 @@
 import IconBox from "./IconBox";
 import Link from "next/link";
 import Tagbox from "./TagBox";
-import Image from "next/image";
+
 interface Content {
   seq: number;
   title: string;
@@ -48,13 +48,7 @@ export default function CardContentL({ keyword, contents }: Props) {
             </div>
             {content.img && (
               <div className="flex items-center w-1/3 h-full mb-2">
-                <Image
-                  className="rounded-md"
-                  width={0}
-                  height={0}
-                  src={content.img}
-                  alt="이미지가 준비되지 않았습니다"
-                />
+                <img className="rounded-md" src={content.img} alt="이미지가 준비되지 않았습니다" />
               </div>
             )}
           </div>

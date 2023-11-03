@@ -1,7 +1,8 @@
 "use client";
+import AWS from "aws-sdk";
+
 import { ContextStore, commands } from "@uiw/react-md-editor";
-import { useState } from "react";
-import { ImgUpload } from "@/constants/ImgUpload";
+import { useRef, useState } from "react";
 interface Handle {
   close: () => void;
   execute: () => void;
@@ -11,21 +12,92 @@ interface Handle {
 }
 
 export default function FileUploader({ handle }: { handle: Handle }) {
-  const [howUpload, seHowUpload] = useState(ImgUpload.FILE);
-  const methodList = ["File", "URL"];
+  const [howUpload, setHowUpload] = useState(0);
+  const [imgFiles, setImgFiles] = useState<FileList | null[]>([]);
+  const methodList = ["파일", "URL"];
+  const fileRef = useRef<HTMLInputElement>(null);
+
+  const onImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files) {
+      setImgFiles(event.target.files);
+      console.log(imgFiles);
+      console.log(URL.createObjectURL(event.target.files[0]));
+      // const newFileURL = URL.createObjectURL(event.target.files[0]);
+      // setFileURL(newFileURL);
+    }
+  };
+
+  const uploadS3 = async () => {
+    if (imgFiles.length === 0) return;
+    try {
+      const file = imgFiles[0];
+      const blobImg = new Blob([file!], { type: file!.type });
+      //업로드할 파일의 이름으로 Date 사용
+      const name = Date.now();
+      //s3 관련 설정들
+      AWS.config.update({
+        region: process.env.NEXT_PUBLIC_BUCKEYT_REGION,
+        accessKeyId: process.env.NEXT_PUBLIC_ACCESS_KEY,
+        secretAccessKey: process.env.NEXT_PUBLIC_SECRET_KEY,
+      });
+
+      //앞서 생성한
+      const upload = new AWS.S3.ManagedUpload({
+        params: {
+          ACL: "public-read",
+          Bucket: process.env.NEXT_PUBLIC_BUCKEYT_NAME!,
+          Key: `trouble/${name}.png`,
+          Body: blobImg,
+        },
+      });
+      //이미지 업로드
+      //업로드 된 이미지 url을 가져오기
+      const url_key = await upload.promise().then((res) => process.env.NEXT_PUBLIC_BUCKEYT_URL + res.Key);
+      // 가져온 위치에 이미지를 삽입한다
+      return url_key;
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div>
-      <div className="p-2 rounded-lg w-[20rem]">
-        <div className="w-24 grid-2">
+      <div className="p-4 rounded-lg w-[25rem] shadow-md">
+        <div className="w-full grid grid-cols-2 hover:cursor-pointer text-base">
           {methodList.map((method, idx) => (
-            <div key={idx} className={`border-b-2 ${howUpload === idx && "border-main text-main"}`}>
-              {method}
+            <div
+              onClick={() => setHowUpload(idx)}
+              key={idx}
+              className={`border-b-2 text-center ${howUpload === idx && "font-semibold border-main text-main"}`}
+            >
+              <p>{method}</p>
+              <div className={`w-full h-1 ${howUpload === idx && "bg-main "}`}></div>
             </div>
           ))}
         </div>
+        <div className="my-5">
+          <p className="text-xs font-semibold mb-2">선택한 파일</p>
+          <div className="flex">
+            <div className="w-2/3 h-8 rounded-lg border-2 text-xs text-slate-500 font-semibold px-2 flex items-center">
+              <p className="w-full line-clamp-1">
+                {imgFiles?.length > 0 ? imgFiles[0]?.name : "선택된 파일이 없습니다"}
+              </p>
+            </div>
+            <div className="flex items-center justify-center flex-1">
+              <button
+                className="text-sm bg-slate-200 w-24 p-1 rounded-lg shadow-md hover:shadow-sm hover:bg-slate-300 border transition-all duration-200"
+                onClick={() => {
+                  fileRef.current?.click();
+                }}
+              >
+                파일 선택
+              </button>
+              <input type="file" className="hidden" ref={fileRef} accept="image/*" onChange={onImageChange} />
+            </div>
+          </div>
+        </div>
 
         <div>{/* My Custom Toolbar: {JSON.stringify(handle.getState())} */}</div>
-        <button
+        {/* <button
           type="button"
           onClick={() =>
             // console.log("> execute: >>>>>", handle.getState())
@@ -33,13 +105,33 @@ export default function FileUploader({ handle }: { handle: Handle }) {
           }
         >
           State
-        </button>
-        <button type="button" onClick={() => handle.close()}>
-          Close
-        </button>
-        <button type="button" onClick={() => handle.execute()}>
-          Execute
-        </button>
+        </button> */}
+        <div className="flex gap-2 justify-end">
+          <button
+            className="p-2 bg-sub text-white hover:bg-red-700 rounded-lg shadow-md hover:shadow-sm transition-all duration-200"
+            onClick={() => handle.close()}
+          >
+            닫기
+          </button>
+          <button
+            className="p-2 bg-main hover:bg-amber-600 rounded-lg shadow-md hover:shadow-sm transition-all duration-200"
+            onClick={async () => {
+              if (howUpload === 0) {
+                try {
+                  const res = await uploadS3();
+                  handle.execute();
+                  handle.dispatch(res);
+                  return res;
+                } catch (err) {
+                  console.log(err);
+                  return;
+                }
+              }
+            }}
+          >
+            추가
+          </button>
+        </div>
       </div>
     </div>
   );
