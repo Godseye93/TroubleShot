@@ -1,5 +1,7 @@
 package com.orientalSalad.troubleShot.email.controller;
 
+import java.time.Duration;
+
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.http.HttpStatus;
@@ -31,19 +33,19 @@ public class EmailController {
 		description = "이메일 하나 보내면 됨"
 	)
 	@PostMapping("/email/send")
-	public ResponseEntity<?> sendAuthCodeEmail(@RequestBody RequestEmailDTO email) throws MessagingException {
+	public ResponseEntity<?> sendAuthCodeEmail(@RequestBody RequestEmailDTO requestEmailDTO) throws MessagingException {
 		// 이메일 발신될 데이터 적재
 		log.info("====인증 이메일 발송 시작====");
-		log.info(email);
+		log.info(requestEmailDTO);
 
-		AuthCodeDTO authCodeDTO = emailService.sendAuthEmail(email.getEmail());
+		AuthCodeDTO authCodeDTO = emailService.sendAuthEmail(requestEmailDTO.getEmail());
 
 		ValueOperations valueOperation = redisTemplate.opsForValue();
-		valueOperation.set("auth-"+email,authCodeDTO);
+		valueOperation.set("auth-"+requestEmailDTO.getEmail(),authCodeDTO, Duration.ofMinutes(30));
 
 		ResultDTO resultDTO = ResultDTO.builder()
 			.success(true)
-			.message(email+"로 이메일 발송이 성공했습니다.")
+			.message(requestEmailDTO.getEmail()+"로 이메일 발송이 성공했습니다.")
 			.build();
 
 		log.info("====인증 이메일 발송 끝====");
@@ -51,21 +53,20 @@ public class EmailController {
 	}
 	@Operation(summary = "이메일 인증 번호 확인 API")
 	@PostMapping("/email/confirm")
-	public ResponseEntity<?> confirmAuthCodeEmail(@RequestBody AuthCodeDTO authCodeDTO, HttpSession session) throws
+	public ResponseEntity<?> confirmAuthCodeEmail(@RequestBody AuthCodeDTO authCodeDTO) throws
 		Exception {
 		log.info("====인증 코드 확인 시작====");
 		log.info(authCodeDTO);
+		String key = "auth-"+authCodeDTO.getEmail();
 
 		ValueOperations valueOperations =redisTemplate.opsForValue();
-
 		AuthCodeDTO sessionAuthCode = (AuthCodeDTO)valueOperations.get("auth-"+authCodeDTO.getEmail());
 
 		log.info(sessionAuthCode.toString());
-
 		ResultDTO resultDTO = null;
 
 		if(authCodeDTO.getCode().equals(sessionAuthCode.getCode())){
-			session.removeAttribute("auth-"+authCodeDTO.getEmail());
+			redisTemplate.delete(key);
 			resultDTO = ResultDTO.builder()
 				.message("인증을 성공했습니다.")
 				.success(true)
