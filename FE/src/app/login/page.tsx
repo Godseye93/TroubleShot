@@ -7,7 +7,13 @@ import backgroundImage from "../../../public/background/loginBackground4.jpg";
 export default function Page() {
   return (
     <main className="fcc w-full h-[100vh]">
-      <Image src={backgroundImage} alt="backgroundImage" className="bg-cover h-screen absolute w-full -z-10" />
+      <Image
+        src={backgroundImage}
+        width={0}
+        height={0}
+        alt="backgroundImage"
+        className="bg-cover h-screen absolute w-full -z-10"
+      />
       <div className="bg-white rounded p-10 text-center shadow-md">
         <h1 className="text-3xl border-b border-main">로그인</h1>
         <div className="my-4 text-left">

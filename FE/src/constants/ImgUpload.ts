@@ -1,4 +1,4 @@
 export const ImgUpload = {
-  FILE: 1,
-  URL: 2,
+  FILE: 0,
+  URL: 1,
 };

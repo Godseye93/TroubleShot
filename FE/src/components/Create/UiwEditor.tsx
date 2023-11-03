@@ -12,7 +12,7 @@ const title3: ICommand = {
   execute: (state: TextState) => {
     let modifyText = `### ${state.selectedText}\n`;
     if (!state.selectedText) {
-      modifyText = `### `;
+      modifyText = "###";
     }
     // api.replaceSelection(modifyText);
   },

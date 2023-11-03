@@ -1,14 +1,14 @@
 import { AiOutlineEye, AiOutlineHeart } from "react-icons/ai";
 import { MdComment } from "react-icons/md";
 
-interface props {
+interface Props {
   likes: number;
   views: number;
   comments: number;
   m?: string;
 }
 
-export default function IconBox({ likes, views, comments, m }: props) {
+export default function IconBox({ likes, views, comments, m }: Props) {
   return (
     <div className="flex  items-center gap-1">
       <div className="flex items-center max-w-[33%]">
