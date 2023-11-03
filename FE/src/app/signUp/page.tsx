@@ -139,7 +139,7 @@ export default function page() {
               placeholder="이메일을 입력하세요."
             />
             <div
-              className="bg-main fcc text-white rounded-lg w-24 p-1"
+              className="bg-main fcc text-white rounded-lg w-24 p-1 cursor-pointer"
               onClick={() => {
                 handleEmailCert();
               }}
@@ -212,7 +212,10 @@ export default function page() {
             뒤로가기
           </Link>
 
-          <button className="bg-main text-white py-2 inline-block w-5/12 rounded-lg" onClick={handleSubmit}>
+          <button
+            className="bg-main text-white py-2 inline-block w-5/12 rounded-lg cursor-pointer"
+            onClick={handleSubmit}
+          >
             가입하기
           </button>
         </div>
