@@ -12,10 +12,15 @@ type Handle = {
 
 export default function FileUploader({ handle }: { handle: Handle }) {
   const [howUpload, seHowUpload] = useState(ImgUpload.FILE);
+  const methodList = ["File", "URL"];
   return (
     <div>
       <div className="p-2 rounded-lg w-[20rem]">
-        <div></div>
+        <div className="w-24 grid-2">
+          {methodList.map((method, idx) => (
+            <div className={`border-b-2 ${howUpload === idx && "border-main text-main"}`}>{method}</div>
+          ))}
+        </div>
 
         <div>{/* My Custom Toolbar: {JSON.stringify(handle.getState())} */}</div>
         <button

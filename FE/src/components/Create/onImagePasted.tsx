@@ -1,6 +1,6 @@
 import type { SetStateAction } from "react";
 // import { fileUpload } from "../../../../../libs/firebase/storage";
-import insertToTextArea from "./insertToTextArea";
+// import insertToTextArea from "./insertToTextArea";
 
 const onImagePasted = async (
   dataTransfer: DataTransfer,
