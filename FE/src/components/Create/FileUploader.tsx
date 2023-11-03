@@ -18,7 +18,9 @@ export default function FileUploader({ handle }: { handle: Handle }) {
       <div className="p-2 rounded-lg w-[20rem]">
         <div className="w-24 grid-2">
           {methodList.map((method, idx) => (
-            <div className={`border-b-2 ${howUpload === idx && "border-main text-main"}`}>{method}</div>
+            <div key={idx} className={`border-b-2 ${howUpload === idx && "border-main text-main"}`}>
+              {method}
+            </div>
           ))}
         </div>
 
