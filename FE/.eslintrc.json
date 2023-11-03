@@ -1,6 +1,6 @@
 {
   "extends": [
-    "next/core-web-vitals",
+    "next",
     "plugin:testing-library/react",
     "plugin:jest-dom/recommended",
     "eslint:recommended",
