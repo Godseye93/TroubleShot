@@ -22,18 +22,18 @@ import lombok.extern.log4j.Log4j2;
 public class TagController {
 	private final TroubleShootingService troubleShootingService;
 
-	@Operation(summary = "태그 생성")
-	@PostMapping("")
-	public ResponseEntity<?> insertTroubleShooting(@RequestBody TroubleShootingDTO troubleShootingDTO){
-		log.info("====== 트러블 슈팅 문서 등록 시작 =====");
-		troubleShootingService.insertTroubleShooting(troubleShootingDTO);
-
-		ResultDTO resultDTO = ResultDTO.builder()
-			.success(true)
-			.message("트러블 슈팅 문서 등록이 성공했습니다.")
-			.build();
-		
-		log.info("====== 트러블 슈팅 문서 등록 끝 =====");
-		return new ResponseEntity<ResultDTO>(resultDTO, HttpStatus.ACCEPTED);
-	}
+	// @Operation(summary = "태그 생성")
+	// @PostMapping("")
+	// public ResponseEntity<?> insertTroubleShooting(@RequestBody TroubleShootingDTO troubleShootingDTO){
+	// 	log.info("====== 트러블 슈팅 문서 등록 시작 =====");
+	// 	troubleShootingService.insertTroubleShooting(troubleShootingDTO);
+	//
+	// 	ResultDTO resultDTO = ResultDTO.builder()
+	// 		.success(true)
+	// 		.message("트러블 슈팅 문서 등록이 성공했습니다.")
+	// 		.build();
+	//
+	// 	log.info("====== 트러블 슈팅 문서 등록 끝 =====");
+	// 	return new ResponseEntity<ResultDTO>(resultDTO, HttpStatus.ACCEPTED);
+	// }
 }

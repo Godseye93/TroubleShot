@@ -21,6 +21,8 @@ import lombok.experimental.SuperBuilder;
 public class TroubleShootingDTO extends BaseDTO {
 	@Schema(description = "제목")
 	private String title;
+	@Schema(description = "카테고리")
+	private String category;
 	@Schema(description = "내용")
 	private String context;
 	@Schema(description = "작성자")

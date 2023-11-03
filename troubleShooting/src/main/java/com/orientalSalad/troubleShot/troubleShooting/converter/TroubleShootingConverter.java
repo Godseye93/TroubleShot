@@ -26,6 +26,7 @@ public class TroubleShootingConverter implements ObjectConverter<TroubleShooting
 			.replyCount(troubleShootingDTO.getReplyCount())
 			.solved(troubleShootingDTO.isSolved())
 			.writerSeq(troubleShootingDTO.getWriter().getSeq())
+			.category(troubleShootingDTO.getCategory())
 			.build();
 	}
 
@@ -42,6 +43,7 @@ public class TroubleShootingConverter implements ObjectConverter<TroubleShooting
 			.createTime(troubleShootingEntity.getCreateTime())
 			.updateTime(troubleShootingEntity.getUpdateTime())
 			.deleteTime(troubleShootingEntity.getDeleteTime())
+			.category(troubleShootingEntity.getCategory())
 			.build();
 	}
 }

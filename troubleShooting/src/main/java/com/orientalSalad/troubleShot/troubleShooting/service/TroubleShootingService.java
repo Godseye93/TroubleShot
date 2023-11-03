@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.orientalSalad.troubleShot.global.constant.Pagination;
 import com.orientalSalad.troubleShot.global.utill.ObjectConverter;
 import com.orientalSalad.troubleShot.tag.serivice.TagService;
+import com.orientalSalad.troubleShot.troubleShooting.dto.RequestTroubleShootingDTO;
 import com.orientalSalad.troubleShot.troubleShooting.dto.SearchTroubleShootingDTO;
 import com.orientalSalad.troubleShot.troubleShooting.dto.TroubleShootingDTO;
 import com.orientalSalad.troubleShot.troubleShooting.dto.TroubleShootingReplyDTO;
@@ -38,15 +39,48 @@ public class TroubleShootingService {
 	private final ObjectConverter<TroubleShootingReplyDTO, TroubleShootingReplyEntity> troubleShootingReplyConverter;
 	private final TagService tagService;
 
-	public boolean insertTroubleShooting(TroubleShootingDTO troubleShootingDTO){
-		TroubleShootingEntity troubleShootingEntity = troubleShootingConverter.toEntity(troubleShootingDTO);
+	public boolean insertTroubleShooting(RequestTroubleShootingDTO requestTroubleShootingDTO){
+		TroubleShootingEntity troubleShootingEntity = troubleShootingConverter.toEntity(requestTroubleShootingDTO.getTroubleShooting());
 		troubleShootingEntity = troubleShootingRepository.save(troubleShootingEntity);
 
-		tagService.attachTag(troubleShootingDTO.getTags(),troubleShootingEntity.getSeq());
+		tagService.attachTag(requestTroubleShootingDTO.getTroubleShooting().getTags(),troubleShootingEntity.getSeq());
 
 		return true;
 	}
+	public boolean updateTroubleShooting(RequestTroubleShootingDTO requestTroubleShootingDTO) throws Exception{
+		//작성자와 로그인 유저 확인
+		if(requestTroubleShootingDTO.getLoginSeq() != requestTroubleShootingDTO.getTroubleShooting().getWriter().getSeq()){
+			throw new Exception("작성자와 로그인유저가 다릅니다.");
+		}
 
+		TroubleShootingDTO troubleShootingDTO = requestTroubleShootingDTO.getTroubleShooting();
+
+		TroubleShootingEntity troubleShootingEntity = troubleShootingRepository.findBySeq(troubleShootingDTO.getSeq());
+		troubleShootingEntity.update(troubleShootingDTO);
+
+		troubleShootingEntity = troubleShootingRepository.save(troubleShootingEntity);
+
+		tagService.updateTag(troubleShootingDTO.getTags(),troubleShootingDTO.getSeq());
+
+		return true;
+	}
+	public boolean deleteTroubleShooting(RequestTroubleShootingDTO requestTroubleShootingDTO) throws Exception{
+		//작성자와 로그인 유저 확인
+		if(requestTroubleShootingDTO.getLoginSeq() != requestTroubleShootingDTO.getTroubleShooting().getWriter().getSeq()){
+			throw new Exception("작성자와 로그인유저가 다릅니다.");
+		}
+
+		TroubleShootingDTO troubleShootingDTO = requestTroubleShootingDTO.getTroubleShooting();
+	
+		//문서 삭제
+		TroubleShootingEntity troubleShootingEntity = troubleShootingRepository.findBySeq(troubleShootingDTO.getSeq());
+		troubleShootingRepository.delete(troubleShootingEntity);
+			
+		//태그 삭제
+		tagService.deleteTag(troubleShootingDTO.getSeq());
+
+		return true;
+	}
 	public boolean insertTroubleShooingReply(TroubleShootingReplyDTO troubleShootingReplyDTO){
 		TroubleShootingReplyEntity troubleShootingReplyEntity
 			= troubleShootingReplyConverter.toEntity(troubleShootingReplyDTO);
@@ -104,18 +138,6 @@ public class TroubleShootingService {
 		}
 
 		Long count = troubleShootingMapper.countTroubleShootingList(searchParam,searchParam.getTags(),tageSize);
-
-		return count;
-	}
-	public List<TroubleShootingDTO> findTroubleShootingListByUserSeq(SearchTroubleShootingDTO searchParam,Long userSeq) throws Exception {
-		List<TroubleShootingDTO> troubleShootingDTOList
-			= troubleShootingMapper.selectTroubleShootingListByUserSeq(searchParam,userSeq);
-
-		return troubleShootingDTOList;
-	}
-
-	public Long countTroubleShootingListByUserSeq(SearchTroubleShootingDTO searchParam,Long userSeq) throws Exception {
-		Long count = troubleShootingMapper.countTroubleShootingListByUserSeq(searchParam,userSeq);
 
 		return count;
 	}
