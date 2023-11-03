@@ -123,101 +123,104 @@ export default function page() {
       <ToastContainer />
 
       <Image src={backgroundImage} alt="backgroundImage" className="bg-cover h-screen absolute w-full -z-10 blur-lg" />
-      <div className="bg-white rounded p-10 text-center shadow-md">
-        <h1 className="text-3xl border-b border-main">회원 가입</h1>
+      <div className="">
+        <div className="h-[10vh]"></div>
+        <div className="bg-white rounded p-10 text-center shadow-md w-[25rem]">
+          <h1 className="text-3xl border-b border-main">회원 가입</h1>
 
-        <div className="my-4 text-left">
-          <label className="text-gray-900 me-2">아이디(이메일)</label>
-          {isEmailRequest === false && <label className="text-sub">올바른 형식이 아닙니다.</label>}
-          <div className="flex">
-            <input
-              type="text"
-              className={`border block w-full p-2 rounded me-2 ${isEmailRequest ? "bg-[#E8F0FE]" : "bg-white"}`}
-              id="TSemail"
-              value={email}
-              onChange={handleEmailInputChange}
-              placeholder="이메일을 입력하세요."
-            />
-            <div
-              className="bg-main fcc text-white rounded-lg w-24 p-1 cursor-pointer"
-              onClick={() => {
-                handleEmailCert();
-              }}
-            >
-              인증 요청
-            </div>
-          </div>
-        </div>
-
-        {isEmailRequest ? (
           <div className="my-4 text-left">
-            <label className="text-gray-900 me-2">인증번호 입력</label>
-            {isCodeCorrect === false && <label className="text-sub">인증번호가 옳지 않습니다.</label>}
+            <label className="text-gray-900 me-2">아이디(이메일)</label>
+            {isEmailRequest === false && <label className="text-sub">올바른 형식이 아닙니다.</label>}
             <div className="flex">
               <input
                 type="text"
-                className={`border block w-full p-2 rounded me-2 ${isCodeCorrect ? "bg-[#E8F0FE]" : "bg-white"}`}
-                id="certCode"
-                ref={codeRef}
-                placeholder="인증번호를 입력하세요."
+                className={`border block w-full p-2 rounded me-2 ${isEmailRequest ? "bg-[#E8F0FE]" : "bg-white"}`}
+                id="TSemail"
+                value={email}
+                onChange={handleEmailInputChange}
+                placeholder="이메일을 입력하세요."
               />
               <div
-                className="fcc bg-sub text-white rounded-lg w-24 p-1"
+                className="bg-main fcc text-white rounded-lg w-24 p-1 cursor-pointer"
                 onClick={() => {
-                  handleCode();
+                  handleEmailCert();
                 }}
               >
-                확인
+                인증 요청
               </div>
             </div>
           </div>
-        ) : null}
 
-        <div className="my-4 text-left">
-          <label className="text-gray-900">닉네임</label>
-          <input
-            type="text"
-            className="border block w-full p-2 rounded me-2"
-            id="TSnickname"
-            onChange={handleNicknameInputChange}
-            placeholder="최대 10자까지 가능합니다."
-          />
-        </div>
+          {isEmailRequest ? (
+            <div className="my-4 text-left">
+              <label className="text-gray-900 me-2">인증번호 입력</label>
+              {isCodeCorrect === false && <label className="text-sub">인증번호가 옳지 않습니다.</label>}
+              <div className="flex">
+                <input
+                  type="text"
+                  className={`border block w-full p-2 rounded me-2 ${isCodeCorrect ? "bg-[#E8F0FE]" : "bg-white"}`}
+                  id="certCode"
+                  ref={codeRef}
+                  placeholder="인증번호를 입력하세요."
+                />
+                <div
+                  className="fcc bg-sub text-white rounded-lg w-24 p-1"
+                  onClick={() => {
+                    handleCode();
+                  }}
+                >
+                  확인
+                </div>
+              </div>
+            </div>
+          ) : null}
 
-        <div className="my-4 text-left">
-          <label className="text-gray-900">비밀번호</label>
-          <input
-            type="password"
-            className="border block w-full p-2 rounded me-2"
-            id="password"
-            onChange={handlePasswordInputChange}
-            placeholder="최대 12자까지 가능합니다."
-          />
-        </div>
+          <div className="my-4 text-left">
+            <label className="text-gray-900">닉네임</label>
+            <input
+              type="text"
+              className="border block w-full p-2 rounded me-2"
+              id="TSnickname"
+              onChange={handleNicknameInputChange}
+              placeholder="최대 10자까지 가능합니다."
+            />
+          </div>
 
-        <div className="my-4 text-left">
-          <label className="text-gray-900 me-2">비밀번호 확인</label>
-          {isMatch === false && <label className="text-sub">비밀번호가 옳지 않습니다.</label>}
-          <input
-            type="password"
-            className="border block w-full p-2 rounded me-2"
-            id="passwordCheck"
-            onChange={handleCheckPasswordInputChange}
-            placeholder="최대 12자까지 가능합니다."
-          />
-        </div>
+          <div className="my-4 text-left">
+            <label className="text-gray-900">비밀번호</label>
+            <input
+              type="password"
+              className="border block w-full p-2 rounded me-2"
+              id="password"
+              onChange={handlePasswordInputChange}
+              placeholder="최대 12자까지 가능합니다."
+            />
+          </div>
 
-        <div id="submitBox" className="flex justify-around mt-6 mb-4">
-          <Link href={"/login"} className="bg-slate-400 text-white py-2 inline-block w-5/12 rounded-lg">
-            뒤로가기
-          </Link>
+          <div className="my-4 text-left">
+            <label className="text-gray-900 me-2">비밀번호 확인</label>
+            {isMatch === false && <label className="text-sub">비밀번호가 옳지 않습니다.</label>}
+            <input
+              type="password"
+              className="border block w-full p-2 rounded me-2"
+              id="passwordCheck"
+              onChange={handleCheckPasswordInputChange}
+              placeholder="최대 12자까지 가능합니다."
+            />
+          </div>
 
-          <button
-            className="bg-main text-white py-2 inline-block w-5/12 rounded-lg cursor-pointer"
-            onClick={handleSubmit}
-          >
-            가입하기
-          </button>
+          <div id="submitBox" className="flex justify-around mt-6 mb-4">
+            <Link href={"/login"} className="bg-slate-400 text-white py-2 inline-block w-5/12 rounded-lg">
+              뒤로가기
+            </Link>
+
+            <button
+              className="bg-main text-white py-2 inline-block w-5/12 rounded-lg cursor-pointer"
+              onClick={handleSubmit}
+            >
+              가입하기
+            </button>
+          </div>
         </div>
       </div>
     </div>

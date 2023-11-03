@@ -1,6 +1,5 @@
 export type CommonType = string;
 
-<<<<<<< HEAD
 export type EmailCertResponse = {
   success: boolean;
 };
@@ -16,6 +15,23 @@ export interface SignUpType {
   nickname: string;
   locale: string;
 }
-=======
-export type Email = string;
->>>>>>> 78cd6b69c35e46d44f8d27742d58c42488349462
+
+export interface ReqLogin {
+  email: string;
+  password: string;
+  type: number;
+}
+
+export interface ResLogin {
+  success: boolean;
+  message: string;
+  member: Member;
+}
+
+export interface Member {
+  seq: number;
+  email: string;
+  profileImg: string | null;
+  nickname: string;
+  locale: string;
+}
