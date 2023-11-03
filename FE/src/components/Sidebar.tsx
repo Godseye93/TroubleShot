@@ -5,9 +5,10 @@ import { AiFillPlusCircle } from "react-icons/ai";
 interface Props {
   menus: JSX.Element[];
   categorys?: string[];
+  link: string;
 }
 
-export default function Sidebar({ menus, categorys }: Props) {
+export default function Sidebar({ menus, categorys, link }: Props) {
   return (
     <div className="w-[14%] h-[91vh] bg-white shadow-lg mt-4 rounded-lg pt-5  flex-col justify-between text-lg md:flex hidden">
       <div>
@@ -30,7 +31,7 @@ export default function Sidebar({ menus, categorys }: Props) {
           </div>
         )}
         <Link
-          href="/create"
+          href={`${link}/create`}
           className="fcc bg-main rounded-full h-10 w-3/4 shadow-orange-700 shadow-md mb-10 flex hover:shadow-md hover:bg-yellow-500 transition-all"
         >
           <FaPen />
