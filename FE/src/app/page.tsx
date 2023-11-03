@@ -1,3 +1,4 @@
+/* eslint-disable */
 "use client";
 import { useEffect, useRef, useState } from "react";
 import styles from "../styles/Home.module.css";
@@ -8,7 +9,7 @@ import FirstIntro from "../components/home/FirstIntro";
 import FeatureIntro from "../components/home/FeatureIntro";
 import CarouselIntro from "../components/home/CarouselIntro";
 import HomeOutro from "../components/home/HomeOutro";
-import Footer from "../components/Footer";
+// import Footer from "../components/Footer";
 
 export default function Page() {
   const outerDivRef = useRef<any>();
@@ -19,7 +20,6 @@ export default function Page() {
   // scrollTo로 이동할 때 정확히 해당 위치가 아닌 조금 위로 이동하게 되어서 오차가 생김
   // 오차 방지하기 위해
   const DIVIDER_HEIGHT = 5;
-
   useEffect(() => {
     const wheelHandler = (e: any) => {
       // event type 명시

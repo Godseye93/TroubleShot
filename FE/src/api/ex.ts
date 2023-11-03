@@ -1,16 +1,16 @@
 import { apiInstance } from ".";
-interface ex {
-  ex: string;
+interface Ex {
+  Ex: string;
 }
 const api = apiInstance("login");
 
-export const login = async (user: ex): Promise<ex> => {
+export const login = async (user: Ex): Promise<Ex> => {
   const { data } = await api.post("login", user);
   return data;
 };
 
-// import {login} from '@/api/ex
-// const onLongin = async (user: ex) => {
+// import {login} from '@/api/Ex
+// const onLongin = async (user: Ex) => {
 //   try {
 //     const res: LoginResultValue = await login(user);
 //     toast.success("로그인 되었습니다.");

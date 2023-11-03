@@ -1,11 +1,12 @@
-import { BsBookmarkStar, BsBookmarkStarFill } from "react-icons/bs";
+import { BsBookmarkStar } from "react-icons/bs";
 import IconBox from "./IconBox";
+import Image from "next/image";
 
-interface user {
+interface User {
   username: string;
   userImg: string;
 }
-interface board {
+interface Board {
   seq: number;
   title: string;
   tags: string[];
@@ -15,15 +16,21 @@ interface board {
   content: string;
   img?: string;
   date: string;
-  user: user;
+  user: User;
 }
-export default function BoardItem({ board, last, idx }: { board: board; last: number; idx: number }) {
+export default function BoardItem({ board, last, idx }: { board: Board; last: number; idx: number }) {
   return (
     <div className={`${idx !== last && "border-b-2"} py-3`}>
       {/* 상단바 */}
       <div className="flex justify-between items-center">
         <div className="flex items-center">
-          <img src={board.user.userImg} className="rounded-full w-10 h-10 shadow-md" />
+          <Image
+            src={board.user.userImg}
+            alt="이미지 준비중"
+            className="rounded-full w-10 h-10 shadow-md"
+            width={0}
+            height={0}
+          />
           <p className="mx-2 font-semibold">{board.user.username}</p>
           <p className="text-xs">{board.date}</p>
         </div>
@@ -44,7 +51,7 @@ export default function BoardItem({ board, last, idx }: { board: board; last: nu
         </div>
         {board.img && (
           <div className="w-72">
-            <img src={board.img} className="rounded-lg" alt="" />
+            <Image src={board.img} width={0} height={0} className="rounded-lg" alt="" />
           </div>
         )}
       </div>
