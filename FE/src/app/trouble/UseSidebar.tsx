@@ -20,5 +20,5 @@ export default function UseSidebar() {
       <BsFillBookmarkStarFill /> <p className="ms-3 line-clamp-1">북마크</p>
     </Link>,
   ];
-  return <Sidebar menus={menus} categorys={categorys} />;
+  return <Sidebar link="/trouble" menus={menus} categorys={categorys} />;
 }

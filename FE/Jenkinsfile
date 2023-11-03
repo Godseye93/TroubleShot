@@ -20,10 +20,8 @@ pipeline {
 
         stage('Build image') {
             steps {
-                dir('user') {
+                dir('FE') {
                     sh 'ls -al'
-                    sh 'npm install'
-                    sh 'npm run build'
                     sh 'docker login -u godseye93 -p wjdtmfgh123'
                     sh 'docker build -t godseye93/front:latest .'
                 }
