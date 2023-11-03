@@ -1,10 +1,10 @@
 import BoardItem from "@/components/BoardItem";
 
-interface user {
+interface User {
   username: string;
   userImg: string;
 }
-interface content {
+interface Content {
   seq: number;
   title: string;
   tags: string[];
@@ -14,12 +14,12 @@ interface content {
   content: string;
   img?: string;
   date: string;
-  user: user;
+  user: User;
 }
-interface props {
-  contents: content[];
+interface Props {
+  contents: Content[];
 }
-export default function BoardList({ contents }: props) {
+export default function BoardList({ contents }: Props) {
   return (
     <div className="bg-white rounded-lg shadow-md px-2">
       {contents.map((content, idx) => (

@@ -1,4 +1,5 @@
-import React, { SetStateAction, useState } from "react";
+/* eslint-disable */
+import React, { SetStateAction } from "react";
 
 export default function SetOptions({
   title,

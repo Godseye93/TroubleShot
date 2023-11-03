@@ -5,10 +5,10 @@ interface Props {
   children: React.ReactNode;
 }
 const Rsidebar = dynamic(() => import("./Rsidebar"), {
-  loading: () => <p> 'Loading...',</p>,
+  loading: () => <p> Loading...,</p>,
 });
 const UseSidebar = dynamic(() => import("./UseSidebar"), {
-  loading: () => <p> 'Loading...',</p>,
+  loading: () => <p> Loading...,</p>,
 });
 export default function Layout({ children }: Props) {
   return (

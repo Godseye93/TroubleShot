@@ -2,20 +2,27 @@
 import { ContextStore, commands } from "@uiw/react-md-editor";
 import { useState } from "react";
 import { ImgUpload } from "@/constants/ImgUpload";
-type Handle = {
+interface Handle {
   close: () => void;
   execute: () => void;
   getState?: (() => false | commands.TextState) | undefined;
   textApi?: commands.TextAreaTextApi | undefined;
   dispatch?: React.Dispatch<ContextStore> | undefined;
-};
+}
 
 export default function FileUploader({ handle }: { handle: Handle }) {
   const [howUpload, seHowUpload] = useState(ImgUpload.FILE);
+  const methodList = ["File", "URL"];
   return (
     <div>
       <div className="p-2 rounded-lg w-[20rem]">
-        <div></div>
+        <div className="w-24 grid-2">
+          {methodList.map((method, idx) => (
+            <div key={idx} className={`border-b-2 ${howUpload === idx && "border-main text-main"}`}>
+              {method}
+            </div>
+          ))}
+        </div>
 
         <div>{/* My Custom Toolbar: {JSON.stringify(handle.getState())} */}</div>
         <button
