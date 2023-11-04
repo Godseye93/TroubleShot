@@ -102,22 +102,6 @@ public class TroubleShootingController {
 		log.info("====== 트러블 슈팅 문서 수정 끝 =====");
 		return new ResponseEntity<ResultDTO>(resultDTO, HttpStatus.OK);
 	}
-	@Operation(summary = "트러블 슈팅 덧글 달기")
-	@PostMapping("/{seq}/reply")
-	public ResponseEntity<?> insertReply(@PathVariable(name = "seq") long seq,@RequestBody TroubleShootingReplyDTO troubleShootingReplyDTO) throws Exception {
-		log.info("====== 트러블 슈팅 문서 덧글 달기 시작 =====");
-
-		troubleShootingService.insertTroubleShooingReply(troubleShootingReplyDTO);
-
-		ResultDTO resultDTO = ResultDTO.builder()
-			.success(true)
-			.message("트러블 슈팅 문서 덧글 등록이 성공했습니다.")
-			.build();
-
-		log.info("====== 트러블 슈팅 문서 덧글 달기 끝 =====");
-		return new ResponseEntity<ResultDTO>(resultDTO, HttpStatus.OK);
-	}
-
 	@Operation(summary = "트러블 슈팅 단일 문서 상세 내용 검색")
 	@GetMapping("/{seq}")
 	public ResponseEntity<?> findTroubleShooting(@PathVariable(name = "seq") long seq) throws Exception {
@@ -155,5 +139,35 @@ public class TroubleShootingController {
 
 		log.info("====== 트러블 슈팅 문서 목록 검색 끝 =====");
 		return new ResponseEntity<ResponseTroubleShootingListDTO>(resultDTO, HttpStatus.OK);
+	}
+	@Operation(summary = "트러블 슈팅 덧글 달기")
+	@PostMapping("/{seq}/reply")
+	public ResponseEntity<?> insertReply(@PathVariable(name = "seq") long seq,@RequestBody TroubleShootingReplyDTO troubleShootingReplyDTO) throws Exception {
+		log.info("====== 트러블 슈팅 문서 덧글 달기 시작 =====");
+
+		troubleShootingService.insertTroubleShooingReply(troubleShootingReplyDTO);
+
+		ResultDTO resultDTO = ResultDTO.builder()
+			.success(true)
+			.message("트러블 슈팅 문서 덧글 등록이 성공했습니다.")
+			.build();
+
+		log.info("====== 트러블 슈팅 문서 덧글 달기 끝 =====");
+		return new ResponseEntity<ResultDTO>(resultDTO, HttpStatus.OK);
+	}
+	@Operation(summary = "트러블 슈팅 덧글 수정")
+	@PutMapping("/{seq}/reply")
+	public ResponseEntity<?> updateReply(@PathVariable(name = "seq") long seq,@RequestBody TroubleShootingReplyDTO troubleShootingReplyDTO) throws Exception {
+		log.info("====== 트러블 슈팅 문서 덧글 수정 시작 =====");
+
+		troubleShootingService.update(troubleShootingReplyDTO);
+
+		ResultDTO resultDTO = ResultDTO.builder()
+			.success(true)
+			.message("트러블 슈팅 문서 덧글 등록이 성공했습니다.")
+			.build();
+
+		log.info("====== 트러블 슈팅 문서 덧글 수정 끝 =====");
+		return new ResponseEntity<ResultDTO>(resultDTO, HttpStatus.OK);
 	}
 }

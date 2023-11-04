@@ -1,6 +1,8 @@
 package com.orientalSalad.troubleShot.troubleShooting.entity;
 
 import com.orientalSalad.troubleShot.global.entity.BaseEntity;
+import com.orientalSalad.troubleShot.troubleShooting.dto.TroubleShootingDTO;
+import com.orientalSalad.troubleShot.troubleShooting.dto.TroubleShootingReplyDTO;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -28,5 +30,9 @@ public class TroubleShootingReplyEntity extends BaseEntity {
 		this.writerSeq = writerSeq;
 		this.likeCount = likeCount;
 		this.troubleSeq = troubleSeq;
+	}
+
+	public void update(TroubleShootingReplyDTO replyDTO){
+		this.context = replyDTO.getContext();
 	}
 }

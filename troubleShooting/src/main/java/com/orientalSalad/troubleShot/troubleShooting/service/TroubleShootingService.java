@@ -89,7 +89,30 @@ public class TroubleShootingService {
 
 		return true;
 	}
+	public boolean updateTroubleShooingReply(TroubleShootingReplyDTO troubleShootingReplyDTO) throws Exception {
+		TroubleShootingReplyEntity replyEntity = troubleShootingReplyRepository.findById(troubleShootingReplyDTO.getSeq()).orElse(null);
 
+		if(replyEntity == null){
+			throw new Exception("잘못된 덧글입니다.");
+		}
+
+		replyEntity.update(troubleShootingReplyDTO);
+
+		troubleShootingReplyRepository.save(replyEntity);
+
+		return true;
+	}
+	public boolean deleteTroubleShooingReply(TroubleShootingReplyDTO troubleShootingReplyDTO) throws Exception {
+		TroubleShootingReplyEntity replyEntity = troubleShootingReplyRepository.findById(troubleShootingReplyDTO.getSeq()).orElse(null);
+
+		if(replyEntity == null){
+			throw new Exception("잘못된 덧글입니다.");
+		}
+
+		troubleShootingReplyRepository.delete(replyEntity);
+
+		return true;
+	}
 	public TroubleShootingDTO findTroubleShootingBySeq(long seq) throws Exception {
 		TroubleShootingDTO troubleShootingDTO = troubleShootingMapper.selectTroubleShootingBySeq(seq);
 
