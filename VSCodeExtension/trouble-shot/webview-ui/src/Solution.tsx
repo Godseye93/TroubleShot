@@ -32,7 +32,6 @@ const Solution = ({ sessionId, troubleId }: Props) => {
     markdownText += `### 해결 코드\n\`\`\`\n${code}\n\`\`\`\n\n`;
     markdownText += `### 해결 설명\n${description}\n\n`;
 
-    console.log(markdownText);
     return markdownText;
   }
 
@@ -82,7 +81,7 @@ const Solution = ({ sessionId, troubleId }: Props) => {
   }
 
   return (
-    <section className="flex flex-col w-2/3 gap-1 ">
+    <section className=" flex flex-col w-2/3 gap-1">
       <VSCodeTextArea value={code} onInput={onChange} name="code">
         문제 코드
       </VSCodeTextArea>
@@ -92,14 +91,14 @@ const Solution = ({ sessionId, troubleId }: Props) => {
       <div className="flex items-center justify-center gap-5 mt-5">
         <div onClick={onCopyMarkdown}>
           <VSCodeButton>
-            <VscCopy className="mr-3 " />
+            <VscCopy className=" mr-3" />
             마크다운 코드 복사
           </VSCodeButton>
         </div>
 
         <div onClick={onSolveTrouble}>
           <VSCodeButton>
-            <BsReplyAll className="mr-3 " />
+            <BsReplyAll className=" mr-3" />
             SOLUTION 달기
           </VSCodeButton>
         </div>

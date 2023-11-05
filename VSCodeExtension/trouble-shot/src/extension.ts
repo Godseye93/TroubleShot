@@ -6,7 +6,10 @@ import { getRootPath } from "./utilities/getRootPath";
 import { MyTroubleListProviderWithoutLogin } from "./TreeDataProvider/MyTroubleListProviderWithoutLogin";
 import { getMarkdownView } from "./panels/getMarkdownView";
 import { Trouble } from "./TreeDataProvider/MyTroubleListProvider";
-import { spawn } from "child_process";
+import { exec } from "child_process";
+import { parsingErrMsg } from "./utilities/parsingErrMsg";
+import { ErrHistoryProvider, Err } from "./TreeDataProvider/ErrHistoryProvider";
+import { v4 as uuidv4 } from "uuid";
 
 export const TROUBLE_SHOOTING_TYPE = {
   TROUBLE: 0 as const,
@@ -20,31 +23,18 @@ export async function activate(context: vscode.ExtensionContext) {
   const isLogin = sessionId !== -1;
   vscode.commands.executeCommand("setContext", "isLogin", isLogin);
 
+  const errHistoryProvider = new ErrHistoryProvider(context.globalState);
+  context.subscriptions.push(
+    vscode.window.registerTreeDataProvider("error-history", errHistoryProvider)
+  );
+
   context.subscriptions.push(
     vscode.workspace.onDidSaveTextDocument((document) => {
-      const buildProcess = spawn("npm", ["run", "build", "--", "--logLevel", "error"], {
-        cwd: rootPath,
-        shell: true,
-      });
-
-      buildProcess.on("error", (err) => {
-        console.error("Failed to start subprocess.", err);
-      });
-
-      let buildErrors = "";
-      let allOutput = "";
-
-      buildProcess.stderr.on("data", (data) => {
-        buildErrors += data.toString();
-      });
-
-      buildProcess.stdout.on("data", (data) => {
-        allOutput += data.toString();
-      });
-
-      buildProcess.on("close", (code) => {
-        if (code !== 0) {
-          console.error(`Build failed with code ${code} and errors:\n${buildErrors}`);
+      exec("npm run build", { cwd: rootPath }, (error, stdout, stderr) => {
+        if (error) {
+          const errMsg = parsingErrMsg(stdout);
+          const err = new Err(errMsg.title, new Date(), errMsg.errMsg, uuidv4());
+          errHistoryProvider.addErr(err);
         }
       });
     })

@@ -24,6 +24,10 @@
       {
         "view": "node-dependencies",
         "contents": "No nodeDependencies found"
+      },
+      {
+        "view": "error-history",
+        "contents": "No Error History found"
       }
     ],
     "commands": [
@@ -89,9 +93,8 @@
           "when": "isLogin"
         },
         {
-          "id": "team-trouble-list",
-          "name": "Team Trouble List",
-          "when": "isLogin"
+          "id": "error-history",
+          "name": "Error History"
         },
         {
           "id": "node-dependencies",
@@ -112,12 +115,12 @@
         },
         {
           "command": "create.trouble",
-          "when": "view == my-trouble-list-without-login || view == my-trouble-list || view == team-trouble-list || view == community-trouble-list",
+          "when": "view == my-trouble-list-without-login || view == my-trouble-list",
           "group": "navigation"
         },
         {
           "command": "refresh.trouble",
-          "when": "view == my-trouble-list-without-login || view == my-trouble-list || view == team-trouble-list || view == community-trouble-list",
+          "when": "view == my-trouble-list-without-login || view == my-trouble-list",
           "group": "navigation"
         }
       ],
@@ -129,12 +132,12 @@
         },
         {
           "command": "delete.trouble",
-          "when": "view == my-trouble-list-without-login || view == my-trouble-list || view == team-trouble-list || view == community-trouble-list",
+          "when": "view == my-trouble-list-without-login || view == my-trouble-list",
           "group": "inline"
         },
         {
           "command": "copy.markdown",
-          "when": "view == my-trouble-list-without-login || view == my-trouble-list || view == team-trouble-list || view == community-trouble-list",
+          "when": "view == my-trouble-list-without-login || view == my-trouble-list",
           "group": "inline"
         }
       ]
