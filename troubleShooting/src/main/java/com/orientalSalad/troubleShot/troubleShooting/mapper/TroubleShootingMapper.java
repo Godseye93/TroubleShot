@@ -16,7 +16,7 @@ import com.orientalSalad.troubleShot.troubleShooting.sql.TroubleShootingSQLProvi
 
 @Mapper
 public interface TroubleShootingMapper {
-	public TroubleShootingDTO selectTroubleShootingBySeq(@Param("seq") long seq);
+	public TroubleShootingDTO selectTroubleShootingBySeq(@Param("searchParam") SearchTroubleShootingDTO searchParam);
 
 	public List<TroubleShootingDTO> selectTroubleShootingList(
 		@Param("searchParam") SearchTroubleShootingDTO searchParam,

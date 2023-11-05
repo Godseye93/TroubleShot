@@ -8,6 +8,7 @@
         <result property="title" column="title"/>
         <result property="context" column="context"/>
         <result property="solved" column="solved"/>
+        <result property="category" column="category"/>
         <result property="createTime" column="create_time"/>
         <result property="updateTime" column="update_time"/>
         <result property="deleteTime" column="delete_time"/>
@@ -21,7 +22,25 @@
                 typeHandler="com.orientalSalad.troubleShot.troubleShooting.typehandler.JsonToListTypeHandler"/>
         <association property="writer" resultMap="simpleMember"/>
     </resultMap>
-
+    <resultMap id="TroubleShootingDetail" type="com.orientalSalad.troubleShot.troubleShooting.dto.TroubleShootingDTO">
+        <id property="seq" column="seq" />
+        <result property="title" column="title"/>
+        <result property="context" column="context"/>
+        <result property="solved" column="solved"/>
+        <result property="category" column="category"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="deleteTime" column="delete_time"/>
+        <result property="viewCount" column="view_count"/>
+        <result property="likeCount" column="like_count"/>
+        <result property="replyCount" column="reply_count"/>
+        <result property="loginLike" column="login_like"/>
+        <result property="tags" column="tag_name"
+                typeHandler="com.orientalSalad.troubleShot.troubleShooting.typehandler.StringToListTypeHandler"/>
+        <result property="replies" column="reply"
+                typeHandler="com.orientalSalad.troubleShot.troubleShooting.typehandler.JsonToListTypeHandler"/>
+        <association property="writer" resultMap="simpleMember"/>
+    </resultMap>
     <resultMap id="tagList" type="String">
         <result column="tag_name"></result>
     </resultMap>
@@ -45,22 +64,71 @@
     <select id="selectTroubleShootingBySeq"
         parameterType="Long"
         resultMap="TroubleShooting">
-        SELECT ts.seq AS seq, ts.title AS title, ts.context AS context, ts.solved AS solved,
-               ts.cre
-                   ate_time AS create_time, ts.update_time AS update_time, ts.delete_time AS delete_time,
-               ts.view_count AS view_count, ts.like_count AS like_count, ts.reply_count AS reply_count,
-               m.seq AS writer_seq, m.nickname AS writer_nickname, m.email AS writer_email, m.profile_img AS writer_profile_img,
-               t.name AS tag_name
+        SELECT  ts.seq AS seq,
+                ts.title AS title,
+                ts.context AS context,
+                ts.category AS category,
+                ts.solved AS solved,
+                ts.create_time AS create_time,
+                ts.update_time AS update_time,
+                ts.delete_time AS delete_time,
+                ts.view_count AS view_count,
+                COUNT(distinct tsl.seq) AS like_count,
+                COUNT(distinct tsr.seq) AS reply_count,
+                m.seq AS writer_seq,
+                m.nickname AS writer_nickname,
+                m.email AS writer_email,
+                m.profile_img AS writer_profile_img,
+                <if test="searchParam.loginSeq != null or searchParam.loginSeq != 0">
+                    CASE
+                    WHEN tsl.user_seq IS NOT NULL THEN true
+                    ELSE false
+                    END as login_like,
+                </if>
+                STRING_AGG(distinct t.name, ', ') AS tag_name,
+                JSON_AGG(json_build_object(
+                'seq', tsr.seq,
+                'createTime', tsr.create_time,
+                'updateTime', tsr.update_time,
+                'deleteTime', tsr.delete_time,
+                'context',tsr.context,
+                'writerSeq',tsr.writer_seq,
+                'likeCount',tsr.like_count,
+                'troubleSeq',tsr.trouble_seq)) AS reply
         FROM
             trouble_shooting ts
-                LEFT JOIN
+        LEFT JOIN
+            trouble_shooting_reply tsr on ts.seq = tsr.trouble_seq
+        LEFT JOIN
             trouble_tag tt ON tt.trouble_seq = ts.seq
-                LEFT JOIN
+        LEFT JOIN
             tag t ON t.seq = tt.tag_seq
-                LEFT JOIN
+        LEFT JOIN
             member m ON ts.writer_seq = m.seq
+        LEFT JOIN
+            trouble_shooting_like tsl ON ts.seq  = tsl.trouble_seq
+        <if test="searchParam.loginSeq != null or searchParam.loginSeq != 0">
+            AND tsl.user_seq = #{searchParam.loginSeq}
+        </if>
         WHERE
-            ts.seq = #{seq}
+            ts.seq = #{searchParam.troubleSeq}
+        GROUP BY
+            ts.seq,
+            m.seq,
+            m.nickname,
+            m.email,
+            m.profile_img,
+            <if test="searchParam.loginSeq !=null or searchParam.loginSeq !=0">
+                tsl.user_seq,
+            </if>
+            ts.title,
+            ts.context,
+            ts.solved,
+            ts.category,
+            ts.create_time,
+            ts.update_time,
+            ts.delete_time,
+            ts.view_count
     </select>
     <select id="countTroubleShootingList"
             parameterType="com.orientalSalad.troubleShot.troubleShooting.dto.SearchTroubleShootingDTO"
@@ -83,19 +151,19 @@
         FROM
             trouble_shooting ts
         <if test="searchParam.tags != null and searchParam.tags.size() > 0">
-            INNER JOIN
+        INNER JOIN
             matched_posts mp on mp.seq = ts.seq
         </if>
         LEFT JOIN
-        trouble_shooting_reply tsr on ts.seq = tsr.trouble_seq
+            trouble_shooting_reply tsr on ts.seq = tsr.trouble_seq
         LEFT JOIN
-        trouble_tag tt ON tt.trouble_seq = ts.seq
+            trouble_tag tt ON tt.trouble_seq = ts.seq
         LEFT JOIN
-        tag t ON t.seq = tt.tag_seq
+            tag t ON t.seq = tt.tag_seq
         LEFT JOIN
-        member m ON ts.writer_seq = m.seq
+            member m ON ts.writer_seq = m.seq
         LEFT JOIN
-        trouble_shooting_like tsl ON ts.seq  = tsl.trouble_seq
+            trouble_shooting_like tsl ON ts.seq  = tsl.trouble_seq
         WHERE
         1 = 1
         <if test="searchParam.writer != null and searchParam.writer.trim().length() > 0">
@@ -103,6 +171,9 @@
         </if>
         <if test="searchParam.solved != null">
             AND ts.solved = #{searchParam.solved}
+        </if>
+        <if test="searchParam.troubleSeq != null and searchParam.troubleSeq != 0">
+            AND ts.seq = #{searchParam.troubleSeq}
         </if>
         <if test="searchParam.keyword != null and searchParam.keyword.trim().length() > 0">
             AND ts.title LIKE CONCAT('%',#{searchParam.keyword},'%')
@@ -137,6 +208,7 @@
         SELECT  ts.seq AS seq,
                 ts.title AS title,
                 ts.context AS context,
+                ts.category AS category,
                 ts.solved AS solved,
 			    ts.create_time AS create_time,
                 ts.update_time AS update_time,
@@ -188,6 +260,9 @@
         <if test="searchParam.writer != null and searchParam.writer.trim().length() > 0">
             AND m.nickname LIKE CONCAT('%',#{searchParam.writer},'%')
         </if>
+        <if test="searchParam.troubleSeq != null and searchParam.troubleSeq != 0">
+            AND ts.seq = #{searchParam.troubleSeq}
+        </if>
         <if test="searchParam.solved != null">
             AND ts.solved = #{searchParam.solved}
         </if>
@@ -197,6 +272,9 @@
         </if>
         <if test="searchParam.startTime != null">
             AND ts.create_time &gt;=  #{searchParam.startTime}
+        </if>
+        <if test="searchParam.category != null and searchParam.category.trim().length() > 0">
+            AND ts.category = #{searchParam.category}
         </if>
         <if test="searchParam.endTime != null">
             AND ts.create_time &lt;=  #{searchParam.endTime}
@@ -216,6 +294,7 @@
             ts.title,
             ts.context,
             ts.solved,
+            ts.category,
             ts.create_time,
             ts.update_time,
             ts.delete_time,

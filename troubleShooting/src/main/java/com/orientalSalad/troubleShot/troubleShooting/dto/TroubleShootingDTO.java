@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 @SuperBuilder
@@ -18,6 +19,7 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class TroubleShootingDTO extends BaseDTO {
 	@Schema(description = "제목")
 	private String title;
@@ -29,16 +31,16 @@ public class TroubleShootingDTO extends BaseDTO {
 	private SimpleMemberDTO writer;
 	@Schema(description = "해결 여부")
 	private boolean solved;
-	@Schema(description = "조회 수")
+	@Schema(description = "조회 수",hidden = true)
 	private int viewCount;
-	@Schema(description = "좋아요 수")
+	@Schema(description = "좋아요 수",hidden = true)
 	private int likeCount;
-	@Schema(description = "덧글 수")
+	@Schema(description = "덧글 수",hidden = true)
 	private int replyCount;
 	@Schema(description = "다중 태그")
 	private List<String> tags;
-	@Schema(description = "덧글")
+	@Schema(description = "덧글",hidden = true)
 	private Set<TroubleShootingReplyDTO> replies;
-	@Schema(description = "로그인한 유저가 좋아요를 눌렀는지 확인")
+	@Schema(description = "로그인한 유저가 좋아요를 눌렀는지 확인",hidden = true)
 	private boolean loginLike;
 }

@@ -15,9 +15,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.orientalSalad.troubleShot.global.dto.RequestDTO;
 import com.orientalSalad.troubleShot.global.dto.ResultDTO;
 import com.orientalSalad.troubleShot.global.utill.Authentication;
 import com.orientalSalad.troubleShot.troubleShooting.dto.RequestTroubleShootingDTO;
+import com.orientalSalad.troubleShot.troubleShooting.dto.RequestTroubleShootingReplyDTO;
 import com.orientalSalad.troubleShot.troubleShooting.dto.ResponseTroubleShootingDTO;
 import com.orientalSalad.troubleShot.troubleShooting.dto.ResponseTroubleShootingListDTO;
 import com.orientalSalad.troubleShot.troubleShooting.dto.SearchTroubleShootingDTO;
@@ -43,6 +45,8 @@ public class TroubleShootingController {
 	public ResponseEntity<?> insertTroubleShooting(
 		HttpServletRequest request, @RequestBody RequestTroubleShootingDTO requestTroubleShootingDTO) throws Exception {
 		log.info("====== 트러블 슈팅 문서 등록 시작 =====");
+		log.info(requestTroubleShootingDTO.toString());
+
 		//로그인 확인
 		authentication.checkLogin(request,requestTroubleShootingDTO);
 		//트러블슈팅 문서 등록
@@ -60,20 +64,27 @@ public class TroubleShootingController {
 	@DeleteMapping("/{seq}")
 	public ResponseEntity<?> deleteTroubleShooting(
 		HttpServletRequest request,
-		@RequestBody RequestTroubleShootingDTO requestTroubleShootingDTO,
+		@RequestBody RequestDTO requestDTO,
 		@PathVariable(name = "seq") Long seq) throws
 		Exception {
 		log.info("====== 트러블 슈팅 문서 삭제 시작 =====");
 		//로그인 확인
-		authentication.checkLogin(request,requestTroubleShootingDTO);
+		authentication.checkLogin(request,requestDTO);
 		//pk 설정
-		requestTroubleShootingDTO.getTroubleShooting().setSeq(seq);
+		RequestTroubleShootingDTO requestTroubleShootingDTO
+			= RequestTroubleShootingDTO.builder()
+			.loginSeq(requestDTO.getLoginSeq())
+			.type(requestDTO.getType())
+			.troubleShooting(TroubleShootingDTO.builder()
+				.seq(seq)
+				.build())
+			.build();
 		//트러블슈팅 문서 삭제
 		troubleShootingService.deleteTroubleShooting(requestTroubleShootingDTO);
 
 		ResultDTO resultDTO = ResultDTO.builder()
 			.success(true)
-			.message("트러블 슈팅 문서 수정이 성공했습니다.")
+			.message(seq+"번 트러블 슈팅 문서 삭제를 성공했습니다.")
 			.build();
 
 		log.info("====== 트러블 슈팅 문서 삭제 끝 =====");
@@ -87,6 +98,7 @@ public class TroubleShootingController {
 		@PathVariable(name = "seq") Long seq) throws
 		Exception {
 		log.info("====== 트러블 슈팅 문서 수정 시작 =====");
+		log.info(requestTroubleShootingDTO);
 		//로그인 확인
 		authentication.checkLogin(request,requestTroubleShootingDTO);
 		//pk 설정
@@ -104,9 +116,15 @@ public class TroubleShootingController {
 	}
 	@Operation(summary = "트러블 슈팅 단일 문서 상세 내용 검색")
 	@GetMapping("/{seq}")
-	public ResponseEntity<?> findTroubleShooting(@PathVariable(name = "seq") long seq) throws Exception {
+	public ResponseEntity<?> findTroubleShooting(@PathVariable(name = "seq") long seq,
+		@ModelAttribute RequestDTO requestDTO) throws Exception {
 		log.info("====== 트러블 슈팅 문서 pk 탐색 시작 =====");
-		TroubleShootingDTO troubleShootingDTO = troubleShootingService.findTroubleShootingBySeq(seq);
+		log.info("pk : "+seq);
+		TroubleShootingDTO troubleShootingDTO = troubleShootingService.findTroubleShootingBySeq(seq,requestDTO);
+
+		if(troubleShootingDTO == null){
+			throw new Exception(seq+"번 트러블 슈팅 문서가 없습니다.");
+		}
 
 		log.info(troubleShootingDTO);
 
@@ -142,10 +160,14 @@ public class TroubleShootingController {
 	}
 	@Operation(summary = "트러블 슈팅 덧글 달기")
 	@PostMapping("/{seq}/reply")
-	public ResponseEntity<?> insertReply(@PathVariable(name = "seq") long seq,@RequestBody TroubleShootingReplyDTO troubleShootingReplyDTO) throws Exception {
+	public ResponseEntity<?> insertReply(@PathVariable(name = "seq") long seq,
+		@RequestBody RequestTroubleShootingReplyDTO requestTroubleShootingReplyDTO,
+		HttpServletRequest request) throws Exception {
 		log.info("====== 트러블 슈팅 문서 덧글 달기 시작 =====");
+		//로그인 확인
+		authentication.checkLogin(request,requestTroubleShootingReplyDTO);
 
-		troubleShootingService.insertTroubleShooingReply(troubleShootingReplyDTO);
+		troubleShootingService.insertTroubleShooingReply(requestTroubleShootingReplyDTO);
 
 		ResultDTO resultDTO = ResultDTO.builder()
 			.success(true)
@@ -156,11 +178,20 @@ public class TroubleShootingController {
 		return new ResponseEntity<ResultDTO>(resultDTO, HttpStatus.OK);
 	}
 	@Operation(summary = "트러블 슈팅 덧글 수정")
-	@PutMapping("/{seq}/reply")
-	public ResponseEntity<?> updateReply(@PathVariable(name = "seq") long seq,@RequestBody TroubleShootingReplyDTO troubleShootingReplyDTO) throws Exception {
+	@PutMapping("/{troubleSeq}/reply/{replySeq}")
+	public ResponseEntity<?> updateReply(
+		@PathVariable(name = "troubleSeq") long troubleSeq,
+		@PathVariable(name = "replySeq") long replySeq,
+		@RequestBody RequestTroubleShootingReplyDTO requestTroubleShootingReplyDTO,
+		HttpServletRequest request) throws Exception {
 		log.info("====== 트러블 슈팅 문서 덧글 수정 시작 =====");
 
-		troubleShootingService.update(troubleShootingReplyDTO);
+		requestTroubleShootingReplyDTO.getTroubleShootingReply().setTroubleSeq(troubleSeq);
+		requestTroubleShootingReplyDTO.getTroubleShootingReply().setSeq(replySeq);
+		//로그인 확인
+		authentication.checkLogin(request,requestTroubleShootingReplyDTO);
+
+		troubleShootingService.updateTroubleShooingReply(requestTroubleShootingReplyDTO);
 
 		ResultDTO resultDTO = ResultDTO.builder()
 			.success(true)
@@ -168,6 +199,40 @@ public class TroubleShootingController {
 			.build();
 
 		log.info("====== 트러블 슈팅 문서 덧글 수정 끝 =====");
+		return new ResponseEntity<ResultDTO>(resultDTO, HttpStatus.OK);
+	}
+	@Operation(summary = "트러블 슈팅 덧글 삭제")
+	@DeleteMapping("/{troubleSeq}/reply/{replySeq}")
+	public ResponseEntity<?> deleteReply(
+		@PathVariable(name = "troubleSeq") long troubleSeq,
+		@PathVariable(name = "replySeq") long replySeq,
+		@RequestBody RequestDTO requestDTO,
+		HttpServletRequest request) throws Exception {
+		log.info("====== 트러블 슈팅 문서 덧글 삭제 시작 =====");
+		log.info(requestDTO.toString());
+		//덧글 요청 객체 생성
+		RequestTroubleShootingReplyDTO requestTroubleShootingReplyDTO
+			= RequestTroubleShootingReplyDTO.builder()
+			.loginSeq(requestDTO.getLoginSeq())
+			.type(requestDTO.getType())
+			.troubleShootingReply(TroubleShootingReplyDTO.builder()
+				.seq(replySeq)
+				.troubleSeq(troubleSeq)
+				.build())
+			.build();
+		log.info(requestTroubleShootingReplyDTO.toString());
+		//로그인 확인
+		authentication.checkLogin(request,requestTroubleShootingReplyDTO);
+		
+		//덧글 삭제
+		troubleShootingService.deleteTroubleShooingReply(requestTroubleShootingReplyDTO);
+
+		ResultDTO resultDTO = ResultDTO.builder()
+			.success(true)
+			.message("트러블 슈팅 문서 덧글 삭제가 성공했습니다.")
+			.build();
+
+		log.info("====== 트러블 슈팅 문서 덧글 삭제 끝 =====");
 		return new ResponseEntity<ResultDTO>(resultDTO, HttpStatus.OK);
 	}
 }

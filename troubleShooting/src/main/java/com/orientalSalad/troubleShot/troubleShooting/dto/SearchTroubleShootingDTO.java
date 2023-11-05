@@ -30,12 +30,16 @@ public class SearchTroubleShootingDTO{
 	private int pageSize;
 	@Schema(description = "페이지 번호")
 	private int pageNo;
+	@Schema(description = "카테고리")
+	private String category;
 	@Schema(description = "풀이 여부")
 	private Boolean solved;
 	@Schema(description = "다중 태그")
 	private List<String> tags;
 	@Schema(description = "작성자 이름")
 	private String writer;
+	@Schema(description = "게시물 pk")
+	private Long troubleSeq;
 	@Schema(description = "작성자 pk")
 	private Long writerSeq;
 	@Schema(description = "로그인 유저 pk")

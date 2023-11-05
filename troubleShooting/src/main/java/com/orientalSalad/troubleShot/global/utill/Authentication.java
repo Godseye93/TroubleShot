@@ -27,7 +27,9 @@ public class Authentication {
 		String key = "login_"+requestDTO.getLoginSeq()+"_"+requestDTO.getType();
 
 		LoginDTO loginDTO = (LoginDTO)valueOperations.get(key);
-
+		if(loginDTO == null){
+			throw new Exception("로그인하지 않은 유저입니다");
+		}
 		if(!loginDTO.getIp().equals(loginDTO.getIp())){
 			throw new Exception("로그인한 기기가 다릅니다.");
 		}

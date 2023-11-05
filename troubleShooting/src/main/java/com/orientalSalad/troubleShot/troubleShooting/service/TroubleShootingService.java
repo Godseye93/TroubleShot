@@ -7,9 +7,11 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import com.orientalSalad.troubleShot.global.constant.Pagination;
+import com.orientalSalad.troubleShot.global.dto.RequestDTO;
 import com.orientalSalad.troubleShot.global.utill.ObjectConverter;
 import com.orientalSalad.troubleShot.tag.serivice.TagService;
 import com.orientalSalad.troubleShot.troubleShooting.dto.RequestTroubleShootingDTO;
+import com.orientalSalad.troubleShot.troubleShooting.dto.RequestTroubleShootingReplyDTO;
 import com.orientalSalad.troubleShot.troubleShooting.dto.SearchTroubleShootingDTO;
 import com.orientalSalad.troubleShot.troubleShooting.dto.TroubleShootingDTO;
 import com.orientalSalad.troubleShot.troubleShooting.dto.TroubleShootingReplyDTO;
@@ -65,13 +67,14 @@ public class TroubleShootingService {
 		return true;
 	}
 	public boolean deleteTroubleShooting(RequestTroubleShootingDTO requestTroubleShootingDTO) throws Exception{
+		TroubleShootingDTO troubleShootingDTO
+			= this.findTroubleShootingBySeq(requestTroubleShootingDTO.getTroubleShooting().getSeq(),
+			requestTroubleShootingDTO);
 		//작성자와 로그인 유저 확인
-		if(requestTroubleShootingDTO.getLoginSeq() != requestTroubleShootingDTO.getTroubleShooting().getWriter().getSeq()){
+		if(requestTroubleShootingDTO.getLoginSeq() != troubleShootingDTO.getWriter().getSeq()){
 			throw new Exception("작성자와 로그인유저가 다릅니다.");
 		}
 
-		TroubleShootingDTO troubleShootingDTO = requestTroubleShootingDTO.getTroubleShooting();
-	
 		//문서 삭제
 		TroubleShootingEntity troubleShootingEntity = troubleShootingRepository.findBySeq(troubleShootingDTO.getSeq());
 		troubleShootingRepository.delete(troubleShootingEntity);
@@ -81,40 +84,71 @@ public class TroubleShootingService {
 
 		return true;
 	}
-	public boolean insertTroubleShooingReply(TroubleShootingReplyDTO troubleShootingReplyDTO){
+	public boolean insertTroubleShooingReply(RequestTroubleShootingReplyDTO requestTroubleShootingReplyDTO) throws
+		Exception {
+		//작성자와 로그인 유저 확인
+		long writerSeq = requestTroubleShootingReplyDTO.getTroubleShootingReply().getWriterSeq();
+
+		if(requestTroubleShootingReplyDTO.getLoginSeq() != writerSeq){
+			throw new Exception("작성자와 로그인유저가 다릅니다.");
+		}
+
 		TroubleShootingReplyEntity troubleShootingReplyEntity
-			= troubleShootingReplyConverter.toEntity(troubleShootingReplyDTO);
+			= troubleShootingReplyConverter.toEntity(requestTroubleShootingReplyDTO.getTroubleShootingReply());
 
 		troubleShootingReplyRepository.save(troubleShootingReplyEntity);
 
 		return true;
 	}
-	public boolean updateTroubleShooingReply(TroubleShootingReplyDTO troubleShootingReplyDTO) throws Exception {
-		TroubleShootingReplyEntity replyEntity = troubleShootingReplyRepository.findById(troubleShootingReplyDTO.getSeq()).orElse(null);
+	public boolean updateTroubleShooingReply(RequestTroubleShootingReplyDTO requestTroubleShootingReplyDTO) throws Exception {
+		//작성자와 로그인 유저 확인
+		long writerSeq = requestTroubleShootingReplyDTO.getTroubleShootingReply().getWriterSeq();
+		if(requestTroubleShootingReplyDTO.getLoginSeq() != writerSeq){
+			throw new Exception("작성자와 로그인유저가 다릅니다.");
+		}
+
+		TroubleShootingReplyEntity replyEntity = troubleShootingReplyRepository.findById(
+			requestTroubleShootingReplyDTO.getTroubleShootingReply().getSeq()).orElse(null);
 
 		if(replyEntity == null){
 			throw new Exception("잘못된 덧글입니다.");
 		}
 
-		replyEntity.update(troubleShootingReplyDTO);
+		replyEntity.update(requestTroubleShootingReplyDTO.getTroubleShootingReply());
 
 		troubleShootingReplyRepository.save(replyEntity);
 
 		return true;
 	}
-	public boolean deleteTroubleShooingReply(TroubleShootingReplyDTO troubleShootingReplyDTO) throws Exception {
-		TroubleShootingReplyEntity replyEntity = troubleShootingReplyRepository.findById(troubleShootingReplyDTO.getSeq()).orElse(null);
+	public boolean deleteTroubleShooingReply(RequestTroubleShootingReplyDTO requestTroubleShootingReplyDTO) throws Exception {
+		TroubleShootingReplyEntity replyEntity = troubleShootingReplyRepository.findById(
+			requestTroubleShootingReplyDTO.getTroubleShootingReply().getSeq()).orElse(null);
+
 
 		if(replyEntity == null){
 			throw new Exception("잘못된 덧글입니다.");
+		}
+
+		//작성자와 로그인 유저 확인
+
+		if(requestTroubleShootingReplyDTO.getLoginSeq() != replyEntity.getWriterSeq()){
+			throw new Exception("작성자와 로그인유저가 다릅니다.");
 		}
 
 		troubleShootingReplyRepository.delete(replyEntity);
 
 		return true;
 	}
-	public TroubleShootingDTO findTroubleShootingBySeq(long seq) throws Exception {
-		TroubleShootingDTO troubleShootingDTO = troubleShootingMapper.selectTroubleShootingBySeq(seq);
+	public TroubleShootingDTO findTroubleShootingBySeq(long seq, RequestDTO requestDTO) throws Exception {
+		SearchTroubleShootingDTO searchParam = SearchTroubleShootingDTO.builder()
+			.troubleSeq(seq)
+			.build();
+
+		if(requestDTO == null){
+			searchParam.setLoginSeq(requestDTO.getLoginSeq());
+		}
+
+		TroubleShootingDTO troubleShootingDTO = troubleShootingMapper.selectTroubleShootingBySeq(searchParam);
 
 		if(troubleShootingDTO == null){
 			throw new Exception(seq+"번 게시물은 없습니다.");
