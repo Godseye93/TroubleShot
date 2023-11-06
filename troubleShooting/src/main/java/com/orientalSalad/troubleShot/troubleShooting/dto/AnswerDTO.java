@@ -1,6 +1,7 @@
 package com.orientalSalad.troubleShot.troubleShooting.dto;
 
 import java.util.Objects;
+import java.util.Set;
 
 import com.orientalSalad.troubleShot.global.dto.BaseDTO;
 import com.orientalSalad.troubleShot.member.dto.SimpleMemberDTO;
@@ -19,17 +20,23 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class TroubleShootingReplyDTO extends BaseDTO {
+public class AnswerDTO extends BaseDTO {
+	@Schema(description = "제목")
+	private String title;
 	@Schema(description = "내용")
 	private String context;
-	@Schema(description = "작성자 pk")
-	private long writerSeq;
 	@Schema(description = "작성자")
-	SimpleMemberDTO writer;
-	@Schema(description = "좋아요 수",hidden = true)
+	private SimpleMemberDTO writer;
+	@Schema(description = "좋아요 수")
 	private int likeCount;
-	@Schema(description = "문서 pk")
+	@Schema(description = "덧글 수")
+	private int replyCount;
+	@Schema(description = "게시물 pk")
 	private long troubleSeq;
+	@Schema(description = "덧글",hidden = true)
+	private Set<TroubleShootingReplyDTO> replies;
+	@Schema(description = "로그인한 유저가 좋아요를 눌렀는지 확인",hidden = true)
+	private boolean loginLike;
 
 	@Override
 	public boolean equals(Object o) {
@@ -38,7 +45,7 @@ public class TroubleShootingReplyDTO extends BaseDTO {
 		if (!(o instanceof TroubleShootingReplyDTO))
 			return false;
 
-		TroubleShootingReplyDTO that = (TroubleShootingReplyDTO)o;
+		AnswerDTO that = (AnswerDTO)o;
 
 		return this.seq == that.seq;
 	}

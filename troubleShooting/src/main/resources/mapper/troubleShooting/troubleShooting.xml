@@ -20,29 +20,9 @@
                 typeHandler="com.orientalSalad.troubleShot.troubleShooting.typehandler.StringToListTypeHandler"/>
         <result property="replies" column="reply"
                 typeHandler="com.orientalSalad.troubleShot.troubleShooting.typehandler.JsonToListTypeHandler"/>
+        <result property="answers" column="answer"
+                typeHandler="com.orientalSalad.troubleShot.troubleShooting.typehandler.AnswerJsonToListTypeHandler"/>
         <association property="writer" resultMap="simpleMember"/>
-    </resultMap>
-    <resultMap id="TroubleShootingDetail" type="com.orientalSalad.troubleShot.troubleShooting.dto.TroubleShootingDTO">
-        <id property="seq" column="seq" />
-        <result property="title" column="title"/>
-        <result property="context" column="context"/>
-        <result property="solved" column="solved"/>
-        <result property="category" column="category"/>
-        <result property="createTime" column="create_time"/>
-        <result property="updateTime" column="update_time"/>
-        <result property="deleteTime" column="delete_time"/>
-        <result property="viewCount" column="view_count"/>
-        <result property="likeCount" column="like_count"/>
-        <result property="replyCount" column="reply_count"/>
-        <result property="loginLike" column="login_like"/>
-        <result property="tags" column="tag_name"
-                typeHandler="com.orientalSalad.troubleShot.troubleShooting.typehandler.StringToListTypeHandler"/>
-        <result property="replies" column="reply"
-                typeHandler="com.orientalSalad.troubleShot.troubleShooting.typehandler.JsonToListTypeHandler"/>
-        <association property="writer" resultMap="simpleMember"/>
-    </resultMap>
-    <resultMap id="tagList" type="String">
-        <result column="tag_name"></result>
     </resultMap>
 
     <resultMap id="simpleMember" type="com.orientalSalad.troubleShot.member.dto.SimpleMemberDTO">
@@ -73,6 +53,7 @@
                 ts.update_time AS update_time,
                 ts.delete_time AS delete_time,
                 ts.view_count AS view_count,
+                COUNT(distinct a.seq) AS answer_count,
                 COUNT(distinct tsl.seq) AS like_count,
                 COUNT(distinct tsr.seq) AS reply_count,
                 m.seq AS writer_seq,
@@ -93,8 +74,29 @@
                 'deleteTime', tsr.delete_time,
                 'context',tsr.context,
                 'writerSeq',tsr.writer_seq,
+                'writer',json_build_object(
+                    'seq', reply_m.seq,
+                    'nickname',reply_m.nickname,
+                    'email',reply_m.email,
+                    'profileImg',reply_m.profile_img),
                 'likeCount',tsr.like_count,
-                'troubleSeq',tsr.trouble_seq)) AS reply
+                'troubleSeq',tsr.trouble_seq)) AS reply,
+                JSON_AGG(json_build_object(
+                    'seq', a.seq,
+                    'title',a.title,
+                    'context',a.context,
+                    'createTime',a.create_time,
+                    'deleteTime',a.delete_time,
+                    'updateTime',a.update_time,
+                    'likeCount',a.like_count,
+                    'troubleSeq',a.trouble_seq,
+                    'writer',json_build_object(
+                        'seq', answer_m.seq,
+                        'nickname',answer_m.nickname,
+                        'email',answer_m.email,
+                        'profileImg',answer_m.profile_img
+                    )
+                )) as answer
         FROM
             trouble_shooting ts
         LEFT JOIN
@@ -110,25 +112,16 @@
         <if test="searchParam.loginSeq != null or searchParam.loginSeq != 0">
             AND tsl.user_seq = #{searchParam.loginSeq}
         </if>
+        LEFT JOIN
+            member reply_m ON tsr.writer_seq  = reply_m.seq
+        LEFT JOIN
+            answer a ON ts.seq  = a.trouble_seq
+        LEFT JOIN
+            member answer_m ON a.writer_seq  = answer_m.seq
         WHERE
             ts.seq = #{searchParam.troubleSeq}
         GROUP BY
-            ts.seq,
-            m.seq,
-            m.nickname,
-            m.email,
-            m.profile_img,
-            <if test="searchParam.loginSeq !=null or searchParam.loginSeq !=0">
-                tsl.user_seq,
-            </if>
-            ts.title,
-            ts.context,
-            ts.solved,
-            ts.category,
-            ts.create_time,
-            ts.update_time,
-            ts.delete_time,
-            ts.view_count
+            tsl.user_seq,ts.seq, m.seq,a.seq,answer_m.seq
     </select>
     <select id="countTroubleShootingList"
             parameterType="com.orientalSalad.troubleShot.troubleShooting.dto.SearchTroubleShootingDTO"
@@ -165,7 +158,7 @@
         LEFT JOIN
             trouble_shooting_like tsl ON ts.seq  = tsl.trouble_seq
         WHERE
-        1 = 1
+            1 = 1
         <if test="searchParam.writer != null and searchParam.writer.trim().length() > 0">
             AND m.nickname LIKE CONCAT('%',#{searchParam.writer},'%')
         </if>
@@ -226,16 +219,7 @@
                         ELSE false
                     END as login_like,
                 </if>
-                STRING_AGG(distinct t.name, ', ') AS tag_name,
-                JSON_AGG(json_build_object(
-                'seq', tsr.seq,
-                'createTime', tsr.create_time,
-                'updateTime', tsr.update_time,
-                'deleteTime', tsr.delete_time,
-                'context',tsr.context,
-                'writerSeq',tsr.writer_seq,
-                'likeCount',tsr.like_count,
-                'troubleSeq',tsr.trouble_seq)) AS reply
+                STRING_AGG(distinct t.name, ', ') AS tag_name
         FROM
             trouble_shooting ts
         <if test="searchParam.tags != null and searchParam.tags.size() > 0">

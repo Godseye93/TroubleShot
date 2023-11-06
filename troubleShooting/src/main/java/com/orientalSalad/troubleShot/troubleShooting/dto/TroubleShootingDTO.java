@@ -37,10 +37,14 @@ public class TroubleShootingDTO extends BaseDTO {
 	private int likeCount;
 	@Schema(description = "덧글 수",hidden = true)
 	private int replyCount;
+	@Schema(description = "솔루션 수",hidden = true)
+	private int answerCount;
 	@Schema(description = "다중 태그")
 	private List<String> tags;
-	@Schema(description = "덧글",hidden = true)
+	@Schema(description = "덧글 목록",hidden = true)
 	private Set<TroubleShootingReplyDTO> replies;
+	@Schema(description = "솔루션 목록",hidden = true)
+	private Set<AnswerDTO> answers;
 	@Schema(description = "로그인한 유저가 좋아요를 눌렀는지 확인",hidden = true)
 	private boolean loginLike;
 }

@@ -22,7 +22,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
 @Controller
-@RequestMapping("/users/{userSeq}/trouble-shooting")
+@RequestMapping("/users/{userSeq}/trouble-shootings")
 @RequiredArgsConstructor
 @Log4j2
 public class UserTroubleShootingController {

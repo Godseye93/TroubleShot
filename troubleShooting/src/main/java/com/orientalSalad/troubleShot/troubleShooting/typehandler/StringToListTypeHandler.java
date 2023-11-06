@@ -26,7 +26,6 @@ public class StringToListTypeHandler extends BaseTypeHandler<List<String>> {
 	@Override
 	public List<String> getNullableResult(ResultSet rs, String columnName) throws SQLException {
 		String value = rs.getString(columnName);
-
 		return value == null ? new ArrayList<>() : Arrays.asList(value.split(",\\s*"));
 	}
 
