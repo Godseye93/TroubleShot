@@ -2,6 +2,8 @@
 import React, { useState, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useLoginStore } from "@/stores/useLoginStore";
 
 import Github_logo from "../../../public/logo/Github_logo.png";
 
@@ -9,10 +11,14 @@ import backgroundImage from "../../../public/background/loginBackground4.jpg";
 
 import { loginSubmit } from "@/api/account";
 import { ReqLogin } from "@/types/CommonType";
+import { toast } from "react-toastify";
 
 export default function Page() {
+  const router = useRouter();
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
+
+  const { login } = useLoginStore();
 
   const [blurValue, setBlurValue] = useState(20); // 블러
 
@@ -32,10 +38,18 @@ export default function Page() {
       password: password,
       type: 0,
     };
+
     try {
       const res = await loginSubmit(params);
       if (res.success) {
-        console.log("로그인 성공 !");
+        // 성공 처리
+        login(res);
+        // console.log(res.message);
+        // 토스트
+        toast.success("로그인 성공 !");
+        // 화면 전환
+        router.back();
+        // 헤더 전환
       }
     } catch (err) {
       console.log("Error:", err);

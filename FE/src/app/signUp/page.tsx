@@ -8,8 +8,7 @@ import backgroundImage from "../../../public/background/loginBackground4.jpg";
 import { emailCert, emailcodeCheck, signUpSubmit } from "@/api/account";
 import { EmailCode } from "@/types/CommonType";
 
-import { ToastContainer } from "react-toastify";
-import { EmailcodeSuccess, CodeCheckSuccess, CodeCheckFail, SubmitFail, SignUpSuccess } from "./notify";
+import { EmailcodeSuccess, CodeCheckSuccess, CodeCheckFail, SubmitFail, SignUpSuccess } from "../toast/notify";
 
 import "react-toastify/dist/ReactToastify.css";
 
@@ -120,8 +119,6 @@ export default function page() {
 
   return (
     <div className="fcc w-full h-[100vh]">
-      <ToastContainer />
-
       <Image src={backgroundImage} alt="backgroundImage" className="bg-cover h-screen absolute w-full -z-10 blur-lg" />
       <div className="">
         <div className="h-[10vh]"></div>
