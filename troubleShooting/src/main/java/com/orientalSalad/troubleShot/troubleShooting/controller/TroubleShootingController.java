@@ -122,6 +122,8 @@ public class TroubleShootingController {
 		@ModelAttribute RequestDTO requestDTO) throws Exception {
 		log.info("====== 트러블 슈팅 문서 pk 탐색 시작 =====");
 		log.info("pk : "+seq);
+		log.info("request : "+requestDTO.toString());
+
 		TroubleShootingDTO troubleShootingDTO = troubleShootingService.findTroubleShootingBySeq(seq,requestDTO);
 
 		if(troubleShootingDTO == null){

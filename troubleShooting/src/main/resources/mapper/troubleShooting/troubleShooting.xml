@@ -15,6 +15,7 @@
         <result property="viewCount" column="view_count"/>
         <result property="likeCount" column="like_count"/>
         <result property="replyCount" column="reply_count"/>
+        <result property="answerCount" column="answer_count"/>
         <result property="loginLike" column="login_like"/>
         <result property="tags" column="tag_name"
                 typeHandler="com.orientalSalad.troubleShot.troubleShooting.typehandler.StringToListTypeHandler"/>
@@ -91,29 +92,27 @@
         parameterType="Long"
         resultMap="TroubleShooting">
         SELECT  ts.seq AS seq,
-                ts.title AS title,
-                ts.context AS context,
-                ts.category AS category,
-                ts.solved AS solved,
-                ts.create_time AS create_time,
-                ts.update_time AS update_time,
-                ts.delete_time AS delete_time,
-                ts.view_count AS view_count,
-                COUNT(distinct a.seq) AS answer_count,
-                COUNT(distinct tsl.seq) AS like_count,
-                COUNT(distinct tsr.seq) AS reply_count,
-                m.seq AS writer_seq,
-                m.nickname AS writer_nickname,
-                m.email AS writer_email,
-                m.profile_img AS writer_profile_img,
-                <if test="searchParam.loginSeq != null or searchParam.loginSeq != 0">
-                    CASE
-                    WHEN tsl.user_seq IS NOT NULL THEN true
-                    ELSE false
-                    END as login_like,
-                </if>
-                STRING_AGG(distinct t.name, ', ') AS tag_name,
-                JSON_AGG(json_build_object(
+            ts.title AS title,
+            ts.context AS context,
+            ts.category AS category,
+            ts.solved AS solved,
+            ts.create_time AS create_time,
+            ts.update_time AS update_time,
+            ts.delete_time AS delete_time,
+            ts.view_count AS view_count,
+            COUNT(DISTINCT a.seq) AS answer_count,
+            ts.like_count  AS like_count,
+            COUNT(DISTINCT tsr.seq) AS reply_count,
+            m.seq AS writer_seq,
+            m.nickname AS writer_nickname,
+            m.email AS writer_email,
+            m.profile_img AS writer_profile_img,
+            CASE
+                WHEN login_tsl.user_seq IS NOT NULL THEN true
+                ELSE false
+            END as login_like,
+            STRING_AGG(distinct t.name, ', ') AS tag_name,
+            JSON_AGG(json_build_object(
                 'seq', tsr.seq,
                 'createTime', tsr.create_time,
                 'updateTime', tsr.update_time,
@@ -121,13 +120,18 @@
                 'context',tsr.context,
                 'writerSeq',tsr.writer_seq,
                 'writer',json_build_object(
-                    'seq', reply_m.seq,
-                    'nickname',reply_m.nickname,
-                    'email',reply_m.email,
-                    'profileImg',reply_m.profile_img),
+                'seq', reply_m.seq,
+                'nickname',reply_m.nickname,
+                'email',reply_m.email,
+                'profileImg',reply_m.profile_img),
                 'likeCount',tsr.like_count,
-                'troubleSeq',tsr.trouble_seq)) AS reply,
-                JSON_AGG(json_build_object(
+                'loginLike',
+                    CASE
+                        WHEN login_tsrl.user_seq IS NOT NULL THEN true
+                        ELSE false
+                    END,
+                'troubleSeq', tsr.trouble_seq)) AS reply,
+                    JSON_AGG(json_build_object(
                     'seq', a.seq,
                     'title',a.title,
                     'context',a.context,
@@ -136,38 +140,54 @@
                     'updateTime',a.update_time,
                     'likeCount',a.like_count,
                     'troubleSeq',a.trouble_seq,
+                    'loginLike',
+                        CASE
+                            WHEN login_tsal.user_seq IS NOT NULL THEN TRUE
+                            ELSE FALSE
+                        END,
                     'writer',json_build_object(
                         'seq', answer_m.seq,
                         'nickname',answer_m.nickname,
                         'email',answer_m.email,
                         'profileImg',answer_m.profile_img
                     ),
+                    'replyCount',(
+                        SELECT COUNT(DISTINCT tsar.seq)
+                        FROM trouble_shooting_answer_reply tsar
+                        WHERE tsar.answer_seq = a.seq
+                    ),
                     'replies', (
-                                SELECT JSON_AGG(
-                                    json_build_object(
-                                        'seq', ar.seq,
-                                        'context', ar.context,
-                                        'createTime', ar.create_time,
-                                        'deleteTime', ar.delete_time,
-                                        'updateTime', ar.update_time,
-                                        'likeCount', ar.like_count,
-                                        'answerSeq', ar.answer_seq,
-                                        'writer', json_build_object(
-                                            'seq', arm.seq,
-                                            'nickname', arm.nickname,
-                                            'email', arm.email,
-                                            'profileImg', arm.profile_img
-                                            )
+                        SELECT JSON_AGG(
+                            json_build_object(
+                                'seq', ar.seq,
+                                'context', ar.context,
+                                'createTime', ar.create_time,
+                                'deleteTime', ar.delete_time,
+                                'updateTime', ar.update_time,
+                                'likeCount', ar.like_count,
+                                'answerSeq', ar.answer_seq,
+                                'loginLike', CASE
+                                                WHEN login_tsarl.user_seq IS NOT NULL THEN TRUE
+                                                ELSE FALSE
+                                            END,
+                                'writer', json_build_object(
+                                    'seq', arm.seq,
+                                    'nickname', arm.nickname,
+                                    'email', arm.email,
+                                    'profileImg', arm.profile_img
                                         )
-                                    )
-                                    FROM trouble_shooting_answer_reply ar
-                                    WHERE a.seq = ar.answer_seq
                                 )
-                )) as answer
+                            )
+                        FROM
+                             trouble_shooting_answer_reply ar
+                        WHERE
+                              a.seq = ar.answer_seq
+                        )
+                    )) AS answer
         FROM
             trouble_shooting ts
         LEFT JOIN
-            trouble_shooting_reply tsr on ts.seq = tsr.trouble_seq
+            trouble_shooting_reply tsr ON ts.seq = tsr.trouble_seq
         LEFT JOIN
             trouble_tag tt ON tt.trouble_seq = ts.seq
         LEFT JOIN
@@ -176,9 +196,6 @@
             member m ON ts.writer_seq = m.seq
         LEFT JOIN
             trouble_shooting_like tsl ON ts.seq  = tsl.trouble_seq
-        <if test="searchParam.loginSeq != null or searchParam.loginSeq != 0">
-            AND tsl.user_seq = #{searchParam.loginSeq}
-        </if>
         LEFT JOIN
             member reply_m ON tsr.writer_seq  = reply_m.seq
         LEFT JOIN
@@ -189,11 +206,20 @@
             trouble_shooting_answer_reply ar ON a.seq = ar.answer_seq
         LEFT JOIN
             member arm ON arm.seq = ar.writer_seq
+        LEFT JOIN
+            trouble_shooting_answer_like tsal ON tsal.answer_seq  = a.seq
+        LEFT JOIN
+            trouble_shooting_like login_tsl ON ts.seq  = login_tsl.trouble_seq AND login_tsl.user_seq = #{searchParam.loginSeq}
+        LEFT JOIN
+            trouble_shooting_answer_like login_tsal ON a.seq  = login_tsal.answer_seq AND login_tsal.user_seq =#{searchParam.loginSeq}
+        LEFT JOIN
+            trouble_shooting_answer_reply_like login_tsarl ON ar.seq = login_tsarl.answer_reply_seq AND login_tsarl.user_seq = #{searchParam.loginSeq}
+        LEFT JOIN
+            trouble_shooting_reply_like login_tsrl ON tsr.seq  = login_tsrl.reply_seq AND login_tsrl.user_seq = #{searchParam.loginSeq}
         WHERE
-            ts.seq = #{searchParam.troubleSeq}
-
+            ts.seq =  #{searchParam.troubleSeq}
         GROUP BY
-            tsl.user_seq,ts.seq, m.seq,a.seq,answer_m.seq
+            tsl.user_seq,ts.seq, m.seq,a.seq,answer_m.seq, login_tsal.seq, login_tsl.seq, login_tsal.seq
     </select>
     <select id="countTroubleShootingList"
             parameterType="com.orientalSalad.troubleShot.troubleShooting.dto.SearchTroubleShootingDTO"

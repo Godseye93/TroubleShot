@@ -27,6 +27,8 @@ public class TroubleShootingAnswerReplyDTO extends BaseDTO {
 	private int likeCount;
 	@Schema(description = "문서 pk")
 	private long answerSeq;
+	@Schema(description = "로그인한 유저가 좋아요를 눌렀는지 확인",hidden = true)
+	private boolean loginLike;
 
 	@Override
 	public boolean equals(Object o) {

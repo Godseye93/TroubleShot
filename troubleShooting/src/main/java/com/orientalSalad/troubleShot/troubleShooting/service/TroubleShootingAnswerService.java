@@ -8,8 +8,13 @@ import com.orientalSalad.troubleShot.troubleShooting.dto.RequestTroubleShootingA
 import com.orientalSalad.troubleShot.troubleShooting.dto.TroubleShootingAnswerDTO;
 import com.orientalSalad.troubleShot.troubleShooting.dto.TroubleShootingAnswerReplyDTO;
 import com.orientalSalad.troubleShot.troubleShooting.entity.TroubleShootingAnswerEntity;
+import com.orientalSalad.troubleShot.troubleShooting.entity.TroubleShootingAnswerLikeEntity;
 import com.orientalSalad.troubleShot.troubleShooting.entity.TroubleShootingAnswerReplyEntity;
+import com.orientalSalad.troubleShot.troubleShooting.entity.TroubleShootingAnswerReplyLikeEntity;
+import com.orientalSalad.troubleShot.troubleShooting.entity.TroubleShootingLikeEntity;
 import com.orientalSalad.troubleShot.troubleShooting.mapper.TroubleShootingMapper;
+import com.orientalSalad.troubleShot.troubleShooting.repository.TroubleShootingAnswerLikeRepository;
+import com.orientalSalad.troubleShot.troubleShooting.repository.TroubleShootingAnswerReplyLikeRepository;
 import com.orientalSalad.troubleShot.troubleShooting.repository.TroubleShootingAnswerReplyRepository;
 import com.orientalSalad.troubleShot.troubleShooting.repository.TroubleShootingAnswerRepository;
 
@@ -23,6 +28,8 @@ public class TroubleShootingAnswerService {
 	private final TroubleShootingMapper troubleShootingMapper;
 	private final TroubleShootingAnswerRepository answerRepository;
 	private final TroubleShootingAnswerReplyRepository answerReplyRepository;
+	private final TroubleShootingAnswerLikeRepository answerLikeRepository;
+	private final TroubleShootingAnswerReplyLikeRepository answerReplyLikeRepository;
 	private final ObjectConverter<TroubleShootingAnswerDTO, TroubleShootingAnswerEntity> answerConverter;
 	private final ObjectConverter<TroubleShootingAnswerReplyDTO, TroubleShootingAnswerReplyEntity> answerReplyConverter;
 
@@ -98,6 +105,58 @@ public class TroubleShootingAnswerService {
 
 		answerReplyRepository.delete(answerReplyEntity);
 
+		return true;
+	}
+	public boolean updateTroubleShootingAnswerLike(Long userSeq,Long answerSeq) throws Exception {
+		TroubleShootingAnswerLikeEntity answerLikeEntity =
+			answerLikeRepository.findByAnswerSeqEqualsAndUserSeq(
+				answerSeq,userSeq);
+		//좋아요 하기
+		if(answerLikeEntity == null){
+			log.info("좋아요 등록");
+			answerLikeEntity =	TroubleShootingAnswerLikeEntity.builder()
+				.answerSeq(answerSeq)
+				.userSeq(userSeq)
+				.build();
+			answerLikeRepository.save(answerLikeEntity);
+			TroubleShootingAnswerEntity answerEntity = answerRepository.findBySeq(answerSeq);
+			answerEntity.increaseLike();
+			answerRepository.save(answerEntity);
+		}
+		//좋아요 취소
+		else{
+			log.info("좋아요 취소");
+			answerLikeRepository.delete(answerLikeEntity);
+			TroubleShootingAnswerEntity answerEntity = answerRepository.findBySeq(answerSeq);
+			answerEntity.decreaseLike();
+			answerRepository.save(answerEntity);
+		}
+		return true;
+	}
+	public boolean updateTroubleShootingAnswerReplyLike(Long userSeq,Long answerReplySeq) throws Exception {
+		TroubleShootingAnswerReplyLikeEntity answerReplyLikeEntity =
+			answerReplyLikeRepository.findByAnswerReplySeqEqualsAndUserSeq(
+				answerReplySeq,userSeq);
+		//좋아요 하기
+		if(answerReplyLikeEntity == null){
+			answerReplyLikeEntity =	TroubleShootingAnswerReplyLikeEntity.builder()
+				.answerReplySeq(answerReplySeq)
+				.userSeq(userSeq)
+				.build();
+			answerReplyLikeRepository.save(answerReplyLikeEntity);
+
+			TroubleShootingAnswerReplyEntity answerReplyEntity = answerReplyRepository.findBySeq(answerReplySeq);
+			answerReplyEntity.increaseLike();
+			answerReplyRepository.save(answerReplyEntity);
+		}
+		//좋아요 취소
+		else{
+			answerReplyLikeRepository.delete(answerReplyLikeEntity);
+
+			TroubleShootingAnswerReplyEntity answerReplyEntity = answerReplyRepository.findBySeq(answerReplySeq);
+			answerReplyEntity.decreaseLike();
+			answerReplyRepository.save(answerReplyEntity);
+		}
 		return true;
 	}
 }

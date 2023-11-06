@@ -54,4 +54,12 @@ public class TroubleShootingEntity extends BaseEntity {
 	public void updateViews(){
 		this.viewCount++;
 	}
+	public void increaseLike(){
+		this.likeCount++;
+	}
+	public void decreaseLike(){
+		if(this.likeCount > 0){
+			this.likeCount--;
+		}
+	}
 }

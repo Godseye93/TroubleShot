@@ -35,4 +35,12 @@ public class TroubleShootingReplyEntity extends BaseEntity {
 	public void update(TroubleShootingReplyDTO replyDTO){
 		this.context = replyDTO.getContext();
 	}
+	public void increaseLike(){
+		this.likeCount++;
+	}
+	public void decreaseLike(){
+		if(this.likeCount > 0){
+			this.likeCount--;
+		}
+	}
 }

@@ -2,7 +2,6 @@ package com.orientalSalad.troubleShot.troubleShooting.service;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -15,6 +14,7 @@ import com.orientalSalad.troubleShot.troubleShooting.dto.RequestTroubleShootingR
 import com.orientalSalad.troubleShot.troubleShooting.dto.SearchTroubleShootingDTO;
 import com.orientalSalad.troubleShot.troubleShooting.dto.TroubleShootingDTO;
 import com.orientalSalad.troubleShot.troubleShooting.dto.TroubleShootingReplyDTO;
+import com.orientalSalad.troubleShot.troubleShooting.entity.TroubleShootingAnswerEntity;
 import com.orientalSalad.troubleShot.troubleShooting.entity.TroubleShootingEntity;
 import com.orientalSalad.troubleShot.troubleShooting.entity.TroubleShootingLikeEntity;
 import com.orientalSalad.troubleShot.troubleShooting.entity.TroubleShootingReplyEntity;
@@ -142,8 +142,9 @@ public class TroubleShootingService {
 		SearchTroubleShootingDTO searchParam = SearchTroubleShootingDTO.builder()
 			.troubleSeq(seq)
 			.build();
-
-		if(requestDTO == null){
+		
+		//로그인 좋아요 확인을위한 로그인 유저의 pk 넣기
+		if(requestDTO != null){
 			searchParam.setLoginSeq(requestDTO.getLoginSeq());
 		}
 
@@ -209,10 +210,17 @@ public class TroubleShootingService {
 				.userSeq(userSeq)
 				.build();
 			troubleShootingReplyLikeRepository.save(replyLike);
+
+			TroubleShootingReplyEntity replyEntity = troubleShootingReplyRepository.findById(replySeq).orElse(null);
+			replyEntity.increaseLike();
+			troubleShootingReplyRepository.save(replyEntity);
 		}
 		//좋아요 취소
 		else{
 			troubleShootingReplyLikeRepository.delete(replyLike);
+			TroubleShootingReplyEntity replyEntity = troubleShootingReplyRepository.findById(replySeq).orElse(null);
+			replyEntity.decreaseLike();
+			troubleShootingReplyRepository.save(replyEntity);
 		}
 
 		return true;
@@ -228,10 +236,18 @@ public class TroubleShootingService {
 				.userSeq(userSeq)
 				.build();
 			troubleShootingLikeRepository.save(troubleShootingLike);
+
+			TroubleShootingEntity troubleShootingEntity = troubleShootingRepository.findBySeq(troubleShootingSeq);
+			troubleShootingEntity.increaseLike();
+			troubleShootingRepository.save(troubleShootingEntity);
 		}
 		//좋아요 취소
 		else{
 			troubleShootingLikeRepository.delete(troubleShootingLike);
+
+			TroubleShootingEntity troubleShootingEntity = troubleShootingRepository.findBySeq(troubleShootingSeq);
+			troubleShootingEntity.decreaseLike();
+			troubleShootingRepository.save(troubleShootingEntity);
 		}
 
 		return true;
