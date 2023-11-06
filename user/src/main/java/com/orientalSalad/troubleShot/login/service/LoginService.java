@@ -41,7 +41,7 @@ public class LoginService {
 		ValueOperations valueOperations = redisTemplate.opsForValue();
 		valueOperations.set("login_"+memberDTO.getSeq()+"_"+loginDTO.getType(),
 			loginDTO,
-			Duration.ofMinutes(30));
+			Duration.ofDays(1L));
 
 		return memberDTO;
 	}
