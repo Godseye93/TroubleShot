@@ -9,6 +9,7 @@ import org.apache.ibatis.annotations.SelectProvider;
 
 import com.orientalSalad.troubleShot.troubleShooting.dto.SearchTroubleShootingDTO;
 import com.orientalSalad.troubleShot.troubleShooting.dto.TroubleShootingAnswerDTO;
+import com.orientalSalad.troubleShot.troubleShooting.dto.TroubleShootingAnswerReplyDTO;
 import com.orientalSalad.troubleShot.troubleShooting.dto.TroubleShootingDTO;
 import com.orientalSalad.troubleShot.troubleShooting.sql.TroubleShootingSQLProvider;
 
@@ -16,6 +17,7 @@ import com.orientalSalad.troubleShot.troubleShooting.sql.TroubleShootingSQLProvi
 public interface TroubleShootingMapper {
 	public TroubleShootingDTO selectTroubleShootingBySeq(@Param("searchParam") SearchTroubleShootingDTO searchParam);
 	public TroubleShootingAnswerDTO selectTroubleShootingAnswerBySeq(@Param("seq") Long seq);
+	public TroubleShootingAnswerReplyDTO selectTroubleShootingAnswerReplyBySeq(@Param("seq") Long seq);
 
 	public List<TroubleShootingDTO> selectTroubleShootingList(
 		@Param("searchParam") SearchTroubleShootingDTO searchParam,

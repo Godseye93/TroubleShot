@@ -31,12 +31,35 @@
         <result property="replyCount" column="reply_count"/>
         <association property="writer" resultMap="simpleMember"/>
     </resultMap>
+    <resultMap id="TroubleShootingAnswerReply" type="com.orientalSalad.troubleShot.troubleShooting.dto.TroubleShootingAnswerReplyDTO">
+        <id property="seq" column="seq" />
+        <result property="context" column="context"/>
+        <association property="writer" resultMap="simpleMember"/>
+    </resultMap>
     <resultMap id="simpleMember" type="com.orientalSalad.troubleShot.member.dto.SimpleMemberDTO">
         <id property="seq" column="writer_seq" />
         <result property="email" column="writer_email" />
         <result property="profileImg" column="writer_profileImg" />
         <result property="nickname" column="writer_nickname" />
     </resultMap>
+
+    <select id="selectTroubleShootingAnswerReplyBySeq"
+            parameterType="Long"
+            resultMap="TroubleShootingAnswer">
+        SELECT
+            tsar.seq AS seq,
+            tsar.context AS context,
+            m.seq AS writer_seq,
+            m.nickname AS writer_nickname,
+            m.email AS writer_email,
+            m.profile_img AS writer_profile_img
+        FROM
+            trouble_shooting_answer_reply tsar
+                LEFT JOIN
+            member m ON tsar.writer_seq = m.seq
+        WHERE
+            a.seq = #{seq}
+    </select>
     <select id="selectTroubleShootingAnswerBySeq"
             parameterType="Long"
             resultMap="TroubleShootingAnswer">

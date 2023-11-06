@@ -2,6 +2,7 @@ package com.orientalSalad.troubleShot.troubleShooting.entity;
 
 import com.orientalSalad.troubleShot.global.entity.BaseEntity;
 import com.orientalSalad.troubleShot.troubleShooting.dto.TroubleShootingAnswerDTO;
+import com.orientalSalad.troubleShot.troubleShooting.dto.TroubleShootingAnswerReplyDTO;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -35,7 +36,7 @@ public class TroubleShootingAnswerReplyEntity extends BaseEntity {
 		this.likeCount = likeCount;
 		this.answerSeq = answerSeq;
 	}
-	public void update(TroubleShootingAnswerDTO troubleShootingAnswerDTO){
-		this.context = troubleShootingAnswerDTO.getContext();
+	public void update(TroubleShootingAnswerReplyDTO troubleShootingAnswerReplyDTO){
+		this.context = troubleShootingAnswerReplyDTO.getContext();
 	}
 }

@@ -70,7 +70,7 @@ public class TroubleShootingAnswerController {
 			= RequestTroubleShootingAnswerDTO.builder()
 			.loginSeq(requestDTO.getLoginSeq())
 			.type(requestDTO.getType())
-			.troubleShootingAnswerDTO(TroubleShootingAnswerDTO.builder()
+			.troubleShootingAnswer(TroubleShootingAnswerDTO.builder()
 				.seq(answerSeq)
 				.troubleSeq(troubleSeq)
 				.build())
@@ -99,8 +99,8 @@ public class TroubleShootingAnswerController {
 		//로그인 확인
 		authentication.checkLogin(request,requestTroubleShootingAnswerDTO);
 		//pk 설정
-		requestTroubleShootingAnswerDTO.getTroubleShootingAnswerDTO().setSeq(answerSeq);
-		requestTroubleShootingAnswerDTO.getTroubleShootingAnswerDTO().setTroubleSeq(troubleSeq);
+		requestTroubleShootingAnswerDTO.getTroubleShootingAnswer().setSeq(answerSeq);
+		requestTroubleShootingAnswerDTO.getTroubleShootingAnswer().setTroubleSeq(troubleSeq);
 		//트러블슈팅 문서 수정
 		troubleShootingAnswerService.updateTroubleShootingAnswer(requestTroubleShootingAnswerDTO);
 

@@ -16,7 +16,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class RequestTroubleShootingAnswerDTO extends RequestDTO {
-	@Schema(description = "솔루션")
-	private TroubleShootingAnswerDTO troubleShootingAnswer;
+public class RequestTroubleShootingAnswerReplyDTO extends RequestDTO {
+	@Schema(description = "솔루션 덧글")
+	private TroubleShootingAnswerReplyDTO troubleShootingAnswerReply;
 }
