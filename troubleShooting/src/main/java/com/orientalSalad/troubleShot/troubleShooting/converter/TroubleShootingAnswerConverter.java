@@ -1,0 +1,29 @@
+package com.orientalSalad.troubleShot.troubleShooting.converter;
+
+import org.springframework.stereotype.Component;
+
+import com.orientalSalad.troubleShot.global.utill.ObjectConverter;
+import com.orientalSalad.troubleShot.member.dto.SimpleMemberDTO;
+import com.orientalSalad.troubleShot.troubleShooting.dto.TroubleShootingAnswerDTO;
+import com.orientalSalad.troubleShot.troubleShooting.dto.TroubleShootingDTO;
+import com.orientalSalad.troubleShot.troubleShooting.entity.TroubleShootingAnswerEntity;
+import com.orientalSalad.troubleShot.troubleShooting.entity.TroubleShootingEntity;
+
+@Component
+public class TroubleShootingAnswerConverter implements ObjectConverter<TroubleShootingAnswerDTO, TroubleShootingAnswerEntity> {
+
+	@Override
+	public TroubleShootingAnswerEntity toEntity(TroubleShootingAnswerDTO troubleShootingAnswerDTO) {
+		return TroubleShootingAnswerEntity.builder()
+			.troubleSeq(troubleShootingAnswerDTO.getTroubleSeq())
+			.context(troubleShootingAnswerDTO.getContext())
+			.title(troubleShootingAnswerDTO.getTitle())
+			.writerSeq(troubleShootingAnswerDTO.getWriter().getSeq())
+			.build();
+	}
+
+	@Override
+	public TroubleShootingAnswerDTO toDTO(TroubleShootingAnswerEntity troubleShootingAnswerEntity) {
+		return null;
+	}
+}

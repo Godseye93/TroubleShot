@@ -1,7 +1,7 @@
 package com.orientalSalad.troubleShot.troubleShooting.entity;
 
 import com.orientalSalad.troubleShot.global.entity.BaseEntity;
-import com.orientalSalad.troubleShot.troubleShooting.dto.AnswerDTO;
+import com.orientalSalad.troubleShot.troubleShooting.dto.TroubleShootingAnswerDTO;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -11,40 +11,31 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-@Table(name= "answer")
+@Table(name= "trouble_shooting_answer_reply")
 @Entity
 @Getter
 @NoArgsConstructor
 @ToString
-public class AnswerEntity extends BaseEntity {
-	@Column(columnDefinition = "TEXT")
-	private String title;
+public class TroubleShootingAnswerReplyEntity extends BaseEntity {
 	@Column(columnDefinition = "TEXT")
 	private String context;
 	private long writerSeq;
 	@Column(columnDefinition = "int4 DEFAULT '0'")
 	private int likeCount;
-	@Column(columnDefinition = "int4 DEFAULT '0'")
-	private int replyCount;
-	private long troubleSeq;
+	private long answerSeq;
 
 	@Builder
-	public AnswerEntity(String title,
+	public TroubleShootingAnswerReplyEntity(
 		String context,
-		String category,
 		long writerSeq,
 		int likeCount,
-		int replyCount,
-		long troubleSeq){
-		this.title = title;
+		long answerSeq){
 		this.context = context;
 		this.writerSeq = writerSeq;
 		this.likeCount = likeCount;
-		this.replyCount = replyCount;
-		this.troubleSeq = troubleSeq;
+		this.answerSeq = answerSeq;
 	}
-	public void update(AnswerDTO answerDTO){
-		this.title = answerDTO.getTitle();
-		this.context = answerDTO.getContext();
+	public void update(TroubleShootingAnswerDTO troubleShootingAnswerDTO){
+		this.context = troubleShootingAnswerDTO.getContext();
 	}
 }

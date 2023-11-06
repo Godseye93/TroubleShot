@@ -27,10 +27,13 @@ import com.orientalSalad.troubleShot.troubleShooting.dto.TroubleShootingReplyDTO
 import com.orientalSalad.troubleShot.troubleShooting.service.TroubleShootingService;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
+
+@Tag(name = "트러블 슈팅 API")
 @Controller
 @RequestMapping("/trouble-shootings")
 @RequiredArgsConstructor
@@ -126,7 +129,8 @@ public class TroubleShootingController {
 		}
 
 		log.info(troubleShootingDTO);
-
+		log.info("솔루션 목록");
+		log.info(troubleShootingDTO.getAnswers());
 		ResponseTroubleShootingDTO resultDTO = ResponseTroubleShootingDTO.builder()
 			.success(true)
 			.message(seq+"번 트러블 슈팅 문서 검색을 성공했습니다.")

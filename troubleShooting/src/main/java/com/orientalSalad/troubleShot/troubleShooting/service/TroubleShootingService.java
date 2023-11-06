@@ -124,7 +124,6 @@ public class TroubleShootingService {
 		TroubleShootingReplyEntity replyEntity = troubleShootingReplyRepository.findById(
 			requestTroubleShootingReplyDTO.getTroubleShootingReply().getSeq()).orElse(null);
 
-
 		if(replyEntity == null){
 			throw new Exception("잘못된 덧글입니다.");
 		}

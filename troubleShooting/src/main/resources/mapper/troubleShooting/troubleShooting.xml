@@ -24,14 +24,37 @@
                 typeHandler="com.orientalSalad.troubleShot.troubleShooting.typehandler.AnswerJsonToListTypeHandler"/>
         <association property="writer" resultMap="simpleMember"/>
     </resultMap>
-
+    <resultMap id="TroubleShootingAnswer" type="com.orientalSalad.troubleShot.troubleShooting.dto.TroubleShootingAnswerDTO">
+        <id property="seq" column="seq" />
+        <result property="title" column="title"/>
+        <result property="context" column="context"/>
+        <result property="replyCount" column="reply_count"/>
+        <association property="writer" resultMap="simpleMember"/>
+    </resultMap>
     <resultMap id="simpleMember" type="com.orientalSalad.troubleShot.member.dto.SimpleMemberDTO">
         <id property="seq" column="writer_seq" />
         <result property="email" column="writer_email" />
         <result property="profileImg" column="writer_profileImg" />
         <result property="nickname" column="writer_nickname" />
     </resultMap>
-
+    <select id="selectTroubleShootingAnswerBySeq"
+            parameterType="Long"
+            resultMap="TroubleShootingAnswer">
+            SELECT
+                a.seq AS seq,
+                a.title AS title,
+                a.context AS context,
+                m.seq AS writer_seq,
+                m.nickname AS writer_nickname,
+                m.email AS writer_email,
+                m.profile_img AS writer_profile_img
+            FROM
+                 trouble_shooting_answer a
+            LEFT JOIN
+                 member m ON a.writer_seq = m.seq
+            WHERE
+                  a.seq = #{seq}
+    </select>
     <update id="updateTroubleShootingView"
             parameterType="Long">
         UPDATE
@@ -95,7 +118,28 @@
                         'nickname',answer_m.nickname,
                         'email',answer_m.email,
                         'profileImg',answer_m.profile_img
-                    )
+                    ),
+                    'replies', (
+                                SELECT JSON_AGG(
+                                    json_build_object(
+                                        'seq', ar.seq,
+                                        'context', ar.context,
+                                        'createTime', ar.create_time,
+                                        'deleteTime', ar.delete_time,
+                                        'updateTime', ar.update_time,
+                                        'likeCount', ar.like_count,
+                                        'answerSeq', ar.answer_seq,
+                                        'writer', json_build_object(
+                                            'seq', arm.seq,
+                                            'nickname', arm.nickname,
+                                            'email', arm.email,
+                                            'profileImg', arm.profile_img
+                                            )
+                                        )
+                                    )
+                                    FROM trouble_shooting_answer_reply ar
+                                    WHERE a.seq = ar.answer_seq
+                                )
                 )) as answer
         FROM
             trouble_shooting ts
@@ -115,11 +159,16 @@
         LEFT JOIN
             member reply_m ON tsr.writer_seq  = reply_m.seq
         LEFT JOIN
-            answer a ON ts.seq  = a.trouble_seq
+            trouble_shooting_answer a ON ts.seq  = a.trouble_seq
         LEFT JOIN
             member answer_m ON a.writer_seq  = answer_m.seq
+        LEFT JOIN
+            trouble_shooting_answer_reply ar ON a.seq = ar.answer_seq
+        LEFT JOIN
+            member arm ON arm.seq = ar.writer_seq
         WHERE
             ts.seq = #{searchParam.troubleSeq}
+
         GROUP BY
             tsl.user_seq,ts.seq, m.seq,a.seq,answer_m.seq
     </select>

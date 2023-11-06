@@ -13,28 +13,27 @@ import org.apache.ibatis.type.MappedTypes;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.orientalSalad.troubleShot.troubleShooting.dto.AnswerDTO;
-import com.orientalSalad.troubleShot.troubleShooting.dto.TroubleShootingReplyDTO;
+import com.orientalSalad.troubleShot.troubleShooting.dto.TroubleShootingAnswerDTO;
 
 @MappedTypes(Set.class)
-public class AnswerJsonToListTypeHandler extends BaseTypeHandler<Set<AnswerDTO>> {
+public class AnswerJsonToListTypeHandler extends BaseTypeHandler<Set<TroubleShootingAnswerDTO>> {
 	private static final ObjectMapper mapper = new ObjectMapper();
 
 	@Override
-	public void setNonNullParameter(PreparedStatement ps, int i, Set<AnswerDTO> parameter, JdbcType jdbcType) throws SQLException {
+	public void setNonNullParameter(PreparedStatement ps, int i, Set<TroubleShootingAnswerDTO> parameter, JdbcType jdbcType) throws SQLException {
 		ps.setString(i, toJson(parameter));
 	}
 
 	@Override
-	public Set<AnswerDTO> getNullableResult(ResultSet rs, String columnName) throws SQLException {
-		Set<AnswerDTO> result = new HashSet<>();
-
+	public Set<TroubleShootingAnswerDTO> getNullableResult(ResultSet rs, String columnName) throws SQLException {
+		Set<TroubleShootingAnswerDTO> troubleShootingAnswerDTOSet = new HashSet<>();
 		try{
-			result = fromJson(rs.getString(columnName));
-			if(result.size() == 1){
-				for(AnswerDTO replyDTO : result){
-					if(replyDTO.getSeq() == null){
-						result = new HashSet<>();
+			troubleShootingAnswerDTOSet = fromJson(rs.getString(columnName));
+			System.out.println("result: "+troubleShootingAnswerDTOSet);
+			if(troubleShootingAnswerDTOSet.size() == 1){
+				for(TroubleShootingAnswerDTO answerDTO : troubleShootingAnswerDTOSet){
+					if(answerDTO.getSeq() == null){
+						troubleShootingAnswerDTOSet = new HashSet<>();
 						break;
 					}
 				}
@@ -43,20 +42,20 @@ public class AnswerJsonToListTypeHandler extends BaseTypeHandler<Set<AnswerDTO>>
 			e.printStackTrace();
 		}
 
-		return result;
+		return troubleShootingAnswerDTOSet;
 	}
 
 	@Override
-	public Set<AnswerDTO> getNullableResult(ResultSet rs, int columnIndex) throws SQLException {
+	public Set<TroubleShootingAnswerDTO> getNullableResult(ResultSet rs, int columnIndex) throws SQLException {
 		return fromJson(rs.getString(columnIndex));
 	}
 
 	@Override
-	public Set<AnswerDTO> getNullableResult(CallableStatement cs, int columnIndex) throws SQLException {
+	public Set<TroubleShootingAnswerDTO> getNullableResult(CallableStatement cs, int columnIndex) throws SQLException {
 		return fromJson(cs.getString(columnIndex));
 	}
 
-	private String toJson(Set<AnswerDTO> objects) throws SQLException {
+	private String toJson(Set<TroubleShootingAnswerDTO> objects) throws SQLException {
 		try {
 			return mapper.writeValueAsString(objects);
 		} catch (Exception e) {
@@ -64,10 +63,10 @@ public class AnswerJsonToListTypeHandler extends BaseTypeHandler<Set<AnswerDTO>>
 		}
 	}
 
-	private Set<AnswerDTO> fromJson(String json) throws SQLException {
+	private Set<TroubleShootingAnswerDTO> fromJson(String json) throws SQLException {
 		try {
 			System.out.println("handler : "+json);
-			return mapper.readValue(json, new TypeReference<Set<AnswerDTO>>() {});
+			return mapper.readValue(json, new TypeReference<Set<TroubleShootingAnswerDTO>>() {});
 		} catch (Exception e) {
 			throw new SQLException("Error converting JSON to list", e);
 		}

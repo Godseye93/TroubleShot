@@ -4,19 +4,18 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.ResultMap;
-import org.apache.ibatis.annotations.Results;
-import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectProvider;
 
 import com.orientalSalad.troubleShot.troubleShooting.dto.SearchTroubleShootingDTO;
+import com.orientalSalad.troubleShot.troubleShooting.dto.TroubleShootingAnswerDTO;
 import com.orientalSalad.troubleShot.troubleShooting.dto.TroubleShootingDTO;
 import com.orientalSalad.troubleShot.troubleShooting.sql.TroubleShootingSQLProvider;
 
 @Mapper
 public interface TroubleShootingMapper {
 	public TroubleShootingDTO selectTroubleShootingBySeq(@Param("searchParam") SearchTroubleShootingDTO searchParam);
+	public TroubleShootingAnswerDTO selectTroubleShootingAnswerBySeq(@Param("seq") Long seq);
 
 	public List<TroubleShootingDTO> selectTroubleShootingList(
 		@Param("searchParam") SearchTroubleShootingDTO searchParam,
