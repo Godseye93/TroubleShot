@@ -22,7 +22,16 @@ export class ErrHistoryProvider implements vscode.TreeDataProvider<Err> {
   readonly onDidChangeTreeData: vscode.Event<Err | undefined | null | void> =
     this._onDidChangeTreeData.event;
 
+  updateDesc(): void {
+    const errHistory = this.globalState.get<Err[]>("errHistory");
+    errHistory?.forEach((err) => {
+      err.description = format(err.createTime);
+    });
+    this.globalState.update("errHistory", errHistory);
+  }
+
   refresh(): void {
+    this.updateDesc();
     this._onDidChangeTreeData.fire();
   }
 
@@ -31,6 +40,7 @@ export class ErrHistoryProvider implements vscode.TreeDataProvider<Err> {
   }
 
   getChildren(element?: Err): Thenable<Err[]> {
+    this.updateDesc();
     const errHistory = this.globalState.get<Err[]>("errHistory") || [];
     return Promise.resolve(errHistory);
   }
@@ -38,6 +48,20 @@ export class ErrHistoryProvider implements vscode.TreeDataProvider<Err> {
   addErr(err: Err) {
     const errHistory = this.globalState.get<Err[]>("errHistory") || [];
     this.globalState.update("errHistory", [err, ...errHistory]);
+    this.refresh();
+  }
+
+  delErr(err: Err) {
+    const errHistory = this.globalState.get<Err[]>("errHistory") || [];
+    this.globalState.update(
+      "errHistory",
+      errHistory.filter((e) => e.id !== err.id)
+    );
+    this.refresh();
+  }
+
+  clearErr() {
+    this.globalState.update("errHistory", []);
     this.refresh();
   }
 }

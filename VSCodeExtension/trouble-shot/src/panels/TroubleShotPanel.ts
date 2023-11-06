@@ -6,6 +6,8 @@ import { NodeDependenciesProvider } from "../TreeDataProvider/NodeDependenciesPr
 import { Trouble } from "../TreeDataProvider/MyTroubleListProvider";
 import { v4 as uuidv4 } from "uuid";
 import { TROUBLE_SHOOTING_TYPE } from "../extension";
+import { Err } from "../TreeDataProvider/ErrHistoryProvider";
+import { getCode } from "../utilities/getCode";
 
 type TroubleShootingType = typeof TROUBLE_SHOOTING_TYPE[keyof typeof TROUBLE_SHOOTING_TYPE];
 
@@ -27,6 +29,7 @@ export class TroubleShotPanel {
   private readonly _troubleShootingType: TroubleShootingType;
   private readonly _globalState: vscode.Memento;
   private readonly _troubleId?: string;
+  private readonly _errorId?: string;
 
   /**
    * The HelloWorldPanel class private constructor (called only from the render method).
@@ -40,7 +43,8 @@ export class TroubleShotPanel {
     sessionId: number,
     troubleShootingType: TroubleShootingType,
     globalState: vscode.Memento,
-    troubleId?: string
+    troubleId?: string,
+    errorId?: string
   ) {
     this._panel = panel;
 
@@ -61,7 +65,9 @@ export class TroubleShotPanel {
 
     this._globalState = globalState;
 
-    this._troubleId = troubleShootingType === 1 ? troubleId : undefined;
+    this._troubleId = troubleId;
+
+    this._errorId = errorId;
   }
 
   /**
@@ -75,7 +81,8 @@ export class TroubleShotPanel {
     sessionId: number,
     troubleShootingType: TroubleShootingType,
     globalState: vscode.Memento,
-    troubleId?: string
+    troubleId?: string,
+    errorId?: string
   ) {
     if (TroubleShotPanel.currentPanel) {
       // If the webview panel already exists reveal it
@@ -107,7 +114,8 @@ export class TroubleShotPanel {
         sessionId,
         troubleShootingType,
         globalState,
-        troubleId
+        troubleId,
+        errorId
       );
     }
   }
@@ -187,9 +195,10 @@ export class TroubleShotPanel {
                 command: "getInitialStatus",
                 troubleShootingType: this._troubleShootingType,
                 sessionId: this._sessionId,
-                defaultSkills: NodeDependenciesProvider.allDependencies,
+                defaultSkills: JSON.stringify(NodeDependenciesProvider.allDependencies),
               });
             }
+
             if (this._troubleShootingType === TROUBLE_SHOOTING_TYPE.SOLUTION) {
               webview.postMessage({
                 command: "getInitialStatus",
@@ -198,12 +207,27 @@ export class TroubleShotPanel {
                 troubleId: this._troubleId,
               });
             }
+
             if (this._troubleShootingType === TROUBLE_SHOOTING_TYPE.LOGIN_FORM) {
               webview.postMessage({
                 command: "getInitialStatus",
                 troubleShootingType: this._troubleShootingType,
               });
             }
+
+            if (this._troubleShootingType === TROUBLE_SHOOTING_TYPE.TROUBLE_WITH_ERROR) {
+              const allErrors = this._globalState.get<Err[]>("errHistory");
+              const error = allErrors?.find((error) => error.id === this._errorId);
+              webview.postMessage({
+                command: "getInitialStatus",
+                troubleShootingType: this._troubleShootingType,
+                sessionId: this._sessionId,
+                defaultSkills: JSON.stringify(NodeDependenciesProvider.allDependencies),
+                defaultErrorMsg: error?.errMsg.replace(/\n/g, " "),
+                defaultCode: await getCode(error?.errMsg),
+              });
+            }
+
             return;
           case "showMessage":
             if (message.type === "error") {
@@ -228,7 +252,7 @@ export class TroubleShotPanel {
                 "troubleList",
                 prevTroubleList ? [...prevTroubleList, newTrouble] : [newTrouble]
               );
-              vscode.commands.executeCommand("refresh.trouble");
+              vscode.commands.executeCommand("refresh.trouble.list.without.login");
               vscode.window.showInformationMessage("Added to trouble list!");
               this.dispose();
             } catch (error) {
@@ -247,7 +271,7 @@ export class TroubleShotPanel {
                 return trouble;
               });
               await this._globalState.update("troubleList", newTroubleList);
-              vscode.commands.executeCommand("refresh.trouble");
+              vscode.commands.executeCommand("refresh.trouble.list.without.login");
               vscode.window.showInformationMessage("Trouble solved!");
               this.dispose();
             } catch (error) {

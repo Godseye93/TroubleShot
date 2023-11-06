@@ -56,14 +56,34 @@
         "icon": "assets/delete.png"
       },
       {
-        "command": "refresh.trouble",
-        "title": "Trouble Shot : Refresh",
+        "command": "refresh.trouble.list.without.login",
+        "title": "Trouble Shot : Refresh Without Login Trouble List",
+        "icon": "assets/refresh.png"
+      },
+      {
+        "command": "refresh.trouble.error.history",
+        "title": "Trouble Shot : Refresh Error History",
         "icon": "assets/refresh.png"
       },
       {
         "command": "node.dependencies.refreshEntry",
-        "title": "Trouble Shot : Refresh",
+        "title": "Trouble Shot : Refresh Node Dependencies",
         "icon": "assets/refresh.png"
+      },
+      {
+        "command": "delete.error",
+        "title": "Delete Error",
+        "icon": "assets/delete.png"
+      },
+      {
+        "command": "clear.error",
+        "title": "Clear Error",
+        "icon": "assets/clear.png"
+      },
+      {
+        "command": "create.trouble.with.error",
+        "title": "Create Trouble With Error",
+        "icon": "assets/create_using_err.png"
       }
     ],
     "viewsContainers": {
@@ -119,8 +139,18 @@
           "group": "navigation"
         },
         {
-          "command": "refresh.trouble",
+          "command": "refresh.trouble.list.without.login",
           "when": "view == my-trouble-list-without-login || view == my-trouble-list",
+          "group": "navigation"
+        },
+        {
+          "command": "refresh.trouble.error.history",
+          "when": "view == error-history",
+          "group": "navigation"
+        },
+        {
+          "command": "clear.error",
+          "when": "view == error-history",
           "group": "navigation"
         }
       ],
@@ -138,6 +168,16 @@
         {
           "command": "copy.markdown",
           "when": "view == my-trouble-list-without-login || view == my-trouble-list",
+          "group": "inline"
+        },
+        {
+          "command": "delete.error",
+          "when": "view == error-history",
+          "group": "inline"
+        },
+        {
+          "command": "create.trouble.with.error",
+          "when": "view == error-history",
           "group": "inline"
         }
       ]

@@ -5,9 +5,22 @@ export function parsingErrMsg(stdout: string): { title: string; errMsg: string }
   if (errorIndex !== -1) {
     const errorSection = stdout.substring(errorIndex + errorIndicator.length);
 
-    const titleMatch = errorSection.match(/(Module not found: Error:|Syntax error:|Error:)/i);
-    if (titleMatch) {
-      const title = titleMatch[0].trim().replace(/:/gi, "");
+    const eslintIndex = errorSection.indexOf("[eslint]");
+
+    if (eslintIndex !== -1) {
+      const errMsgStart = eslintIndex;
+      const errMsgEnd = errorSection.indexOf("\n\n", eslintIndex);
+      const errMsg =
+        errMsgEnd !== -1
+          ? errorSection.substring(errMsgStart, errMsgEnd).trim()
+          : errorSection.substring(errMsgStart).trim();
+
+      return { title: "Syntax error", errMsg };
+    }
+
+    const moduleErrMatch = errorSection.match(/(Module not found: Error:|Error:)/i);
+    if (moduleErrMatch) {
+      const title = moduleErrMatch[0].trim().replace(/:/gi, "");
       const errMsg = errorSection.substring(errorSection.indexOf(title)).trim();
       return { title, errMsg };
     }

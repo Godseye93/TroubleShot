@@ -15,16 +15,16 @@ import { vscode } from "./utilities/vscode";
 interface Props {
   sessionId: number;
   defaultSkills: string;
+  errMsg?: string;
+  defaultCode?: string;
 }
 
-const Trouble = ({ sessionId, defaultSkills }: Props) => {
-  const [isTeamOpen, setIsTeamOpen] = useState(false);
-
+const Trouble = ({ sessionId, defaultSkills, errMsg, defaultCode }: Props) => {
   const [articleInfo, setArticleInfo] = useState({
     title: "",
     skill: "",
     code: "",
-    console: "",
+    errorMsg: "",
     description: "",
   });
 
@@ -47,14 +47,14 @@ const Trouble = ({ sessionId, defaultSkills }: Props) => {
   }
 
   function onCreateMarkdown() {
-    const { title, skill, code, console, description } = articleInfo;
+    const { title, skill, code, errorMsg, description } = articleInfo;
 
     let markdownText = `# ${title}\n\n`;
     markdownText += `## TROUBLE\n\n`;
     markdownText += `---------------------------------------\n\n`;
     markdownText += `### 사용 기술 및 의존성\n\`${skill}\`\n\n`;
     markdownText += `### 문제 코드\n\`\`\`\n${code}\n\`\`\`\n\n`;
-    markdownText += `### 콘솔 로그\n\`${console}\`\n\n`;
+    markdownText += `### 콘솔 로그\n\`${errorMsg}\`\n\n`;
     markdownText += `### 문제 설명\n${description}\n\n`;
 
     return markdownText;
@@ -83,7 +83,7 @@ const Trouble = ({ sessionId, defaultSkills }: Props) => {
       command: "addTrouble",
       articleInfo: {
         title: articleInfo.title,
-        createTime: new Date().toLocaleString(),
+        createTime: new Date(),
         content: onCreateMarkdown(),
       },
     });
@@ -93,7 +93,21 @@ const Trouble = ({ sessionId, defaultSkills }: Props) => {
     setArticleInfo((prev) => ({ ...prev, skill: defaultSkills }));
   }, [defaultSkills]);
 
-  const { title, skill, code, console, description } = articleInfo;
+  useEffect(() => {
+    if (errMsg) {
+      setArticleInfo((prev) => ({ ...prev, errorMsg: errMsg.replace(/\n/g, " ") }));
+      console.log("errMsg", errMsg);
+      console.log("errorMsg", errMsg.replace(/\n/g, " "));
+    }
+  }, [errMsg]);
+
+  useEffect(() => {
+    if (defaultCode) {
+      setArticleInfo((prev) => ({ ...prev, code: defaultCode }));
+    }
+  }, [defaultCode]);
+
+  const { title, skill, code, errorMsg, description } = articleInfo;
   const isLogin = sessionId !== -1;
 
   return (
@@ -106,22 +120,16 @@ const Trouble = ({ sessionId, defaultSkills }: Props) => {
           <label slot="label">공개 범위</label>
           <VSCodeRadio>비공개</VSCodeRadio>
           <VSCodeRadio>전체 공개</VSCodeRadio>
-          <VSCodeRadio checked={isTeamOpen}>팀 공개</VSCodeRadio>
-          <VSCodeDropdown disabled={isTeamOpen}>
-            <VSCodeOption>Option Label #1</VSCodeOption>
-            <VSCodeOption>Option Label #2</VSCodeOption>
-            <VSCodeOption>Option Label #3</VSCodeOption>
-          </VSCodeDropdown>
         </VSCodeRadioGroup>
       )}
 
-      <VSCodeTextArea value={skill} name="skill" onInput={onChange}>
+      <VSCodeTextArea value={skill} name="skill" onInput={onChange} rows={4}>
         사용 기술 스택
       </VSCodeTextArea>
-      <VSCodeTextArea value={code} onInput={onChange} name="code">
+      <VSCodeTextArea value={code} onInput={onChange} name="code" rows={7}>
         문제 코드
       </VSCodeTextArea>
-      <VSCodeTextArea value={console} name="console" onInput={onChange}>
+      <VSCodeTextArea value={errorMsg} name="errorMsg" onInput={onChange} rows={1}>
         콘솔 로그
       </VSCodeTextArea>
       <VSCodeTextArea value={description} name="description" onInput={onChange}>

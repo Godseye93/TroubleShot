@@ -10,28 +10,30 @@ export const TROUBLE_SHOOTING_TYPE = {
   TROUBLE: 0 as const,
   SOLUTION: 1 as const,
   LOGIN_FORM: 2 as const,
+  TROUBLE_WITH_ERROR: 3 as const,
 };
 
 type TroubleShootingType = typeof TROUBLE_SHOOTING_TYPE[keyof typeof TROUBLE_SHOOTING_TYPE];
 
-export interface skill {
-  [key: string]: string;
-}
 interface Message {
   command: string;
   sessionId: number;
   troubleShootingType: TroubleShootingType;
-  defaultSkills?: skill;
+  defaultSkills?: string;
   troubleId?: string;
+  defaultErrorMsg?: string;
+  defaultCode?: string;
 }
 
 function App() {
   const [sessionId, setSessionId] = useState<number>(-1);
   const [troubleShootingType, setTroubleShootingType] = useState<TroubleShootingType>(
-    TROUBLE_SHOOTING_TYPE.LOADING
+    TROUBLE_SHOOTING_TYPE.TROUBLE
   );
   const [defaultSkills, setDefaultSkills] = useState<any>();
   const [troubleId, setTroubleId] = useState<string>();
+  const [errorMsg, setErrorMsg] = useState<any>();
+  const [defaultCode, setDefaultCode] = useState<string>();
 
   useEffect(() => {
     window.addEventListener("message", onHandleInitMessage);
@@ -60,7 +62,12 @@ function App() {
           setTroubleId(message.troubleId);
           setSessionId(message.sessionId);
         }
-
+        if (message.troubleShootingType === TROUBLE_SHOOTING_TYPE.TROUBLE_WITH_ERROR) {
+          setSessionId(message.sessionId);
+          setDefaultSkills(message.defaultSkills);
+          setErrorMsg(message.defaultErrorMsg);
+          setDefaultCode(message.defaultCode);
+        }
         break;
     }
   }
@@ -68,11 +75,18 @@ function App() {
   return (
     <main className="flex items-center justify-center">
       {troubleShootingType === TROUBLE_SHOOTING_TYPE.TROUBLE ? (
-        <Trouble sessionId={sessionId} defaultSkills={JSON.stringify(defaultSkills)} />
+        <Trouble sessionId={sessionId} defaultSkills={defaultSkills} />
       ) : troubleShootingType === TROUBLE_SHOOTING_TYPE.SOLUTION ? (
         <Solution sessionId={sessionId} troubleId={troubleId} />
       ) : troubleShootingType === TROUBLE_SHOOTING_TYPE.LOGIN_FORM ? (
         <LoginForm />
+      ) : troubleShootingType === TROUBLE_SHOOTING_TYPE.TROUBLE_WITH_ERROR ? (
+        <Trouble
+          sessionId={sessionId}
+          defaultSkills={defaultSkills}
+          errMsg={errorMsg}
+          defaultCode={defaultCode}
+        />
       ) : (
         <div>LOADING</div>
       )}

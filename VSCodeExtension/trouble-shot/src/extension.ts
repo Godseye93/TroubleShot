@@ -15,6 +15,7 @@ export const TROUBLE_SHOOTING_TYPE = {
   TROUBLE: 0 as const,
   SOLUTION: 1 as const,
   LOGIN_FORM: 2 as const,
+  TROUBLE_WITH_ERROR: 3 as const,
 };
 
 export async function activate(context: vscode.ExtensionContext) {
@@ -26,6 +27,24 @@ export async function activate(context: vscode.ExtensionContext) {
   const errHistoryProvider = new ErrHistoryProvider(context.globalState);
   context.subscriptions.push(
     vscode.window.registerTreeDataProvider("error-history", errHistoryProvider)
+  );
+
+  context.subscriptions.push(
+    vscode.commands.registerCommand("delete.error", (error) => {
+      errHistoryProvider.delErr(error);
+    })
+  );
+
+  context.subscriptions.push(
+    vscode.commands.registerCommand("clear.error", () => {
+      errHistoryProvider.clearErr();
+    })
+  );
+
+  context.subscriptions.push(
+    vscode.commands.registerCommand("refresh.trouble.error.history", () => {
+      errHistoryProvider.refresh();
+    })
   );
 
   context.subscriptions.push(
@@ -48,6 +67,19 @@ export async function activate(context: vscode.ExtensionContext) {
         sessionId,
         TROUBLE_SHOOTING_TYPE.TROUBLE,
         context.globalState
+      );
+    })
+  );
+
+  context.subscriptions.push(
+    vscode.commands.registerCommand("create.trouble.with.error", (error) => {
+      TroubleShotPanel.render(
+        context.extensionUri,
+        sessionId,
+        TROUBLE_SHOOTING_TYPE.TROUBLE_WITH_ERROR,
+        context.globalState,
+        undefined,
+        error.id
       );
     })
   );
@@ -94,9 +126,9 @@ export async function activate(context: vscode.ExtensionContext) {
   );
 
   context.subscriptions.push(
-    vscode.commands.registerCommand("node.dependencies.refreshEntry", () =>
-      nodeDependenciesProvider.refresh()
-    )
+    vscode.commands.registerCommand("node.dependencies.refreshEntry", () => {
+      nodeDependenciesProvider.refresh();
+    })
   );
 
   // trouble list without login tree view
@@ -118,7 +150,7 @@ export async function activate(context: vscode.ExtensionContext) {
   );
 
   context.subscriptions.push(
-    vscode.commands.registerCommand("refresh.trouble", () => {
+    vscode.commands.registerCommand("refresh.trouble.list.without.login", () => {
       myTroubleListProviderWithoutLogin.refresh();
     })
   );

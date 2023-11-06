@@ -11,7 +11,7 @@ export class Trouble extends vscode.TreeItem {
     public contextValue: string
   ) {
     super(title);
-    this.tooltip = `Created at ${this.createTime}`;
+    this.tooltip = `Created at ${this.createTime.toLocaleString()}`;
     this.description = `${format(this.createTime)}, ${this.contextValue}`;
     this.command = {
       command: "view.trouble",
@@ -30,11 +30,12 @@ export abstract class MyTroubleListProvider implements vscode.TreeDataProvider<T
     this._onDidChangeTreeData.event;
 
   updateDesc(): void {
-    const troubleList = this.globalState.get<Trouble[]>("troubleList");
-    troubleList?.forEach((trouble) => {
+    const prevTroubleList = this.globalState.get<Trouble[]>("troubleList");
+    const newTroubleList = prevTroubleList?.map((trouble) => {
       trouble.description = `${format(trouble.createTime)}, ${trouble.contextValue}`;
+      return trouble;
     });
-    this.globalState.update("troubleList", troubleList);
+    this.globalState.update("troubleList", newTroubleList);
   }
 
   refresh(): void {
