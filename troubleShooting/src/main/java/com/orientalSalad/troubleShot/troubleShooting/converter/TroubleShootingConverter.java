@@ -27,6 +27,7 @@ public class TroubleShootingConverter implements ObjectConverter<TroubleShooting
 			.solved(troubleShootingDTO.isSolved())
 			.writerSeq(troubleShootingDTO.getWriter().getSeq())
 			.category(troubleShootingDTO.getCategory())
+			.dependency(troubleShootingDTO.getDependency())
 			.build();
 	}
 
@@ -44,6 +45,7 @@ public class TroubleShootingConverter implements ObjectConverter<TroubleShooting
 			.updateTime(troubleShootingEntity.getUpdateTime())
 			.deleteTime(troubleShootingEntity.getDeleteTime())
 			.category(troubleShootingEntity.getCategory())
+			.dependency(troubleShootingEntity.getDependency())
 			.build();
 	}
 }

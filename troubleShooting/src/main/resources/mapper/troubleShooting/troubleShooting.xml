@@ -7,6 +7,7 @@
         <id property="seq" column="seq" />
         <result property="title" column="title"/>
         <result property="context" column="context"/>
+        <result property="dependency" column="dependency"/>
         <result property="solved" column="solved"/>
         <result property="category" column="category"/>
         <result property="createTime" column="create_time"/>
@@ -94,6 +95,7 @@
         SELECT  ts.seq AS seq,
             ts.title AS title,
             ts.context AS context,
+            ts.dependency AS dependency,
             ts.category AS category,
             ts.solved AS solved,
             ts.create_time AS create_time,
@@ -300,6 +302,7 @@
                 ts.title AS title,
                 ts.context AS context,
                 ts.category AS category,
+                ts.dependency AS dependency
                 ts.solved AS solved,
 			    ts.create_time AS create_time,
                 ts.update_time AS update_time,

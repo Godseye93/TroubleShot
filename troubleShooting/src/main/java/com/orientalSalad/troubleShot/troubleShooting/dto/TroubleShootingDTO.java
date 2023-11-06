@@ -27,6 +27,8 @@ public class TroubleShootingDTO extends BaseDTO {
 	private String category;
 	@Schema(description = "내용")
 	private String context;
+	@Schema(description = "의존성")
+	private String dependency;
 	@Schema(description = "작성자")
 	private SimpleMemberDTO writer;
 	@Schema(description = "해결 여부")

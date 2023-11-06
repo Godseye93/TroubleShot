@@ -23,6 +23,7 @@ public class TroubleShootingEntity extends BaseEntity {
 	private String context;
 	@Column(columnDefinition = "TEXT")
 	private String category;
+	private String dependency;
 	private long writerSeq;
 	private boolean solved;
 	@Column(columnDefinition = "int4 DEFAULT '0'")
@@ -34,7 +35,7 @@ public class TroubleShootingEntity extends BaseEntity {
 
 	@Builder
 	public TroubleShootingEntity(String title, String context,String category,
-		long writerSeq, boolean solved,int viewCount,
+		long writerSeq, boolean solved,int viewCount,String dependency,
 		int likeCount, int replyCount){
 		this.title = title;
 		this.context = context;
@@ -42,6 +43,7 @@ public class TroubleShootingEntity extends BaseEntity {
 		this.writerSeq = writerSeq;
 		this.viewCount = viewCount;
 		this.likeCount = likeCount;
+		this.dependency = dependency;
 		this.replyCount = replyCount;
 		this.solved = solved;
 	}
@@ -50,6 +52,8 @@ public class TroubleShootingEntity extends BaseEntity {
 		this.category = troubleShootingDTO.getCategory();
 		this.context = troubleShootingDTO.getContext();
 		this.solved = troubleShootingDTO.isSolved();
+		this.dependency = troubleShootingDTO.getDependency();
+
 	}
 	public void updateViews(){
 		this.viewCount++;
