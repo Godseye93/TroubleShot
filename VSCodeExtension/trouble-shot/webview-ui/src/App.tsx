@@ -28,7 +28,7 @@ interface Message {
 function App() {
   const [sessionId, setSessionId] = useState<number>(-1);
   const [troubleShootingType, setTroubleShootingType] = useState<TroubleShootingType>(
-    TROUBLE_SHOOTING_TYPE.TROUBLE
+    TROUBLE_SHOOTING_TYPE.LOADING
   );
   const [defaultSkills, setDefaultSkills] = useState<any>();
   const [troubleId, setTroubleId] = useState<string>();

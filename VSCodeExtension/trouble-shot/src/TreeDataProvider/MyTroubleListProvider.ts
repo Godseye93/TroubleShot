@@ -5,7 +5,6 @@ export class Trouble extends vscode.TreeItem {
   constructor(
     public readonly title: string,
     public readonly createTime: Date,
-    private readonly creator: string,
     public content: string,
     public readonly id: string,
     public contextValue: string

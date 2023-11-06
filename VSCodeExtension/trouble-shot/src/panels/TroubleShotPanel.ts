@@ -164,7 +164,9 @@ export class TroubleShotPanel {
         <head>
           <meta charset="UTF-8" />
           <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-          <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource}; script-src 'nonce-${nonce}';">
+          <meta http-equiv="Content-Security-Policy" content="default-src 'none';
+          style-src 'self' ${webview.cspSource} 'nonce-${nonce}'; 
+          script-src 'nonce-${nonce}';">
           <link rel="stylesheet" type="text/css" href="${stylesUri}">
           <title>Trouble Shot</title>
         </head>
@@ -242,7 +244,6 @@ export class TroubleShotPanel {
               const newTrouble = new Trouble(
                 message.articleInfo.title,
                 message.articleInfo.createTime,
-                "my",
                 message.articleInfo.content,
                 uuidv4(),
                 "unSolved"
@@ -277,6 +278,35 @@ export class TroubleShotPanel {
             } catch (error) {
               vscode.window.showErrorMessage("Failed to solve!");
             }
+            return;
+          case "onLogin":
+            fetch("https://k9d205.p.ssafy.io:8101/login/login", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(message.body),
+            })
+              .then((res) => {
+                if (!res.ok) {
+                  throw new Error("Network response was not ok");
+                }
+                return res.json();
+              })
+              .then((data) => {
+                if (data.success) {
+                  this._globalState.update("sessionId", data.member.seq);
+                  vscode.commands.executeCommand("setContext", "isLogin", true);
+                  vscode.window.showInformationMessage("Login success!");
+                  this.dispose();
+                } else {
+                  vscode.window.showErrorMessage("Invalid Email or Password!");
+                }
+              })
+              .catch((error) => {
+                console.error("Error:", error);
+              });
+
             return;
           // Add more switch case statements here as more webview message commands
           // are created within the webview context (i.e. inside media/main.js)

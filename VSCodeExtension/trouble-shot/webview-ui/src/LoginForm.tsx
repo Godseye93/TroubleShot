@@ -1,21 +1,28 @@
 import { VSCodeButton, VSCodeTextField } from "@vscode/webview-ui-toolkit/react";
 import { BiLogIn } from "react-icons/bi";
 import { useState } from "react";
+import { vscode } from "./utilities/vscode";
 
 const LoginForm = () => {
   const [loginForm, setLoginForm] = useState({
-    id: "",
-    password: "",
+    email: "test@test.com",
+    password: "test",
   });
   function onChange(e: any) {
     setLoginForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   }
   function onLogin() {
-    console.log(loginForm);
+    vscode.postMessage({
+      command: "onLogin",
+      body: {
+        ...loginForm,
+        type: 2,
+      },
+    });
   }
   return (
     <section className="flex flex-col w-2/3 gap-3 ">
-      <VSCodeTextField value={loginForm.id} name="id" onInput={onChange}>
+      <VSCodeTextField value={loginForm.email} name="id" onInput={onChange}>
         ID
       </VSCodeTextField>
       <VSCodeTextField
