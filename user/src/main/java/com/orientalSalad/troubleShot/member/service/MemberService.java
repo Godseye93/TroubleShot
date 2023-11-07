@@ -2,10 +2,12 @@ package com.orientalSalad.troubleShot.member.service;
 
 import org.springframework.stereotype.Service;
 
+import com.orientalSalad.troubleShot.global.dto.RequestDTO;
 import com.orientalSalad.troubleShot.global.utill.HashEncrypt;
 import com.orientalSalad.troubleShot.global.utill.ObjectConverter;
 import com.orientalSalad.troubleShot.login.dto.LoginDTO;
 import com.orientalSalad.troubleShot.member.dto.MemberDTO;
+import com.orientalSalad.troubleShot.member.dto.RequestMemberDTO;
 import com.orientalSalad.troubleShot.member.entity.MemberEntity;
 import com.orientalSalad.troubleShot.member.repository.MemberRepository;
 
@@ -63,5 +65,41 @@ public class MemberService {
 		MemberDTO memberDTO = memberConverter.toDTO(memberEntity);
 
 		return memberDTO;
+	}
+	public MemberDTO updateMember(RequestMemberDTO requestMemberDTO) throws Exception {
+		if(requestMemberDTO.getLoginSeq() != requestMemberDTO.getMemberDTO().getSeq()){
+			throw new Exception("로그인 정보와 회원 정보가 다릅니다.");
+		}
+
+		MemberDTO memberDTO = requestMemberDTO.getMemberDTO();
+
+		MemberEntity memberEntity = memberRepository.findMemberEntityBySeq(memberDTO.getSeq());
+
+		//없는 유저인 경우
+		if(memberEntity == null){
+			throw new Exception(memberDTO.getSeq()+"번은 없는 유저입니다.");
+		}
+
+		memberEntity.update(memberDTO);
+
+		memberRepository.save(memberEntity);
+
+		return memberDTO;
+	}
+	public boolean deleteMember(RequestDTO requestDTO, Long userSeq) throws Exception {
+		if(requestDTO.getLoginSeq() != userSeq){
+			throw new Exception("로그인 정보와 회원 정보가 다릅니다.");
+		}
+
+		MemberEntity memberEntity = memberRepository.findMemberEntityBySeq(userSeq);
+
+		//없는 유저인 경우
+		if(memberEntity == null){
+			throw new Exception(userSeq+"번은 없는 유저입니다.");
+		}
+
+		memberRepository.delete(memberEntity);
+
+		return true;
 	}
 }
