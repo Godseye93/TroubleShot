@@ -24,7 +24,7 @@ export interface ReqLogin {
 
 export interface ResLogin {
   success: boolean;
-  message: string;
+  // message: string;
   member: Member;
 }
 
@@ -34,4 +34,14 @@ export interface Member {
   profileImg: string | null;
   nickname: string;
   locale: string;
+}
+
+export interface ReqLogout {
+  seq: number;
+  type: number;
+}
+
+export interface ResLogout {
+  success: boolean;
+  message: string;
 }
