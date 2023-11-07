@@ -22,7 +22,26 @@ export async function activate(context: vscode.ExtensionContext) {
   const rootPath = getRootPath();
   const sessionId = await getSessionId(context);
   const isLogin = sessionId !== -1;
-  vscode.commands.executeCommand("setContext", "isLogin", isLogin);
+  vscode.commands.executeCommand("setContext", "isLogin", false);
+
+  context.subscriptions.push(
+    vscode.commands.registerCommand("logout.trouble.shot", async () => {
+      const body = { seq: sessionId, type: 2 };
+      try {
+        await fetch("https://k9d205.p.ssafy.io:8101/login/logout", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(body),
+        });
+        vscode.commands.executeCommand("setContext", "isLogin", false);
+        context.globalState.update("sessionId", -1);
+      } catch (error) {
+        vscode.window.showErrorMessage("Failed to logout!");
+      }
+    })
+  );
 
   const errHistoryProvider = new ErrHistoryProvider(context.globalState);
   context.subscriptions.push(
@@ -64,7 +83,6 @@ export async function activate(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand("create.trouble", () => {
       TroubleShotPanel.render(
         context.extensionUri,
-        sessionId,
         TROUBLE_SHOOTING_TYPE.TROUBLE,
         context.globalState
       );
@@ -75,7 +93,6 @@ export async function activate(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand("create.trouble.with.error", (error) => {
       TroubleShotPanel.render(
         context.extensionUri,
-        sessionId,
         TROUBLE_SHOOTING_TYPE.TROUBLE_WITH_ERROR,
         context.globalState,
         undefined,
@@ -89,7 +106,6 @@ export async function activate(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand("solve.trouble", (trouble) => {
       TroubleShotPanel.render(
         context.extensionUri,
-        sessionId,
         TROUBLE_SHOOTING_TYPE.SOLUTION,
         context.globalState,
         trouble.id
@@ -112,7 +128,6 @@ export async function activate(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand("login.trouble.shot", () => {
       TroubleShotPanel.render(
         context.extensionUri,
-        sessionId,
         TROUBLE_SHOOTING_TYPE.LOGIN_FORM,
         context.globalState
       );
@@ -171,4 +186,10 @@ export async function activate(context: vscode.ExtensionContext) {
       panel.webview.html = getMarkdownView(trouble.content, context.extensionUri);
     })
   );
+
+  // context.subscriptions.push(
+  //   vscode.commands.registerCommand("refresh.trouble.list", () => {
+  //     myTroubleListProviderWithoutLogin.refresh();
+  //   })
+  // );
 }

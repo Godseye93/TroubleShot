@@ -25,7 +25,6 @@ export class TroubleShotPanel {
   public static currentPanel: TroubleShotPanel | undefined;
   private readonly _panel: WebviewPanel;
   private _disposables: Disposable[] = [];
-  private readonly _sessionId: number;
   private readonly _troubleShootingType: TroubleShootingType;
   private readonly _globalState: vscode.Memento;
   private readonly _troubleId?: string;
@@ -40,7 +39,6 @@ export class TroubleShotPanel {
   private constructor(
     panel: WebviewPanel,
     extensionUri: Uri,
-    sessionId: number,
     troubleShootingType: TroubleShootingType,
     globalState: vscode.Memento,
     troubleId?: string,
@@ -57,9 +55,6 @@ export class TroubleShotPanel {
 
     // Set an event listener to listen for messages passed from the webview context
     this._setWebviewMessageListener(this._panel.webview);
-
-    // Set the isLogin property
-    this._sessionId = sessionId;
 
     this._troubleShootingType = troubleShootingType;
 
@@ -78,7 +73,6 @@ export class TroubleShotPanel {
    */
   public static render(
     extensionUri: Uri,
-    sessionId: number,
     troubleShootingType: TroubleShootingType,
     globalState: vscode.Memento,
     troubleId?: string,
@@ -111,7 +105,6 @@ export class TroubleShotPanel {
       TroubleShotPanel.currentPanel = new TroubleShotPanel(
         panel,
         extensionUri,
-        sessionId,
         troubleShootingType,
         globalState,
         troubleId,
@@ -196,7 +189,7 @@ export class TroubleShotPanel {
               webview.postMessage({
                 command: "getInitialStatus",
                 troubleShootingType: this._troubleShootingType,
-                sessionId: this._sessionId,
+                sessionId: this._globalState.get<string>("sessionId"),
                 defaultSkills: JSON.stringify(NodeDependenciesProvider.allDependencies),
               });
             }
@@ -205,7 +198,7 @@ export class TroubleShotPanel {
               webview.postMessage({
                 command: "getInitialStatus",
                 troubleShootingType: this._troubleShootingType,
-                sessionId: this._sessionId,
+                sessionId: this._globalState.get<string>("sessionId"),
                 troubleId: this._troubleId,
               });
             }
@@ -223,7 +216,7 @@ export class TroubleShotPanel {
               webview.postMessage({
                 command: "getInitialStatus",
                 troubleShootingType: this._troubleShootingType,
-                sessionId: this._sessionId,
+                sessionId: this._globalState.get<string>("sessionId"),
                 defaultSkills: JSON.stringify(NodeDependenciesProvider.allDependencies),
                 defaultErrorMsg: error?.errMsg.replace(/\n/g, " "),
                 defaultCode: await getCode(error?.errMsg),
@@ -306,7 +299,48 @@ export class TroubleShotPanel {
               .catch((error) => {
                 console.error("Error:", error);
               });
-
+            return;
+          case "uploadTrouble":
+            const body = {
+              loginSeq: this._globalState.get<string>("sessionId"),
+              type: 2,
+              troubleShooting: {
+                title: message.articleInfo.title,
+                category: "",
+                context: message.articleInfo.content,
+                dependency: message.articleInfo.dependency,
+                scope: message.articleInfo.scope,
+                writer: {
+                  seq: this._globalState.get<string>("sessionId"),
+                },
+                solved: false,
+                tags: [],
+              },
+            };
+            fetch("https://k9d205.p.ssafy.io:8102/trouble-shootings", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(body),
+            })
+              .then((res) => {
+                if (!res.ok) {
+                  throw new Error("Network response was not ok");
+                }
+                return res.json();
+              })
+              .then((data) => {
+                if (data.success) {
+                  vscode.window.showInformationMessage("Trouble uploaded!");
+                  vscode.commands.executeCommand("refresh.trouble.list");
+                } else {
+                  vscode.window.showErrorMessage("Failed to upload!");
+                }
+              })
+              .catch((error) => {
+                console.error("Error:", error);
+              });
             return;
           // Add more switch case statements here as more webview message commands
           // are created within the webview context (i.e. inside media/main.js)

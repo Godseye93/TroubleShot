@@ -27,6 +27,7 @@ const Trouble = ({ sessionId, defaultSkills, errMsg, defaultCode }: Props) => {
     errorMsg: "",
     description: "",
   });
+  const [openScope, setOpenScope] = useState("1");
 
   function onChange(e: any) {
     const { name, value } = e.target;
@@ -46,13 +47,13 @@ const Trouble = ({ sessionId, defaultSkills, errMsg, defaultCode }: Props) => {
     return true;
   }
 
-  function onCreateMarkdown() {
+  function onCreateMarkdown(upLoad?: boolean) {
     const { title, skill, code, errorMsg, description } = articleInfo;
 
     let markdownText = `# ${title}\n\n`;
     markdownText += `## TROUBLE\n\n`;
     markdownText += `---------------------------------------\n\n`;
-    markdownText += `### 사용 기술 및 의존성\n\`${skill}\`\n\n`;
+    if (!upLoad) markdownText += `### 사용 기술 및 의존성\n\`${skill}\`\n\n`;
     markdownText += `### 문제 코드\n\`\`\`\n${code}\n\`\`\`\n\n`;
     markdownText += `### 콘솔 로그\n\`${errorMsg}\`\n\n`;
     markdownText += `### 문제 설명\n${description}\n\n`;
@@ -89,15 +90,27 @@ const Trouble = ({ sessionId, defaultSkills, errMsg, defaultCode }: Props) => {
     });
   }
 
+  function onUploadTrouble() {
+    vscode.postMessage({
+      command: "uploadTrouble",
+      articleInfo: {
+        title: articleInfo.title,
+        content: onCreateMarkdown(true),
+        scope: openScope,
+        dependency: articleInfo.skill,
+      },
+    });
+  }
+
   useEffect(() => {
-    setArticleInfo((prev) => ({ ...prev, skill: defaultSkills }));
+    if (defaultSkills) {
+      setArticleInfo((prev) => ({ ...prev, skill: defaultSkills }));
+    }
   }, [defaultSkills]);
 
   useEffect(() => {
     if (errMsg) {
-      setArticleInfo((prev) => ({ ...prev, errorMsg: errMsg.replace(/\n/g, " ") }));
-      console.log("errMsg", errMsg);
-      console.log("errorMsg", errMsg.replace(/\n/g, " "));
+      setArticleInfo((prev) => ({ ...prev, errorMsg: errMsg }));
     }
   }, [errMsg]);
 
@@ -106,6 +119,11 @@ const Trouble = ({ sessionId, defaultSkills, errMsg, defaultCode }: Props) => {
       setArticleInfo((prev) => ({ ...prev, code: defaultCode }));
     }
   }, [defaultCode]);
+
+  function handleRadioChange(event: any) {
+    const selectedValue = event.target.value;
+    setOpenScope(selectedValue);
+  }
 
   const { title, skill, code, errorMsg, description } = articleInfo;
   const isLogin = sessionId !== -1;
@@ -116,10 +134,14 @@ const Trouble = ({ sessionId, defaultSkills, errMsg, defaultCode }: Props) => {
         제목
       </VSCodeTextField>
       {isLogin && (
-        <VSCodeRadioGroup>
+        <VSCodeRadioGroup onChange={handleRadioChange}>
           <label slot="label">공개 범위</label>
-          <VSCodeRadio>비공개</VSCodeRadio>
-          <VSCodeRadio>전체 공개</VSCodeRadio>
+          <VSCodeRadio value="1" checked={openScope === "1"}>
+            비공개
+          </VSCodeRadio>
+          <VSCodeRadio value="0" checked={openScope === "0"}>
+            전체 공개
+          </VSCodeRadio>
         </VSCodeRadioGroup>
       )}
 
@@ -144,10 +166,12 @@ const Trouble = ({ sessionId, defaultSkills, errMsg, defaultCode }: Props) => {
         </div>
 
         {isLogin ? (
-          <VSCodeButton>
-            <BiUpload className="mr-3 " />
-            TROUBLE SHOT 게시물 업로드
-          </VSCodeButton>
+          <div onClick={onUploadTrouble}>
+            <VSCodeButton>
+              <BiUpload className="mr-3 " />
+              TROUBLE SHOT 게시물 업로드
+            </VSCodeButton>
+          </div>
         ) : (
           <div onClick={onAddTrouble}>
             <VSCodeButton>
