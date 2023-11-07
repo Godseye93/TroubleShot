@@ -329,6 +329,7 @@
 				ts.view_count AS view_count,
                 COUNT(distinct tsl.seq) AS like_count,
                 COUNT(distinct tsr.seq) AS reply_count,
+                COUNT(distinct a.seq) AS answer_count,
 				m.seq AS writer_seq,
                 m.nickname AS writer_nickname,
                 m.email AS writer_email,
@@ -352,6 +353,8 @@
             trouble_tag tt ON tt.trouble_seq = ts.seq
         LEFT JOIN
             tag t ON t.seq = tt.tag_seq
+        LEFT JOIN
+            trouble_shooting_answer a ON ts.seq  = a.trouble_seq
         LEFT JOIN
             member m ON ts.writer_seq = m.seq
         LEFT JOIN

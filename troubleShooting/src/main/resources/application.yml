@@ -4,4 +4,4 @@ spring:
   application:
     name: troubleShooting
   config:
-    import: configserver:http://k9d205.p.ssafy.io:9090
+    import: configserver:http://43.200.130.229:9090
