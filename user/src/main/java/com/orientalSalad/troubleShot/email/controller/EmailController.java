@@ -18,7 +18,6 @@ import com.orientalSalad.troubleShot.global.dto.ResultDTO;
 
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.mail.MessagingException;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
@@ -30,7 +29,7 @@ public class EmailController {
 	private final EmailService emailService;
 	private final RedisTemplate redisTemplate;
 	@Operation(summary = "이메일 인증 번호 전송 API",
-		description = "이메일 하나 보내면 됨"
+		description = "입력 DTO : RequestEmailDTO"
 	)
 	@PostMapping("/email/send")
 	public ResponseEntity<?> sendAuthCodeEmail(@RequestBody RequestEmailDTO requestEmailDTO) throws MessagingException {
@@ -51,7 +50,7 @@ public class EmailController {
 		log.info("====인증 이메일 발송 끝====");
 		return new ResponseEntity<ResultDTO>(resultDTO, HttpStatus.ACCEPTED);
 	}
-	@Operation(summary = "이메일 인증 번호 확인 API")
+	@Operation(summary = "이메일 인증 번호 확인 API",	description = "입력 DTO : AuthCodeDTO")
 	@PostMapping("/email/confirm")
 	public ResponseEntity<?> confirmAuthCodeEmail(@RequestBody AuthCodeDTO authCodeDTO) throws
 		Exception {

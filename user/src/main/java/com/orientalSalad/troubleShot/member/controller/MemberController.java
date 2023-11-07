@@ -27,7 +27,9 @@ public class MemberController {
 	private final Validation memberValidation;
 
 	@Operation(summary = "회원가입 API",
-		description = "필수 값 : "
+		description =
+			"입력 DTO : MemberDTO\n"+
+			"필수 값 : "
 			+ "이메일, 비밀번호, 닉네임, 국적")
 	@PostMapping()
 	public ResponseEntity<?> insertMember(@RequestBody MemberDTO memberDTO) throws Exception{
