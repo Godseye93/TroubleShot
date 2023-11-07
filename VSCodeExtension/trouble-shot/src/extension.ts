@@ -22,7 +22,7 @@ export async function activate(context: vscode.ExtensionContext) {
   const rootPath = getRootPath();
   const sessionId = await getSessionId(context);
   const isLogin = sessionId !== -1;
-  vscode.commands.executeCommand("setContext", "isLogin", false);
+  vscode.commands.executeCommand("setContext", "isLogin", isLogin);
 
   context.subscriptions.push(
     vscode.commands.registerCommand("logout.trouble.shot", async () => {
