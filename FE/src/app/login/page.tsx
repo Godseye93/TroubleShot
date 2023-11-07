@@ -44,10 +44,6 @@ export default function Page() {
 
   return (
     <main className="fcc w-full h-[100vh]">
-<<<<<<< HEAD
-      <Image src={backgroundImage} alt="backgroundImage" className="bg-cover h-screen absolute w-full -z-10" />
-      <div className="bg-white rounded p-10 text-center shadow-md">
-=======
       <Image
         src={backgroundImage}
         alt="backgroundImage"
@@ -58,7 +54,6 @@ export default function Page() {
       />
 
       <div className="bg-white rounded p-10 text-center shadow-md w-[25rem]">
->>>>>>> 5c23658cb37b3e83d63460eaf87a05a58bc9fed2
         <h1 className="text-3xl border-b border-main">로그인</h1>
         <div className="my-4 text-left">
           <label className="text-gray-900">아이디</label>
