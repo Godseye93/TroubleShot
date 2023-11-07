@@ -9,14 +9,14 @@ export default function Options() {
   const [selectAnswer, setSelectAnswer] = useState(0);
   const [selectSort, setSelectSort] = useState(0);
   const anwerOption = ["전체", "해결된 글", "미해결 글"];
-  const sortOption = ["최신순", "좋아요 순", "댓글 순"];
+  const sortOption = ["최신순", "좋아요 순", "댓글 순", "조회순"];
 
   return (
     <div>
       <div className="mt-7 flex gap-2">
         <div className="w-[50%] border-r-2 pe-2">
           <Duration />
-          <InputTag setTags={setTags} />
+          <InputTag setTags={setTags} showTitle />
         </div>
         <div className="w-[25%] ps-2 border-r-2 pe-2">
           <SetOptions

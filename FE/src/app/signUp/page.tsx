@@ -120,7 +120,13 @@ export default function page() {
 
   return (
     <div className="fcc w-full h-[100vh]">
+<<<<<<< HEAD
+      <Image src={backgroundImage} alt="backgroundImage" className="bg-cover h-screen absolute w-full -z-10" />
+      <div className="bg-white rounded p-10 text-center shadow-md">
+        <h1 className="text-3xl border-b border-main">회원 가입</h1>
+=======
       <ToastContainer />
+>>>>>>> 5c23658cb37b3e83d63460eaf87a05a58bc9fed2
 
       <Image src={backgroundImage} alt="backgroundImage" className="bg-cover h-screen absolute w-full -z-10 blur-lg" />
       <div className="">
