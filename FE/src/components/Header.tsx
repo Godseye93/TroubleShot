@@ -2,6 +2,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import trous_logo_origin from "/public/logo/trous_logo_origin.png";
+import defaultProfile from "@/../public/defaultProfile.png";
 import { usePathname } from "next/navigation";
 import { useLoginStore } from "@/stores/useLoginStore";
 
@@ -33,6 +34,14 @@ export default function Header() {
           커뮤니티
         </Link>
       </div>
+
+      {isLogged ? (
+        <div>asd</div>
+      ) : (
+        <div className="w-3/4">
+          <Image src={defaultProfile} alt="" className=" w-1/6" />
+        </div>
+      )}
 
       {isLogged ? (
         <div
