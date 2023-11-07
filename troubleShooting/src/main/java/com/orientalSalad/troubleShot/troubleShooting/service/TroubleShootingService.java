@@ -14,6 +14,7 @@ import com.orientalSalad.troubleShot.troubleShooting.dto.RequestTroubleShootingR
 import com.orientalSalad.troubleShot.troubleShooting.dto.SearchTroubleShootingDTO;
 import com.orientalSalad.troubleShot.troubleShooting.dto.TroubleShootingDTO;
 import com.orientalSalad.troubleShot.troubleShooting.dto.TroubleShootingReplyDTO;
+import com.orientalSalad.troubleShot.troubleShooting.entity.CategoryEntity;
 import com.orientalSalad.troubleShot.troubleShooting.entity.TroubleShootingAnswerEntity;
 import com.orientalSalad.troubleShot.troubleShooting.entity.TroubleShootingEntity;
 import com.orientalSalad.troubleShot.troubleShooting.entity.TroubleShootingLikeEntity;
@@ -39,6 +40,7 @@ public class TroubleShootingService {
 	private final TroubleShootingReplyLikeRepository troubleShootingReplyLikeRepository;
 	private final ObjectConverter<TroubleShootingDTO, TroubleShootingEntity> troubleShootingConverter;
 	private final ObjectConverter<TroubleShootingReplyDTO, TroubleShootingReplyEntity> troubleShootingReplyConverter;
+	private final CategoryService categoryService;
 	private final TagService tagService;
 
 	public boolean insertTroubleShooting(RequestTroubleShootingDTO requestTroubleShootingDTO){
