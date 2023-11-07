@@ -39,9 +39,7 @@ public class LoginService {
 
 		//로그인 정보를 reids에 저장
 		ValueOperations valueOperations = redisTemplate.opsForValue();
-		valueOperations.set("login_"+memberDTO.getSeq()+"_"+loginDTO.getType(),
-			loginDTO,
-			Duration.ofDays(1L));
+		valueOperations.set("login_"+memberDTO.getSeq()+"_"+loginDTO.getType(),loginDTO);
 
 		return memberDTO;
 	}
