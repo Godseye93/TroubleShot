@@ -10,9 +10,6 @@ import { EmailCode } from "@/types/CommonType";
 
 import { EmailcodeSuccess, CodeCheckSuccess, CodeCheckFail, SubmitFail, SignUpSuccess } from "../toast/notify";
 
-import "react-toastify/dist/ReactToastify.css";
-import { toast } from "react-toastify";
-
 export default function page() {
   const [email, setEmail] = useState<string>(""); // 이메일
   const [nickname, setNickname] = useState<string>(""); // 닉네임
