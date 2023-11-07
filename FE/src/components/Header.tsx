@@ -35,24 +35,21 @@ export default function Header() {
         </Link>
       </div>
 
-      {isLogged ? (
-        <div>asd</div>
-      ) : (
-        <div className="w-3/4">
-          <Image src={defaultProfile} alt="" className=" w-1/6" />
-        </div>
-      )}
+      {/* {isLogged ? <div>asd</div> : <Image src={defaultProfile} alt="" className=" w-[3rem]" />} */}
 
       {isLogged ? (
-        <div
-          onClick={() => {
-            logout();
-          }}
-          className="w-2/12 h-2/12 flex items-center justify-end"
-        >
-          <button className="bg-main hover:bg-yellow-700 duration-300 line-clamp-1  text-white font-bold w-20 p-1 rounded fcc me-2">
-            로그아웃
-          </button>
+        <div>
+          {/* <Link href={}><Image src={defaultProfile} alt="" className=" w-[3rem]"/></Link> */}
+          <div
+            onClick={() => {
+              logout();
+            }}
+            className="w-2/12 h-2/12 flex items-center justify-end"
+          >
+            <button className="bg-main hover:bg-yellow-700 duration-300 line-clamp-1  text-white font-bold w-20 p-1 rounded fcc me-2">
+              로그아웃
+            </button>
+          </div>
         </div>
       ) : (
         <Link href="/login" className="w-2/12 h-2/12 flex items-center justify-end">

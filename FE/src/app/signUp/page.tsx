@@ -9,6 +9,7 @@ import { emailCert, emailcodeCheck, signUpSubmit } from "@/api/account";
 import { EmailCode } from "@/types/CommonType";
 
 import { EmailcodeSuccess, CodeCheckSuccess, CodeCheckFail, SubmitFail, SignUpSuccess } from "../toast/notify";
+import { toast } from "react-toastify";
 
 export default function page() {
   const [email, setEmail] = useState<string>(""); // 이메일
@@ -25,10 +26,8 @@ export default function page() {
 
   const codeRef = useRef<HTMLInputElement>(null);
 
-  // 이메일 형식 처리에 활용하기
+  // 이메일 입력
   const handleEmailInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // const isEmailValid = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
-
     setEmail(e.target.value);
   };
 
@@ -62,17 +61,22 @@ export default function page() {
 
   // 인증번호 이메일로 요청
   const handleEmailCert = async () => {
-    try {
-      const res = await emailCert(email);
-      if (res?.success) {
-        EmailcodeSuccess();
-        console.log("이메일 인증 요청 성공"); // 토스트로 알림 띄우기
-        // 요청에 성공했으면 코드를 입력할 칸과 코드 확인 버튼을 보여줘야 한다.
-        setIsEmailRequest(true);
+    const isEmailValid = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email); // boolean
+    if (isEmailValid) {
+      try {
+        const res = await emailCert(email);
+        if (res?.success) {
+          EmailcodeSuccess();
+          console.log("이메일 인증 요청 성공"); // 토스트로 알림 띄우기
+          // 요청에 성공했으면 코드를 입력할 칸과 코드 확인 버튼을 보여줘야 한다.
+          setIsEmailRequest(true);
+        }
+      } catch (err) {
+        console.log("Error:", err);
+        setIsEmailRequest(false);
       }
-    } catch (err) {
-      console.log("Error:", err);
-      setIsEmailRequest(false);
+    } else {
+      toast.error("올바른 이메일 형식이 아닙니다.");
     }
   };
 
@@ -187,7 +191,8 @@ export default function page() {
           </div>
 
           <div className="my-4 text-left">
-            <label className="text-gray-900">비밀번호</label>
+            <label className="text-gray-900 me-2">비밀번호</label>
+            {pswVld === false && <label className="text-sub">비밀번호가 너무 짧습니다.</label>}
             <input
               type="password"
               className="border block w-full p-2 rounded me-2"
