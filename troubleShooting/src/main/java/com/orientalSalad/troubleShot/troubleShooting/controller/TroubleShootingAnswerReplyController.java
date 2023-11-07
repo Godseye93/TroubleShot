@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.orientalSalad.troubleShot.global.dto.RequestDTO;
 import com.orientalSalad.troubleShot.global.dto.ResultDTO;
 import com.orientalSalad.troubleShot.global.utill.Authentication;
-import com.orientalSalad.troubleShot.troubleShooting.dto.RequestTroubleShootingAnswerDTO;
 import com.orientalSalad.troubleShot.troubleShooting.dto.RequestTroubleShootingAnswerReplyDTO;
 import com.orientalSalad.troubleShot.troubleShooting.dto.TroubleShootingAnswerReplyDTO;
 import com.orientalSalad.troubleShot.troubleShooting.service.TroubleShootingAnswerService;
@@ -33,7 +32,7 @@ public class TroubleShootingAnswerReplyController {
 	private final TroubleShootingAnswerService troubleShootingAnswerService;
 	private final Authentication authentication;
 
-	@Operation(summary = "트러블 슈팅 솔루션 덧글 등록")
+	@Operation(summary = "트러블 슈팅 솔루션 덧글 등록",description = "입력 DTO :RequestTroubleShootingAnswerReplyDTO")
 	@PostMapping("")
 	public ResponseEntity<?> insertAnswerReply(
 		HttpServletRequest request,
@@ -58,7 +57,7 @@ public class TroubleShootingAnswerReplyController {
 		log.info("====== 트러블 슈팅 솔루션 덧글 등록 끝 =====");
 		return new ResponseEntity<ResultDTO>(resultDTO, HttpStatus.OK);
 	}
-	@Operation(summary = "트러블 슈팅 솔루션 덧글 삭제")
+	@Operation(summary = "트러블 슈팅 솔루션 덧글 삭제",description = "입력 DTO :RequestDTO")
 	@DeleteMapping("/{replySeq}")
 	public ResponseEntity<?> deleteTroubleShooting(
 		HttpServletRequest request,
@@ -91,7 +90,7 @@ public class TroubleShootingAnswerReplyController {
 		log.info("====== 트러블 슈팅 솔루션 덧글 삭제 끝 =====");
 		return new ResponseEntity<ResultDTO>(resultDTO, HttpStatus.OK);
 	}
-	@Operation(summary = "트러블 슈팅 솔루션 덧글 수정")
+	@Operation(summary = "트러블 슈팅 솔루션 덧글 수정",description = "입력 DTO :RequestTroubleShootingAnswerReplyDTO")
 	@PutMapping("/{replySeq}")
 	public ResponseEntity<?> updateTroubleShooting(
 		HttpServletRequest request,

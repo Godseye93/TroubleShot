@@ -53,42 +53,8 @@ public class SearchTroubleShootingDTO{
 	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
 	@Schema(description = "끝 검색 시간")
 	private LocalDateTime endTime;
+	@Schema(description = "즐겨찾는 게시물인지 아닌지(기본값 false)")
+	private boolean favorite;
 	@Schema(description = "정렬 방식 0: 최신순,1 :좋아요 많음, 2: 댓글 많음, 3: 조회수 높음")
 	private int order;
-
-	public String getKeyword() {
-		return keyword;
-	}
-
-	public int getPageSize() {
-		return pageSize;
-	}
-
-	public int getPageNo() {
-		return pageNo;
-	}
-
-	public Boolean getSolved() {
-		return solved;
-	}
-
-	public List<String> getTags() {
-		return tags;
-	}
-
-	public String getWriter() {
-		return writer;
-	}
-
-	public LocalDateTime getStartTime() {
-		return startTime;
-	}
-
-	public LocalDateTime getEndTime() {
-		return endTime;
-	}
-
-	public int getOrder() {
-		return order;
-	}
 }

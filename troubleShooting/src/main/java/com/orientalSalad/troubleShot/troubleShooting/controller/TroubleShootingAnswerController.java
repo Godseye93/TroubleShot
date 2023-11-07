@@ -32,7 +32,7 @@ public class TroubleShootingAnswerController {
 	private final TroubleShootingAnswerService troubleShootingAnswerService;
 	private final Authentication authentication;
 
-	@Operation(summary = "트러블 슈팅 솔루션 등록")
+	@Operation(summary = "트러블 슈팅 솔루션 등록",description = "입력 DTO :RequestTroubleShootingAnswerDTO")
 	@PostMapping("")
 	public ResponseEntity<?> insertAnswer(
 		HttpServletRequest request,
@@ -54,7 +54,7 @@ public class TroubleShootingAnswerController {
 		log.info("====== 트러블 슈팅 솔루션 등록 끝 =====");
 		return new ResponseEntity<ResultDTO>(resultDTO, HttpStatus.OK);
 	}
-	@Operation(summary = "트러블 슈팅 솔루션 삭제")
+	@Operation(summary = "트러블 슈팅 솔루션 삭제",description = "입력 DTO :RequestDTO")
 	@DeleteMapping("/{answerSeq}")
 	public ResponseEntity<?> deleteTroubleShooting(
 		HttpServletRequest request,
@@ -86,7 +86,7 @@ public class TroubleShootingAnswerController {
 		log.info("====== 트러블 슈팅 솔루션 삭제 끝 =====");
 		return new ResponseEntity<ResultDTO>(resultDTO, HttpStatus.OK);
 	}
-	@Operation(summary = "트러블 슈팅 문서 수정")
+	@Operation(summary = "트러블 슈팅 문서 수정",description = "입력 DTO :RequestTroubleShootingAnswerDTO")
 	@PutMapping("/{answerSeq}")
 	public ResponseEntity<?> updateTroubleShooting(
 		HttpServletRequest request,

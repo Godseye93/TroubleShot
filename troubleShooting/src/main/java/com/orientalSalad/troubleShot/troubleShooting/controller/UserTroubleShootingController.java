@@ -21,7 +21,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
-@Tag(name = "좋아요 API")
+@Tag(name = "좋아요/즐겨찾기 API")
 @Controller
 @RequestMapping("/users/{userSeq}/trouble-shootings")
 @RequiredArgsConstructor
@@ -31,7 +31,7 @@ public class UserTroubleShootingController {
 	private final TroubleShootingAnswerService troubleShootingAnswerService;
 	private final Authentication authentication;
 
-	@Operation(summary = "트러블 슈팅 솔루션 좋아요")
+	@Operation(summary = "트러블 슈팅 솔루션 좋아요",description = "입력 DTO :RequestDTO")
 	@PostMapping("/{troubleSeq}/answers/{answerSeq}/like")
 	public ResponseEntity<?> likeAnswer(
 		@PathVariable(name = "userSeq") long userSeq,
@@ -55,7 +55,7 @@ public class UserTroubleShootingController {
 		log.info("====== 트러블 슈팅 문서 솔루션 좋아요 끝 =====");
 		return new ResponseEntity<ResultDTO>(resultDTO, HttpStatus.OK);
 	}
-	@Operation(summary = "트러블 슈팅 솔루션 덧글 좋아요")
+	@Operation(summary = "트러블 슈팅 솔루션 덧글 좋아요",description = "입력 DTO :RequestDTO")
 	@PostMapping("/{troubleSeq}/answers/{answerSeq}/replies/{replySeq}/like")
 	public ResponseEntity<?> likeAnswer(
 		@PathVariable(name = "userSeq") long userSeq,
@@ -80,7 +80,7 @@ public class UserTroubleShootingController {
 		log.info("====== 트러블 슈팅 문서 솔루션 덧글 좋아요 끝 =====");
 		return new ResponseEntity<ResultDTO>(resultDTO, HttpStatus.OK);
 	}
-	@Operation(summary = "트러블 슈팅 덧글 좋아요")
+	@Operation(summary = "트러블 슈팅 덧글 좋아요",description = "입력 DTO :RequestDTO")
 	@PostMapping("/{troubleSeq}/reply/{replySeq}/like")
 	public ResponseEntity<?> likeReply(
 		@PathVariable(name = "userSeq") long userSeq,
@@ -103,7 +103,7 @@ public class UserTroubleShootingController {
 		return new ResponseEntity<ResultDTO>(resultDTO, HttpStatus.OK);
 	}
 
-	@Operation(summary = "트러블 슈팅 좋아요")
+	@Operation(summary = "트러블 슈팅 좋아요",description = "입력 DTO :RequestDTO")
 	@PostMapping("/{troubleSeq}/like")
 	public ResponseEntity<?> likeTroubleShooting(
 		@PathVariable(name = "userSeq") long userSeq,
@@ -123,6 +123,28 @@ public class UserTroubleShootingController {
 			.build();
 
 		log.info("====== 트러블 슈팅 문서 좋아요 끝 =====");
+		return new ResponseEntity<ResultDTO>(resultDTO, HttpStatus.OK);
+	}
+	@Operation(summary = "트러블 슈팅 즐겨찾기",description = "입력 DTO :RequestDTO")
+	@PostMapping("/{troubleSeq}/favorite")
+	public ResponseEntity<?> favoriteTroubleShooting(
+		@PathVariable(name = "userSeq") long userSeq,
+		@PathVariable(name = "troubleSeq") long troubleSeq,
+		@RequestBody RequestDTO requestDTO,
+		HttpServletRequest httpServletRequest) throws Exception {
+		log.info("====== 트러블 슈팅 문서 즐겨찾기 시작 =====");
+
+		//로그인 확인
+		authentication.checkLogin(httpServletRequest,requestDTO);
+
+		troubleShootingService.updateTroubleShootingFavorite(userSeq,troubleSeq);
+
+		ResultDTO resultDTO = ResultDTO.builder()
+			.success(true)
+			.message(troubleSeq+"번 즐겨찾기 변경이 성공했습니다.")
+			.build();
+
+		log.info("====== 트러블 슈팅 문서 즐겨찾기 끝 =====");
 		return new ResponseEntity<ResultDTO>(resultDTO, HttpStatus.OK);
 	}
 }

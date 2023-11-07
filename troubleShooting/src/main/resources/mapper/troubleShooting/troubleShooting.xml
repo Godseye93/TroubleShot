@@ -250,17 +250,21 @@
             matched_posts mp on mp.seq = ts.seq
         </if>
         LEFT JOIN
-        trouble_shooting_reply tsr on ts.seq = tsr.trouble_seq
+            trouble_shooting_reply tsr on ts.seq = tsr.trouble_seq
         LEFT JOIN
-        trouble_tag tt ON tt.trouble_seq = ts.seq
+            trouble_tag tt ON tt.trouble_seq = ts.seq
         LEFT JOIN
-        tag t ON t.seq = tt.tag_seq
+            tag t ON t.seq = tt.tag_seq
         LEFT JOIN
-        member m ON ts.writer_seq = m.seq
+            member m ON ts.writer_seq = m.seq
         LEFT JOIN
-        trouble_shooting_like tsl ON ts.seq  = tsl.trouble_seq
+            trouble_shooting_like tsl ON ts.seq  = tsl.trouble_seq
         <if test="searchParam.loginSeq != null or searchParam.loginSeq != 0">
             AND tsl.user_seq = #{searchParam.loginSeq}
+        </if>
+        <if test="searchParam.favorite == true">
+        LEFT JOIN
+            favorite f ON ts.seq = f.trouble_seq
         </if>
         WHERE
         1 = 1
@@ -355,6 +359,11 @@
         <if test="searchParam.loginSeq != null or searchParam.loginSeq != 0">
             AND tsl.user_seq = #{searchParam.loginSeq}
         </if>
+        <if test="searchParam.favorite == true">
+        LEFT JOIN
+            favorite f ON ts.seq = f.trouble_seq
+        </if>
+
         WHERE
         1 = 1
         AND ts.scope in ( 0

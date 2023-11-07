@@ -42,7 +42,7 @@ public class TroubleShootingController {
 	private final TroubleShootingService troubleShootingService;
 	private final Authentication authentication;
 
-	@Operation(summary = "트러블 슈팅 문서 등록")
+	@Operation(summary = "트러블 슈팅 문서 등록",description = "입력 DTO :RequestTroubleShootingDTO")
 	@PostMapping("")
 	public ResponseEntity<?> insertTroubleShooting(
 		HttpServletRequest request, @RequestBody RequestTroubleShootingDTO requestTroubleShootingDTO) throws Exception {
@@ -62,7 +62,7 @@ public class TroubleShootingController {
 		log.info("====== 트러블 슈팅 문서 등록 끝 =====");
 		return new ResponseEntity<ResultDTO>(resultDTO, HttpStatus.OK);
 	}
-	@Operation(summary = "트러블 슈팅 문서 삭제")
+	@Operation(summary = "트러블 슈팅 문서 삭제",description = "입력 DTO :RequestTroubleShootingDTO")
 	@DeleteMapping("/{seq}")
 	public ResponseEntity<?> deleteTroubleShooting(
 		HttpServletRequest request,
@@ -92,7 +92,7 @@ public class TroubleShootingController {
 		log.info("====== 트러블 슈팅 문서 삭제 끝 =====");
 		return new ResponseEntity<ResultDTO>(resultDTO, HttpStatus.OK);
 	}
-	@Operation(summary = "트러블 슈팅 문서 수정")
+	@Operation(summary = "트러블 슈팅 문서 수정",description = "입력 DTO :RequestTroubleShootingDTO")
 	@PutMapping("/{seq}")
 	public ResponseEntity<?> updateTroubleShooting(
 		HttpServletRequest request,
@@ -116,7 +116,7 @@ public class TroubleShootingController {
 		log.info("====== 트러블 슈팅 문서 수정 끝 =====");
 		return new ResponseEntity<ResultDTO>(resultDTO, HttpStatus.OK);
 	}
-	@Operation(summary = "트러블 슈팅 단일 문서 상세 내용 검색")
+	@Operation(summary = "트러블 슈팅 단일 문서 상세 내용 검색",description = "입력 DTO :RequestDTO")
 	@GetMapping("/{seq}")
 	public ResponseEntity<?> findTroubleShooting(@PathVariable(name = "seq") long seq,
 		@ModelAttribute RequestDTO requestDTO) throws Exception {
@@ -142,7 +142,7 @@ public class TroubleShootingController {
 		log.info("====== 트러블 슈팅 문서 pk 탐색 끝 =====");
 		return new ResponseEntity<ResponseTroubleShootingDTO>(resultDTO, HttpStatus.OK);
 	}
-	@Operation(summary = "트러블 슈팅 문서 목록 검색")
+	@Operation(summary = "트러블 슈팅 문서 목록 검색",description = "입력 DTO :SearchTroubleShootingDTO")
 	@GetMapping("")
 	public ResponseEntity<?> findTroubleShootingList(
 		@ModelAttribute SearchTroubleShootingDTO searchParam) throws
@@ -163,7 +163,7 @@ public class TroubleShootingController {
 		log.info("====== 트러블 슈팅 문서 목록 검색 끝 =====");
 		return new ResponseEntity<ResponseTroubleShootingListDTO>(resultDTO, HttpStatus.OK);
 	}
-	@Operation(summary = "트러블 슈팅 덧글 달기")
+	@Operation(summary = "트러블 슈팅 덧글 달기",description = "입력 DTO :requestTroubleShootingReplyDTO")
 	@PostMapping("/{seq}/reply")
 	public ResponseEntity<?> insertReply(@PathVariable(name = "seq") long seq,
 		@RequestBody RequestTroubleShootingReplyDTO requestTroubleShootingReplyDTO,
@@ -182,7 +182,7 @@ public class TroubleShootingController {
 		log.info("====== 트러블 슈팅 문서 덧글 달기 끝 =====");
 		return new ResponseEntity<ResultDTO>(resultDTO, HttpStatus.OK);
 	}
-	@Operation(summary = "트러블 슈팅 덧글 수정")
+	@Operation(summary = "트러블 슈팅 덧글 수정",description = "입력 DTO :RequestTroubleShootingReplyDTO")
 	@PutMapping("/{troubleSeq}/reply/{replySeq}")
 	public ResponseEntity<?> updateReply(
 		@PathVariable(name = "troubleSeq") long troubleSeq,
@@ -206,7 +206,7 @@ public class TroubleShootingController {
 		log.info("====== 트러블 슈팅 문서 덧글 수정 끝 =====");
 		return new ResponseEntity<ResultDTO>(resultDTO, HttpStatus.OK);
 	}
-	@Operation(summary = "트러블 슈팅 덧글 삭제")
+	@Operation(summary = "트러블 슈팅 덧글 삭제",description = "입력 DTO :RequestDTO")
 	@DeleteMapping("/{troubleSeq}/reply/{replySeq}")
 	public ResponseEntity<?> deleteReply(
 		@PathVariable(name = "troubleSeq") long troubleSeq,

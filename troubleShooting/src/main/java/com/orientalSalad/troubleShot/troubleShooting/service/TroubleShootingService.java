@@ -15,12 +15,14 @@ import com.orientalSalad.troubleShot.troubleShooting.dto.SearchTroubleShootingDT
 import com.orientalSalad.troubleShot.troubleShooting.dto.TroubleShootingDTO;
 import com.orientalSalad.troubleShot.troubleShooting.dto.TroubleShootingReplyDTO;
 import com.orientalSalad.troubleShot.troubleShooting.entity.CategoryEntity;
+import com.orientalSalad.troubleShot.troubleShooting.entity.FavoriteEntity;
 import com.orientalSalad.troubleShot.troubleShooting.entity.TroubleShootingAnswerEntity;
 import com.orientalSalad.troubleShot.troubleShooting.entity.TroubleShootingEntity;
 import com.orientalSalad.troubleShot.troubleShooting.entity.TroubleShootingLikeEntity;
 import com.orientalSalad.troubleShot.troubleShooting.entity.TroubleShootingReplyEntity;
 import com.orientalSalad.troubleShot.troubleShooting.entity.TroubleShootingReplyLikeEntity;
 import com.orientalSalad.troubleShot.troubleShooting.mapper.TroubleShootingMapper;
+import com.orientalSalad.troubleShot.troubleShooting.repository.FavoriteRepository;
 import com.orientalSalad.troubleShot.troubleShooting.repository.TroubleShootingLikeRepository;
 import com.orientalSalad.troubleShot.troubleShooting.repository.TroubleShootingReplyLikeRepository;
 import com.orientalSalad.troubleShot.troubleShooting.repository.TroubleShootingReplyRepository;
@@ -40,7 +42,7 @@ public class TroubleShootingService {
 	private final TroubleShootingReplyLikeRepository troubleShootingReplyLikeRepository;
 	private final ObjectConverter<TroubleShootingDTO, TroubleShootingEntity> troubleShootingConverter;
 	private final ObjectConverter<TroubleShootingReplyDTO, TroubleShootingReplyEntity> troubleShootingReplyConverter;
-	private final CategoryService categoryService;
+	private final FavoriteRepository favoriteRepository;
 	private final TagService tagService;
 
 	public boolean insertTroubleShooting(RequestTroubleShootingDTO requestTroubleShootingDTO){
@@ -250,6 +252,26 @@ public class TroubleShootingService {
 			TroubleShootingEntity troubleShootingEntity = troubleShootingRepository.findBySeq(troubleShootingSeq);
 			troubleShootingEntity.decreaseLike();
 			troubleShootingRepository.save(troubleShootingEntity);
+		}
+
+		return true;
+	}
+	public boolean updateTroubleShootingFavorite(Long userSeq,Long troubleShootingSeq) throws Exception {
+		FavoriteEntity favoriteEntity =
+			favoriteRepository.findByUserSeqAndTroubleSeq(
+				userSeq,troubleShootingSeq);
+		//즐겨찾기 하기
+		if(favoriteEntity == null){
+			favoriteEntity =FavoriteEntity.builder()
+				.troubleSeq(troubleShootingSeq)
+				.userSeq(userSeq)
+				.build();
+
+			favoriteRepository.save(favoriteEntity);
+		}
+		//즐겨찾기 취소
+		else{
+			favoriteRepository.delete(favoriteEntity);
 		}
 
 		return true;

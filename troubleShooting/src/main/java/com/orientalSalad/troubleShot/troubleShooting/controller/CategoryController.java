@@ -40,7 +40,7 @@ public class CategoryController {
 	private final CategoryService categoryService;
 	private final Authentication authentication;
 
-	@Operation(summary = "카테고리 등록")
+	@Operation(summary = "카테고리 등록",description = "입력 DTO :RequestCategoryDTO")
 	@PostMapping("")
 	public ResponseEntity<?> insertCategory(
 		HttpServletRequest request,
@@ -62,7 +62,7 @@ public class CategoryController {
 		log.info("====== 슈팅 카테고리 등록 끝 =====");
 		return new ResponseEntity<ResultDTO>(resultDTO, HttpStatus.OK);
 	}
-	@Operation(summary = "카테고리 삭제 ")
+	@Operation(summary = "카테고리 삭제",description = "입력 DTO :RequestDTO")
 	@DeleteMapping("/{categorySeq}")
 	public ResponseEntity<?> deleteCategory(
 		HttpServletRequest request,
@@ -96,7 +96,7 @@ public class CategoryController {
 		log.info("====== 카테고리 삭제 끝 =====");
 		return new ResponseEntity<ResultDTO>(resultDTO, HttpStatus.OK);
 	}
-	@Operation(summary = "카테고리 수정")
+	@Operation(summary = "카테고리 수정",description = "입력 DTO :RequestCategoryDTO")
 	@PutMapping("/{categorySeq}")
 	public ResponseEntity<?> updateCategory(
 		HttpServletRequest request,
