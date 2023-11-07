@@ -11,6 +11,7 @@ import { EmailCode } from "@/types/CommonType";
 import { EmailcodeSuccess, CodeCheckSuccess, CodeCheckFail, SubmitFail, SignUpSuccess } from "../toast/notify";
 
 import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
 
 export default function page() {
   const [email, setEmail] = useState<string>(""); // 이메일
@@ -20,17 +21,26 @@ export default function page() {
 
   const [isEmailRequest, setIsEmailRequest] = useState<boolean | null>(null); // 이메일 인증 요청 성공 여부
   const [isCodeCorrect, setisCodeCorrect] = useState<boolean | null>(null); // 인증번호 확인 요청 성공 여부
+  const [checkNickname, setCheckNickname] = useState<boolean | null>(null);
   const [isMatch, setIsMatch] = useState<boolean | null>(null); // 비밀번호 확인
 
   const codeRef = useRef<HTMLInputElement>(null);
 
   // 이메일 형식 처리에 활용하기
   const handleEmailInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // const isEmailValid = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
+
     setEmail(e.target.value);
   };
 
+  // 닉네임 길이 확인
   const handleNicknameInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNickname(e.target.value);
+    const nicknameValue = e.target.value;
+    if (nicknameValue.length >= 2 && nicknameValue.length <= 10) {
+      setCheckNickname(true);
+      return;
+    }
+    setCheckNickname(false);
   };
 
   const handlePasswordInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -62,7 +72,6 @@ export default function page() {
   const handleCode = async () => {
     const code = codeRef.current!.value; // 해당 부분 오류 여지 있음. 느낌표 없애면 string 이거나 undefined
     // 이메일 인증 처리
-    console.log(code);
     const params: EmailCode = { email: email, code: code };
     try {
       const res = await emailcodeCheck(params);
@@ -80,7 +89,6 @@ export default function page() {
 
   // 회원가입 요청
   const handleSubmit = async () => {
-    console.log("실행됨");
     if (!isEmailRequest || !isCodeCorrect || !isMatch) {
       if (!isEmailRequest) {
         SubmitFail();
@@ -97,7 +105,6 @@ export default function page() {
       }
     } else {
       // 제출 로직 구현
-      console.log("실행됨2");
       try {
         const res = await signUpSubmit({
           email: email,
@@ -106,12 +113,10 @@ export default function page() {
           locale: "Korea",
         });
         if (res === "success") {
-          console.log("회원가입 성공 !");
           SignUpSuccess();
           setisCodeCorrect(true);
         }
       } catch (err) {
-        console.log("Error:", err);
         SubmitFail();
       }
     }
@@ -173,7 +178,8 @@ export default function page() {
           ) : null}
 
           <div className="my-4 text-left">
-            <label className="text-gray-900">닉네임</label>
+            <label className="text-gray-900 me-2">닉네임</label>
+            {checkNickname === false && <label className="text-sub">올바른 형식이 아닙니다.</label>}
             <input
               type="text"
               className="border block w-full p-2 rounded me-2"
@@ -190,7 +196,7 @@ export default function page() {
               className="border block w-full p-2 rounded me-2"
               id="password"
               onChange={handlePasswordInputChange}
-              placeholder="최대 12자까지 가능합니다."
+              placeholder="6자 이상 입력 해주세요."
             />
           </div>
 
@@ -202,7 +208,7 @@ export default function page() {
               className="border block w-full p-2 rounded me-2"
               id="passwordCheck"
               onChange={handleCheckPasswordInputChange}
-              placeholder="최대 12자까지 가능합니다."
+              placeholder="비밀번호 확인입니다."
             />
           </div>
 

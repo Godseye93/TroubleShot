@@ -44,15 +44,14 @@ export default function Page() {
       if (res.success) {
         // 성공 처리
         login(res);
-        // console.log(res.message);
+        // zustand에 저장
         // 토스트
         toast.success("로그인 성공 !");
         // 화면 전환
         router.back();
-        // 헤더 전환
       }
     } catch (err) {
-      console.log("Error:", err);
+      toast.error("잘못된 정보가 입력 되었습니다.");
     }
   };
 
