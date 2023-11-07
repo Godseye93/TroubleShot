@@ -1,4 +1,13 @@
-import { CommonType, EmailCertResponse, EmailCode, ReqLogin, ResLogin, SignUpType } from "@/types/CommonType";
+import {
+  CommonType,
+  EmailCertResponse,
+  EmailCode,
+  ReqLogin,
+  ReqLogout,
+  ResLogin,
+  ResLogout,
+  SignUpType,
+} from "@/types/CommonType";
 import { apiInstance } from ".";
 
 const api = apiInstance();
@@ -24,5 +33,11 @@ export const signUpSubmit = async (params: SignUpType): Promise<CommonType> => {
 // 로그인 요청
 export const loginSubmit = async (params: ReqLogin): Promise<ResLogin> => {
   const { data } = await api.post("login/login", params);
+  return data;
+};
+
+// 로그아웃 요청
+export const logoutSubmit = async (params: ReqLogout): Promise<ResLogout> => {
+  const { data } = await api.post("login/logout", params);
   return data;
 };
