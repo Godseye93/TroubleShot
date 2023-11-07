@@ -1,7 +1,6 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
 @layer base {
     html {
         font-family: 'SUITE-Regular';
@@ -9,6 +8,10 @@
         color: #1d1d1f;
         background: #E9EBF2;
     }
+      ul,
+  ol {
+    list-style: revert;
+  }
 }
 
 @font-face {
@@ -148,4 +151,41 @@ height: 10px;
   }
   .react-datepicker__triangle{
     @apply hidden
+  }
+
+  @keyframes waterfall2 {
+    0% {
+        opacity: 0;
+        transform: translateY(-50%) scaleY(0);
+        max-height: 0;
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0%) scaleY(1);
+        max-height: 20rem;
+    }
+  }
+  @keyframes waterfall2re {
+    0% {
+        opacity: 1;
+        transform: translateY(0%) scaleY(1);
+        max-height: 20rem;
+      }
+      to {
+        opacity: 0;
+        transform: translateY(-50%) scaleY(0);
+        max-height: 0;
+    }
+  }
+  .waterfall{
+    animation-name: waterfall2;
+    animation-duration: 0.4s;
+    animation-fill-mode: forwards;
+    top: 100%;
+  }
+  .waterfall2re{
+    animation-name: waterfall2re;
+    animation-duration: 0.4s;
+    animation-fill-mode: forwards;
+    top: 100%;
   }

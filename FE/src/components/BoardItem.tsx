@@ -1,11 +1,11 @@
-import { BsBookmarkStar, BsBookmarkStarFill } from "react-icons/bs";
+import { BsBookmarkStar } from "react-icons/bs";
 import IconBox from "./IconBox";
 
-interface user {
+interface User {
   username: string;
   userImg: string;
 }
-interface board {
+interface Board {
   seq: number;
   title: string;
   tags: string[];
@@ -15,9 +15,9 @@ interface board {
   content: string;
   img?: string;
   date: string;
-  user: user;
+  user: User;
 }
-export default function BoardItem({ board, last, idx }: { board: board; last: number; idx: number }) {
+export default function BoardItem({ board, last, idx }: { board: Board; last: number; idx: number }) {
   return (
     <div className={`${idx !== last && "border-b-2"} py-3`}>
       {/* 상단바 */}

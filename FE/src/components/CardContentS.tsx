@@ -1,6 +1,6 @@
 import Link from "next/link";
 import IconBox from "./IconBox";
-interface content {
+interface Content {
   seq: number;
   title: string;
   tags: string[];
@@ -10,12 +10,12 @@ interface content {
   content: string;
   date: string;
 }
-interface props {
+interface Props {
   keyword: string;
-  contents: content[];
+  contents: Content[];
 }
 
-export default function CardContentS({ keyword, contents }: props) {
+export default function CardContentS({ keyword, contents }: Props) {
   return (
     <div className="rounded-lg w-52 bg-white shadow-md">
       <div className="w-full h-7 px-2 bg-main rounded-t-lg flex items-center justify-between">

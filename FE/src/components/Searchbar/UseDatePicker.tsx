@@ -1,6 +1,6 @@
 import { forwardRef } from "react";
 import { getYear, getMonth } from "date-fns";
-import DatePicker, { ReactDatePicker, ReactDatePickerProps } from "react-datepicker";
+import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { AiFillCaretLeft, AiFillCaretRight } from "react-icons/ai";
 import { ko } from "date-fns/locale";
@@ -21,6 +21,7 @@ export default function UseDatePicker({
       </div>
     )
   );
+  CustomInput.displayName = "CustomInput";
   return (
     <DatePicker
       maxDate={new Date()}
