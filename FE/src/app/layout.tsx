@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import { ToastContainer } from "react-toastify";
 
 import { ToastContainer } from "react-toastify";
 

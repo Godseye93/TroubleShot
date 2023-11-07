@@ -24,7 +24,7 @@ export default function Sidebar({ menus, categorys, link }: Props) {
       <div className="flex-col items-center flex">
         {categorys && (
           <div className="w-full fcc">
-            <button className="fcc bg-sub text-white rounded-full w-3/4 h-10  shadow-red-600 shadow-md mb-5 flex hover:shadow-md hover:bg-red-600 transition-all">
+            <button className="fcc bg-sub text-white rounded-full w-3/4 h-10  shadow-red-600 shadow-md mb-5 flex hover:shadow-md hover:bg-pink-700 transition-all">
               <AiFillPlusCircle />
               <p className="ms-2 line-clamp-1">카테고리 추가</p>
             </button>
