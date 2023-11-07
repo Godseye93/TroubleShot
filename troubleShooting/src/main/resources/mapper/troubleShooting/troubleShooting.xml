@@ -9,6 +9,7 @@
         <result property="context" column="context"/>
         <result property="dependency" column="dependency"/>
         <result property="solved" column="solved"/>
+        <result property="scope" column="scope"/>
         <result property="category" column="category"/>
         <result property="createTime" column="create_time"/>
         <result property="updateTime" column="update_time"/>
@@ -96,6 +97,7 @@
             ts.title AS title,
             ts.context AS context,
             ts.dependency AS dependency,
+            ts.scope AS scope,
             ts.category AS category,
             ts.solved AS solved,
             ts.create_time AS create_time,
@@ -271,6 +273,7 @@
         <if test="searchParam.keyword != null and searchParam.keyword.trim().length() > 0">
             AND ts.title LIKE CONCAT('%',#{searchParam.keyword},'%')
             AND ts.context LIKE CONCAT('%',#{searchParam.keyword},'%')
+            AND ts.dependency LIKE CONCAT('%',#{searchParam.keyword},'%')
         </if>
         <if test="searchParam.startTime != null">
             AND ts.create_time &gt;=  #{searchParam.startTime}
@@ -302,8 +305,9 @@
                 ts.title AS title,
                 ts.context AS context,
                 ts.category AS category,
-                ts.dependency AS dependency
+                ts.dependency AS dependency,
                 ts.solved AS solved,
+                ts.scope AS scope,
 			    ts.create_time AS create_time,
                 ts.update_time AS update_time,
                 ts.delete_time AS delete_time,
@@ -341,7 +345,12 @@
             AND tsl.user_seq = #{searchParam.loginSeq}
         </if>
         WHERE
-            1 = 1
+        1 = 1
+        AND ts.scope in ( 0
+        <if test="searchParam.loginSeq != null or searchParam.loginSeq != 0">
+            , #{searchParam.loginSeq}
+        </if>
+        )
         <if test="searchParam.writer != null and searchParam.writer.trim().length() > 0">
             AND m.nickname LIKE CONCAT('%',#{searchParam.writer},'%')
         </if>
@@ -352,8 +361,9 @@
             AND ts.solved = #{searchParam.solved}
         </if>
         <if test="searchParam.keyword != null and searchParam.keyword.trim().length() > 0">
-            AND ts.title LIKE CONCAT('%',#{searchParam.keyword},'%')
-            AND ts.context LIKE CONCAT('%',#{searchParam.keyword},'%')
+            AND (ts.title LIKE CONCAT('%',#{searchParam.keyword},'%')
+            OR ts.context LIKE CONCAT('%',#{searchParam.keyword},'%')
+            OR ts.dependency LIKE CONCAT('%',#{searchParam.keyword},'%'))
         </if>
         <if test="searchParam.startTime != null">
             AND ts.create_time &gt;=  #{searchParam.startTime}

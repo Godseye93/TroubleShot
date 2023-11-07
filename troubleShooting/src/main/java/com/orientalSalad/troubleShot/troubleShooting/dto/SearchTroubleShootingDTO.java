@@ -38,6 +38,8 @@ public class SearchTroubleShootingDTO{
 	private List<String> tags;
 	@Schema(description = "작성자 이름")
 	private String writer;
+	@Schema(description = "의존성")
+	private String dependency;
 	@Schema(description = "게시물 pk")
 	private Long troubleSeq;
 	@Schema(description = "작성자 pk")
