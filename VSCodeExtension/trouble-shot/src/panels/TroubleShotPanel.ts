@@ -1,3 +1,4 @@
+import { isOffLineTrouble } from "./../utilities/isOnline";
 import { Disposable, Webview, WebviewPanel, window, Uri, ViewColumn } from "vscode";
 import { getUri } from "../utilities/getUri";
 import { getNonce } from "../utilities/getNonce";
@@ -254,26 +255,59 @@ export class TroubleShotPanel {
             }
             return;
           case "solveTrouble":
-            try {
-              const prevTroubleList = this._globalState.get<Trouble[]>("troubleList");
-              const newTroubleList = prevTroubleList?.map((trouble) => {
-                if (trouble.id === message.articleInfo.troubleId) {
-                  trouble.content += "\n\n";
-                  trouble.content += message.articleInfo.content;
-                  trouble.contextValue = "solved";
+            if (isOffLineTrouble(message.articleInfo.troubleId)) {
+              try {
+                const prevTroubleList = this._globalState.get<Trouble[]>("troubleList");
+                const newTroubleList = prevTroubleList?.map((trouble) => {
+                  if (trouble.id === message.articleInfo.troubleId) {
+                    trouble.content += "\n\n";
+                    trouble.content += message.articleInfo.content;
+                    trouble.contextValue = "solved";
+                  }
+                  return trouble;
+                });
+                await this._globalState.update("troubleList", newTroubleList);
+                vscode.commands.executeCommand("refresh.trouble.list.without.login");
+                vscode.window.showInformationMessage("Trouble solved!");
+                this.dispose();
+              } catch (error) {
+                vscode.window.showErrorMessage("Failed to solve!");
+              }
+            } else {
+              const sessionId = this._globalState.get<string>("sessionId");
+              const res = await fetch(
+                `https://orientalsalad.kro.kr:8102/trouble-shootings/${message.articleInfo.troubleId}/answers`,
+                {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({
+                    loginSeq: sessionId,
+                    type: 2,
+                    troubleShootingAnswer: {
+                      title: message.articleInfo.title,
+                      context: message.articleInfo.content,
+                      writer: {
+                        seq: sessionId,
+                      },
+                      troubleSeq: message.articleInfo.troubleId,
+                    },
+                  }),
                 }
-                return trouble;
-              });
-              await this._globalState.update("troubleList", newTroubleList);
-              vscode.commands.executeCommand("refresh.trouble.list.without.login");
-              vscode.window.showInformationMessage("Trouble solved!");
-              this.dispose();
-            } catch (error) {
-              vscode.window.showErrorMessage("Failed to solve!");
+              );
+              const resJson = await res.json();
+              if (resJson.success) {
+                vscode.commands.executeCommand("refresh.trouble.list");
+                vscode.window.showInformationMessage("Trouble solved!");
+                this.dispose();
+              } else {
+                vscode.window.showErrorMessage("Failed to solve!");
+              }
             }
             return;
           case "onLogin":
-            fetch("https://k9d205.p.ssafy.io:8101/login/login", {
+            fetch("https://orientalsalad.kro.kr:8101/login/login", {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
@@ -317,7 +351,7 @@ export class TroubleShotPanel {
                 tags: [],
               },
             };
-            fetch("https://k9d205.p.ssafy.io:8102/trouble-shootings", {
+            fetch("https://orientalsalad.kro.kr:8102/trouble-shootings", {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",

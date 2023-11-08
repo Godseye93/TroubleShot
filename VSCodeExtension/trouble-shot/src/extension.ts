@@ -10,6 +10,8 @@ import { exec } from "child_process";
 import { parsingErrMsg } from "./utilities/parsingErrMsg";
 import { ErrHistoryProvider, Err } from "./TreeDataProvider/ErrHistoryProvider";
 import { v4 as uuidv4 } from "uuid";
+import { MyTroubleListProviderLogin } from "./TreeDataProvider/MyTroubleListProviderLogin";
+import { isOffLineTrouble } from "./utilities/isOnline";
 
 export const TROUBLE_SHOOTING_TYPE = {
   TROUBLE: 0 as const,
@@ -28,7 +30,7 @@ export async function activate(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand("logout.trouble.shot", async () => {
       const body = { seq: sessionId, type: 2 };
       try {
-        await fetch("https://k9d205.p.ssafy.io:8101/login/logout", {
+        await fetch("https://orientalsalad.kro.kr:8101/login/logout", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -37,6 +39,7 @@ export async function activate(context: vscode.ExtensionContext) {
         });
         vscode.commands.executeCommand("setContext", "isLogin", false);
         context.globalState.update("sessionId", -1);
+        vscode.window.showInformationMessage("Logout success!");
       } catch (error) {
         vscode.window.showErrorMessage("Failed to logout!");
       }
@@ -159,37 +162,75 @@ export async function activate(context: vscode.ExtensionContext) {
   );
 
   context.subscriptions.push(
-    vscode.commands.registerCommand("delete.trouble", (trouble) => {
-      myTroubleListProviderWithoutLogin.deleteTroubleShooting(trouble);
-    })
-  );
-
-  context.subscriptions.push(
     vscode.commands.registerCommand("refresh.trouble.list.without.login", () => {
       myTroubleListProviderWithoutLogin.refresh();
     })
   );
 
   context.subscriptions.push(
-    vscode.commands.registerCommand("view.trouble", (troubleShootId: string) => {
-      const troubleList = context.globalState.get<Trouble[]>("troubleList");
-      const trouble = troubleList?.find((troubleShoot) => troubleShoot.id === troubleShootId);
-      if (!trouble) return;
-      const panel = vscode.window.createWebviewPanel(
-        "viewTroubleShooting",
-        trouble.title,
-        vscode.ViewColumn.One,
-        {
-          enableScripts: true,
-        }
-      );
-      panel.webview.html = getMarkdownView(trouble.content, context.extensionUri);
+    vscode.commands.registerCommand("view.trouble", async (troubleShootId: string) => {
+      if (isOffLineTrouble(troubleShootId)) {
+        const troubleList = context.globalState.get<Trouble[]>("troubleList");
+        const trouble = troubleList?.find((troubleShoot) => troubleShoot.id === troubleShootId);
+        if (!trouble) return;
+        const panel = vscode.window.createWebviewPanel(
+          "viewTroubleShooting",
+          trouble.title,
+          vscode.ViewColumn.One,
+          {
+            enableScripts: true,
+          }
+        );
+        panel.webview.html = getMarkdownView(trouble.content, context.extensionUri);
+      } else {
+        const res = await fetch(
+          `https://orientalsalad.kro.kr:8102/trouble-shootings/${Number(
+            troubleShootId
+          )}?loginSeq=0&type=2`
+        );
+        const { troubleShooting } = await res.json();
+        if (!troubleShooting) return;
+        const panel = vscode.window.createWebviewPanel(
+          "viewTroubleShooting",
+          troubleShooting.title,
+          vscode.ViewColumn.One,
+          {
+            enableScripts: true,
+          }
+        );
+        let solvedContent = "";
+        troubleShooting.answers.forEach((answer: any) => {
+          solvedContent += answer.context;
+        });
+
+        panel.webview.html = getMarkdownView(
+          troubleShooting.context + solvedContent,
+          context.extensionUri
+        );
+      }
     })
   );
 
-  // context.subscriptions.push(
-  //   vscode.commands.registerCommand("refresh.trouble.list", () => {
-  //     myTroubleListProviderWithoutLogin.refresh();
-  //   })
-  // );
+  // trouble list without login tree view
+  const myTroubleListProviderLogin = new MyTroubleListProviderLogin(context.globalState);
+
+  context.subscriptions.push(
+    vscode.window.registerTreeDataProvider("my-trouble-list", myTroubleListProviderLogin)
+  );
+
+  context.subscriptions.push(
+    vscode.commands.registerCommand("refresh.trouble.list", () => {
+      myTroubleListProviderLogin.refresh();
+    })
+  );
+
+  context.subscriptions.push(
+    vscode.commands.registerCommand("delete.trouble", (trouble) => {
+      if (isOffLineTrouble(trouble.id)) {
+        myTroubleListProviderWithoutLogin.deleteTroubleShooting(trouble);
+      } else {
+        myTroubleListProviderLogin.deleteTroubleShooting(trouble);
+      }
+    })
+  );
 }

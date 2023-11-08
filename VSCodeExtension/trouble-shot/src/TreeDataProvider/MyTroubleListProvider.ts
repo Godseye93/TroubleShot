@@ -23,7 +23,7 @@ export class Trouble extends vscode.TreeItem {
 export abstract class MyTroubleListProvider implements vscode.TreeDataProvider<Trouble> {
   constructor(readonly globalState: vscode.Memento) {}
 
-  private _onDidChangeTreeData: vscode.EventEmitter<Trouble | undefined | null | void> =
+  protected _onDidChangeTreeData: vscode.EventEmitter<Trouble | undefined | null | void> =
     new vscode.EventEmitter<Trouble | undefined | null | void>();
   readonly onDidChangeTreeData: vscode.Event<Trouble | undefined | null | void> =
     this._onDidChangeTreeData.event;

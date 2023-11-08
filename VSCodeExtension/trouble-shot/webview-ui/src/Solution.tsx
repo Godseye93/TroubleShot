@@ -67,10 +67,6 @@ const Solution = ({ sessionId, troubleId }: Props) => {
   }
 
   function onSolveTrouble() {
-    const isLogin = sessionId !== -1;
-    if (isLogin) {
-      return;
-    }
     vscode.postMessage({
       command: "solveTrouble",
       articleInfo: {
