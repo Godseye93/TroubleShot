@@ -26,9 +26,9 @@ public class TroubleShootingAnswerDTO extends BaseDTO {
 	private String context;
 	@Schema(description = "작성자")
 	private SimpleMemberDTO writer;
-	@Schema(description = "좋아요 수")
+	@Schema(description = "좋아요 수",hidden = true)
 	private int likeCount;
-	@Schema(description = "덧글 수")
+	@Schema(description = "덧글 수",hidden = true)
 	private int replyCount;
 	@Schema(description = "게시물 pk")
 	private long troubleSeq;
