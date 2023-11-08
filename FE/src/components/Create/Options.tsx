@@ -41,7 +41,7 @@ export default function Options({ categorys, options, setOptions, setShowOptions
             <p>{!options.category ? "선택안함" : options.category}</p>
             <IoIosArrowDown />
             {isdrop && (
-              <div className={`absolute  bg-white w-[20rem] shadow-md rounded-lg border-2 -bottom-[8rem] z-50 left-0`}>
+              <div className="absolute  bg-white w-[20rem] shadow-md rounded-lg border-2 -bottom-[8rem] z-50 left-0">
                 <div
                   className="hvc hover:cursor-pointer h-7 flex items-center px-2 rounded-t-lg"
                   onClick={() => {
