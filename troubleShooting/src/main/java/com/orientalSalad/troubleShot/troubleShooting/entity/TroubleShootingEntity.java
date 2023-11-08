@@ -23,6 +23,7 @@ public class TroubleShootingEntity extends BaseEntity {
 	private String context;
 	@Column(columnDefinition = "TEXT")
 	private String category;
+	@Column(columnDefinition = "TEXT")
 	private String dependency;
 	private long writerSeq;
 	private boolean solved;
