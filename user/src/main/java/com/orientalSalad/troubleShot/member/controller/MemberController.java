@@ -48,6 +48,14 @@ public class MemberController {
 			throw new Exception("올바르지 않은 필드 값입니다.");
 		}
 
+		if(memberDTO.getLocale() == null || memberDTO.getLocale().equals("")){
+			memberDTO.setLocale("KO_KR");
+		}
+
+		if(memberDTO.getProfileImg() == null || memberDTO.getProfileImg().equals("")){
+			memberDTO.setProfileImg("https://k9d205-troubleshot.s3.ap-northeast-2.amazonaws.com/trouble/DefaultImg.png");
+		}
+
 		Boolean success = memberService.insertMember(memberDTO);
 		
 		//회원가입이 실패하면(이메일 중복)
