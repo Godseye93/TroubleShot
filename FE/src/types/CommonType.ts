@@ -45,3 +45,10 @@ export interface ResLogout {
   success: boolean;
   message: string;
 }
+
+export type LoginState = {
+  isLogged: boolean;
+  toggleLoginStatus: (userData?: ResLogin) => void;
+  // login: (params: ResLogin) => void;
+  // logout: () => void;
+};

@@ -18,7 +18,7 @@ export default function Page() {
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
 
-  const { login } = useLoginStore();
+  const { toggleLoginStatus } = useLoginStore();
 
   const [blurValue, setBlurValue] = useState(20); // 블러
 
@@ -43,7 +43,7 @@ export default function Page() {
       const res = await loginSubmit(params);
       if (res.success) {
         // 성공 처리
-        login(res);
+        toggleLoginStatus(res);
         // zustand에 저장
         // 토스트
         toast.success("로그인 성공 !");
