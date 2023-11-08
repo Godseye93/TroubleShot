@@ -16,6 +16,10 @@ public class CorsConfig {
 		config.addAllowedOrigin("http://127.0.0.1:5500");
 		config.addAllowedOrigin("https://localhost:5500");
 		config.addAllowedOrigin("https://127.0.0.1:5500");
+
+		config.addAllowedOrigin("http://127.0.0.1:3000");
+		config.addAllowedOrigin("http://127.0.0.1:3000");
+
 		config.addAllowedHeader("*");
 		config.addAllowedMethod("*");
 
