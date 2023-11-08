@@ -1,30 +1,25 @@
+"use client";
+import { getTrouble } from "@/api/trouble";
 import BoardItem from "@/components/BoardItem";
+import { useQuery } from "@tanstack/react-query";
 
-interface User {
-  username: string;
-  userImg: string;
-}
-interface Content {
-  seq: number;
-  title: string;
-  tags: string[];
-  likes: number;
-  views: number;
-  comments: number;
-  content: string;
-  img?: string;
-  date: string;
-  user: User;
-}
-interface Props {
-  contents: Content[];
-}
-export default function BoardList({ contents }: Props) {
+export default function BoardList() {
+  const { data, error } = useQuery({
+    queryKey: ["boards"],
+    queryFn: async () => {
+      const data = await getTrouble();
+      return data;
+    },
+  });
+
   return (
-    <div className="bg-white rounded-lg shadow-md px-2">
-      {contents.map((content, idx) => (
-        <BoardItem key={idx} board={content} idx={idx} last={contents.length - 1} />
-      ))}
+    <div className="mt-2">
+      <div className="bg-white rounded-lg shadow-md px-2">
+        {data &&
+          data.troubleShootingList.map((content, idx) => (
+            <BoardItem key={idx} board={content} idx={idx} last={data.troubleShootingList.length - 1} />
+          ))}
+      </div>
     </div>
   );
 }

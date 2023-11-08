@@ -14,9 +14,9 @@ export default function Layout({ children }: Props) {
   return (
     <>
       <div className="h-12"></div>
-      <div className="px-2 flex justify-between">
+      <div className="px-2 flex justify-between w-full">
         <UseSidebar />
-        {children}
+        <div className="mt-4 mx-3 flex-1">{children}</div>
         <Rsidebar />
       </div>
     </>

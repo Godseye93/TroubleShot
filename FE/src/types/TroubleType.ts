@@ -3,3 +3,79 @@ export interface CreateOptions {
   scope: 0 | 1;
   tags: string | null[];
 }
+
+export interface SearchParams {
+  keyword?: string;
+  pageSize?: number;
+  pageNo?: number;
+  category?: string;
+  solved?: boolean;
+  tags?: string[];
+  writer?: string;
+  dependency?: string;
+  troubleSeq?: number;
+  writerSeq?: number;
+  loginSeq?: number;
+  startTime?: string;
+  endTime?: string;
+  favorite?: boolean;
+  order?: number;
+}
+export interface Writer {
+  seq: number;
+  email: string;
+  profileImg: string;
+  nickname: string;
+}
+export interface TroubleShootingBoard {
+  seq: number;
+  createTime: string;
+  updateTime: string;
+  title: string;
+  category: string;
+  context: string;
+  dependency: null | string;
+  scope: number;
+  writer: Writer;
+  solved: boolean;
+  viewCount: number;
+  likeCount: number;
+  replyCount: number;
+  answerCount: number;
+  tags: string[];
+  replies: null | Reply[];
+  answers: null;
+  loginLike: false;
+}
+
+export interface GetTroubleList {
+  success: boolean;
+  message: string;
+  troubleShootingList: TroubleShootingBoard[];
+  totalCount: number;
+}
+export interface Reply {
+  seq: number;
+  createTime: string;
+  updateTime: string;
+  context: string;
+  writerSeq: number;
+  writer: Writer;
+  likeCount: number;
+  troubleSeq: number;
+  loginLike: boolean;
+}
+export interface Answer {
+  seq: 1;
+  createTime: string;
+  updateTime: string;
+  deleteTime: null;
+  title: string;
+  context: string;
+  writer: Writer;
+  likeCount: number;
+  replyCount: number;
+  troubleSeq: number;
+  replies: Reply[];
+  loginLike: boolean;
+}
