@@ -42,7 +42,7 @@
     <resultMap id="simpleMember" type="com.orientalSalad.troubleShot.member.dto.SimpleMemberDTO">
         <id property="seq" column="writer_seq" />
         <result property="email" column="writer_email" />
-        <result property="profileImg" column="writer_profileImg" />
+        <result property="profileImg" column="writer_profile_img" />
         <result property="nickname" column="writer_nickname" />
     </resultMap>
 
