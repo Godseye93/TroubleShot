@@ -3,11 +3,11 @@ import MDEditor, { commands } from "@uiw/react-md-editor";
 import React, { SetStateAction, useState } from "react";
 import { BsImage } from "react-icons/bs";
 import FileUploader from "./FileUploader";
-interface props {
+interface Props {
   markdown: string;
   setMarkdown: React.Dispatch<SetStateAction<string>>;
 }
-export default function UiwEditor({ markdown, setMarkdown }: props) {
+export default function UiwEditor({ markdown, setMarkdown }: Props) {
   return (
     <div className="shadow-md">
       <MDEditor

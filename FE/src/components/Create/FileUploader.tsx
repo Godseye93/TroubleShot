@@ -143,6 +143,7 @@ export default function FileUploader({ handle }: { handle: Handle }) {
                     handle.close();
                     setImgFiles([]);
                     setHowUpload(0);
+                    // eslint-disable-next-line
                     if (fileRef.current) fileRef.current.value = "";
                     setUrlImg("");
                     return;
