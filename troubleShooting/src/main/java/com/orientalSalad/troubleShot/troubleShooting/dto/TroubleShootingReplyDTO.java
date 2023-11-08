@@ -22,8 +22,6 @@ import lombok.experimental.SuperBuilder;
 public class TroubleShootingReplyDTO extends BaseDTO {
 	@Schema(description = "내용")
 	private String context;
-	@Schema(description = "작성자 pk")
-	private long writerSeq;
 	@Schema(description = "작성자")
 	SimpleMemberDTO writer;
 	@Schema(description = "좋아요 수",hidden = true)

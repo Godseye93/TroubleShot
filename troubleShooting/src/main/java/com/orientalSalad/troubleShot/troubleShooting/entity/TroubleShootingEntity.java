@@ -26,7 +26,10 @@ public class TroubleShootingEntity extends BaseEntity {
 	@Column(columnDefinition = "TEXT")
 	private String dependency;
 	private long writerSeq;
+	@Column(columnDefinition = "boolean DEFAULT false")
 	private boolean solved;
+	@Column(columnDefinition = "boolean DEFAULT false")
+	private boolean taged;
 	@Column(columnDefinition = "int4 DEFAULT '0'")
 	private int scope;
 	@Column(columnDefinition = "int4 DEFAULT '0'")
@@ -57,10 +60,16 @@ public class TroubleShootingEntity extends BaseEntity {
 		this.context = troubleShootingDTO.getContext();
 		this.solved = troubleShootingDTO.isSolved();
 		this.dependency = troubleShootingDTO.getDependency();
-		this.scope =scope;
+		this.scope =troubleShootingDTO.getScope();
 	}
 	public void updateViews(){
 		this.viewCount++;
+	}
+	public void updateSolved(){
+		this.solved = true;
+	}
+	public void updateTaged(){
+		this.taged =true;
 	}
 	public void increaseLike(){
 		this.likeCount++;

@@ -22,6 +22,8 @@ public class TroubleShootingAnswerEntity extends BaseEntity {
 	@Column(columnDefinition = "TEXT")
 	private String context;
 	private long writerSeq;
+	@Column(columnDefinition = "boolean DEFAULT false")
+	private boolean selected;
 	@Column(columnDefinition = "int4 DEFAULT '0'")
 	private int likeCount;
 	@Column(columnDefinition = "int4 DEFAULT '0'")
@@ -45,6 +47,9 @@ public class TroubleShootingAnswerEntity extends BaseEntity {
 	public void update(TroubleShootingAnswerDTO troubleShootingAnswerDTO){
 		this.title = troubleShootingAnswerDTO.getTitle();
 		this.context = troubleShootingAnswerDTO.getContext();
+	}
+	public void select(){
+		this.selected = true;
 	}
 	public void increaseLike(){
 		this.likeCount++;

@@ -91,7 +91,7 @@ public class TroubleShootingService {
 	public boolean insertTroubleShooingReply(RequestTroubleShootingReplyDTO requestTroubleShootingReplyDTO) throws
 		Exception {
 		//작성자와 로그인 유저 확인
-		long writerSeq = requestTroubleShootingReplyDTO.getTroubleShootingReply().getWriterSeq();
+		long writerSeq = requestTroubleShootingReplyDTO.getTroubleShootingReply().getWriter().getSeq();
 
 		if(requestTroubleShootingReplyDTO.getLoginSeq() != writerSeq){
 			throw new Exception("작성자와 로그인유저가 다릅니다.");
@@ -106,7 +106,7 @@ public class TroubleShootingService {
 	}
 	public boolean updateTroubleShooingReply(RequestTroubleShootingReplyDTO requestTroubleShootingReplyDTO) throws Exception {
 		//작성자와 로그인 유저 확인
-		long writerSeq = requestTroubleShootingReplyDTO.getTroubleShootingReply().getWriterSeq();
+		long writerSeq = requestTroubleShootingReplyDTO.getTroubleShootingReply().getWriter().getSeq();
 		if(requestTroubleShootingReplyDTO.getLoginSeq() != writerSeq){
 			throw new Exception("작성자와 로그인유저가 다릅니다.");
 		}
@@ -273,7 +273,7 @@ public class TroubleShootingService {
 		else{
 			favoriteRepository.delete(favoriteEntity);
 		}
-
 		return true;
 	}
+
 }

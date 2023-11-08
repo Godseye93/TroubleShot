@@ -24,6 +24,8 @@ import com.orientalSalad.troubleShot.troubleShooting.dto.ResponseTroubleShooting
 import com.orientalSalad.troubleShot.troubleShooting.dto.SearchTroubleShootingDTO;
 import com.orientalSalad.troubleShot.troubleShooting.dto.TroubleShootingDTO;
 import com.orientalSalad.troubleShot.troubleShooting.dto.TroubleShootingReplyDTO;
+import com.orientalSalad.troubleShot.troubleShooting.entity.TroubleShootingAnswerEntity;
+import com.orientalSalad.troubleShot.troubleShooting.service.TroubleShootingAnswerService;
 import com.orientalSalad.troubleShot.troubleShooting.service.TroubleShootingService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -40,6 +42,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class TroubleShootingController {
 	private final TroubleShootingService troubleShootingService;
+	private final TroubleShootingAnswerService troubleShootingAnswerService;
 	private final Authentication authentication;
 
 	@Operation(summary = "트러블 슈팅 문서 등록",description = "입력 DTO :RequestTroubleShootingDTO")
@@ -238,6 +241,28 @@ public class TroubleShootingController {
 			.build();
 
 		log.info("====== 트러블 슈팅 문서 덧글 삭제 끝 =====");
+		return new ResponseEntity<ResultDTO>(resultDTO, HttpStatus.OK);
+	}
+	@Operation(summary = "트러블 슈팅 솔루션 채택")
+	@PutMapping("/{troubleSeq}/answer/{answerSeq}")
+	public ResponseEntity<?> updateReply(
+		@PathVariable(name = "troubleSeq") long troubleSeq,
+		@PathVariable(name = "answerSeq") long answerSeq,
+		@RequestBody RequestDTO requestDTO,
+		HttpServletRequest request) throws Exception {
+		log.info("====== 트러블 슈팅 솔루션 채택 시작 =====");
+
+		//로그인 확인
+		authentication.checkLogin(request,requestDTO);
+
+		troubleShootingAnswerService.selectAnswerForSolve(answerSeq,troubleSeq,requestDTO);
+
+		ResultDTO resultDTO = ResultDTO.builder()
+			.success(true)
+			.message("솔루션 채택을 성공했습니다.")
+			.build();
+
+		log.info("====== 트러블 슈팅 문서 솔루션 채택 끝 =====");
 		return new ResponseEntity<ResultDTO>(resultDTO, HttpStatus.OK);
 	}
 }

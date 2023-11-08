@@ -17,7 +17,7 @@ public class TroubleShootingReplyConverter implements ObjectConverter<TroubleSho
 		return TroubleShootingReplyEntity.builder()
 			.context(troubleShootingReplyDTO.getContext())
 			.troubleSeq(troubleShootingReplyDTO.getTroubleSeq())
-			.writerSeq(troubleShootingReplyDTO.getWriterSeq())
+			.writerSeq(troubleShootingReplyDTO.getWriter().getSeq())
 			.likeCount(troubleShootingReplyDTO.getLikeCount())
 			.build();
 	}
@@ -27,7 +27,9 @@ public class TroubleShootingReplyConverter implements ObjectConverter<TroubleSho
 		return TroubleShootingReplyDTO.builder()
 			.context(troubleShootingReplyEntity.getContext())
 			.troubleSeq(troubleShootingReplyEntity.getTroubleSeq())
-			.writerSeq(troubleShootingReplyEntity.getWriterSeq())
+			.writer(SimpleMemberDTO.builder()
+				.seq(troubleShootingReplyEntity.getWriterSeq())
+				.build())
 			.likeCount(troubleShootingReplyEntity.getLikeCount())
 			.createTime(troubleShootingReplyEntity.getCreateTime())
 			.updateTime(troubleShootingReplyEntity.getUpdateTime())

@@ -2,6 +2,7 @@ package com.orientalSalad.troubleShot.troubleShooting.service;
 
 import org.springframework.stereotype.Service;
 
+import com.orientalSalad.troubleShot.global.dto.RequestDTO;
 import com.orientalSalad.troubleShot.global.utill.ObjectConverter;
 import com.orientalSalad.troubleShot.troubleShooting.dto.RequestTroubleShootingAnswerDTO;
 import com.orientalSalad.troubleShot.troubleShooting.dto.RequestTroubleShootingAnswerReplyDTO;
@@ -11,12 +12,12 @@ import com.orientalSalad.troubleShot.troubleShooting.entity.TroubleShootingAnswe
 import com.orientalSalad.troubleShot.troubleShooting.entity.TroubleShootingAnswerLikeEntity;
 import com.orientalSalad.troubleShot.troubleShooting.entity.TroubleShootingAnswerReplyEntity;
 import com.orientalSalad.troubleShot.troubleShooting.entity.TroubleShootingAnswerReplyLikeEntity;
-import com.orientalSalad.troubleShot.troubleShooting.entity.TroubleShootingLikeEntity;
-import com.orientalSalad.troubleShot.troubleShooting.mapper.TroubleShootingMapper;
+import com.orientalSalad.troubleShot.troubleShooting.entity.TroubleShootingEntity;
 import com.orientalSalad.troubleShot.troubleShooting.repository.TroubleShootingAnswerLikeRepository;
 import com.orientalSalad.troubleShot.troubleShooting.repository.TroubleShootingAnswerReplyLikeRepository;
 import com.orientalSalad.troubleShot.troubleShooting.repository.TroubleShootingAnswerReplyRepository;
 import com.orientalSalad.troubleShot.troubleShooting.repository.TroubleShootingAnswerRepository;
+import com.orientalSalad.troubleShot.troubleShooting.repository.TroubleShootingRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Slf4j
 public class TroubleShootingAnswerService {
-	private final TroubleShootingMapper troubleShootingMapper;
+	private final TroubleShootingRepository troubleShootingRepository;
 	private final TroubleShootingAnswerRepository answerRepository;
 	private final TroubleShootingAnswerReplyRepository answerReplyRepository;
 	private final TroubleShootingAnswerLikeRepository answerLikeRepository;
@@ -157,6 +158,25 @@ public class TroubleShootingAnswerService {
 			answerReplyEntity.decreaseLike();
 			answerReplyRepository.save(answerReplyEntity);
 		}
+		return true;
+	}
+	public boolean selectAnswerForSolve(Long answerSeq, Long troubleSeq, RequestDTO requestDTO) throws Exception{
+		TroubleShootingEntity troubleShootingEntity = troubleShootingRepository.findBySeq(troubleSeq);
+
+		if(troubleShootingEntity == null){
+			throw new Exception("없는 글 입니다.");
+		}else if(troubleShootingEntity.getWriterSeq() != requestDTO.getLoginSeq()){
+			throw new Exception("작성자가 아닙니다.");
+		}
+
+		TroubleShootingAnswerEntity answerEntity = answerRepository.findBySeq(answerSeq);
+
+		answerEntity.select();
+		troubleShootingEntity.updateSolved();
+
+		answerRepository.save(answerEntity);
+		troubleShootingRepository.save(troubleShootingEntity);
+
 		return true;
 	}
 }
