@@ -5,6 +5,7 @@ import Footer from "../components/Footer";
 import { ToastContainer } from "react-toastify";
 
 import "react-toastify/dist/ReactToastify.css";
+import ReactQueryProvider from "./ReactQueryProvider";
 
 export const metadata: Metadata = {
   title: "Trouble Shot",
@@ -17,7 +18,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <ToastContainer />
         <Header />
-        {children}
+        <ReactQueryProvider>{children}</ReactQueryProvider>
         <Footer />
       </body>
     </html>
