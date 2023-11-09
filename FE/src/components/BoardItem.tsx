@@ -1,14 +1,18 @@
-import { BsBookmarkStar } from "react-icons/bs";
+"use client";
+import { BsBookmarkStar, BsBookmarkStarFill } from "react-icons/bs";
 import IconBox from "./IconBox";
 import { TroubleShootingBoard } from "@/types/TroubleType";
 import { removeHtmlAndMarkdownTags } from "@/utils/removeHtmlAndMarkdownTags";
 import { getImageLink } from "@/utils/getImageLink";
 import Tagbox from "./TagBox";
 import { getTimeAgo } from "@/utils/getTimeAgo";
+import { useLoginStore } from "@/stores/useLoginStore";
 export default function BoardItem({ board, last, idx }: { board: TroubleShootingBoard; last: number; idx: number }) {
   const imgList = getImageLink(board.context);
+  const { user } = useLoginStore();
   return (
     <div className={`${idx !== last && "border-b-2"} py-3 mt-2 w-full flex justify-center`}>
+      {board.loginLike.toString()}
       {/* 상단바 */}
       <div className="flex-1">
         <div className="flex justify-between items-center">
@@ -18,9 +22,15 @@ export default function BoardItem({ board, last, idx }: { board: TroubleShooting
             <p className="text-xs">{getTimeAgo(board.createTime)}</p>
           </div>
           <div className="text-center me-2">
-            <button className="text-2xl hover:text-main transition-all hover:shadow-md duration-200">
-              <BsBookmarkStar />
-            </button>
+            {!user ? (
+              <button className="text-2xl hover:text-main transition-all hover:shadow-md duration-200">
+                <BsBookmarkStar />
+              </button>
+            ) : (
+              <button className="text-2xl text-main transition-all hover:shadow-md duration-200 hover:text-sub">
+                <BsBookmarkStarFill />
+              </button>
+            )}
             {board.solved ? <p className="text-blue-500">해결 완료</p> : <p className="text-red-500">미해결</p>}
           </div>
         </div>
@@ -40,7 +50,14 @@ export default function BoardItem({ board, last, idx }: { board: TroubleShooting
         </div>
         {board.tags.length > 0 && <Tagbox tags={board.tags} />}
         <div className="mt-3 text-lg">
-          <IconBox m={"me-1"} comments={board.replyCount} likes={board.likeCount} views={board.viewCount} />
+          <IconBox
+            m={"me-1"}
+            comments={board.replyCount}
+            likes={board.likeCount}
+            views={board.viewCount}
+            isLike={board.loginLike}
+            troubleSeq={board.seq}
+          />
         </div>
       </div>
     </div>

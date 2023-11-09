@@ -11,3 +11,18 @@ export const postTrouble = async (req: RequestTroubleShooting): Promise<DefaultR
   const { data } = await api.post("trouble-shootings", req);
   return data;
 };
+export const postTroubleLike = async (
+  userSeq: number,
+  troubleSeq: number,
+  loginSeq?: number
+): Promise<DefaultRespense> => {
+  let body: {
+    type: 0;
+    loginSeq?: number;
+  } = {
+    type: 0,
+  };
+  if (loginSeq) body = { ...body, loginSeq };
+  const { data } = await api.post(`/users/${userSeq}/trouble-shootings/${troubleSeq}/like`, body);
+  return data;
+};

@@ -11,7 +11,7 @@ export default async function HydratedPosts() {
     troubleShooting: {},
   };
   await queryClient.prefetchQuery({
-    queryKey: ["bookmark"],
+    queryKey: ["boards"],
     queryFn: async () => {
       const data = await getTrouble();
       return data;

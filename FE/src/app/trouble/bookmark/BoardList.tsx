@@ -1,13 +1,23 @@
 "use client";
 import { getTrouble } from "@/api/trouble";
+import getQueryClient from "@/app/getQueryClient";
 import BoardItem from "@/components/BoardItem";
+import { useLoginStore } from "@/stores/useLoginStore";
+import { SearchParams } from "@/types/TroubleType";
 import { useQuery } from "@tanstack/react-query";
 
 export default function BoardList() {
+  const { user } = useLoginStore();
+  const queryClient = getQueryClient();
+  const options: SearchParams = {
+    loginSeq: user?.member.seq,
+    favorite: true,
+    writerSeq: user?.member.seq,
+  };
   const { data, error } = useQuery({
     queryKey: ["boards"],
     queryFn: async () => {
-      const data = await getTrouble();
+      const data = await getTrouble(options);
       return data;
     },
   });

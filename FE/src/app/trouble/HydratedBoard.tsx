@@ -15,8 +15,8 @@ export default async function HydratedPosts() {
   const dehydratedState = dehydrate(queryClient);
 
   return (
-    <HydrationBoundary state={dehydratedState}>
-      <BoardList />
-    </HydrationBoundary>
+    // <HydrationBoundary state={dehydratedState}>
+    <BoardList />
+    // </HydrationBoundary>
   );
 }
