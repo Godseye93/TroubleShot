@@ -297,7 +297,7 @@
             AND ts.create_time &lt;=  #{searchParam.endTime}
         </if>
         <if test="searchParam.writerSeq != null">
-            AND ts.writer_seq &lt;=  #{searchParam.writerSeq}
+            AND ts.writer_seq =  #{searchParam.writerSeq}
         </if>
     </select>
     <select id="selectTroubleShootingList"
@@ -398,7 +398,7 @@
             AND ts.create_time &lt;=  #{searchParam.endTime}
         </if>
         <if test="searchParam.writerSeq != null">
-            AND ts.writer_seq &lt;=  #{searchParam.writerSeq}
+            AND ts.writer_seq =  #{searchParam.writerSeq}
         </if>
         GROUP BY
             ts.seq,
