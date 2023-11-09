@@ -9,24 +9,25 @@ import { emailCert, emailcodeCheck, signUpSubmit } from "@/api/account";
 import { EmailCode } from "@/types/CommonType";
 
 import { EmailcodeSuccess, CodeCheckSuccess, CodeCheckFail, SubmitFail, SignUpSuccess } from "../toast/notify";
+import { toast } from "react-toastify";
 
 export default function page() {
   const [email, setEmail] = useState<string>(""); // 이메일
   const [nickname, setNickname] = useState<string>(""); // 닉네임
   const [password, setPassword] = useState<string>(""); // 비밀번호
+  const [pswVld, setPswVld] = useState<boolean>(); // 비밀번호 유효성 확인
+
   const [checkPassword, setCheckPassword] = useState<string>(""); // 비밀번호 확인
+  const [isMatch, setIsMatch] = useState<boolean | null>(null); // 비밀번호 - 비밀번호 확인
 
   const [isEmailRequest, setIsEmailRequest] = useState<boolean | null>(null); // 이메일 인증 요청 성공 여부
   const [isCodeCorrect, setisCodeCorrect] = useState<boolean | null>(null); // 인증번호 확인 요청 성공 여부
-  const [checkNickname, setCheckNickname] = useState<boolean | null>(null);
-  const [isMatch, setIsMatch] = useState<boolean | null>(null); // 비밀번호 확인
+  const [checkNickname, setCheckNickname] = useState<boolean | null>(null); // 닉네임 유효성 확인
 
   const codeRef = useRef<HTMLInputElement>(null);
 
-  // 이메일 형식 처리에 활용하기
+  // 이메일 입력
   const handleEmailInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // const isEmailValid = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
-
     setEmail(e.target.value);
   };
 
@@ -35,15 +36,24 @@ export default function page() {
     const nicknameValue = e.target.value;
     if (nicknameValue.length >= 2 && nicknameValue.length <= 10) {
       setCheckNickname(true);
+      setNickname(nicknameValue);
       return;
     }
     setCheckNickname(false);
   };
 
+  // 비밀번호 유효성
   const handlePasswordInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const password = e.target.value;
+    if (password.length < 6) {
+      setPswVld(false);
+      return;
+    }
+    setPswVld(true);
     setPassword(e.target.value);
   };
 
+  // 비밀번호 확인
   const handleCheckPasswordInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCheckPassword(e.target.value);
     setIsMatch(e.target.value === password);
@@ -51,17 +61,22 @@ export default function page() {
 
   // 인증번호 이메일로 요청
   const handleEmailCert = async () => {
-    try {
-      const res = await emailCert(email);
-      if (res?.success) {
-        EmailcodeSuccess();
-        console.log("이메일 인증 요청 성공"); // 토스트로 알림 띄우기
-        // 요청에 성공했으면 코드를 입력할 칸과 코드 확인 버튼을 보여줘야 한다.
-        setIsEmailRequest(true);
+    const isEmailValid = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email); // boolean
+    if (isEmailValid) {
+      try {
+        const res = await emailCert(email);
+        if (res?.success) {
+          EmailcodeSuccess();
+          console.log("이메일 인증 요청 성공"); // 토스트로 알림 띄우기
+          // 요청에 성공했으면 코드를 입력할 칸과 코드 확인 버튼을 보여줘야 한다.
+          setIsEmailRequest(true);
+        }
+      } catch (err) {
+        console.log("Error:", err);
+        setIsEmailRequest(false);
       }
-    } catch (err) {
-      console.log("Error:", err);
-      setIsEmailRequest(false);
+    } else {
+      toast.error("올바른 이메일 형식이 아닙니다.");
     }
   };
 
@@ -86,20 +101,9 @@ export default function page() {
 
   // 회원가입 요청
   const handleSubmit = async () => {
-    if (!isEmailRequest || !isCodeCorrect || !isMatch) {
-      if (!isEmailRequest) {
-        SubmitFail();
-        return;
-      }
-      if (!isCodeCorrect) {
-        SubmitFail();
-        return;
-      }
-      if (!isMatch) {
-        setIsMatch(false);
-        SubmitFail();
-        return;
-      }
+    if (!isEmailRequest || !isCodeCorrect || !isMatch || !checkNickname || !pswVld) {
+      SubmitFail();
+      return;
     } else {
       // 제출 로직 구현
       try {
@@ -182,12 +186,13 @@ export default function page() {
               className="border block w-full p-2 rounded me-2"
               id="TSnickname"
               onChange={handleNicknameInputChange}
-              placeholder="최대 10자까지 가능합니다."
+              placeholder="최소 2자 | 최대 10자까지 가능합니다."
             />
           </div>
 
           <div className="my-4 text-left">
-            <label className="text-gray-900">비밀번호</label>
+            <label className="text-gray-900 me-2">비밀번호</label>
+            {pswVld === false && <label className="text-sub">비밀번호가 너무 짧습니다.</label>}
             <input
               type="password"
               className="border block w-full p-2 rounded me-2"
