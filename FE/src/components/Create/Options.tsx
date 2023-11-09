@@ -5,14 +5,16 @@ import { IoIosArrowDown } from "react-icons/io";
 import { CreateOptions } from "@/types/TroubleType";
 import { BsSearch } from "react-icons/bs";
 import { AiOutlineClose } from "react-icons/ai";
+import { Id } from "react-toastify";
 interface Props {
   categorys: string[];
   options: CreateOptions;
   setOptions: React.Dispatch<SetStateAction<CreateOptions>>;
   setShowOptions: React.Dispatch<SetStateAction<boolean>>;
+  onSubmit: () => Promise<Id | undefined>;
 }
 
-export default function Options({ categorys, options, setOptions, setShowOptions }: Props) {
+export default function Options({ categorys, options, setOptions, setShowOptions, onSubmit }: Props) {
   const [isdrop, setIsdrop] = useState(false);
   const [tags, setTags] = useState<string[]>([]);
   const [inputText, setInputText] = useState("");
@@ -28,6 +30,18 @@ export default function Options({ categorys, options, setOptions, setShowOptions
       setIsClicked(true);
     }
   }, [isClicked]);
+
+  const setSolved = (value: boolean) => {
+    setOptions((prev) => {
+      return { ...prev, solved: value };
+    });
+  };
+  const setScope = (value: 0 | 1) => {
+    setOptions((prev) => {
+      return { ...prev, scope: value };
+    });
+  };
+
   return (
     <div className="w-[30rem] shadow-md bg-white p-5 rounded-lg border-2">
       <div className="flex items-center justify-between">
@@ -77,18 +91,49 @@ export default function Options({ categorys, options, setOptions, setShowOptions
       </div>
       <div className="flex items-center justify-between mt-5">
         <p className="font-semibold text-lg">공개범위</p>
-        <div className="flex items-center justify-between w-[20rem]">
-          <label htmlFor="open" className="flex-1 items-center flex">
-            공개
-            <input className="ms-2" type="radio" name="scope" id="open" value={1} defaultChecked />
-          </label>
-          <label htmlFor="close" className="flex-1 items-center flex">
-            비공개
-            <input className="ms-2" type="radio" name="scope" id="close" value={0} />
-          </label>
-        </div>
+        <form>
+          <div className="flex items-center justify-between w-[20rem]">
+            <label htmlFor="open" className="flex-1 items-center flex">
+              공개
+              <input className="ms-2" type="radio" name="scope" id="open" value={1} onChange={() => setScope(1)} />
+            </label>
+            <label htmlFor="close" className="flex-1 items-center flex">
+              비공개
+              <input className="ms-2" type="radio" name="scope" id="close" value={0} onChange={() => setScope(0)} />
+            </label>
+          </div>
+        </form>
       </div>
 
+      <div className="flex items-center justify-between mt-5">
+        <p className="font-semibold text-lg">해결 여부</p>
+        <form>
+          <div className="flex items-center justify-between w-[20rem]">
+            <label htmlFor="open" className="flex-1 items-center flex">
+              해결
+              <input
+                className="ms-2"
+                type="radio"
+                name="solved"
+                id="solved"
+                value={1}
+                onChange={() => setSolved(true)}
+              />
+            </label>
+            <label htmlFor="close" className="flex-1 items-center flex">
+              미해결
+              <input
+                className="ms-2"
+                type="radio"
+                name="solved"
+                id="notSolved"
+                value={0}
+                onChange={() => setSolved(false)}
+              />
+            </label>
+          </div>
+        </form>
+      </div>
       <div className="flex items-center justify-between mt-5">
         <p className="font-semibold text-lg">태그 추가</p>
 
@@ -144,7 +189,10 @@ export default function Options({ categorys, options, setOptions, setShowOptions
         >
           닫기
         </button>
-        <button className="rounded-lg bg-main shadow-md py-1 px-2 hover:shadow-sm hover:bg-amber-500 transition-all duration-200">
+        <button
+          onClick={onSubmit}
+          className="rounded-lg bg-main shadow-md py-1 px-2 hover:shadow-sm hover:bg-amber-500 transition-all duration-200"
+        >
           업로드
         </button>
       </div>

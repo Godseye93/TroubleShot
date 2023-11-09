@@ -1,7 +1,30 @@
+export interface DefaultRespense {
+  success: boolean;
+  message: string;
+}
+
 export interface CreateOptions {
   category: string;
+  scope: 0 | 1 | null;
+  tags: string[];
+  solved: boolean | null;
+}
+export interface PostTroubleShooting {
+  title: string;
+  category: string;
+  context: string;
+  dependency: string;
   scope: 0 | 1;
-  tags: string | null[];
+  writer: {
+    seq: number;
+  };
+  solved: boolean;
+  tags: string[];
+}
+export interface RequestTroubleShooting {
+  loginSeq: number;
+  type: 0;
+  troubleShooting: PostTroubleShooting;
 }
 
 export interface SearchParams {
