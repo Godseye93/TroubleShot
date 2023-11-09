@@ -1,4 +1,4 @@
-package com.orientalSalad.troubleShot.forms;
+package com.orientalSalad.troubleShot.loginVersion;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -21,7 +21,7 @@ public class Login {
     private JPanel loginMain;
     private JButton loginButton;
     private JLabel toJoinLinkText;
-    private TroubleShotMain troubleShotMain;
+    private LoginVersionMain loginVersionMain;
 
     public Login() {
         panel = new JPanel();
@@ -65,9 +65,9 @@ public class Login {
                     loginButton.setEnabled(false);
 
                     // 로그인 화면 끄고, 트러블 작성 페이지 보여주기
-                    troubleShotMain = TroubleShotMain.getInstance();
-                    troubleShotMain.showTrouble();
-                    troubleShotMain.toLogoutLabel();
+                    loginVersionMain = LoginVersionMain.getInstance();
+                    loginVersionMain.showTrouble();
+                    loginVersionMain.toLogoutLabel();
 
                 }
                 else {

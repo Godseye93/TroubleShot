@@ -1,10 +1,8 @@
-package com.orientalSalad.troubleShot.forms;
+package com.orientalSalad.troubleShot.loginVersion;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-public class Trouble {
+public class LoginVersionTrouble {
 	private JPanel panel;
 	private JPanel troubleMain;
 
@@ -35,7 +33,7 @@ public class Trouble {
 	private JButton markDown복사Button;
 	private JComboBox teamComboBox;
 
-	public Trouble() {
+	public LoginVersionTrouble() {
 
 //		setRadioGroup();
 		panel = new JPanel();

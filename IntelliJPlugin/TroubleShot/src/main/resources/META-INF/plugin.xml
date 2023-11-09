@@ -34,11 +34,11 @@
     <actions>
     <!-- add-to-group : 기존 메뉴에 버튼, 마우스 단축, 키보드 단축키 등 추가할때 사용
             group-id: 버튼을 추가할 그룹, anchor: 버튼 순서(위치)-->
-        <action id="EditorPopupMenu.TroubleShotAction"
-                class="com.orientalSalad.troubleShot.actions.TroubleShotAction"
-                text="Trouble Shot">
-            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
-            <keyboard-shortcut first-keystroke="shift T" keymap="$default"/>
-        </action>
+<!--        <action id="EditorPopupMenu.TroubleShotAction"-->
+<!--                class="com.orientalSalad.troubleShot.actions.TroubleShotAction"-->
+<!--                text="Trouble Shot">-->
+<!--            <add-to-group group-id="EditorPopupMenu" anchor="first"/>-->
+<!--            <keyboard-shortcut first-keystroke="shift T" keymap="$default"/>-->
+<!--        </action>-->
     </actions>
 </idea-plugin>

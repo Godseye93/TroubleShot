@@ -5,13 +5,19 @@ import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowFactory;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
-import com.orientalSalad.troubleShot.forms.MyCustomPanel;
+import com.orientalSalad.troubleShot.loginVersion.MyCustomPanel;
 
 public class MyToolWindowFactory implements ToolWindowFactory {
+    public static Project project;
+    public static ToolWindow toolWindow;
+    public static MyCustomPanel customPanel;
+
     @Override
     public void createToolWindowContent(Project project, ToolWindow toolWindow) {
+        this.project = project;
+        this.toolWindow = toolWindow;
         // 사용자 정의 패널을 툴 윈도우에 추가하는 코드
-        MyCustomPanel customPanel = null;
+        customPanel = null;
         try {
             customPanel = new MyCustomPanel(null);
         } catch (Exception e) {
@@ -21,4 +27,7 @@ public class MyToolWindowFactory implements ToolWindowFactory {
         Content content = contentFactory.createContent(customPanel, "", false);
         toolWindow.getContentManager().addContent(content);
     }
+
+
+
 }

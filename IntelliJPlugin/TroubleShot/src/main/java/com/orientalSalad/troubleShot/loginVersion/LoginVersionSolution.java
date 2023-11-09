@@ -1,10 +1,8 @@
-package com.orientalSalad.troubleShot.forms;
-
-import com.intellij.ui.PanelWithButtons;
+package com.orientalSalad.troubleShot.loginVersion;
 
 import javax.swing.*;
 
-public class Solution {
+public class LoginVersionSolution {
     private JPanel panel;
     private JPanel solutionMain;
     private JTextArea textArea1;
@@ -14,7 +12,7 @@ public class Solution {
     private JButton markDown복사Button;
 
 
-    public Solution() {
+    public LoginVersionSolution() {
         panel = new JPanel();
         panel.add(solutionMain);
     }

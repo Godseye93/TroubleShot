@@ -1,17 +1,12 @@
-package com.orientalSalad.troubleShot.forms;
+package com.orientalSalad.troubleShot.loginVersion;
 
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.HashMap;
-import java.util.Map;
 
-import static com.orientalSalad.troubleShot.actions.TroubleShotAction.frame;
 
-public class TroubleShotMain {
+public class LoginVersionMain {
     private JPanel panel;
     private JList<String> mainList;
     private JButton cancelButton;
@@ -21,16 +16,16 @@ public class TroubleShotMain {
     private JPanel footPanel;
     private JLabel loginLabel;
     private CardLayout cardLayout;
-    private static TroubleShotMain instance;
+    private static LoginVersionMain instance;
 
-    public static TroubleShotMain getInstance() {
+    public static LoginVersionMain getInstance() {
         if (instance == null) {
-            instance = new TroubleShotMain();
+            instance = new LoginVersionMain();
         }
         return instance;
     }
 
-    public TroubleShotMain() {
+    public LoginVersionMain() {
 
         System.out.println("TroubleShotMain 시작");
         panel = new JPanel();
@@ -38,10 +33,10 @@ public class TroubleShotMain {
         // detail에 trouble, solution 배치
         cardLayout = new CardLayout();
         detailPanel = new JPanel(cardLayout);
-        Trouble trouble = new Trouble();
-        detailPanel.add(trouble.getPanel(), "Write Trouble");
-        Solution solution = new Solution();
-        detailPanel.add(solution.getPanel(), "Write Solution");
+        LoginVersionTrouble loginVersionTrouble = new LoginVersionTrouble();
+        detailPanel.add(loginVersionTrouble.getPanel(), "Write Trouble");
+        LoginVersionSolution loginVersionSolution = new LoginVersionSolution();
+        detailPanel.add(loginVersionSolution.getPanel(), "Write Solution");
         Login login = new Login();
         detailPanel.add(login.getPanel(), "Login");
 
@@ -75,7 +70,7 @@ public class TroubleShotMain {
 
         // cancle 버튼
         cancelButton.addActionListener(e -> {
-            frame.dispose();
+//            frame.dispose();
         });
 
         // main에 list, detail, foot 배치
