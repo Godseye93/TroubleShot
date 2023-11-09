@@ -1,9 +1,11 @@
-package com.orientalSalad.troubleShot.loginVersion;
+package com.orientalSalad.troubleShot;
 
 import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.ui.SimpleToolWindowPanel;
+import com.orientalSalad.troubleShot.loginVersion.LoginVersionMain;
 import com.orientalSalad.troubleShot.logoutVersion.LogoutVersionMain;
+import com.orientalSalad.troubleShot.util.AutomaticUtil;
 
 public class MyCustomPanel extends SimpleToolWindowPanel {
 

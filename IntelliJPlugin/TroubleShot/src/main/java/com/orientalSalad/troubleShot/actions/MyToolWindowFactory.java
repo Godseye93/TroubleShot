@@ -5,7 +5,7 @@ import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowFactory;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
-import com.orientalSalad.troubleShot.loginVersion.MyCustomPanel;
+import com.orientalSalad.troubleShot.MyCustomPanel;
 
 public class MyToolWindowFactory implements ToolWindowFactory {
     public static Project project;

@@ -6,7 +6,7 @@ import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.ui.content.Content;
-import com.orientalSalad.troubleShot.loginVersion.MyCustomPanel;
+import com.orientalSalad.troubleShot.MyCustomPanel;
 
 public class ShowCustomPanelAction extends AnAction {
 

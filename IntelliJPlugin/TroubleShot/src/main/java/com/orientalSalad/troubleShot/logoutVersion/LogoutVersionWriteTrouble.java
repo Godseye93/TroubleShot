@@ -1,7 +1,7 @@
 package com.orientalSalad.troubleShot.logoutVersion;
 
 
-import com.orientalSalad.troubleShot.loginVersion.MyCustomPanel;
+import com.orientalSalad.troubleShot.util.AutomaticUtil;
 import com.orientalSalad.troubleShot.util.FileUtil;
 
 import javax.swing.*;
@@ -15,6 +15,7 @@ import static com.orientalSalad.troubleShot.actions.MyToolWindowFactory.toolWind
 
 public class LogoutVersionWriteTrouble {
     private FileUtil fileUtil;
+    private AutomaticUtil automaticUtil;
     private JPanel wrapperPanel;
     private JPanel footPanel;
     private JPanel centerPanel;
@@ -34,10 +35,15 @@ public class LogoutVersionWriteTrouble {
     public LogoutVersionWriteTrouble() {
 
         fileUtil = new FileUtil();
+        automaticUtil = new AutomaticUtil();
 
         wrapperPanel.setLayout(new BorderLayout());
         wrapperPanel.add(new JScrollPane(centerPanel), BorderLayout.CENTER);
         wrapperPanel.add(footPanel, BorderLayout.SOUTH);
+
+        // 추출된 의존성 텍스트에 자동 입력
+        techStackInput.setText(automaticUtil.extractTechStack());
+        System.out.println(automaticUtil.extractTechStack());
 
         // shoot 버튼 클릭 시
         shootButton.addActionListener(e -> {
