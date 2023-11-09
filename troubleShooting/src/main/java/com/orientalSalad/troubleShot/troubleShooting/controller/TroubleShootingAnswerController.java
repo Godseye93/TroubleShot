@@ -14,6 +14,7 @@ import com.orientalSalad.troubleShot.global.dto.RequestDTO;
 import com.orientalSalad.troubleShot.global.dto.ResultDTO;
 import com.orientalSalad.troubleShot.global.utill.Authentication;
 import com.orientalSalad.troubleShot.troubleShooting.dto.RequestTroubleShootingAnswerDTO;
+import com.orientalSalad.troubleShot.troubleShooting.dto.ResponseTroubleShootingAnswerDTO;
 import com.orientalSalad.troubleShot.troubleShooting.dto.TroubleShootingAnswerDTO;
 import com.orientalSalad.troubleShot.troubleShooting.service.TroubleShootingAnswerService;
 
@@ -44,11 +45,12 @@ public class TroubleShootingAnswerController {
 		//로그인 확인
 		authentication.checkLogin(request, requestTroubleShootingAnswerDTO);
 		//트러블슈팅 솔루션 등록
-		troubleShootingAnswerService.insertTroubleShootingAnswer(requestTroubleShootingAnswerDTO);
+		TroubleShootingAnswerDTO answerDTO = troubleShootingAnswerService.insertTroubleShootingAnswer(requestTroubleShootingAnswerDTO);
 
-		ResultDTO resultDTO = ResultDTO.builder()
+		ResponseTroubleShootingAnswerDTO resultDTO = ResponseTroubleShootingAnswerDTO.builder()
 			.success(true)
 			.message("트러블 슈팅 솔루션 등록이 성공했습니다.")
+			.troubleShootingAnswer(answerDTO)
 			.build();
 		
 		log.info("====== 트러블 슈팅 솔루션 등록 끝 =====");

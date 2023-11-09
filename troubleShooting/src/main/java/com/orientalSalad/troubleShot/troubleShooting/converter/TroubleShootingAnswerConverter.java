@@ -24,6 +24,14 @@ public class TroubleShootingAnswerConverter implements ObjectConverter<TroubleSh
 
 	@Override
 	public TroubleShootingAnswerDTO toDTO(TroubleShootingAnswerEntity troubleShootingAnswerEntity) {
-		return null;
+		return TroubleShootingAnswerDTO.builder()
+			.troubleSeq(troubleShootingAnswerEntity.getTroubleSeq())
+			.context(troubleShootingAnswerEntity.getContext())
+			.title(troubleShootingAnswerEntity.getTitle())
+			.writer(SimpleMemberDTO.builder()
+				.seq(troubleShootingAnswerEntity.getWriterSeq())
+				.build())
+			.seq(troubleShootingAnswerEntity.getSeq())
+			.build();
 	}
 }

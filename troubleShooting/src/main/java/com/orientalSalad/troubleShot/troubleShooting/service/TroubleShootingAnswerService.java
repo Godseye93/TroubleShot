@@ -34,12 +34,14 @@ public class TroubleShootingAnswerService {
 	private final ObjectConverter<TroubleShootingAnswerDTO, TroubleShootingAnswerEntity> answerConverter;
 	private final ObjectConverter<TroubleShootingAnswerReplyDTO, TroubleShootingAnswerReplyEntity> answerReplyConverter;
 
-	public boolean insertTroubleShootingAnswer(RequestTroubleShootingAnswerDTO requestTroubleShootingAnswerDTO){
+	public TroubleShootingAnswerDTO insertTroubleShootingAnswer(RequestTroubleShootingAnswerDTO requestTroubleShootingAnswerDTO){
 		TroubleShootingAnswerEntity troubleShootingAnswerEntity = answerConverter.toEntity(
 			requestTroubleShootingAnswerDTO.getTroubleShootingAnswer());
 		troubleShootingAnswerEntity = answerRepository.save(troubleShootingAnswerEntity);
 
-		return true;
+		TroubleShootingAnswerDTO answerDTO = answerConverter.toDTO(troubleShootingAnswerEntity);
+
+		return answerDTO;
 	}
 	public boolean updateTroubleShootingAnswer(RequestTroubleShootingAnswerDTO requestTroubleShootingAnswerDTO) throws Exception{
 		TroubleShootingAnswerEntity answerEntity
