@@ -1,24 +1,16 @@
-import { logoutSubmit } from "@/api/account";
-import { LoginState, ResLogin } from "@/types/CommonType";
+import { LoginStore, ResLogin } from "@/types/CommonType";
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 
-const StorageKey = "storage-key";
-export let user: ResLogin | undefined;
+const StorageKey = "user-info";
+// export let user: ResLogin | undefined;
 
-export const useLoginStore = create<LoginState>()(
-  persist(
+export const useLoginStore = create(
+  persist<LoginStore>(
     (set) => ({
-      isLogged: false,
-      toggleLoginStatus: (userData) => {
-        if (!user) {
-          user = userData;
-          set((prev) => ({ isLogged: !prev.isLogged }));
-        } else {
-          user = undefined;
-          set((prev) => ({ isLogged: !prev.isLogged }));
-        }
-      },
+      user: null,
+      userLogin: (res: ResLogin) => set({ user: res }),
+      userLogout: () => set({ user: null }),
     }),
     {
       name: StorageKey,

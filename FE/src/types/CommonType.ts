@@ -24,14 +24,14 @@ export interface ReqLogin {
 
 export interface ResLogin {
   success: boolean;
-  // message: string;
+  message: string;
   member: Member;
 }
 
 export interface Member {
   seq: number;
   email: string;
-  profileImg: string | null;
+  profileImg: string;
   nickname: string;
   locale: string;
 }
@@ -46,9 +46,8 @@ export interface ResLogout {
   message: string;
 }
 
-export type LoginState = {
-  isLogged: boolean;
-  toggleLoginStatus: (userData?: ResLogin) => void;
-  // login: (params: ResLogin) => void;
-  // logout: () => void;
+export type LoginStore = {
+  user: ResLogin | null;
+  userLogin: (res: ResLogin) => void;
+  userLogout: () => void;
 };
