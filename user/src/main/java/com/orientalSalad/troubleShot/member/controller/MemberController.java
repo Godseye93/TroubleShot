@@ -1,10 +1,12 @@
 package com.orientalSalad.troubleShot.member.controller;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.Mapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -18,6 +20,8 @@ import com.orientalSalad.troubleShot.global.utill.Authentication;
 import com.orientalSalad.troubleShot.global.utill.Validation;
 import com.orientalSalad.troubleShot.member.dto.MemberDTO;
 import com.orientalSalad.troubleShot.member.dto.RequestMemberDTO;
+import com.orientalSalad.troubleShot.member.dto.ResponseMemberListDTO;
+import com.orientalSalad.troubleShot.member.dto.SearchMemberDTO;
 import com.orientalSalad.troubleShot.member.service.MemberService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -123,5 +127,23 @@ public class MemberController {
 
 		log.info("==== 회원 정보 삭제 끝 ====");
 		return new ResponseEntity<>("success", HttpStatus.ACCEPTED);
+	}
+	@Operation(summary = "회원 검색")
+	@GetMapping("")
+	public ResponseEntity<?> findMember (
+		@ModelAttribute SearchMemberDTO searchMemberDTO) throws Exception {
+		log.info("==== 회원 목록 검색 시작 ====");
+
+		List<MemberDTO> memberDTOList =  memberService.findMemberByNickName(searchMemberDTO);
+
+		ResponseMemberListDTO resultDTO = ResponseMemberListDTO.builder()
+			.success(true)
+			.message(searchMemberDTO.getNickname()+"로 유저 검색을 성공했습니다.")
+			.memberList(memberDTOList)
+			.build();
+
+
+		log.info("==== 회원 목록 검색 끝 ====");
+		return new ResponseEntity<>(resultDTO, HttpStatus.ACCEPTED);
 	}
 }

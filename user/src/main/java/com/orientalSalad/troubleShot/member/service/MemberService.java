@@ -1,5 +1,11 @@
 package com.orientalSalad.troubleShot.member.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.orientalSalad.troubleShot.global.dto.RequestDTO;
@@ -8,6 +14,7 @@ import com.orientalSalad.troubleShot.global.utill.ObjectConverter;
 import com.orientalSalad.troubleShot.login.dto.LoginDTO;
 import com.orientalSalad.troubleShot.member.dto.MemberDTO;
 import com.orientalSalad.troubleShot.member.dto.RequestMemberDTO;
+import com.orientalSalad.troubleShot.member.dto.SearchMemberDTO;
 import com.orientalSalad.troubleShot.member.entity.MemberEntity;
 import com.orientalSalad.troubleShot.member.repository.MemberRepository;
 
@@ -50,7 +57,32 @@ public class MemberService {
 
 		return memberDTO;
 	}
+	public List<MemberDTO> findMemberByNickName(SearchMemberDTO searchMemberDTO){
+		if(searchMemberDTO.getPageNo() == 0){
+			searchMemberDTO.setPageNo(1);
+		}
+		if(searchMemberDTO.getPageSize() == 0){
+			searchMemberDTO.setPageSize(10);
+		}
 
+		Page<MemberEntity> memberEntityList
+ 			= memberRepository.findMemberEntityByNicknameContaining(searchMemberDTO.getNickname(),
+			PageRequest.of(searchMemberDTO.getPageNo() - 1,
+				searchMemberDTO.getPageSize(),
+				Sort.Direction.DESC, "nickname"));
+
+		List<MemberDTO> memberDTOList = new ArrayList<>();
+
+		if(memberEntityList == null){
+			return memberDTOList;
+		}
+
+		for(MemberEntity memberEntity : memberEntityList){
+			memberDTOList.add(memberConverter.toDTO(memberEntity));
+		}
+
+		return memberDTOList;
+	}
 	public MemberDTO findMemberByEmailAndPassword(LoginDTO loginDTO){
 		//sha-256으로 비밀번호 해싱
 		loginDTO.setPassword(hashEncrypt.hashWithSHA256(loginDTO.getPassword()));
