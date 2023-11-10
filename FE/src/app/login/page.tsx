@@ -30,6 +30,12 @@ export default function Page() {
     setBlurValue(blurValue);
   };
 
+  const handlePasswordIsEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleSubmit();
+    }
+  };
+
   const handleSubmit = async () => {
     const email = emailRef.current!.value;
     const password = passwordRef.current!.value;
@@ -88,6 +94,7 @@ export default function Page() {
             ref={passwordRef}
             placeholder="비밀번호를 입력하세요"
             onChange={handlePasswordInputChange}
+            onKeyUp={handlePasswordIsEnter}
           />
         </div>
 
