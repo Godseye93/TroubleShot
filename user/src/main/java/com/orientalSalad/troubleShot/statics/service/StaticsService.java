@@ -1,7 +1,11 @@
 package com.orientalSalad.troubleShot.statics.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
+import com.orientalSalad.troubleShot.statics.dto.RequestMostUsedTagDTO;
 import com.orientalSalad.troubleShot.statics.dto.UserRankDTO;
 import com.orientalSalad.troubleShot.statics.mapper.StaticsMapper;
 
@@ -73,5 +77,15 @@ public class StaticsService {
 		double rank = (double)userRankDTO.getUpperCount() / userRankDTO.getTotalCount();
 
 		return rank;
+	}
+
+	public List<String> getMostUsedTagList(RequestMostUsedTagDTO requestMostUsedTagDTO){
+		List<String> tagList = staticsMapper.selectMostUsedTag(requestMostUsedTagDTO);
+
+		if(tagList == null){
+			tagList= new ArrayList<>();
+		}
+
+		return tagList;
 	}
 }

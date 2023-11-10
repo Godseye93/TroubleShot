@@ -20,40 +20,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
 @RestController
-@RequestMapping(path = "/members/{userSeq}/statics")
+@RequestMapping(path = "/members/{userSeq}/tags")
 @RequiredArgsConstructor
 @Log4j2
-public class MemberStaticsController {
+public class MemberTagController {
 	private final StaticsService staticsService;
 
-	@Operation(summary = "오각형 통계 가져오기")
-	@GetMapping("/polygon")
-	public ResponseEntity<?> findPloygonByUserSeq (
-		@PathVariable(name = "userSeq") Long userSeq){
-		log.info("==== 유저 오각형 데이터 가져오기 시작 ====");
-
-		double troubleRank = staticsService.getTroubleRank(userSeq)*100;
-		double answerRank = staticsService.getAnswerRank(userSeq)*100;
-		double replyRank = staticsService.getReplyRank(userSeq)*100;
-		double tagTypeRank = staticsService.getTagRank(userSeq)*100;
-		double dailyTroubleRank = staticsService.getDailyTroubleRank(userSeq)*100;
-
-		ResponsePolygonDTO resultDTO = ResponsePolygonDTO.builder()
-			.success(true)
-			.message("유저 오각형 데이터 가져오기를 성공했습니다.")
-			.troubleRank(troubleRank)
-			.answerRank(answerRank)
-			.replyRank(replyRank)
-			.userSeq(userSeq)
-			.tagTypeRank(tagTypeRank)
-			.dailyTroubleRank(dailyTroubleRank)
-			.build();
-
-		log.info("==== 유저 오각형 데이터 가져오기 끝 ====");
-		return new ResponseEntity<>(resultDTO, HttpStatus.ACCEPTED);
-	}
 	@Operation(summary = "많이 사용한 태그 API")
-	@GetMapping("/tags/most-used")
+	@GetMapping("/most-used")
 	public ResponseEntity<?> findMostUsedTag (
 		@ModelAttribute RequestMostUsedTagDTO requestMostUsedTagDTO){
 		log.info("==== 유저의 많이 사용한 태그 가져오기 시작 ====");
@@ -69,5 +43,4 @@ public class MemberStaticsController {
 		log.info("==== 유저의 많이 사용한 태그 가져오기 끝 ====");
 		return new ResponseEntity<>(resultDTO, HttpStatus.ACCEPTED);
 	}
-
 }
