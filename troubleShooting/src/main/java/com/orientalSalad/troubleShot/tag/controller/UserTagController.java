@@ -1,30 +1,17 @@
 package com.orientalSalad.troubleShot.tag.controller;
 
-import java.time.Duration;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import org.apache.ibatis.annotations.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.reactive.function.client.WebClient;
 
-import com.orientalSalad.troubleShot.global.dto.RequestGPTDTO;
-import com.orientalSalad.troubleShot.global.dto.ResponseGPTDTO;
-import com.orientalSalad.troubleShot.global.dto.ResponseGPTMessageDTO;
-import com.orientalSalad.troubleShot.global.dto.ResultDTO;
 import com.orientalSalad.troubleShot.tag.dto.RequestMostUsedTagDTO;
 import com.orientalSalad.troubleShot.tag.dto.ResponseTagListDTO;
-import com.orientalSalad.troubleShot.tag.serivice.TagService;
 import com.orientalSalad.troubleShot.tag.serivice.UserTagService;
-import com.orientalSalad.troubleShot.troubleShooting.entity.TroubleShootingEntity;
-import com.orientalSalad.troubleShot.troubleShooting.repository.TroubleShootingRepository;
 
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
