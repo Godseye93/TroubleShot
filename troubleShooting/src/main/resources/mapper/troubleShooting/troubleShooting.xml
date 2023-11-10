@@ -11,6 +11,7 @@
         <result property="solved" column="solved"/>
         <result property="scope" column="scope"/>
         <result property="category" column="category"/>
+        <result property="favorite" column="favorite"/>
         <result property="createTime" column="create_time"/>
         <result property="updateTime" column="update_time"/>
         <result property="deleteTime" column="delete_time"/>
@@ -111,6 +112,10 @@
             m.nickname AS writer_nickname,
             m.email AS writer_email,
             m.profile_img AS writer_profile_img,
+            CASE
+                WHEN f.seq IS NOT NULL THEN true
+                ELSE false
+            END as favorite,
             CASE
                 WHEN login_tsl.user_seq IS NOT NULL THEN true
                 ELSE false
@@ -220,85 +225,99 @@
             trouble_shooting_answer_reply_like login_tsarl ON ar.seq = login_tsarl.answer_reply_seq AND login_tsarl.user_seq = #{searchParam.loginSeq}
         LEFT JOIN
             trouble_shooting_reply_like login_tsrl ON tsr.seq  = login_tsrl.reply_seq AND login_tsrl.user_seq = #{searchParam.loginSeq}
+        LEFT JOIN
+            favorite f ON ts.seq = f.trouble_seq AND f.user_seq = #{searchParam.loginSeq}
         WHERE
             ts.seq =  #{searchParam.troubleSeq}
         GROUP BY
-            tsl.user_seq,ts.seq, m.seq,a.seq,answer_m.seq, login_tsal.seq, login_tsl.seq, login_tsal.seq
+            tsl.user_seq,ts.seq, m.seq,a.seq,answer_m.seq, login_tsal.seq, login_tsl.seq, login_tsal.seq, f.seq
     </select>
     <select id="countTroubleShootingList"
             parameterType="com.orientalSalad.troubleShot.troubleShooting.dto.SearchTroubleShootingDTO"
             resultType="java.lang.Long">
         <if test="tags != null and tags.size() > 0">
             WITH matched_posts AS (
-            SELECT tt.trouble_seq as seq
-            FROM trouble_tag tt
-            INNER JOIN tag t ON t.seq = tt.tag_seq
-            WHERE t.name IN
-            <foreach collection="tags" item="tag" open="(" close=")" separator=",">
-                #{tag}
-            </foreach>
-            GROUP BY tt.trouble_seq
-            HAVING COUNT(DISTINCT t.name) = #{tagSize}-- 검색하려는 태그의 개수
-            )
+                SELECT tt.trouble_seq as seq
+                FROM trouble_tag tt
+                INNER JOIN tag t ON t.seq = tt.tag_seq
+                WHERE t.name IN
+                <foreach collection="tags" item="tag" open="(" close=")" separator=",">
+                    #{tag}
+                </foreach>
+                GROUP BY tt.trouble_seq
+                HAVING COUNT(DISTINCT t.name) = #{tagSize}-- 검색하려는 태그의 개수
+                )
         </if>
-        SELECT
-            count(ts.seq) as count
-        FROM
-            trouble_shooting ts
-        <if test="searchParam.tags != null and searchParam.tags.size() > 0">
-            INNER JOIN
-            matched_posts mp on mp.seq = ts.seq
-        </if>
-        LEFT JOIN
-            trouble_shooting_reply tsr on ts.seq = tsr.trouble_seq
-        LEFT JOIN
-            trouble_tag tt ON tt.trouble_seq = ts.seq
-        LEFT JOIN
-            tag t ON t.seq = tt.tag_seq
-        LEFT JOIN
-            member m ON ts.writer_seq = m.seq
-        LEFT JOIN
-            trouble_shooting_like tsl ON ts.seq  = tsl.trouble_seq
-        <if test="searchParam.loginSeq != null or searchParam.loginSeq != 0">
-            AND tsl.user_seq = #{searchParam.loginSeq}
-        </if>
-        <if test="searchParam.favorite == true">
-        LEFT JOIN
-            favorite f ON ts.seq = f.trouble_seq
-        </if>
-        WHERE
-        1 = 1
-        AND ts.scope in ( 0
-        <if test="searchParam.loginSeq != null or searchParam.loginSeq != 0">
-            , #{searchParam.loginSeq}
-        </if>
-        )
-        <if test="searchParam.writer != null and searchParam.writer.trim().length() > 0">
-            AND m.nickname LIKE CONCAT('%',#{searchParam.writer},'%')
-        </if>
-        <if test="searchParam.troubleSeq != null and searchParam.troubleSeq != 0">
-            AND ts.seq = #{searchParam.troubleSeq}
-        </if>
-        <if test="searchParam.solved != null">
-            AND ts.solved = #{searchParam.solved}
-        </if>
-        <if test="searchParam.keyword != null and searchParam.keyword.trim().length() > 0">
-            AND (ts.title LIKE CONCAT('%',#{searchParam.keyword},'%')
-            OR ts.context LIKE CONCAT('%',#{searchParam.keyword},'%')
-            OR ts.dependency LIKE CONCAT('%',#{searchParam.keyword},'%'))
-        </if>
-        <if test="searchParam.startTime != null">
-            AND ts.create_time &gt;=  #{searchParam.startTime}
-        </if>
-        <if test="searchParam.category != null and searchParam.category.trim().length() > 0">
-            AND ts.category = #{searchParam.category}
-        </if>
-        <if test="searchParam.endTime != null">
-            AND ts.create_time &lt;=  #{searchParam.endTime}
-        </if>
-        <if test="searchParam.writerSeq != null">
-            AND ts.writer_seq =  #{searchParam.writerSeq}
-        </if>
+            SELECT count(seq_group.seq) AS total_count
+            FROM (
+                    SELECT  ts.seq AS seq
+                    FROM
+                    trouble_shooting ts
+                    <if test="searchParam.tags != null and searchParam.tags.size() > 0">
+                        INNER JOIN
+                        matched_posts mp on mp.seq = ts.seq
+                    </if>
+                    LEFT JOIN
+                    trouble_shooting_reply tsr on ts.seq = tsr.trouble_seq
+                    LEFT JOIN
+                    trouble_tag tt ON tt.trouble_seq = ts.seq
+                    LEFT JOIN
+                    tag t ON t.seq = tt.tag_seq
+                    LEFT JOIN
+                    trouble_shooting_answer a ON ts.seq  = a.trouble_seq
+                    LEFT JOIN
+                    member m ON ts.writer_seq = m.seq
+                    <if test="searchParam.loginSeq != null or searchParam.loginSeq != 0">
+                        LEFT JOIN
+                        trouble_shooting_like tsl ON ts.seq  = tsl.trouble_seq
+                        AND tsl.user_seq = #{searchParam.loginSeq}
+                        LEFT JOIN
+                        favorite f ON f.trouble_seq = ts.seq
+                        AND f.user_seq = #{searchParam.loginSeq}
+                    </if>
+                    WHERE
+                    1 = 1
+                    AND ts.scope in ( 0
+                    <if test="searchParam.loginSeq != null or searchParam.loginSeq != 0">
+                        , #{searchParam.loginSeq}
+                    </if>
+                    )
+                    <if test="searchParam.writer != null and searchParam.writer.trim().length() > 0">
+                        AND m.nickname LIKE CONCAT('%',#{searchParam.writer},'%')
+                    </if>
+                    <if test="searchParam.troubleSeq != null and searchParam.troubleSeq != 0">
+                        AND ts.seq = #{searchParam.troubleSeq}
+                    </if>
+                    <if test="searchParam.solved != null">
+                        AND ts.solved = #{searchParam.solved}
+                    </if>
+                    <if test="searchParam.keyword != null and searchParam.keyword.trim().length() > 0">
+                        AND (ts.title LIKE CONCAT('%',#{searchParam.keyword},'%')
+                        OR ts.context LIKE CONCAT('%',#{searchParam.keyword},'%')
+                        OR ts.dependency LIKE CONCAT('%',#{searchParam.keyword},'%'))
+                    </if>
+                    <if test="searchParam.startTime != null">
+                        AND ts.create_time &gt;=  #{searchParam.startTime}
+                    </if>
+                    <if test="searchParam.category != null and searchParam.category.trim().length() > 0">
+                        AND ts.category = #{searchParam.category}
+                    </if>
+                    <if test="searchParam.endTime != null">
+                        AND ts.create_time &lt;=  #{searchParam.endTime}
+                    </if>
+                    <if test="searchParam.writerSeq != null">
+                        AND ts.writer_seq =  #{searchParam.writerSeq}
+                    </if>
+                    <if test="searchParam.favorite == true">
+                        AND f.user_seq =  #{searchParam.loginSeq}
+                    </if>
+                    GROUP BY
+                    <if test="searchParam.loginSeq != null or searchParam.loginSeq != 0">
+                        tsl.seq,
+                        f.seq,
+                    </if>
+                    ts.seq,
+                    m.seq ) AS seq_group
     </select>
     <select id="selectTroubleShootingList"
             parameterType="com.orientalSalad.troubleShot.troubleShooting.dto.SearchTroubleShootingDTO"
@@ -336,16 +355,20 @@
                 m.profile_img AS writer_profile_img,
                 <if test="searchParam.loginSeq != null or searchParam.loginSeq != 0">
                     CASE
-                        WHEN tsl.user_seq IS NOT NULL THEN true
+                        WHEN tsl.seq IS NOT NULL THEN true
                         ELSE false
                     END as login_like,
+                    CASE
+                    WHEN f.seq IS NOT NULL THEN true
+                    ELSE false
+                    END as favorite,
                 </if>
                 STRING_AGG(distinct t.name, ', ') AS tag_name
         FROM
             trouble_shooting ts
         <if test="searchParam.tags != null and searchParam.tags.size() > 0">
-            INNER JOIN
-                matched_posts mp on mp.seq = ts.seq
+        INNER JOIN
+            matched_posts mp on mp.seq = ts.seq
         </if>
         LEFT JOIN
             trouble_shooting_reply tsr on ts.seq = tsr.trouble_seq
@@ -357,16 +380,14 @@
             trouble_shooting_answer a ON ts.seq  = a.trouble_seq
         LEFT JOIN
             member m ON ts.writer_seq = m.seq
+        <if test="searchParam.loginSeq != null or searchParam.loginSeq != 0">
         LEFT JOIN
             trouble_shooting_like tsl ON ts.seq  = tsl.trouble_seq
-        <if test="searchParam.loginSeq != null or searchParam.loginSeq != 0">
             AND tsl.user_seq = #{searchParam.loginSeq}
-        </if>
-        <if test="searchParam.favorite == true">
         LEFT JOIN
-            favorite f ON ts.seq = f.trouble_seq
+            favorite f ON f.trouble_seq = ts.seq
+            AND f.user_seq = #{searchParam.loginSeq}
         </if>
-
         WHERE
         1 = 1
         AND ts.scope in ( 0
@@ -400,23 +421,16 @@
         <if test="searchParam.writerSeq != null">
             AND ts.writer_seq =  #{searchParam.writerSeq}
         </if>
-        GROUP BY
-            ts.seq,
-            m.seq,
-            m.nickname,
-            m.email,
-            m.profile_img,
-        <if test="searchParam.loginSeq !=null or searchParam.loginSeq !=0">
-            tsl.user_seq,
+        <if test="searchParam.favorite == true">
+            AND f.user_seq =  #{searchParam.loginSeq}
         </if>
-            ts.title,
-            ts.context,
-            ts.solved,
-            ts.category,
-            ts.create_time,
-            ts.update_time,
-            ts.delete_time,
-            ts.view_count
+        GROUP BY
+        <if test="searchParam.loginSeq != null or searchParam.loginSeq != 0">
+            tsl.seq,
+            f.seq,
+        </if>
+            ts.seq,
+            m.seq
         <choose>
             <when test="searchParam.order == 1">
                 ORDER BY ts.like_count DESC
