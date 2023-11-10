@@ -144,4 +144,19 @@
         ORDER BY COUNT(DISTINCT t."name") DESC
         limit #{searchParam.count};
     </select>
+    <select id="selectAllTagsByUserSeq"
+            parameterType="long"
+            resultType="string">
+        SELECT
+            t.name AS tag_name
+        FROM tag t
+                 LEFT JOIN
+                    trouble_tag tt ON tt.tag_seq = t.seq
+                 LEFT JOIN
+                    trouble_shooting ts ON tt.trouble_seq  = ts.seq
+                    AND ts.writer_seq = #{userSeq}
+        WHERE ts.writer_seq = #{userSeq}
+        GROUP BY writer_seq,t."name"
+        ORDER BY t."name";
+    </select>
 </mapper>

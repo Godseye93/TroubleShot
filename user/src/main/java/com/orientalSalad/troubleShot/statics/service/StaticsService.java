@@ -88,4 +88,13 @@ public class StaticsService {
 
 		return tagList;
 	}
+	public List<String> getAllTagsByUserSeq(long userSeq){
+		List<String> tagList = staticsMapper.selectAllTagsByUserSeq(userSeq);
+
+		if(tagList == null){
+			tagList= new ArrayList<>();
+		}
+
+		return tagList;
+	}
 }

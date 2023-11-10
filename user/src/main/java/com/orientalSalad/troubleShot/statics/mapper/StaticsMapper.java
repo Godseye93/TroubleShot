@@ -16,4 +16,5 @@ public interface StaticsMapper {
 	public UserRankDTO selectTagRankBySeq(@Param("userSeq") long userSeq);
 	public UserRankDTO selectDailyPostRankBySeq(@Param("userSeq") long userSeq);
 	public List<String> selectMostUsedTag(@Param("searchParam")RequestMostUsedTagDTO requestMostUsedTagDTO);
+	public List<String> selectAllTagsByUserSeq(@Param("userSeq")long userSeq);
 }

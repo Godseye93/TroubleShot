@@ -41,6 +41,23 @@ public class MemberTagController {
 			.build();
 
 		log.info("==== 유저의 많이 사용한 태그 가져오기 끝 ====");
-		return new ResponseEntity<>(resultDTO, HttpStatus.ACCEPTED);
+		return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+	}
+	@Operation(summary = "내가 사용한 태그 목록 API")
+	@GetMapping("")
+	public ResponseEntity<?> findAllTagsByUserSeq (
+		@PathVariable(name = "userSeq") long userSeq){
+		log.info("==== 유저가 사용한 모든 태그 가져오기 시작 ====");
+
+		List<String> tagList = staticsService.getAllTagsByUserSeq(userSeq);
+
+		ResponseTagDTO resultDTO = ResponseTagDTO.builder()
+			.success(true)
+			.message("유저가 사용한 태그 가져오기를 성공했습니다.")
+			.tagList(tagList)
+			.build();
+
+		log.info("==== 유저가 사용한 모든 태그 가져오기 끝 ====");
+		return new ResponseEntity<>(resultDTO, HttpStatus.OK);
 	}
 }

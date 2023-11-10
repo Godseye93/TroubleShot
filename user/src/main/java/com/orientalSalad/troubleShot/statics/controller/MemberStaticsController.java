@@ -52,22 +52,4 @@ public class MemberStaticsController {
 		log.info("==== 유저 오각형 데이터 가져오기 끝 ====");
 		return new ResponseEntity<>(resultDTO, HttpStatus.ACCEPTED);
 	}
-	@Operation(summary = "많이 사용한 태그 API")
-	@GetMapping("/tags/most-used")
-	public ResponseEntity<?> findMostUsedTag (
-		@ModelAttribute RequestMostUsedTagDTO requestMostUsedTagDTO){
-		log.info("==== 유저의 많이 사용한 태그 가져오기 시작 ====");
-
-		List<String> tagList = staticsService.getMostUsedTagList(requestMostUsedTagDTO);
-
-		ResponseTagDTO resultDTO = ResponseTagDTO.builder()
-			.success(true)
-			.message("유저의 많이 사용한 태그 가져오기를 성공했습니다.")
-			.tagList(tagList)
-			.build();
-
-		log.info("==== 유저의 많이 사용한 태그 가져오기 끝 ====");
-		return new ResponseEntity<>(resultDTO, HttpStatus.ACCEPTED);
-	}
-
 }
