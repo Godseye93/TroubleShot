@@ -41,7 +41,7 @@ const Solution = ({ sessionId, troubleId }: Props) => {
       vscode.postMessage({
         command: "showMessage",
         type: "error",
-        content: "Description is too short!",
+        content: "Description must be at least 2 characters",
       });
       return false;
     }
@@ -49,7 +49,6 @@ const Solution = ({ sessionId, troubleId }: Props) => {
   }
 
   async function onCopyMarkdown() {
-    if (!checkValid()) return;
     try {
       await navigator.clipboard.writeText(onCreateMarkdown());
       vscode.postMessage({
@@ -67,6 +66,7 @@ const Solution = ({ sessionId, troubleId }: Props) => {
   }
 
   function onSolveTrouble() {
+    if (!checkValid()) return;
     vscode.postMessage({
       command: "solveTrouble",
       articleInfo: {

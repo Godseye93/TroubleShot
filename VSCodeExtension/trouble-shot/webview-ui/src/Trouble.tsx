@@ -4,8 +4,6 @@ import {
   VSCodeRadio,
   VSCodeTextArea,
   VSCodeButton,
-  VSCodeDropdown,
-  VSCodeOption,
 } from "@vscode/webview-ui-toolkit/react";
 import { VscCopy } from "react-icons/vsc";
 import { BiUpload } from "react-icons/bi";
@@ -35,12 +33,20 @@ const Trouble = ({ sessionId, defaultSkills, errMsg, defaultCode }: Props) => {
   }
 
   function checkValid() {
-    const { title } = articleInfo;
+    const { title, description } = articleInfo;
     if (title.trim().length < 2 || title.trim().length > 20) {
       vscode.postMessage({
         command: "showMessage",
         type: "error",
-        content: "Title is too short or too long!",
+        content: "Title must be between 2 and 20 characters",
+      });
+      return false;
+    }
+    if (description.trim().length < 2) {
+      vscode.postMessage({
+        command: "showMessage",
+        type: "error",
+        content: "Description must be at least 2 characters",
       });
       return false;
     }
@@ -62,7 +68,6 @@ const Trouble = ({ sessionId, defaultSkills, errMsg, defaultCode }: Props) => {
   }
 
   async function onCopyMarkdown() {
-    if (!checkValid()) return;
     try {
       await navigator.clipboard.writeText(onCreateMarkdown());
       vscode.postMessage({
@@ -80,6 +85,7 @@ const Trouble = ({ sessionId, defaultSkills, errMsg, defaultCode }: Props) => {
   }
 
   function onAddTrouble() {
+    if (!checkValid()) return;
     vscode.postMessage({
       command: "addTrouble",
       articleInfo: {
@@ -91,6 +97,7 @@ const Trouble = ({ sessionId, defaultSkills, errMsg, defaultCode }: Props) => {
   }
 
   function onUploadTrouble() {
+    if (!checkValid()) return;
     vscode.postMessage({
       command: "uploadTrouble",
       articleInfo: {

@@ -4,6 +4,7 @@ import Trouble from "./Trouble";
 import { useEffect, useState } from "react";
 import Solution from "./Solution";
 import LoginForm from "./LoginForm";
+import { VSCodeProgressRing } from "@vscode/webview-ui-toolkit/react";
 
 export const TROUBLE_SHOOTING_TYPE = {
   LOADING: -1 as const,
@@ -88,7 +89,7 @@ function App() {
           defaultCode={defaultCode}
         />
       ) : (
-        <div>LOADING</div>
+        <VSCodeProgressRing />
       )}
     </main>
   );

@@ -368,6 +368,7 @@ export class TroubleShotPanel {
                 if (data.success) {
                   vscode.window.showInformationMessage("Trouble uploaded!");
                   vscode.commands.executeCommand("refresh.trouble.list");
+                  this.dispose();
                 } else {
                   vscode.window.showErrorMessage("Failed to upload!");
                 }
