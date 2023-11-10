@@ -41,8 +41,8 @@ public class MemberController {
 	@Operation(summary = "회원가입 API",
 		description =
 			"입력 DTO : MemberDTO\n"+
-			"필수 값 : "
-			+ "이메일, 비밀번호, 닉네임, 국적")
+				"필수 값 : "
+				+ "이메일, 비밀번호, 닉네임, 국적")
 	@PostMapping()
 	public ResponseEntity<?> insertMember(@RequestBody MemberDTO memberDTO) throws Exception{
 		log.info("==== 유저 회원가입 시작 ====");
@@ -61,7 +61,7 @@ public class MemberController {
 		}
 
 		Boolean success = memberService.insertMember(memberDTO);
-		
+
 		//회원가입이 실패하면(이메일 중복)
 		if(!success){
 			ResultDTO resultDTO = ResultDTO.builder()
