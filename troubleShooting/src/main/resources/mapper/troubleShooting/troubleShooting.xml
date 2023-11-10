@@ -245,7 +245,7 @@
                     #{tag}
                 </foreach>
                 GROUP BY tt.trouble_seq
-                HAVING COUNT(DISTINCT t.name) = #{tagSize}-- 검색하려는 태그의 개수
+                HAVING COUNT(DISTINCT t.name) >= #{tagSize}-- 검색하려는 태그의 개수
                 )
         </if>
             SELECT count(seq_group.seq) AS total_count
@@ -332,7 +332,7 @@
                 #{tag}
             </foreach>
             GROUP BY tt.trouble_seq
-            HAVING COUNT(DISTINCT t.name) = #{tagSize}-- 검색하려는 태그의 개수
+            HAVING COUNT(DISTINCT t.name) >= #{tagSize}-- 검색하려는 태그의 개수
         )
         </if>
         SELECT  ts.seq AS seq,

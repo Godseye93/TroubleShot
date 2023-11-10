@@ -14,15 +14,15 @@ import com.orientalSalad.troubleShot.troubleShooting.dto.RequestTroubleShootingR
 import com.orientalSalad.troubleShot.troubleShooting.dto.SearchTroubleShootingDTO;
 import com.orientalSalad.troubleShot.troubleShooting.dto.TroubleShootingDTO;
 import com.orientalSalad.troubleShot.troubleShooting.dto.TroubleShootingReplyDTO;
-import com.orientalSalad.troubleShot.troubleShooting.entity.CategoryEntity;
 import com.orientalSalad.troubleShot.troubleShooting.entity.FavoriteEntity;
-import com.orientalSalad.troubleShot.troubleShooting.entity.TroubleShootingAnswerEntity;
+import com.orientalSalad.troubleShot.troubleShooting.entity.SearchTagEntity;
 import com.orientalSalad.troubleShot.troubleShooting.entity.TroubleShootingEntity;
 import com.orientalSalad.troubleShot.troubleShooting.entity.TroubleShootingLikeEntity;
 import com.orientalSalad.troubleShot.troubleShooting.entity.TroubleShootingReplyEntity;
 import com.orientalSalad.troubleShot.troubleShooting.entity.TroubleShootingReplyLikeEntity;
 import com.orientalSalad.troubleShot.troubleShooting.mapper.TroubleShootingMapper;
 import com.orientalSalad.troubleShot.troubleShooting.repository.FavoriteRepository;
+import com.orientalSalad.troubleShot.troubleShooting.repository.SearchTagRepository;
 import com.orientalSalad.troubleShot.troubleShooting.repository.TroubleShootingLikeRepository;
 import com.orientalSalad.troubleShot.troubleShooting.repository.TroubleShootingReplyLikeRepository;
 import com.orientalSalad.troubleShot.troubleShooting.repository.TroubleShootingReplyRepository;
@@ -43,6 +43,7 @@ public class TroubleShootingService {
 	private final ObjectConverter<TroubleShootingDTO, TroubleShootingEntity> troubleShootingConverter;
 	private final ObjectConverter<TroubleShootingReplyDTO, TroubleShootingReplyEntity> troubleShootingReplyConverter;
 	private final FavoriteRepository favoriteRepository;
+	private final SearchTagRepository searchTagRepository;
 	private final TagService tagService;
 
 	public boolean insertTroubleShooting(RequestTroubleShootingDTO requestTroubleShootingDTO){
@@ -188,6 +189,20 @@ public class TroubleShootingService {
 		List<TroubleShootingDTO> troubleShootingDTOList
 			= troubleShootingMapper.selectTroubleShootingList(searchParam,searchParam.getTags(),tagSize);
 
+		//로그인 유저인 경우 검색하는 태그 이력 저장
+		if(searchParam.getLoginSeq() !=null && searchParam.getLoginSeq() != 0){
+			for(int i=0; i < searchParam.getTags().size(); i++){
+				System.out.println(searchParam.getTags().get(i));
+				SearchTagEntity searchTagEntity
+					= SearchTagEntity.builder()
+					.userSeq(searchParam.getLoginSeq())
+					.tag(searchParam.getTags().get(i))
+					.build();
+				searchTagRepository.save(searchTagEntity);
+			}
+		}
+		log.info(troubleShootingDTOList.toString());
+		System.out.println("트러블 슈팅 목록 검색 끝");
 		return troubleShootingDTOList;
 	}
 	public Long countTroubleShootingList(SearchTroubleShootingDTO searchParam) throws Exception {

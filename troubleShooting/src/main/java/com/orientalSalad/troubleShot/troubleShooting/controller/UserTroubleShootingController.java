@@ -23,7 +23,7 @@ import lombok.extern.log4j.Log4j2;
 
 @Tag(name = "좋아요/즐겨찾기 API")
 @Controller
-@RequestMapping("/users/{userSeq}/trouble-shootings")
+@RequestMapping("/members/{userSeq}/trouble-shootings")
 @RequiredArgsConstructor
 @Log4j2
 public class UserTroubleShootingController {
