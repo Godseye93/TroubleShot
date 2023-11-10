@@ -41,10 +41,18 @@ export default function Page() {
               <div className="w-1/2 p-5">
                 <p>내가 많이 사용한 태그</p>
                 <div className="flex flex-wrap w-full">
-                  <div className="bg-softmain w-1/2 p-2">tag 1</div>
-                  <div className="bg-softmain w-1/2 p-2">tag 2</div>
-                  <div className="bg-softmain w-1/2 p-2">tag 3</div>
-                  <div className="bg-softmain w-1/2 p-2">tag 4</div>
+                  <div className="w-1/2 p-2">
+                    <div className="w-3/4 bg-gray-300 rounded-lg fcc">tag 1</div>
+                  </div>
+                  <div className="w-1/2 p-2">
+                    <div className="w-3/4 bg-gray-300 rounded-lg fcc">tag 2</div>
+                  </div>
+                  <div className="w-1/2 p-2">
+                    <div className="w-3/4 bg-gray-300 rounded-lg fcc">tag 3</div>
+                  </div>
+                  <div className="w-1/2 p-2">
+                    <div className="w-3/4 bg-gray-300 rounded-lg fcc">tag 4</div>
+                  </div>
                 </div>
               </div>
               <div className="w-1/2 p-5">
@@ -52,7 +60,7 @@ export default function Page() {
                 <div className="w-[300px] h-[200px]">
                   <MyResponsivePie />
                 </div>
-                <p>asdsda</p>
+                <p>전체 통계 데이터 확인하기</p>
               </div>
             </div>
           </div>
