@@ -26,6 +26,7 @@ export default function Header() {
       });
       if (res.success) {
         userLogout();
+        window.location.href = "/";
       }
     } catch (err) {
       console.log("Error:", err);
