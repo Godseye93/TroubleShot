@@ -184,15 +184,14 @@ public class TroubleShootingService {
 
 		int tagSize = searchParam.getTags() !=null ? searchParam.getTags().size() : 0;
 
-		log.info(searchParam.toString());
-
 		List<TroubleShootingDTO> troubleShootingDTOList
 			= troubleShootingMapper.selectTroubleShootingList(searchParam,searchParam.getTags(),tagSize);
 
 		//로그인 유저인 경우 검색하는 태그 이력 저장
-		if(searchParam.getLoginSeq() !=null && searchParam.getLoginSeq() != 0){
+		if(searchParam.getLoginSeq() != null
+			&& searchParam.getLoginSeq() != 0
+			&& searchParam.getTags() != null){
 			for(int i=0; i < searchParam.getTags().size(); i++){
-				System.out.println(searchParam.getTags().get(i));
 				SearchTagEntity searchTagEntity
 					= SearchTagEntity.builder()
 					.userSeq(searchParam.getLoginSeq())
@@ -201,8 +200,6 @@ public class TroubleShootingService {
 				searchTagRepository.save(searchTagEntity);
 			}
 		}
-		log.info(troubleShootingDTOList.toString());
-		System.out.println("트러블 슈팅 목록 검색 끝");
 		return troubleShootingDTOList;
 	}
 	public Long countTroubleShootingList(SearchTroubleShootingDTO searchParam) throws Exception {
