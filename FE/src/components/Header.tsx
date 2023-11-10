@@ -10,11 +10,11 @@ import { useEffect, useState } from "react";
 export default function Header() {
   const path = usePathname();
   const { user, userLogout } = useLoginStore(); // zustand에서 isLogged 가져와서 헤더 전환
+  const [mounted, setMounted] = useState<boolean>(false);
 
-  // const storageData = sessionStorage.getItem("user-info");
-  // const isfsdf = isLogged?.state.isLogged;
-  // const userData = JSON.parse(storageData!).state.user;
-  // const isLogged = !user;
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const logout = async () => {
     // 로그아웃 api 요청
@@ -31,14 +31,6 @@ export default function Header() {
       console.log("Error:", err);
     }
   };
-
-  // const userData = user;
-  // const profileImg = user?.member.profileImg;
-  const [mounted, setMounted] = useState<boolean>(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   return (
     mounted && (
@@ -68,7 +60,7 @@ export default function Header() {
 
         {user ? (
           <div className="flex items-center justify-end w-full">
-            <Link href={`mypage/${user?.member.seq}`} className="me-3">
+            <Link href={`/mypage/${user?.member.seq}`} className="me-3">
               <img src={user.member.profileImg} alt="" className="w-[2.5rem] rounded-full" />
             </Link>
             <div
