@@ -11,6 +11,9 @@
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.441.0",
+    "@nivo/core": "^0.83.0",
+    "@nivo/pie": "^0.83.0",
+    "@nivo/radar": "^0.83.0",
     "@tanstack/react-query": "^5.7.2",
     "@types/react-datepicker": "^4.19.1",
     "@types/react-slick": "^0.23.11",
