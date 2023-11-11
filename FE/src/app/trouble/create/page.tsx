@@ -4,18 +4,52 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Options from "@/components/Create/Options";
 import { CreateOptions } from "@/types/TroubleType";
+import { toast } from "react-toastify";
+import { postTrouble } from "@/api/trouble";
+import { useLoginStore } from "@/stores/useLoginStore";
 export default function Page() {
   const [title, setTitle] = useState("");
   const [markdown, setMarkdown] = useState("");
   const router = useRouter();
   const [showOptions, setShowOptions] = useState(false);
+  const [dependency, setDependency] = useState("");
+
   const [options, setOptions] = useState<CreateOptions>({
     category: "",
-    scope: 0,
+    scope: null,
     tags: [],
+    solved: null,
   });
-
+  const [Changed, setChanged] = useState(false);
   const categorys = ["java", "ts", "react"];
+  const { user } = useLoginStore();
+  const onSubmit = async () => {
+    if (title.trim() === "") return toast.error("제목을 입력해 주세요");
+    if (markdown.trim() === "") return toast.error("내용을 입력해 주세요");
+    if (options.category.trim() === "") return toast.error("카테고리를 선택해 주세요");
+    if (options.solved === null) return toast.error("해결 여부를 선택해 주세요");
+    if (options.scope === null) return toast.error("공개 범위를 선택해 주세요");
+    const req = {
+      loginSeq: user!.member.seq,
+      type: 0 as const,
+      troubleShooting: {
+        title: title,
+        category: options.category,
+        context: markdown,
+        dependency: dependency,
+        scope: options.scope,
+        writer: { seq: user!.member.seq },
+        tags: options.tags,
+        solved: options.solved,
+      },
+    };
+    try {
+      await postTrouble(req);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <div className="flex-1 me-2  min-h-[91vh]">
       <div className="mt-4 w-full ms-2 ">
@@ -31,20 +65,24 @@ export default function Page() {
 
               <button
                 className="rounded-lg bg-main shadow-md p-2 hover:shadow-sm hover:bg-amber-500 transition-all duration-200"
-                onClick={() => setShowOptions(true)}
+                onClick={() => {
+                  setShowOptions(true);
+                  setChanged(true);
+                }}
               >
                 작성완료
               </button>
-              {/* {showOptions && ( */}
-              <div className={`absolute ${showOptions ? "waterfall" : "waterfall2re"} z-50`}>
-                <Options
-                  options={options}
-                  setOptions={setOptions}
-                  categorys={categorys}
-                  setShowOptions={setShowOptions}
-                />
-              </div>
-              {/* )} */}
+              {Changed && (
+                <div className={`absolute ${showOptions ? "waterfall" : "waterfall2re"} z-50`}>
+                  <Options
+                    options={options}
+                    setOptions={setOptions}
+                    categorys={categorys}
+                    setShowOptions={setShowOptions}
+                    onSubmit={onSubmit}
+                  />
+                </div>
+              )}
             </div>
             <input
               type="text"
@@ -62,7 +100,7 @@ export default function Page() {
                   "next": "13.5.6",
                   "react": "^18",
                 }`}
-                onChange={(e) => console.log(e.target.value)}
+                onChange={(e) => setDependency(e.target.value)}
               ></textarea>
             </div>
           </div>

@@ -14,7 +14,7 @@ export default function Layout({ children }: Props) {
   return (
     <>
       <div className="h-12"></div>
-      <div className="px-2 flex justify-between">
+      <div className="px-2 flex justify-between w-full">
         <UseSidebar />
         {children}
         <Rsidebar />

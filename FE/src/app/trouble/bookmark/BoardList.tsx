@@ -5,23 +5,14 @@ import { useLoginStore } from "@/stores/useLoginStore";
 import { SearchParams } from "@/types/TroubleType";
 import React, { useState } from "react";
 import useInfiniteList from "@/hooks/useInfiniteList";
-
 export default function BoardList() {
   const { user } = useLoginStore();
   const [options, setOptions] = useState<SearchParams>({
     ...(user && { loginSeq: user.member.seq }),
-    writerSeq: user?.member.seq,
+    favorite: true,
   });
-  const { data } = useInfiniteList(options);
-  // const { data, error } = useQuery({
-  //   queryKey: ["boards"],
-  //   queryFn: async () => {
-  //     const data = await getTrouble(options);
-  //     console.log(options);
-  //     return data;
-  //   },
-  // });
 
+  const { data } = useInfiniteList(options);
   return (
     <>
       <Searchbar setPropsOptions={setOptions} />
