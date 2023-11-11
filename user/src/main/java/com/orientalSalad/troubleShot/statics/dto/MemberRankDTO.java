@@ -16,7 +16,7 @@ import lombok.extern.log4j.Log4j2;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserRankDTO {
+public class MemberRankDTO {
 	@Schema(description = "유저 pk")
 	long userSeq;
 	@Schema(description = "유저보다 많은 개수")

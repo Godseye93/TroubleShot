@@ -6,15 +6,17 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.orientalSalad.troubleShot.statics.dto.RequestMostUsedTagDTO;
-import com.orientalSalad.troubleShot.statics.dto.UserRankDTO;
+import com.orientalSalad.troubleShot.statics.dto.MemberRankDTO;
 
 @Mapper
 public interface StaticsMapper {
-	public UserRankDTO selectTroubleRankBySeq(@Param("userSeq") long userSeq);
-	public UserRankDTO selectAnswerRankBySeq(@Param("userSeq") long userSeq);
-	public UserRankDTO selectReplyRankBySeq(@Param("userSeq") long userSeq);
-	public UserRankDTO selectTagRankBySeq(@Param("userSeq") long userSeq);
-	public UserRankDTO selectDailyPostRankBySeq(@Param("userSeq") long userSeq);
+	public MemberRankDTO selectTroubleRankBySeq(@Param("userSeq") long userSeq);
+	public MemberRankDTO selectAnswerRankBySeq(@Param("userSeq") long userSeq);
+	public MemberRankDTO selectReplyRankBySeq(@Param("userSeq") long userSeq);
+	public MemberRankDTO selectTagRankBySeq(@Param("userSeq") long userSeq);
+	public MemberRankDTO selectDailyPostRankBySeq(@Param("userSeq") long userSeq);
 	public List<String> selectMostUsedTag(@Param("searchParam")RequestMostUsedTagDTO requestMostUsedTagDTO);
 	public List<String> selectAllTagsByUserSeq(@Param("userSeq")long userSeq);
+	public Long countSolvedTroubleByUserSeq(@Param("userSeq")long userSeq);
+	public Long countNotSolvedTroubleByUserSeq(@Param("userSeq")long userSeq);
 }

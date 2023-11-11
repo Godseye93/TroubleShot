@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.orientalSalad.troubleShot.statics.mapper.StaticsMapper">
-    <resultMap id="UserRank" type="com.orientalSalad.troubleShot.statics.dto.UserRankDTO">
+    <resultMap id="UserRank" type="com.orientalSalad.troubleShot.statics.dto.MemberRankDTO">
         <id property="userSeq" column="user_seq" />
         <result property="upperCount" column="upper_count"/>
         <result property="totalCount" column="total_count"/>

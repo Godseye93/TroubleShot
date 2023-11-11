@@ -1,13 +1,13 @@
-package com.orientalSalad.troubleShot.statics.service;
+package com.orientalSalad.troubleShot.member.service;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.orientalSalad.troubleShot.statics.dto.MemberRankDTO;
 import com.orientalSalad.troubleShot.statics.dto.RequestMostUsedTagDTO;
 import com.orientalSalad.troubleShot.statics.dto.ResponseCountTroubleDTO;
-import com.orientalSalad.troubleShot.statics.dto.MemberRankDTO;
 import com.orientalSalad.troubleShot.statics.mapper.StaticsMapper;
 
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class StaticsService {
+public class MemberTroubleService {
 	private final StaticsMapper staticsMapper;
 
 	public double getTroubleRank(Long userSeq){
@@ -98,22 +98,16 @@ public class StaticsService {
 
 		return tagList;
 	}
-	public Long getSolvedTroubleCount (long userSeq){
-		Long solvedCount = staticsMapper.countSolvedTroubleByUserSeq(userSeq);
+	public ResponseCountTroubleDTO getCountTrouble (long userSeq){
+		long solvedCount = staticsMapper.countSolvedTroubleByUserSeq(userSeq);
+		long notSolvedCount = staticsMapper.countNotSolvedTroubleByUserSeq(userSeq);
 
-		if(solvedCount == null){
-			solvedCount = 0L;
-		}
+		ResponseCountTroubleDTO countTroubleDTO=  ResponseCountTroubleDTO.builder()
+			.solvedCount(solvedCount)
+			.notSolvedCount(notSolvedCount)
+			.totalCount(solvedCount+notSolvedCount)
+			.build();
 
-		return solvedCount;
-	}
-	public Long getNotSolvedTroubleCount (long userSeq){
-		Long notSolvedCount = staticsMapper.countNotSolvedTroubleByUserSeq(userSeq);
-
-		if(notSolvedCount == null){
-			notSolvedCount = 0L;
-		}
-
-		return notSolvedCount;
+		return countTroubleDTO;
 	}
 }

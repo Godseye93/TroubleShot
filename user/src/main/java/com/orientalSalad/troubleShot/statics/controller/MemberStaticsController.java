@@ -1,18 +1,13 @@
 package com.orientalSalad.troubleShot.statics.controller;
 
-import java.util.List;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.orientalSalad.troubleShot.statics.dto.RequestMostUsedTagDTO;
 import com.orientalSalad.troubleShot.statics.dto.ResponsePolygonDTO;
-import com.orientalSalad.troubleShot.statics.dto.ResponseTagDTO;
 import com.orientalSalad.troubleShot.statics.service.StaticsService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -52,4 +47,5 @@ public class MemberStaticsController {
 		log.info("==== 유저 오각형 데이터 가져오기 끝 ====");
 		return new ResponseEntity<>(resultDTO, HttpStatus.ACCEPTED);
 	}
+
 }
