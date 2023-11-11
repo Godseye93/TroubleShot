@@ -7,6 +7,10 @@ import org.apache.ibatis.annotations.Param;
 
 import com.orientalSalad.troubleShot.statics.dto.RequestMostUsedTagDTO;
 import com.orientalSalad.troubleShot.statics.dto.MemberRankDTO;
+import com.orientalSalad.troubleShot.statics.dto.RequestTagHistoryDTO;
+import com.orientalSalad.troubleShot.statics.dto.RequestTroubleHistoryDTO;
+import com.orientalSalad.troubleShot.statics.dto.TagHistoryDTO;
+import com.orientalSalad.troubleShot.statics.dto.TroubleShootingHistoryDTO;
 
 @Mapper
 public interface StaticsMapper {
@@ -15,8 +19,10 @@ public interface StaticsMapper {
 	public MemberRankDTO selectReplyRankBySeq(@Param("userSeq") long userSeq);
 	public MemberRankDTO selectTagRankBySeq(@Param("userSeq") long userSeq);
 	public MemberRankDTO selectDailyPostRankBySeq(@Param("userSeq") long userSeq);
-	public List<String> selectMostUsedTag(@Param("searchParam")RequestMostUsedTagDTO requestMostUsedTagDTO);
+	public List<String> selectMostUsedTag(@Param("searchParam") RequestMostUsedTagDTO requestMostUsedTagDTO);
 	public List<String> selectAllTagsByUserSeq(@Param("userSeq")long userSeq);
+	public List<TagHistoryDTO> selectTopTagHistoryByUserSeq(@Param("searchParam")RequestTagHistoryDTO requestTagHistoryDTO);
 	public Long countSolvedTroubleByUserSeq(@Param("userSeq")long userSeq);
 	public Long countNotSolvedTroubleByUserSeq(@Param("userSeq")long userSeq);
+	public List<TroubleShootingHistoryDTO> countAllTroubleByUserSeqAndCreateDate(@Param("searchParam") RequestTroubleHistoryDTO requestTroubleHistoryDTO);
 }

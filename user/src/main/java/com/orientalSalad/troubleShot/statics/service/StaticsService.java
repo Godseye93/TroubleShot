@@ -5,9 +5,12 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.orientalSalad.troubleShot.statics.dto.RequestMostUsedTagDTO;
-import com.orientalSalad.troubleShot.statics.dto.ResponseCountTroubleDTO;
 import com.orientalSalad.troubleShot.statics.dto.MemberRankDTO;
+import com.orientalSalad.troubleShot.statics.dto.RequestMostUsedTagDTO;
+import com.orientalSalad.troubleShot.statics.dto.RequestTagHistoryDTO;
+import com.orientalSalad.troubleShot.statics.dto.RequestTroubleHistoryDTO;
+import com.orientalSalad.troubleShot.statics.dto.TagHistoryDTO;
+import com.orientalSalad.troubleShot.statics.dto.TroubleShootingHistoryDTO;
 import com.orientalSalad.troubleShot.statics.mapper.StaticsMapper;
 
 import lombok.RequiredArgsConstructor;
@@ -115,5 +118,21 @@ public class StaticsService {
 		}
 
 		return notSolvedCount;
+	}
+	public List<TagHistoryDTO> getAllTagHistory (RequestTagHistoryDTO requestTagHistoryDTO){
+		List<TagHistoryDTO> tagHistoryDTO = staticsMapper.selectTopTagHistoryByUserSeq(requestTagHistoryDTO);
+
+		if(tagHistoryDTO == null){
+			tagHistoryDTO = new ArrayList<>();
+		}
+		return tagHistoryDTO;
+	}
+	public List<TroubleShootingHistoryDTO> getAllTroubleShootingHistory (RequestTroubleHistoryDTO requestTroubleHistoryDTO){
+		List<TroubleShootingHistoryDTO> troubleShootingHistoryDTOList = staticsMapper.countAllTroubleByUserSeqAndCreateDate(requestTroubleHistoryDTO);
+
+		if(troubleShootingHistoryDTOList == null){
+			troubleShootingHistoryDTOList = new ArrayList<>();
+		}
+		return troubleShootingHistoryDTOList;
 	}
 }

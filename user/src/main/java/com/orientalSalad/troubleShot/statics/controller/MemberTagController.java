@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.orientalSalad.troubleShot.statics.dto.RequestMostUsedTagDTO;
-import com.orientalSalad.troubleShot.statics.dto.ResponsePolygonDTO;
+import com.orientalSalad.troubleShot.statics.dto.RequestTagHistoryDTO;
 import com.orientalSalad.troubleShot.statics.dto.ResponseTagDTO;
+import com.orientalSalad.troubleShot.statics.dto.ResponseTagHistoryDTO;
+import com.orientalSalad.troubleShot.statics.dto.TagHistoryDTO;
 import com.orientalSalad.troubleShot.statics.service.StaticsService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -58,6 +60,23 @@ public class MemberTagController {
 			.build();
 
 		log.info("==== 유저가 사용한 모든 태그 가져오기 끝 ====");
+		return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+	}
+	@Operation(summary = "기간별 많이 사용한 태그 히스토리 API")
+	@GetMapping("/most-used-history")
+	public ResponseEntity<?> findMostUsedTagHistory (
+		@ModelAttribute RequestTagHistoryDTO requestTagHistoryDTO){
+		log.info("==== 기간별 많이 사용한 태그 히스토리 가져오기 시작 ====");
+
+		List<TagHistoryDTO> tagHistoryList = staticsService.getAllTagHistory(requestTagHistoryDTO);
+
+		ResponseTagHistoryDTO resultDTO = ResponseTagHistoryDTO.builder()
+			.success(true)
+			.message("기간별 많이 사용한 태그 히스토리 가져오기를 성공했습니다.")
+			.tagHistoryList(tagHistoryList)
+			.build();
+
+		log.info("==== 기간별 많이 사용한 태그 히스토리 가져오기 끝 ====");
 		return new ResponseEntity<>(resultDTO, HttpStatus.OK);
 	}
 }

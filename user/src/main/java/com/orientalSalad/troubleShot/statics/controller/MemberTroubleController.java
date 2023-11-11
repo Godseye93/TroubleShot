@@ -1,14 +1,20 @@
 package com.orientalSalad.troubleShot.statics.controller;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.orientalSalad.troubleShot.statics.dto.RequestTroubleHistoryDTO;
 import com.orientalSalad.troubleShot.statics.dto.ResponseCountTroubleDTO;
 import com.orientalSalad.troubleShot.statics.dto.ResponsePolygonDTO;
+import com.orientalSalad.troubleShot.statics.dto.ResponseTroubleHistoryDTO;
+import com.orientalSalad.troubleShot.statics.dto.TroubleShootingHistoryDTO;
 import com.orientalSalad.troubleShot.statics.service.StaticsService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -40,6 +46,24 @@ public class MemberTroubleController {
 			.build();
 
 		log.info("==== 해결/미해결 트러블 슈팅 문서 개수 가져오기 끝 ====");
+		return new ResponseEntity<>(resultDTO, HttpStatus.ACCEPTED);
+	}
+	@Operation(summary = "작성한 트러블슈팅 히스토리")
+	@GetMapping("/history")
+	public ResponseEntity<?> getTroubleShootingHistory (
+		@PathVariable(name = "userSeq") Long userSeq,
+		@ModelAttribute RequestTroubleHistoryDTO requestTroubleHistoryDTO){
+		log.info("==== 작성한 트러블슈팅 히스토리 가져오기 시작 ====");
+
+		List<TroubleShootingHistoryDTO> troubleShootingHistoryDTOList = staticsService.getAllTroubleShootingHistory(requestTroubleHistoryDTO);
+
+		ResponseTroubleHistoryDTO resultDTO = ResponseTroubleHistoryDTO.builder()
+			.success(true)
+			.message("작성한 트러블슈팅 히스토리 가져오기를 성공했습니다.")
+			.troubleShootingHistoryList(troubleShootingHistoryDTOList)
+			.build();
+
+		log.info("==== 작성한 트러블슈팅 히스토리 가져오기 끝 ====");
 		return new ResponseEntity<>(resultDTO, HttpStatus.ACCEPTED);
 	}
 }

@@ -8,6 +8,17 @@
         <result property="upperCount" column="upper_count"/>
         <result property="totalCount" column="total_count"/>
     </resultMap>
+    <resultMap id="UserTagStatics" type="com.orientalSalad.troubleShot.statics.dto.MemberRankDTO">
+        <id property="userSeq" column="user_seq" />
+        <result property="upperCount" column="upper_count"/>
+        <result property="totalCount" column="total_count"/>
+    </resultMap>
+    <resultMap id="TagHistory" type="com.orientalSalad.troubleShot.statics.dto.TagHistoryDTO">
+        <id property="name" column="tag_name" />
+        <result property="totalCount" column="total_count"/>
+        <result property="dailyHistoryList" column="daily_history"
+                typeHandler="com.orientalSalad.troubleShot.statics.typehandler.JsonToDailyTagHistoryTypeHandler"/>
+    </resultMap>
 
     <select id="selectTroubleRankBySeq"
             parameterType="long"
@@ -148,7 +159,8 @@
             parameterType="long"
             resultType="string">
         SELECT
-            t.name AS tag_name
+            t.name AS tag_name,
+            count(t.name) AS tag_count
         FROM tag t
                  LEFT JOIN
                     trouble_tag tt ON tt.tag_seq = t.seq
@@ -157,6 +169,53 @@
                     AND ts.writer_seq = #{userSeq}
         WHERE ts.writer_seq = #{userSeq}
         GROUP BY writer_seq,t."name"
-        ORDER BY t."name";
+        ORDER BY tag_count DESC, t."name" DESC;
+    </select>
+    <select id="selectTopTagHistoryByUserSeq"
+            parameterType="com.orientalSalad.troubleShot.statics.dto.RequestTagHistoryDTO"
+            resultMap="TagHistory">
+        SELECT
+            top_used_tag.tag_name,
+            SUM(tag_count) AS total_count,
+            JSON_AGG(
+                    json_build_object(
+                            'count',top_used_tag.tag_count,
+                            'date', create_time
+                        )
+                ) AS daily_history
+        FROM (
+             SELECT
+                 t.name AS tag_name,
+                 COUNT(t.name) AS tag_count,
+                 DATE(ts.create_time) AS create_time
+            FROM
+                tag t
+            LEFT JOIN
+                trouble_tag tt ON tt.tag_seq = t.seq
+            LEFT JOIN
+                trouble_shooting ts ON tt.trouble_seq  = ts.seq
+            WHERE
+                ts.writer_seq = #{searchParam.userSeq}
+                AND t.name IN
+                    (SELECT
+                        t.name AS tag_name
+                    FROM
+                        tag t
+                    LEFT JOIN
+                        trouble_tag tt ON tt.tag_seq = t.seq
+                    LEFT JOIN
+                        trouble_shooting ts ON tt.trouble_seq  = ts.seq AND ts.writer_seq = #{searchParam.userSeq}
+                    WHERE ts.writer_seq = #{searchParam.userSeq}
+                        AND ts.create_time >= NOW() - (#{searchParam.day} || ' DAY')::INTERVAL
+                    GROUP BY
+                        t.name
+                    ORDER BY
+                        COUNT(t.name) DESC, t.name DESC
+                    LIMIT #{searchParam.count})
+                AND ts.create_time >= now() - (#{searchParam.day} || ' DAY')::INTERVAL
+            GROUP BY writer_seq, t.name, DATE(ts.create_time)
+            ORDER BY tag_name, create_time DESC
+            ) AS top_used_tag
+        GROUP BY tag_name;
     </select>
 </mapper>
