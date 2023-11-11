@@ -16,6 +16,7 @@ export default function useInfiniteList(options: SearchParams) {
   const totalPage = Math.ceil(data ? data.pages[0].totalCount / 10 : 1);
   useEffect(() => {
     let fetching = false;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handleScroll = async (e: any) => {
       const { scrollHeight, scrollTop, clientHeight } = e.target.scrollingElement;
       if (!fetching && scrollHeight - scrollTop <= clientHeight * 1.2) {
