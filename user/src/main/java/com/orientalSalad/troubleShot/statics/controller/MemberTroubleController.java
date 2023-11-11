@@ -29,7 +29,7 @@ public class MemberTroubleController {
 	private final StaticsService staticsService;
 
 	@Operation(summary = "해결/미해결 트러블 슈팅 문서 개수 가져오기")
-	@GetMapping("/solve-and-not-solve")
+	@GetMapping("/count")
 	public ResponseEntity<?> get (
 		@PathVariable(name = "userSeq") Long userSeq){
 		log.info("==== 해결/미해결 트러블 슈팅 문서 개수 가져오기 시작 ====");

@@ -8,7 +8,15 @@
         <result property="count" column="count"/>
         <result property="date" column="date"/>
     </resultMap>
-
+    <select id="countAllTroubleByUserSeq"
+            parameterType="long"
+            resultType="Long">
+        select
+            count(*) as solved_count
+        from trouble_shooting ts
+        where writer_seq = #{userSeq}
+        group by writer_seq;
+    </select>
     <select id="countSolvedTroubleByUserSeq"
             parameterType="long"
             resultType="Long">

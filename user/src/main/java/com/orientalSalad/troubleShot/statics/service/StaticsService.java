@@ -101,6 +101,15 @@ public class StaticsService {
 
 		return tagList;
 	}
+	public Long getAllTroubleCount(long userSeq){
+		Long solvedCount = staticsMapper.countAllTroubleByUserSeq(userSeq);
+
+		if(solvedCount == null){
+			solvedCount = 0L;
+		}
+
+		return solvedCount;
+	}
 	public Long getSolvedTroubleCount (long userSeq){
 		Long solvedCount = staticsMapper.countSolvedTroubleByUserSeq(userSeq);
 

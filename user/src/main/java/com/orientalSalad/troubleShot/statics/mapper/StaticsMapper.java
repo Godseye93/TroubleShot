@@ -25,4 +25,5 @@ public interface StaticsMapper {
 	public Long countSolvedTroubleByUserSeq(@Param("userSeq")long userSeq);
 	public Long countNotSolvedTroubleByUserSeq(@Param("userSeq")long userSeq);
 	public List<TroubleShootingHistoryDTO> countAllTroubleByUserSeqAndCreateDate(@Param("searchParam") RequestTroubleHistoryDTO requestTroubleHistoryDTO);
+	public Long countAllTroubleByUserSeq(@Param("userSeq")long userSeq);
 }
