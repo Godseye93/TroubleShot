@@ -36,6 +36,7 @@ public class MemberTroubleController {
 			.message("해결/미해결 트러블 슈팅 문서 개수 가져오기를 성공했습니다.")
 			.solvedCount(solvedCount)
 			.notSolvedCount(notSolvedCount)
+			.totalCount(solvedCount+notSolvedCount)
 			.build();
 
 		log.info("==== 해결/미해결 트러블 슈팅 문서 개수 가져오기 끝 ====");
