@@ -51,3 +51,20 @@ export type LoginStore = {
   userLogin: (res: ResLogin) => void;
   userLogout: () => void;
 };
+
+export interface PieGraphInfo {
+  troubleRank: number;
+  answerRank: number;
+  tagTypeRank: number;
+  replyRank: number;
+  dailyTroubleRank: number;
+}
+
+export interface PieGraphInfoAddNick {
+  nickname: string | undefined;
+  troubleRank: number;
+  answerRank: number;
+  tagTypeRank: number;
+  replyRank: number;
+  dailyTroubleRank: number;
+}

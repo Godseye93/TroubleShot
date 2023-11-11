@@ -22,10 +22,10 @@ export default function Page() {
           <div className="flex justify-between items-center bg-white rounded-lg mb-4 w-full p-5">
             <div className="w-1/6 flex-col ">
               <img src={userData?.profileImg} alt="trosProfileImg" className="" />
-              <Link href="/">프로필 수정하기</Link>
+              <Link href={`/mypage/${user?.member.seq}/edit`}>프로필 수정하기</Link>
             </div>
             <div>
-              <p>{user?.member.nickname}</p>
+              <p className="text-xl font-bold">{user?.member.nickname}</p>
               <p>{user?.member.email}</p>
               <p>{user?.member.locale}</p>
             </div>

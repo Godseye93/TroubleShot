@@ -1,89 +1,73 @@
 "use client";
 import { ResponsiveRadar } from "@nivo/radar";
+import { useLoginStore } from "@/stores/useLoginStore";
+import { useState, useEffect } from "react";
+import { PieGraphInfo, PieGraphInfoAddNick } from "@/types/CommonType";
+import { getPieGraphInfo } from "@/api/account";
 
-type Data = {
-  taste: string;
-  chardonay: number;
-  carmenere: number;
-  syrah: number;
-}[];
+// 타입 오류 해결
+// 백에서 받는 데이터 이름 바꾸기 >> 한국어로
 
-interface Props {
-  data: Data;
-}
+const average = {
+  nickname: "평균",
+  troubleRank: 50,
+  answerRank: 50,
+  tagTypeRank: 50,
+  replyRank: 50,
+  dailyTroubleRank: 50,
+};
 
-const data = [
-  {
-    taste: "fruity",
-    chardonay: 70,
-    carmenere: 110,
-    syrah: 100,
-  },
-  {
-    taste: "bitter",
-    chardonay: 82,
-    carmenere: 116,
-    syrah: 50,
-  },
-  {
-    taste: "heavy",
-    chardonay: 61,
-    carmenere: 59,
-    syrah: 86,
-  },
-  {
-    taste: "strong",
-    chardonay: 45,
-    carmenere: 100,
-    syrah: 77,
-  },
-  {
-    taste: "sunny",
-    chardonay: 63,
-    carmenere: 76,
-    syrah: 61,
-  },
-];
+export function MyResponsiveRadar () {
+  const { user } = useLoginStore();
+  const nickname:string = user!.member.nickname;
+  const userSeq = user?.member.seq;
 
-export const MyResponsiveRadar = () => (
+  // const userData = getPieGraphInfo(userSeq!);
+  const [userData, setUserData] = useState<PieGraphInfo | null>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await getPieGraphInfo(userSeq!);
+      setUserData(data);
+    };
+
+    fetchData();
+  }, [userSeq]);
+
+  const userDataObj:PieGraphInfoAddNick = {...(userData || {}), nickname, 
+  troubleRank: userData?.troubleRank || 0, // 또는 다른 기본값 설정
+  answerRank: userData?.answerRank || 0,
+  tagTypeRank: userData?.tagTypeRank || 0,
+  replyRank: userData?.replyRank || 0,
+  dailyTroubleRank: userData?.dailyTroubleRank || 0,};
+
+  const totalData = Object.keys(average)
+  .filter((key): key is keyof PieGraphInfoAddNick =>  key !== "nickname")
+  .map(key => ({
+    rank: key,
+    [average.nickname]: average[key],
+    [userDataObj.nickname!]: userDataObj[key],
+  }));
+
+  return(
   <ResponsiveRadar
-    data={data}
-    keys={["chardonay", "carmenere", "syrah"]}
-    indexBy="taste"
-    maxValue={200}
+    data={totalData}
+    keys={["평균", nickname]}
+    indexBy="rank"
+    maxValue={100}
     valueFormat=">-.2f"
-    margin={{ top: 70, right: 80, bottom: 40, left: 80 }}
-    borderWidth={5}
+    margin={{ top: 40, right: 80, bottom: 40, left: 80 }}
+    borderWidth={3}
     borderColor={{ from: "color", modifiers: [] }}
-    gridLevels={10}
-    gridLabelOffset={25}
+    // gridLevels={10}
+    gridLabelOffset={10}
     enableDots={false}
-    dotSize={10}
+    dotSize={5}
     dotColor={{ theme: "background" }}
     dotBorderWidth={2}
-    colors={{ scheme: "paired" }}
-    blendMode="hard-light"
+    colors={{ scheme: "nivo" }}
+    blendMode="multiply"
     motionConfig="wobbly"
-    // legends={[
-    //   {
-    //     anchor: "top-left",
-    //     direction: "column",
-    //     translateX: -50,
-    //     translateY: -40,
-    //     itemWidth: 80,
-    //     itemHeight: 20,
-    //     itemTextColor: "#999",
-    //     symbolSize: 12,
-    //     symbolShape: "circle",
-    //     effects: [
-    //       {
-    //         on: "hover",
-    //         style: {
-    //           itemTextColor: "#000",
-    //         },
-    //       },
-    //     ],
-    //   },
-    // ]}
   />
-);
+  );
+}

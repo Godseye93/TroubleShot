@@ -2,6 +2,7 @@ import {
   CommonType,
   EmailCertResponse,
   EmailCode,
+  PieGraphInfo,
   ReqLogin,
   ReqLogout,
   ResLogin,
@@ -40,4 +41,14 @@ export const loginSubmit = async (params: ReqLogin): Promise<ResLogin> => {
 export const logoutSubmit = async (params: ReqLogout): Promise<ResLogout> => {
   const { data } = await api.post("login/logout", params);
   return data;
+};
+
+// 마이페이지 파이 그래프 정보 요청
+export const getPieGraphInfo = async (params:number): Promise<PieGraphInfo> => {
+  const { data } = await api.get(`/members/${params}/statics/polygon`);
+  // data에서 필요한 필드만 추출하여 새로운 객체를 생성
+  const { troubleRank, answerRank, tagTypeRank, replyRank, dailyTroubleRank } = data;
+
+  // 새로운 객체를 반환
+  return { troubleRank, answerRank, tagTypeRank, replyRank, dailyTroubleRank };
 };
