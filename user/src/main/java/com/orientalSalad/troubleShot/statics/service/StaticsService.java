@@ -5,12 +5,14 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.orientalSalad.troubleShot.global.constant.TroubleShootingType;
 import com.orientalSalad.troubleShot.statics.dto.MemberRankDTO;
 import com.orientalSalad.troubleShot.statics.dto.RequestMostUsedTagDTO;
 import com.orientalSalad.troubleShot.statics.dto.RequestTagHistoryDTO;
 import com.orientalSalad.troubleShot.statics.dto.RequestTroubleHistoryDTO;
 import com.orientalSalad.troubleShot.statics.dto.TagHistoryDTO;
 import com.orientalSalad.troubleShot.statics.dto.TroubleShootingHistoryDTO;
+import com.orientalSalad.troubleShot.statics.dto.TroubleShootingTypeGroupDTO;
 import com.orientalSalad.troubleShot.statics.mapper.StaticsMapper;
 
 import lombok.RequiredArgsConstructor;
@@ -143,5 +145,27 @@ public class StaticsService {
 			troubleShootingHistoryDTOList = new ArrayList<>();
 		}
 		return troubleShootingHistoryDTOList;
+	}
+	public List<TroubleShootingTypeGroupDTO> countAllTroubleShootingByPostType(long userSeq){
+		List<TroubleShootingTypeGroupDTO> groupDTOList = staticsMapper.countAllTroubleByPostType(userSeq);
+
+		if(groupDTOList == null){
+			groupDTOList = new ArrayList<>();
+		}
+		
+		//타입에 따라 이름 지정
+		for(int i=0;i<groupDTOList.size();i++){
+			if(groupDTOList.get(i).getType() == TroubleShootingType.WEB){
+				groupDTOList.get(i).setName("Web");
+			}else if(groupDTOList.get(i).getType() == TroubleShootingType.INTELLIJ){
+				groupDTOList.get(i).setName("IntelliJ");
+			}else if(groupDTOList.get(i).getType() == TroubleShootingType.VS_CODE){
+				groupDTOList.get(i).setName("VS Code");
+			}else{
+				groupDTOList.get(i).setName("알수없음");
+			}
+		}
+
+		return groupDTOList;
 	}
 }

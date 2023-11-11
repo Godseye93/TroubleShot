@@ -11,6 +11,7 @@ import com.orientalSalad.troubleShot.statics.dto.RequestTagHistoryDTO;
 import com.orientalSalad.troubleShot.statics.dto.RequestTroubleHistoryDTO;
 import com.orientalSalad.troubleShot.statics.dto.TagHistoryDTO;
 import com.orientalSalad.troubleShot.statics.dto.TroubleShootingHistoryDTO;
+import com.orientalSalad.troubleShot.statics.dto.TroubleShootingTypeGroupDTO;
 
 @Mapper
 public interface StaticsMapper {
@@ -26,4 +27,5 @@ public interface StaticsMapper {
 	public Long countNotSolvedTroubleByUserSeq(@Param("userSeq")long userSeq);
 	public List<TroubleShootingHistoryDTO> countAllTroubleByUserSeqAndCreateDate(@Param("searchParam") RequestTroubleHistoryDTO requestTroubleHistoryDTO);
 	public Long countAllTroubleByUserSeq(@Param("userSeq")long userSeq);
+	public List<TroubleShootingTypeGroupDTO> countAllTroubleByPostType(@Param("userSeq") long userSeq);
 }

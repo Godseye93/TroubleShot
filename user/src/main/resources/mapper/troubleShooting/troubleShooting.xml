@@ -8,6 +8,11 @@
         <result property="count" column="count"/>
         <result property="date" column="date"/>
     </resultMap>
+    <resultMap id="TroubleShootingTypeGroup"
+               type="com.orientalSalad.troubleShot.statics.dto.TroubleShootingTypeGroupDTO">
+        <result property="count" column="count"/>
+        <result property="type" column="type"/>
+    </resultMap>
     <select id="countAllTroubleByUserSeq"
             parameterType="long"
             resultType="Long">
@@ -50,6 +55,18 @@
         where
               writer_seq = #{userSeq} and ts.solved = false
         group by writer_seq;
-
+    </select>
+    <select id="countAllTroubleByPostType"
+            parameterType="long"
+            resultMap="TroubleShootingTypeGroup">
+        select
+            post_type as type,
+            count(post_type) as count
+        from
+            trouble_shooting ts
+        where
+            writer_seq = #{userSeq}
+        group by
+            post_type;
     </select>
 </mapper>
