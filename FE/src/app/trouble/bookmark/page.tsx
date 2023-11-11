@@ -1,9 +1,9 @@
-import HydratedBoard from "./HydratedBoard";
+import BoardList from "./BoardList";
 
 export default function Page() {
   return (
     <main className="mt-4 mx-3 flex-1">
-      <HydratedBoard />
+      <BoardList />
     </main>
   );
 }

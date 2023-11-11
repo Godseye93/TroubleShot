@@ -25,6 +25,11 @@ export default function BoardItem({ board, last, idx }: { board: TroubleShooting
         queryKey: ["boards"],
         exact: true,
       });
+      queryClient.invalidateQueries({
+        queryKey: ["hotBoard"],
+        exact: true,
+      });
+      console.log(board.favorite);
     } catch (err) {
       console.log(err);
     }

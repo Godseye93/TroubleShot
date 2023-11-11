@@ -5,12 +5,13 @@ import { getTrouble } from "@/api/trouble";
 
 export default async function HydratedPosts() {
   const queryClient = getQueryClient();
-  await queryClient.prefetchQuery({
-    queryKey: ["boards"],
-    queryFn: async () => {
-      const data = await getTrouble();
+  await queryClient.prefetchInfiniteQuery({
+    queryKey: ["board"],
+    queryFn: async ({ pageParam = 1 }) => {
+      const data = await getTrouble({ pageNo: pageParam });
       return data;
     },
+    initialPageParam: 1,
   });
   const dehydratedState = dehydrate(queryClient);
 

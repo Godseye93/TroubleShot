@@ -2,7 +2,9 @@ export interface DefaultRespense {
   success: boolean;
   message: string;
 }
-
+export interface GetMostTags extends DefaultRespense {
+  tagList: string[];
+}
 export interface CreateOptions {
   category: string;
   scope: 0 | 1 | null;

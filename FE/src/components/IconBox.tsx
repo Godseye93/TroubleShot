@@ -29,6 +29,10 @@ export default function IconBox({ likes, views, comments, m, isLike, troubleSeq 
         queryKey: ["boards"],
         exact: true,
       });
+      queryClient.invalidateQueries({
+        queryKey: ["hotBoard"],
+        exact: true,
+      });
     } catch (err) {
       console.log(err);
     }
