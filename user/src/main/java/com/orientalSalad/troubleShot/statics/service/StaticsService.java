@@ -103,14 +103,14 @@ public class StaticsService {
 
 		return tagList;
 	}
-	public Long getAllTroubleCount(long userSeq){
-		Long solvedCount = staticsMapper.countAllTroubleByUserSeq(userSeq);
+	public Long getAllTroubleCountByUserSeq(long userSeq){
+		Long totalCount = staticsMapper.countAllTroubleByUserSeq(userSeq);
 
-		if(solvedCount == null){
-			solvedCount = 0L;
+		if(totalCount == null){
+			totalCount = 0L;
 		}
 
-		return solvedCount;
+		return totalCount;
 	}
 	public Long getSolvedTroubleCount (long userSeq){
 		Long solvedCount = staticsMapper.countSolvedTroubleByUserSeq(userSeq);
@@ -145,6 +145,24 @@ public class StaticsService {
 			troubleShootingHistoryDTOList = new ArrayList<>();
 		}
 		return troubleShootingHistoryDTOList;
+	}
+	public long countAllAnswerByUserSeq(long userSeq){
+		Long totalCount = staticsMapper.countAllAnswerByUserSeq(userSeq);
+
+		if(totalCount == null){
+			totalCount = 0L;
+		}
+
+		return totalCount;
+	}
+	public long countAllSelectAnswerByUserSeq(long userSeq){
+		Long totalCount = staticsMapper.countAllSelectedAnswerByUserSeq(userSeq);
+
+		if(totalCount == null){
+			totalCount = 0L;
+		}
+
+		return totalCount;
 	}
 	public List<TroubleShootingTypeGroupDTO> countAllTroubleShootingByPostType(long userSeq){
 		List<TroubleShootingTypeGroupDTO> groupDTOList = staticsMapper.countAllTroubleByPostType(userSeq);

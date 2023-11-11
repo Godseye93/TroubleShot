@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.orientalSalad.troubleShot.statics.dto.ResponseCountTroubleAndAnswerDTO;
 import com.orientalSalad.troubleShot.statics.dto.ResponsePolygonDTO;
 import com.orientalSalad.troubleShot.statics.service.StaticsService;
 
@@ -47,5 +48,27 @@ public class MemberStaticsController {
 		log.info("==== 유저 오각형 데이터 가져오기 끝 ====");
 		return new ResponseEntity<>(resultDTO, HttpStatus.ACCEPTED);
 	}
+	@Operation(summary = "트러블 문서와 답변 통계 가져오기")
+	@GetMapping("/count-trouble-and-answer")
+	public ResponseEntity<?> countTroubleAndAnswer (
+		@PathVariable(name = "userSeq") Long userSeq){
+		log.info("==== 트러블 문서와 답변 통계 가져오기 시작 ====");
 
+		Long answerCount = staticsService.countAllAnswerByUserSeq(userSeq);
+		Long selectedAnswerCount = staticsService.countAllSelectAnswerByUserSeq(userSeq);
+		Long troubleCount = staticsService.getAllTroubleCountByUserSeq(userSeq);
+		double rate = (double)selectedAnswerCount / answerCount * 100;
+
+		ResponseCountTroubleAndAnswerDTO resultDTO = ResponseCountTroubleAndAnswerDTO.builder()
+			.success(true)
+			.message("트러블 문서와 답변 통계 가져오기를 성공했습니다.")
+			.answerCount(answerCount)
+			.selectedAnswerCount(selectedAnswerCount)
+			.troubleCount(troubleCount)
+			.selectedRate(rate)
+			.build();
+
+		log.info("==== 트러블 문서와 답변 통계 가져오기 끝 ====");
+		return new ResponseEntity<>(resultDTO, HttpStatus.ACCEPTED);
+	}
 }

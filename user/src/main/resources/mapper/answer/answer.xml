@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.orientalSalad.troubleShot.statics.mapper.StaticsMapper">
+    <select id="countAllAnswerByUserSeq"
+            parameterType="long"
+            resultType="long">
+        SELECT
+               count(*)
+        FROM
+             trouble_shooting_answer tsa
+        WHERE
+              tsa.writer_seq = #{userSeq};
+    </select>
+    <select id="countAllSelectedAnswerByUserSeq"
+            parameterType="long"
+            resultType="long">
+        SELECT
+            count(*)
+        FROM
+            trouble_shooting_answer tsa
+        WHERE
+            tsa.writer_seq = #{userSeq}
+            AND tsa.selected = true;
+    </select>
+</mapper>
