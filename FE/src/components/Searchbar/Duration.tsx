@@ -1,13 +1,16 @@
-import { useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import { BsFillCalendarFill } from "react-icons/bs";
 import UseDatePicker from "./UseDatePicker";
-export default function Duration() {
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
-
-  const [isSelected, setIsSelected] = useState(false);
-
+interface Props {
+  startDate: Date;
+  endDate: Date;
+  isSelected: boolean;
+  setStartDate: React.Dispatch<SetStateAction<Date>>;
+  setEndDate: React.Dispatch<SetStateAction<Date>>;
+  setIsSelected: React.Dispatch<SetStateAction<boolean>>;
+}
+export default function Duration({ startDate, endDate, isSelected, setStartDate, setEndDate, setIsSelected }: Props) {
   return (
     <div className="flex border-b-2 pb-5">
       <div className="w-20 font-semibold">기간별</div>

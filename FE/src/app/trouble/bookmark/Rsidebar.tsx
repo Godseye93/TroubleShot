@@ -1,20 +1,10 @@
-import BoardList from "@/app/trouble/BoardList";
+"use client";
+import CardContent from "@/components/CardContentS";
+import { usePathname } from "next/navigation";
 
-export default function TroubleContents() {
-  const temuser = [
-    {
-      username: "정슬호",
-      userImg: "https://m.dokidokigoods.co.kr/web/product/big/202301/3f31955ad234d3a2a5dbfbd7a14701f1.jpg",
-    },
-    {
-      username: "정슬호",
-      userImg: "https://m.dokidokigoods.co.kr/web/product/big/202301/3f31955ad234d3a2a5dbfbd7a14701f1.jpg",
-    },
-    {
-      username: "정슬호",
-      userImg: "https://m.dokidokigoods.co.kr/web/product/big/202301/3f31955ad234d3a2a5dbfbd7a14701f1.jpg",
-    },
-  ];
+export default function Rsidebar() {
+  const path = usePathname();
+  const tmpkeyword = "javascript";
   const tempdata = [
     {
       seq: 1,
@@ -26,7 +16,6 @@ export default function TroubleContents() {
       comments: 123459,
       likes: 456125616549838,
       date: "2023-01-10",
-      user: temuser[0],
     },
     {
       seq: 2,
@@ -38,7 +27,6 @@ export default function TroubleContents() {
       comments: 123459,
       likes: 4561238,
       date: "2023-01-22",
-      user: temuser[1],
     },
     {
       seq: 3,
@@ -80,12 +68,12 @@ export default function TroubleContents() {
       likes: 123,
       img: "https://pbs.twimg.com/media/D44RMeiUwAAn_1F.jpg",
       date: "2023-01-31",
-      user: temuser[2],
     },
   ];
+
   return (
-    <div className="mt-2">
-      <BoardList contents={tempdata} />
+    <div className={`mt-4 ${!path.includes("create") && "lg:block"} hidden`}>
+      <CardContent keyword={tmpkeyword} contents={tempdata} />
     </div>
   );
 }
