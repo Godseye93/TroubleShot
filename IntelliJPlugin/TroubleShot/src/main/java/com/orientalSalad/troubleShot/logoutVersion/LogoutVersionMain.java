@@ -38,8 +38,8 @@ public class LogoutVersionMain {
         detailPanel = new JPanel(cardLayout);
         LogoutVersionWriteTrouble logoutVersionWriteTrouble = new LogoutVersionWriteTrouble();
         detailPanel.add(logoutVersionWriteTrouble.getPanel(), "Write Trouble");
-        Login login = new Login();
-        detailPanel.add(login.getPanel(), "Login");
+//        Login login = new Login();
+//        detailPanel.add(login.getPanel(), "Login");
         LogoutVersionList logoutVersionList = new LogoutVersionList();
         detailPanel.add(logoutVersionList.getPanel(), "My Trouble Shooting");
         // main에 list, detail, foot 배치

@@ -17,9 +17,10 @@ dependencies {
 //  implementation 'org.springframework.boot:spring-boot-starter-webflux'
 //  implementation 'org.springframework:spring-webflux:5.2.7.RELEASE'
     implementation 'com.squareup.okhttp3:okhttp:4.9.0'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.5'
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.0'
     implementation 'com.atlassian.commonmark:commonmark:0.13.1'
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.5'
+
 
 }
 

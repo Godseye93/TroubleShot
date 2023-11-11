@@ -20,7 +20,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.attribute.UserDefinedFileAttributeView;
 
-import static com.orientalSalad.troubleShot.actions.MyToolWindowFactory.project;
+import static com.orientalSalad.troubleShot.actions.TroubleShot.project;
 
 public class FileUtil {
 

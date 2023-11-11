@@ -1,18 +1,16 @@
 package com.orientalSalad.troubleShot.logoutVersion;
 
-import com.orientalSalad.troubleShot.util.FileUtil;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 
-import static com.orientalSalad.troubleShot.actions.MyToolWindowFactory.customPanel;
-import static com.orientalSalad.troubleShot.actions.MyToolWindowFactory.toolWindow;
+import static com.orientalSalad.troubleShot.MainPanel.fileUtil;
+import static com.orientalSalad.troubleShot.actions.TroubleShot.mainPanel;
+import static com.orientalSalad.troubleShot.actions.TroubleShot.toolWindow;
 
 
 public class LogoutVersionWriteSolution {
-    private FileUtil fileUtil;
     public String mdFileName;
     private JTextArea solvedCodeInput;
     private JTextArea descriptionInput;
@@ -26,7 +24,6 @@ public class LogoutVersionWriteSolution {
     }
 
     public LogoutVersionWriteSolution(){
-        fileUtil = new FileUtil();
         // markdown copy 버튼 클릭 시
         copyMDButton.addActionListener(e -> {
             copyMDCode();
@@ -41,7 +38,7 @@ public class LogoutVersionWriteSolution {
             fileUtil.loadAndDisplayFile(mdFileName);
 
             // 초기화
-            customPanel.setContent(LogoutVersionMain.getNewInstance().getPanel());
+            mainPanel.setContent(LogoutVersionMain.getNewInstance().getPanel());
 
             // ToolWindow 숨기기
             toolWindow.hide(null);

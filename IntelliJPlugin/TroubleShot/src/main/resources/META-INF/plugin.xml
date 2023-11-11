@@ -7,20 +7,20 @@
   <name>TroubleShot</name>
 
   <!-- 회사 정보 -->
-  <vendor email="support@yourcompany.com" url="https://www.yourcompany.com">YourCompany</vendor>
+  <vendor email="yeahleem2@gmail.com" url="https://www.yourcompany.com">Oriental Salad</vendor>
 
   <!-- desciption : 한글 지원 안됨 -->
   <description><![CDATA[
-    Enter short description for your plugin here.<br>
-    <em>most HTML tags may be used</em>
+    We make writing trouble-shooting easy.<br>
+    <em>Try Trouble SHOT!!</em>
   ]]></description>
 
   <depends>com.intellij.modules.platform</depends>
 
-    <extensions defaultExtensionNs="com.intellij">
-        <toolWindow id="MyCustomToolWindow"
+  <extensions defaultExtensionNs="com.intellij">
+        <toolWindow id="TroubleShot"
                     anchor="right"
-                    factoryClass="com.orientalSalad.troubleShot.actions.MyToolWindowFactory">
+                    factoryClass="com.orientalSalad.troubleShot.actions.TroubleShot">
         </toolWindow>
     </extensions>
 

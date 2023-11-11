@@ -1,7 +1,5 @@
 package com.orientalSalad.troubleShot.logoutVersion;
 
-import com.orientalSalad.troubleShot.util.FileUtil;
-
 import javax.swing.*;
 
 import java.awt.*;
@@ -13,8 +11,9 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.orientalSalad.troubleShot.MainPanel.fileUtil;
+
 public class LogoutVersionList {
-    private FileUtil fileUtil;
     private JPanel wrapperPanel;
     private JScrollPane scrollPane;
 
@@ -23,9 +22,8 @@ public class LogoutVersionList {
     }
 
     public LogoutVersionList() {
-        fileUtil = new FileUtil();
         // 파일 제목들 가져오기
-        String[] fileNames = fileUtil.getFileNameList();;
+        String[] fileNames = fileUtil.getFileNameList();
         if (fileNames == null) {
             // todo : 작성한 트러블 슈팅이 존재하지 않습니다. 텍스트로 보여주기
             System.out.println("fileNames null입니다");

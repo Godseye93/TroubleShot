@@ -13,9 +13,9 @@ import com.intellij.psi.search.GlobalSearchScope;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.orientalSalad.troubleShot.actions.MyToolWindowFactory.project;
+import static com.orientalSalad.troubleShot.actions.TroubleShot.project;
 
-public class AutomaticUtil {
+public class TechStackAutomation {
 
     // 의존성 추출 자동화
     public String extractTechStack() {
@@ -23,6 +23,7 @@ public class AutomaticUtil {
 
         String mavenDependencies = extractMavenTechStack();
         String gradleDependencies = extractGradleTechStack();
+        String langauge = currentFileInfo();
 
         if (mavenDependencies != null) {
             techStack.append(mavenDependencies).append("\n");
@@ -30,11 +31,9 @@ public class AutomaticUtil {
         if (gradleDependencies != null) {
             techStack.append(gradleDependencies).append("\n");
         }
-        if (currentFileInfo() != null) {
-            techStack.append("fileinfo : ").append(currentFileInfo()).append("\n");
-        }
-        if (mavenDependencies == null && gradleDependencies == null) {
-            // todo : 현재 파일/폴더에서 언어&버전 정보 가져오기
+
+        if (langauge != null && mavenDependencies == null && gradleDependencies == null) {
+            techStack.append(langauge).append("\n");
         }
         return techStack.toString();
     }
@@ -68,7 +67,6 @@ public class AutomaticUtil {
             String projectPath = project.getBasePath();
 
             if (projectPath == null || filePath == null || !filePath.startsWith(projectPath)) {
-                System.out.println("gradleFiles 존재하지 않음");
                 continue;
             }
 
@@ -98,7 +96,6 @@ public class AutomaticUtil {
         PsiFile[] mavenFiles = FilenameIndex.getFilesByName(project, "pom.xml", GlobalSearchScope.allScope(project));
 
         if (mavenFiles == null || mavenFiles.length == 0) {
-            System.out.println("mavenFiles 존재하지 않음");
             return null;
         }
 
