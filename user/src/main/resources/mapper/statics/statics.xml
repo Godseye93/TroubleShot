@@ -218,4 +218,43 @@
             ) AS top_used_tag
         GROUP BY tag_name;
     </select>
+    <select id="selectAllTroubleTagHistoryByUserSeq"
+    parameterType="long"
+    resultMap="TagHistory">
+        SELECT
+            t.name AS tag_name,
+            count(t.name) AS total_count
+        FROM
+            tag t
+        INNER JOIN
+            trouble_tag tt on tt.tag_seq = t.seq
+        INNER JOIN
+            trouble_shooting ts on tt.trouble_seq  = ts.seq
+            AND ts.writer_seq =  #{userSeq}
+        group by
+            t.name
+        order by
+            total_count desc,
+            t.name;
+    </select>
+    <select id="selectAllAnswerTagHistoryByUserSeq"
+            parameterType="long"
+            resultMap="TagHistory">
+        SELECT
+            count(t.name) AS total_count,
+	        t.name AS tag_name
+        FROM
+            tag t
+        INNER JOIN
+            trouble_tag tt ON tt.tag_seq = t.seq
+        INNER JOIN
+            trouble_shooting ts ON tt.trouble_seq  = ts.seq
+        INNER JOIN
+            trouble_shooting_answer tsa ON ts.seq = tsa.trouble_seq
+            AND tsa.writer_seq = #{userSeq}
+        GROUP BY
+             t.name
+        ORDER BY
+            total_count DESC;
+    </select>
 </mapper>

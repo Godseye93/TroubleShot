@@ -79,4 +79,38 @@ public class MemberTagController {
 		log.info("==== 기간별 많이 사용한 태그 히스토리 가져오기 끝 ====");
 		return new ResponseEntity<>(resultDTO, HttpStatus.OK);
 	}
+	@Operation(summary = "내가 트러블문서에 사용한 태그 목록 API")
+	@GetMapping("/trouble-shootings")
+	public ResponseEntity<?> findAllTroubleTagsByUserSeq (
+		@PathVariable(name = "userSeq") long userSeq){
+		log.info("==== 유저가 트러블문서에 사용한 모든 태그 가져오기 시작 ====");
+
+		List<TagHistoryDTO> tagHistoryList = staticsService.getAllTroubleTagHistory(userSeq);
+
+		ResponseTagHistoryDTO resultDTO = ResponseTagHistoryDTO.builder()
+			.success(true)
+			.message("유저가 트러블문서에 사용한 모든 태그 가져오기를 성공했습니다.")
+			.tagHistoryList(tagHistoryList)
+			.build();
+
+		log.info("====유저가 트러블문서에 사용한 모든 태그 가져오기끝 ====");
+		return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+	}
+	@Operation(summary = "내가 답변에 사용한 태그 목록 API")
+	@GetMapping("/answers")
+	public ResponseEntity<?> findAllAnswerTagsByUserSeq (
+		@PathVariable(name = "userSeq") long userSeq){
+		log.info("==== 유저가 답변에 사용한 모든 태그 가져오기 시작 ====");
+
+		List<TagHistoryDTO> tagHistoryList = staticsService.getAllAnswerTagHistory(userSeq);
+
+		ResponseTagHistoryDTO resultDTO = ResponseTagHistoryDTO.builder()
+			.success(true)
+			.message("유저가 답변에 사용한 모든 태그 가져오기를 성공했습니다.")
+			.tagHistoryList(tagHistoryList)
+			.build();
+
+		log.info("====유저가 답변에 사용한 모든 태그 가져오기끝 ====");
+		return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+	}
 }

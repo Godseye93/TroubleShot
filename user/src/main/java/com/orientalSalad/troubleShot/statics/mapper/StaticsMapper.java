@@ -30,4 +30,6 @@ public interface StaticsMapper {
 	public List<TroubleShootingTypeGroupDTO> countAllTroubleByPostType(@Param("userSeq") long userSeq);
 	public Long countAllAnswerByUserSeq(@Param("userSeq")long userSeq);
 	public Long countAllSelectedAnswerByUserSeq(@Param("userSeq")long userSeq);
+	public List<TagHistoryDTO>  selectAllTroubleTagHistoryByUserSeq(@Param("userSeq")long userSeq);
+	public List<TagHistoryDTO>  selectAllAnswerTagHistoryByUserSeq(@Param("userSeq")long userSeq);
 }

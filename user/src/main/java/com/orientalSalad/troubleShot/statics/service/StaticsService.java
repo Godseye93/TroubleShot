@@ -186,4 +186,20 @@ public class StaticsService {
 
 		return groupDTOList;
 	}
+	public List<TagHistoryDTO> getAllTroubleTagHistory (Long userSeq){
+		List<TagHistoryDTO> tagHistoryDTO = staticsMapper.selectAllTroubleTagHistoryByUserSeq(userSeq);
+		log.info(tagHistoryDTO.toString());
+		if(tagHistoryDTO == null){
+			tagHistoryDTO = new ArrayList<>();
+		}
+		return tagHistoryDTO;
+	}
+	public List<TagHistoryDTO> getAllAnswerTagHistory (Long userSeq){
+		List<TagHistoryDTO> tagHistoryDTO = staticsMapper.selectAllAnswerTagHistoryByUserSeq(userSeq);
+
+		if(tagHistoryDTO == null){
+			tagHistoryDTO = new ArrayList<>();
+		}
+		return tagHistoryDTO;
+	}
 }
