@@ -69,6 +69,7 @@ export interface TroubleShootingBoard {
   replies: null | Reply[];
   answers: null;
   loginLike: false;
+  favorite: false;
 }
 
 export interface GetTroubleList {

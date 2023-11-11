@@ -7,6 +7,7 @@ export const getTrouble = async (params: SearchParams = {}): Promise<GetTroubleL
   const { data } = await api.get("trouble-shootings", { params });
   return data;
 };
+
 export const postTrouble = async (req: RequestTroubleShooting): Promise<DefaultRespense> => {
   const { data } = await api.post("trouble-shootings", req);
   return data;
@@ -16,13 +17,19 @@ export const postTroubleLike = async (
   troubleSeq: number,
   loginSeq?: number
 ): Promise<DefaultRespense> => {
-  let body: {
-    type: 0;
-    loginSeq?: number;
-  } = {
+  const body = {
     type: 0,
+    ...(loginSeq && { loginSeq: userSeq }),
   };
-  if (loginSeq) body = { ...body, loginSeq };
-  const { data } = await api.post(`/users/${userSeq}/trouble-shootings/${troubleSeq}/like`, body);
+  const { data } = await api.post(`/members/${userSeq}/trouble-shootings/${troubleSeq}/like`, body);
+  return data;
+};
+
+export const postTroubleFavorite = async (userSeq: number, troubleSeq: number): Promise<DefaultRespense> => {
+  const body = {
+    type: 0,
+    loginSeq: userSeq,
+  };
+  const { data } = await api.post(`/members/${userSeq}/trouble-shootings/${troubleSeq}/favorite`, body);
   return data;
 };
