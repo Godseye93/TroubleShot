@@ -1,7 +1,8 @@
 package com.orientalSalad.troubleShot.logoutVersion;
 
 
-import com.orientalSalad.troubleShot.util.TechStackAutomation;
+import com.orientalSalad.troubleShot.common.TechStackAutomation;
+import com.orientalSalad.troubleShot.common.TroubleAutomation;
 
 import javax.swing.*;
 
@@ -9,9 +10,9 @@ import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 
-import static com.orientalSalad.troubleShot.MainPanel.fileUtil;
-import static com.orientalSalad.troubleShot.actions.TroubleShot.mainPanel;
-import static com.orientalSalad.troubleShot.actions.TroubleShot.toolWindow;
+import static com.orientalSalad.troubleShot.common.MainPanel.fileUtil;
+import static com.orientalSalad.troubleShot.endpoint.TroubleShotToolWindow.mainPanel;
+import static com.orientalSalad.troubleShot.endpoint.TroubleShotToolWindow.toolWindow;
 
 
 public class LogoutVersionWriteTrouble {
@@ -50,7 +51,7 @@ public class LogoutVersionWriteTrouble {
 
         // 추출된 의존성 텍스트에 자동 입력
         techStackInput.setText(techStackAutomation.extractTechStack());
-        System.out.println(techStackAutomation.extractTechStack());
+        consoleLogInput.setText("과연 이번에는");
 
         // shoot 버튼 클릭 시
         shootButton.addActionListener(e -> {
@@ -65,11 +66,11 @@ public class LogoutVersionWriteTrouble {
             toolWindow.hide(null);
         });
 
-
-
         // markdown copy 버튼 클릭 시
         mdCopyButton.addActionListener(e -> {
             copyMDCode();
+            TroubleAutomation troubleAutomation = new TroubleAutomation();
+            consoleLogInput.setText(troubleAutomation.getTroubleInfo());
         });
 
     }
@@ -81,33 +82,10 @@ public class LogoutVersionWriteTrouble {
         // markdown으로 생성
         String markdown = makeMDCode();
 
-        System.out.println(markdown.toString());
-
         // 복사하기
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         StringSelection selection = new StringSelection(markdown.toString());
         clipboard.setContents(selection, null);
-
-/*
-        // mardkdown -> html
-        Parser parser = Parser.builder().build();
-        Node document = parser.parse(markdown.toString());
-        HtmlRenderer renderer = HtmlRenderer.builder().build();
-        String html = renderer.render(document);
-
-        System.out.println(html);
-
-        // 창으로 띄우기
-        JEditorPane editorPane = new JEditorPane();
-        editorPane.setContentType("text/html");
-        editorPane.setText(html);
-        JDialog dialog = new JDialog();
-        dialog.setTitle(titleInput.getText());
-        dialog.getContentPane().add(new JScrollPane(editorPane));
-        dialog.setSize(500, 800);
-        dialog.setVisible(true);
-
- */
     }
 
     private String makeMDCode() {

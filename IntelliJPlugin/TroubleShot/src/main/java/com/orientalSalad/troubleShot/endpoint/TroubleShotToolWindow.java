@@ -1,13 +1,13 @@
-package com.orientalSalad.troubleShot.actions;
+package com.orientalSalad.troubleShot.endpoint;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowFactory;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
-import com.orientalSalad.troubleShot.MainPanel;
+import com.orientalSalad.troubleShot.common.MainPanel;
 
-public class TroubleShot implements ToolWindowFactory {
+public class TroubleShotToolWindow implements ToolWindowFactory {
     public static Project project;
     public static ToolWindow toolWindow;
     public static MainPanel mainPanel;

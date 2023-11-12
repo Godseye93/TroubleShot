@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.orientalSalad.troubleShot.MainPanel.fileUtil;
+import static com.orientalSalad.troubleShot.common.MainPanel.fileUtil;
 
 public class LogoutVersionList {
     private JPanel wrapperPanel;

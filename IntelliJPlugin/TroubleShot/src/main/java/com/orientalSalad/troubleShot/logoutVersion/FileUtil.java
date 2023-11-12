@@ -1,4 +1,4 @@
-package com.orientalSalad.troubleShot.util;
+package com.orientalSalad.troubleShot.logoutVersion;
 
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.fileEditor.FileEditorManager;
@@ -20,7 +20,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.attribute.UserDefinedFileAttributeView;
 
-import static com.orientalSalad.troubleShot.actions.TroubleShot.project;
+import static com.orientalSalad.troubleShot.endpoint.TroubleShotToolWindow.project;
 
 public class FileUtil {
 

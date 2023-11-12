@@ -1,11 +1,12 @@
-package com.orientalSalad.troubleShot;
+package com.orientalSalad.troubleShot.common;
 
 import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.ui.SimpleToolWindowPanel;
 import com.orientalSalad.troubleShot.loginVersion.LoginVersionMain;
+import com.orientalSalad.troubleShot.logoutVersion.FileUtil;
 import com.orientalSalad.troubleShot.logoutVersion.LogoutVersionMain;
-import com.orientalSalad.troubleShot.util.*;
+import com.orientalSalad.troubleShot.common.*;
 
 public class MainPanel extends SimpleToolWindowPanel {
     public static FileUtil fileUtil;
@@ -17,11 +18,6 @@ public class MainPanel extends SimpleToolWindowPanel {
         System.out.println("windowTool 시작");
 
         fileUtil = new FileUtil();
-        troubleAutomation = new TroubleAutomation();
-        troubleAutomation.detectRunningProcesses();
-
-        ErrorLogFilterApplier errorLogFilterApplier = new ErrorLogFilterApplier();
-        errorLogFilterApplier.captureErrorMessages();
 
 
         // 자동 로그인 돼있는 경우

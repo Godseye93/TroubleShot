@@ -1,4 +1,4 @@
-package com.orientalSalad.troubleShot.util;
+package com.orientalSalad.troubleShot.common;
 
 import com.intellij.lang.Language;
 import com.intellij.openapi.editor.Document;
@@ -13,7 +13,7 @@ import com.intellij.psi.search.GlobalSearchScope;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.orientalSalad.troubleShot.actions.TroubleShot.project;
+import static com.orientalSalad.troubleShot.endpoint.TroubleShotToolWindow.project;
 
 public class TechStackAutomation {
 

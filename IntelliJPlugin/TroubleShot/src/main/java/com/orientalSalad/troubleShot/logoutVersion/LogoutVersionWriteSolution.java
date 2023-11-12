@@ -5,9 +5,9 @@ import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 
-import static com.orientalSalad.troubleShot.MainPanel.fileUtil;
-import static com.orientalSalad.troubleShot.actions.TroubleShot.mainPanel;
-import static com.orientalSalad.troubleShot.actions.TroubleShot.toolWindow;
+import static com.orientalSalad.troubleShot.common.MainPanel.fileUtil;
+import static com.orientalSalad.troubleShot.endpoint.TroubleShotToolWindow.mainPanel;
+import static com.orientalSalad.troubleShot.endpoint.TroubleShotToolWindow.toolWindow;
 
 
 public class LogoutVersionWriteSolution {

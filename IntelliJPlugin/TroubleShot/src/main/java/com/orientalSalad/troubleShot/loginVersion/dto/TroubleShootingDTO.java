@@ -1,4 +1,4 @@
-package com.orientalSalad.troubleShot.dto;
+package com.orientalSalad.troubleShot.loginVersion.dto;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

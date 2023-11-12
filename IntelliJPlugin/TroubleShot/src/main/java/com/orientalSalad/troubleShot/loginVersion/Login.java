@@ -2,7 +2,7 @@ package com.orientalSalad.troubleShot.loginVersion;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.orientalSalad.troubleShot.dto.LoginResponseDTO;
+import com.orientalSalad.troubleShot.loginVersion.dto.LoginResponseDTO;
 import net.minidev.json.JSONObject;
 import okhttp3.*;
 
