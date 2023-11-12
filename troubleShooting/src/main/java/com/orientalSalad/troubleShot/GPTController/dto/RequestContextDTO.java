@@ -13,6 +13,6 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class RequestReadMeDTO {
+public class RequestContextDTO {
 	String context;
 }
