@@ -2,72 +2,85 @@
 import { ResponsiveRadar } from "@nivo/radar";
 import { useLoginStore } from "@/stores/useLoginStore";
 import { useState, useEffect } from "react";
-import { PieGraphInfo, PieGraphInfoAddNick } from "@/types/CommonType";
-import { getPieGraphInfo } from "@/api/account";
+import { RadarGraphInfoAddNick, RadarToUseInfo } from "@/types/CommonType";
+import { getRadarGraphInfo } from "@/api/account";
 
-// 타입 오류 해결
-// 백에서 받는 데이터 이름 바꾸기 >> 한국어로
+// 아무것도 없을 때 100으로 뜸
 
-const average = {
-  nickname: "평균",
-  troubleRank: 50,
-  answerRank: 50,
-  tagTypeRank: 50,
-  replyRank: 50,
-  dailyTroubleRank: 50,
-};
-
-export function MyResponsiveRadar () {
+export function MyResponsiveRadar() {
+  const average = {
+    nickname: "평균",
+    질문력: 50,
+    답변력: 50,
+    태그다양성: 50,
+    댓글력: 50,
+    열정도: 50,
+  };
   const { user } = useLoginStore();
-  const nickname:string = user!.member.nickname;
+  const nickname: string = user!.member.nickname;
   const userSeq = user?.member.seq;
 
-  // const userData = getPieGraphInfo(userSeq!);
-  const [userData, setUserData] = useState<PieGraphInfo | null>(null);
+  const [userData, setUserData] = useState<RadarToUseInfo | null>(null);
+
+  const fetchUserData = async () => {
+    try {
+      const data = await getRadarGraphInfo(userSeq!);
+      setUserData((prevUserData) => ({
+        ...prevUserData,
+        ...{
+          질문력: data.troubleRank,
+          답변력: data.answerRank,
+          태그다양성: data.tagTypeRank,
+          댓글력: data.replyRank,
+          열정도: data.dailyTroubleRank,
+        },
+      }));
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      const data = await getPieGraphInfo(userSeq!);
-      setUserData(data);
-    };
-
-    fetchData();
+    fetchUserData();
   }, [userSeq]);
 
-  const userDataObj:PieGraphInfoAddNick = {...(userData || {}), nickname, 
-  troubleRank: userData?.troubleRank || 0, // 또는 다른 기본값 설정
-  answerRank: userData?.answerRank || 0,
-  tagTypeRank: userData?.tagTypeRank || 0,
-  replyRank: userData?.replyRank || 0,
-  dailyTroubleRank: userData?.dailyTroubleRank || 0,};
+  const userDataObj: RadarGraphInfoAddNick = {
+    ...(userData || {}),
+    nickname,
+    질문력: userData?.질문력 || 0,
+    답변력: userData?.답변력 || 0,
+    태그다양성: userData?.태그다양성 || 0,
+    댓글력: userData?.댓글력 || 0,
+    열정도: userData?.열정도 || 0,
+  };
 
   const totalData = Object.keys(average)
-  .filter((key): key is keyof PieGraphInfoAddNick =>  key !== "nickname")
-  .map(key => ({
-    rank: key,
-    [average.nickname]: average[key],
-    [userDataObj.nickname!]: userDataObj[key],
-  }));
+    .filter((key): key is keyof RadarGraphInfoAddNick => key !== "nickname")
+    .map((key) => ({
+      rank: key,
+      [average.nickname]: average[key],
+      [userDataObj.nickname!]: userDataObj[key],
+    }));
 
-  return(
-  <ResponsiveRadar
-    data={totalData}
-    keys={["평균", nickname]}
-    indexBy="rank"
-    maxValue={100}
-    valueFormat=">-.2f"
-    margin={{ top: 40, right: 80, bottom: 40, left: 80 }}
-    borderWidth={3}
-    borderColor={{ from: "color", modifiers: [] }}
-    // gridLevels={10}
-    gridLabelOffset={10}
-    enableDots={false}
-    dotSize={5}
-    dotColor={{ theme: "background" }}
-    dotBorderWidth={2}
-    colors={{ scheme: "nivo" }}
-    blendMode="multiply"
-    motionConfig="wobbly"
-  />
+  return (
+    <ResponsiveRadar
+      data={totalData}
+      keys={[nickname, "평균"]}
+      indexBy="rank"
+      maxValue={100}
+      valueFormat=">-.2f"
+      margin={{ top: 40, right: 80, bottom: 40, left: 80 }}
+      borderWidth={3}
+      borderColor={{ from: "color", modifiers: [] }}
+      // gridLevels={10}
+      gridLabelOffset={10}
+      enableDots={false}
+      dotSize={5}
+      dotColor={{ theme: "background" }}
+      dotBorderWidth={2}
+      colors={{ scheme: "accent" }}
+      blendMode="multiply"
+      motionConfig="wobbly"
+    />
   );
 }

@@ -52,7 +52,7 @@ export type LoginStore = {
   userLogout: () => void;
 };
 
-export interface PieGraphInfo {
+export interface RadarGraphInfo {
   troubleRank: number;
   answerRank: number;
   tagTypeRank: number;
@@ -60,11 +60,36 @@ export interface PieGraphInfo {
   dailyTroubleRank: number;
 }
 
-export interface PieGraphInfoAddNick {
-  nickname: string | undefined;
-  troubleRank: number;
-  answerRank: number;
-  tagTypeRank: number;
-  replyRank: number;
-  dailyTroubleRank: number;
+export interface RadarToUseInfo {
+  질문력: number;
+  답변력: number;
+  태그다양성: number;
+  댓글력: number;
+  열정도: number;
 }
+
+export interface RadarGraphInfoAddNick {
+  nickname: string;
+  질문력: number;
+  답변력: number;
+  태그다양성: number;
+  댓글력: number;
+  열정도: number;
+}
+
+export interface BarChartInfo {
+  solvedCount: number;
+  notSolvedCount: number;
+  totalCount: number;
+}
+
+export interface PieGraphInfo {
+  solvedCount: number;
+  notSolvedCount: number;
+  // totalCount: number;
+}
+
+export type ReqTags = {
+  userSeq: number;
+  count: number;
+};
