@@ -53,4 +53,6 @@ public class TroubleShootingDTO extends BaseDTO {
 	private boolean loginLike;
 	@Schema(description = "북마크",hidden = true)
 	private boolean favorite;
+	@Schema(description = "등록한 기기")
+	private long postType;
 }

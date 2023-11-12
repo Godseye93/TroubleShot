@@ -20,6 +20,7 @@
         <result property="replyCount" column="reply_count"/>
         <result property="answerCount" column="answer_count"/>
         <result property="loginLike" column="login_like"/>
+        <result property="postType" column="post_type"/>
         <result property="tags" column="tag_name"
                 typeHandler="com.orientalSalad.troubleShot.troubleShooting.typehandler.StringToListTypeHandler"/>
         <result property="replies" column="reply"
@@ -105,6 +106,7 @@
             ts.update_time AS update_time,
             ts.delete_time AS delete_time,
             ts.view_count AS view_count,
+            ts.post_type AS post_type,
             COUNT(DISTINCT a.seq) AS answer_count,
             ts.like_count  AS like_count,
             COUNT(DISTINCT tsr.seq) AS reply_count,
@@ -346,6 +348,7 @@
                 ts.update_time AS update_time,
                 ts.delete_time AS delete_time,
 				ts.view_count AS view_count,
+                ts.post_type AS post_type,
                 COUNT(distinct tsl.seq) AS like_count,
                 COUNT(distinct tsr.seq) AS reply_count,
                 COUNT(distinct a.seq) AS answer_count,
@@ -448,4 +451,5 @@
         LIMIT #{searchParam.pageSize, javaType=Integer, jdbcType=INTEGER}
         OFFSET (#{searchParam.pageNo} - 1)* #{searchParam.pageSize, javaType=Integer, jdbcType=INTEGER}
     </select>
+
 </mapper>

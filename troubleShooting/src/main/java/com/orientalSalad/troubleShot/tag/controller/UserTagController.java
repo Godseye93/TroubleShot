@@ -14,9 +14,11 @@ import com.orientalSalad.troubleShot.tag.dto.ResponseTagListDTO;
 import com.orientalSalad.troubleShot.tag.serivice.UserTagService;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
+@Tag(name = "유저의 태그 데이터 API")
 @Controller
 @RequestMapping("/members/{userSeq}")
 @RequiredArgsConstructor

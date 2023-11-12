@@ -24,7 +24,6 @@ import com.orientalSalad.troubleShot.troubleShooting.dto.ResponseTroubleShooting
 import com.orientalSalad.troubleShot.troubleShooting.dto.SearchTroubleShootingDTO;
 import com.orientalSalad.troubleShot.troubleShooting.dto.TroubleShootingDTO;
 import com.orientalSalad.troubleShot.troubleShooting.dto.TroubleShootingReplyDTO;
-import com.orientalSalad.troubleShot.troubleShooting.entity.TroubleShootingAnswerEntity;
 import com.orientalSalad.troubleShot.troubleShooting.service.TroubleShootingAnswerService;
 import com.orientalSalad.troubleShot.troubleShooting.service.TroubleShootingService;
 
@@ -54,6 +53,7 @@ public class TroubleShootingController {
 
 		//로그인 확인
 		authentication.checkLogin(request,requestTroubleShootingDTO);
+
 		//트러블슈팅 문서 등록
 		troubleShootingService.insertTroubleShooting(requestTroubleShootingDTO);
 

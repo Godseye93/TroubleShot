@@ -30,19 +30,21 @@ public class TroubleShootingEntity extends BaseEntity {
 	private boolean solved;
 	@Column(columnDefinition = "boolean DEFAULT false")
 	private boolean taged;
-	@Column(columnDefinition = "int4 DEFAULT '0'")
+	@Column(columnDefinition = "int4 DEFAULT 0")
 	private int scope;
-	@Column(columnDefinition = "int4 DEFAULT '0'")
+	@Column(columnDefinition = "int4 DEFAULT 0")
 	private int viewCount;
-	@Column(columnDefinition = "int4 DEFAULT '0'")
+	@Column(columnDefinition = "int4 DEFAULT 0")
 	private int likeCount;
-	@Column(columnDefinition = "int4 DEFAULT '0'")
+	@Column(columnDefinition = "int4 DEFAULT 0")
 	private int replyCount;
+	@Column
+	private long postType;
 
 	@Builder
 	public TroubleShootingEntity(String title, String context,String category,
 		long writerSeq, boolean solved,int viewCount,String dependency,int scope,
-		int likeCount, int replyCount){
+		int likeCount, int replyCount,long postType){
 		this.title = title;
 		this.context = context;
 		this.category = category;
@@ -53,6 +55,7 @@ public class TroubleShootingEntity extends BaseEntity {
 		this.replyCount = replyCount;
 		this.solved = solved;
 		this.scope = scope;
+		this.postType = postType;
 	}
 	public void update(TroubleShootingDTO troubleShootingDTO){
 		this.title = troubleShootingDTO.getTitle();

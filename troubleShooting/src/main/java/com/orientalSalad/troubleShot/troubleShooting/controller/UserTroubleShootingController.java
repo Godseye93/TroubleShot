@@ -147,4 +147,6 @@ public class UserTroubleShootingController {
 		log.info("====== 트러블 슈팅 문서 즐겨찾기 끝 =====");
 		return new ResponseEntity<ResultDTO>(resultDTO, HttpStatus.OK);
 	}
+
+
 }

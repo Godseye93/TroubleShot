@@ -47,6 +47,8 @@ public class TroubleShootingService {
 	private final TagService tagService;
 
 	public boolean insertTroubleShooting(RequestTroubleShootingDTO requestTroubleShootingDTO){
+		requestTroubleShootingDTO.getTroubleShooting().setPostType(requestTroubleShootingDTO.getType());
+
 		TroubleShootingEntity troubleShootingEntity = troubleShootingConverter.toEntity(requestTroubleShootingDTO.getTroubleShooting());
 		troubleShootingEntity = troubleShootingRepository.save(troubleShootingEntity);
 
