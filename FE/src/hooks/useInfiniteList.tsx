@@ -3,9 +3,9 @@ import { SearchParams } from "@/types/TroubleType";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 
-export default function useInfiniteList(options: SearchParams) {
+export default function useInfiniteList(options: SearchParams, queryKey: string) {
   const { data, error, fetchNextPage, hasNextPage, status } = useInfiniteQuery({
-    queryKey: ["boards"],
+    queryKey: [queryKey],
     queryFn: async ({ pageParam = 1 }) => {
       const data = await getTrouble({ ...options, pageSize: 10, pageNo: pageParam });
       return data;

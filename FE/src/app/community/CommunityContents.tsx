@@ -10,6 +10,7 @@ import qs from "qs";
 import axios from "axios";
 import { getOneWeekAgoDate, getToday } from "@/utils/getDate";
 import BoardItem from "@/components/BoardItem";
+import Link from "next/link";
 axios.defaults.paramsSerializer = (params) => {
   return qs.stringify(params);
 };
@@ -96,8 +97,18 @@ export default function CommunityContents() {
       <div className="bg-white rounded-lg shadow-md px-2 mt-2 flex-col items-center">
         {hotBoard &&
           hotBoard.troubleShootingList.map((content, idx) => (
-            <BoardItem key={idx} board={content} idx={idx} last={hotBoard.troubleShootingList.length - 1} />
+            <BoardItem
+              nowUrl="community/posts"
+              key={idx}
+              board={content}
+              idx={idx}
+              last={hotBoard.troubleShootingList.length - 1}
+              queryKey="hotBoard"
+            />
           ))}
+        <Link href={"/community/posts"}>
+          <div className="flex justify-center items-center text-xl font-semibold h-20 border-t-2">전체보기</div>
+        </Link>
       </div>
     </>
   );

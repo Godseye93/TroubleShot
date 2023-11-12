@@ -5,7 +5,6 @@ import { AiOutlineEye, AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { MdComment } from "react-icons/md";
 import { toast } from "react-toastify";
 import { useQueryClient } from "@tanstack/react-query";
-import getQueryClient from "@/app/getQueryClient";
 interface Props {
   likes: number;
   views: number;
@@ -13,9 +12,10 @@ interface Props {
   m?: string;
   isLike?: boolean;
   troubleSeq?: number;
+  queryKey: string;
 }
 
-export default function IconBox({ likes, views, comments, m, isLike, troubleSeq }: Props) {
+export default function IconBox({ likes, views, comments, m, isLike, troubleSeq, queryKey }: Props) {
   const queryClient = useQueryClient();
   // const queryClient = getQueryClient();
   const { user } = useLoginStore();
@@ -26,11 +26,7 @@ export default function IconBox({ likes, views, comments, m, isLike, troubleSeq 
       const res = await postTroubleLike(user.member.seq, troubleSeq, user.member.seq);
       console.log(res);
       queryClient.invalidateQueries({
-        queryKey: ["boards"],
-        exact: true,
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["hotBoard"],
+        queryKey: [queryKey],
         exact: true,
       });
     } catch (err) {

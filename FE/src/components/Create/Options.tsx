@@ -22,6 +22,9 @@ export default function Options({ categorys, options, setOptions, setShowOptions
   const addTag = () => {
     if (!inputText) return;
     setTags((prev) => [...prev, inputText]);
+    setOptions((prev) => {
+      return { ...prev, tags };
+    });
     setInputText("");
   };
   useEffect(() => {
@@ -109,7 +112,7 @@ export default function Options({ categorys, options, setOptions, setShowOptions
         <p className="font-semibold text-lg">해결 여부</p>
         <form>
           <div className="flex items-center justify-between w-[20rem]">
-            <label htmlFor="open" className="flex-1 items-center flex">
+            <label htmlFor="solved" className="flex-1 items-center flex">
               해결
               <input
                 className="ms-2"
@@ -120,7 +123,7 @@ export default function Options({ categorys, options, setOptions, setShowOptions
                 onChange={() => setSolved(true)}
               />
             </label>
-            <label htmlFor="close" className="flex-1 items-center flex">
+            <label htmlFor="notSolved" className="flex-1 items-center flex">
               미해결
               <input
                 className="ms-2"
