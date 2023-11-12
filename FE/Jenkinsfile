@@ -26,6 +26,18 @@ pipeline {
             }
         }
 
+        stage('Remove Old Docker Image') {
+            steps {
+                script {
+                    try {
+                        sh 'docker rmi godseye93/front:latest || true'
+                    } catch (e) {
+                        echo 'Failed to remove old Docker image'
+                    }
+                }
+            }
+        }
+
         stage('Build image') {
             steps {
                 dir('FE') {
@@ -34,6 +46,13 @@ pipeline {
                     sh 'docker build -t godseye93/front:latest .'
                 }
                 echo 'Build image...'
+            }
+        }
+
+        stage('Push image') {
+            steps {
+                sh 'docker push godseye93/front:latest'
+                echo 'Push image to DockerHub...'
             }
         }
 
