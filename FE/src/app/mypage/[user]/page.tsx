@@ -1,6 +1,7 @@
 "use client";
 import { MyResponsiveRadar } from "@/components/RadarGraph";
 import { MyResponsivePie } from "@/components/PieGraph";
+import UsedLotTags from "@/components/UsedLotTags";
 import { useLoginStore } from "@/stores/useLoginStore";
 import { useState, useEffect } from "react";
 import Link from "next/link";
@@ -14,6 +15,8 @@ export default function Page() {
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  const tagList = ["react", "next.js", "javascript", "java"];
 
   return (
     mounted && (
@@ -41,26 +44,21 @@ export default function Page() {
               <div className="w-1/2 p-5">
                 <p>내가 많이 사용한 태그</p>
                 <div className="flex flex-wrap w-full">
-                  <div className="w-1/2 p-2">
-                    <div className="w-3/4 bg-gray-300 rounded-lg fcc">tag 1</div>
-                  </div>
-                  <div className="w-1/2 p-2">
-                    <div className="w-3/4 bg-gray-300 rounded-lg fcc">tag 2</div>
-                  </div>
-                  <div className="w-1/2 p-2">
-                    <div className="w-3/4 bg-gray-300 rounded-lg fcc">tag 3</div>
-                  </div>
-                  <div className="w-1/2 p-2">
-                    <div className="w-3/4 bg-gray-300 rounded-lg fcc">tag 4</div>
-                  </div>
+                  {/* {tagList.map((tag, i) => (
+                    <div key={i} className="w-1/2 p-2">
+                      <div className="w-3/4 bg-gray-300 rounded-lg fcc">{tag}</div>
+                    </div>
+                  ))} */}
+                  <UsedLotTags />
                 </div>
               </div>
               <div className="w-1/2 p-5">
                 <p>솔루션 그래프</p>
                 <div className="w-[300px] h-[200px]">
                   <MyResponsivePie />
+                  {/* <BarChart /> */}
                 </div>
-                <p>전체 통계 데이터 확인하기</p>
+                <Link href={"#"}>전체 통계 데이터 확인하기</Link>
               </div>
             </div>
           </div>
