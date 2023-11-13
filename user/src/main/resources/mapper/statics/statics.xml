@@ -206,13 +206,20 @@
                     LEFT JOIN
                         trouble_shooting ts ON tt.trouble_seq  = ts.seq AND ts.writer_seq = #{searchParam.userSeq}
                     WHERE ts.writer_seq = #{searchParam.userSeq}
+                    <if test="searchParam.day != null">
                         AND ts.create_time >= NOW() - (#{searchParam.day} || ' DAY')::INTERVAL
+                    </if>
                     GROUP BY
                         t.name
                     ORDER BY
                         COUNT(t.name) DESC, t.name DESC
-                    LIMIT #{searchParam.count})
+                <if test="searchParam.count != null">
+                    LIMIT #{searchParam.count}
+                </if>
+                )
+                <if test="searchParam.day != null">
                 AND ts.create_time >= now() - (#{searchParam.day} || ' DAY')::INTERVAL
+                </if>
             GROUP BY writer_seq, t.name, DATE(ts.create_time)
             ORDER BY tag_name, create_time DESC
             ) AS top_used_tag

@@ -20,7 +20,7 @@ public class RequestTagHistoryDTO {
 	@Schema(description = "유저 pk")
 	long userSeq;
 	@Schema(description = "검색할 기간 일수")
-	long day;
+	Long day;
 	@Schema(description = "검색할 태그 개수")
-	long count;
+	Long count;
 }
