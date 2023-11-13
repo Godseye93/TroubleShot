@@ -56,7 +56,7 @@ public class MemberTroubleController {
 		@PathVariable(name = "userSeq") Long userSeq,
 		@ModelAttribute RequestTroubleHistoryDTO requestTroubleHistoryDTO){
 		log.info("==== 작성한 트러블슈팅 히스토리 가져오기 시작 ====");
-
+		log.info("[PARAM] : "+requestTroubleHistoryDTO);
 		List<TroubleShootingHistoryDTO> troubleShootingHistoryDTOList = staticsService.getAllTroubleShootingHistory(requestTroubleHistoryDTO);
 
 		ResponseTroubleHistoryDTO resultDTO = ResponseTroubleHistoryDTO.builder()

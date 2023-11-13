@@ -144,6 +144,7 @@ public class StaticsService {
 		if(troubleShootingHistoryDTOList == null){
 			troubleShootingHistoryDTOList = new ArrayList<>();
 		}
+
 		return troubleShootingHistoryDTOList;
 	}
 	public long countAllAnswerByUserSeq(long userSeq){
