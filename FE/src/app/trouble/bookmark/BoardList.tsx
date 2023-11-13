@@ -12,7 +12,7 @@ export default function BoardList() {
     favorite: true,
   });
 
-  const { data } = useInfiniteList(options);
+  const { data } = useInfiniteList(options, "bookmark");
   return (
     <>
       <Searchbar setPropsOptions={setOptions} />
@@ -21,7 +21,14 @@ export default function BoardList() {
           data.pages.map((page, i) => (
             <React.Fragment key={i}>
               {page.troubleShootingList.map((content, idx) => (
-                <BoardItem key={idx} board={content} idx={idx} last={page.troubleShootingList.length - 1} />
+                <BoardItem
+                  nowUrl="trouble/bookmark"
+                  key={idx}
+                  board={content}
+                  idx={idx}
+                  last={page.troubleShootingList.length - 1}
+                  queryKey="bookmark"
+                />
               ))}
             </React.Fragment>
           ))}

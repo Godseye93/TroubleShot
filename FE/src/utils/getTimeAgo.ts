@@ -26,3 +26,14 @@ export const getTimeAgo = (dateString: string) => {
     return "방금 전";
   }
 };
+export const changeKoTime = (dateString: string) => {
+  const currentDateLocal = new Date();
+  // `dateString`를 한국 시간대로 변환
+  const dateObject = new Date(dateString);
+  dateObject.setTime(dateObject.getTime() + 9 * 60 * 60 * 1000); // 9시간 추가
+  const year = dateObject.getFullYear();
+  const month = String(dateObject.getMonth() + 1).padStart(2, "0");
+  const day = String(dateObject.getDate()).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
+};

@@ -1,3 +1,4 @@
+import ScrollTop from "@/components/ScrollTop";
 import Rsidebar from "../trouble/Rsidebar";
 import UseCommunitySidebar from "./UseCommunitySidebar";
 
@@ -13,6 +14,7 @@ export default function Layout({ children }: Props) {
         <UseCommunitySidebar />
         {children}
         <Rsidebar />
+        <ScrollTop />
       </div>
     </>
   );
