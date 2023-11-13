@@ -9,13 +9,15 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import { AiOutlineEye, AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { MdComment } from "react-icons/md";
 import { toast } from "react-toastify";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import UiwEditor from "@/components/Create/UiwEditor";
 import AnswerPost from "./AnswerPost";
 import CreateComment from "@/components/CreateComment";
-
+import { useRouter } from "next/navigation";
+import CommentItem from "@/components/CommentItem";
 export default function Detail({ id }: { id: number }) {
   const queryClient = useQueryClient();
+  const router = useRouter();
   const { user } = useLoginStore();
   const [showAnswerForm, setShowAnswerForm] = useState(false);
   const [showComments, setShowComments] = useState(false);
@@ -25,8 +27,7 @@ export default function Detail({ id }: { id: number }) {
   const onLike = async () => {
     if (!user) return toast.error("로그인이 필요합니다.");
     try {
-      const res = await postTroubleLike(user.member.seq, board!.seq, user.member.seq);
-      console.log(res);
+      await postTroubleLike(user.member.seq, board!.seq, user.member.seq);
       queryClient.invalidateQueries({
         queryKey: ["detail"],
         exact: true,
@@ -38,21 +39,28 @@ export default function Detail({ id }: { id: number }) {
   const { data, error, isLoading } = useQuery({
     queryKey: ["detail"],
     queryFn: async () => {
-      const data = await getTroubleDetail(user!.member.seq, id);
+      const data = await getTroubleDetail(user ? user.member.seq : null, id);
       return data;
     },
   });
   const board = data?.troubleShooting;
-
-  const [answerTitle, setAnswerTitle] = useState("");
+  const [answerTitle, setAnswerTitle] = useState(board?.title);
+  useEffect(() => {
+    setAnswerTitle(board?.title);
+  }, [board]);
   const [answerContent, setAnswerContent] = useState("");
-
   const onPostAnswer = async () => {
-    if (!user) return toast.error("로그인이 필요합니다");
-    if (answerTitle.trim() === "") return toast.error("제목을 입력해 주세요");
+    if (!user) {
+      router.push("/login");
+      await new Promise((resolve) => setTimeout(resolve, 0)); // 비동기 작업을 기다림
+      toast.warn("로그인이 필요합니다");
+      return;
+    }
+
+    if (answerTitle!.trim() === "") return toast.error("제목을 입력해 주세요");
     if (answerContent.trim() === "") return toast.error("내용을 입력해 주세요");
     try {
-      await postAnswer(user!.member.seq, board!.seq, answerContent, answerTitle);
+      await postAnswer(user!.member.seq, board!.seq, answerContent, answerTitle!);
       queryClient.invalidateQueries({ queryKey: ["detail"], exact: true });
       toast.success("답변이 등록되었습니다");
       setAnswerTitle("");
@@ -63,6 +71,8 @@ export default function Detail({ id }: { id: number }) {
       console.log(err);
     }
   };
+  const [showUpdate, setShowUpdate] = useState(false);
+
   return (
     <>
       {board && (
@@ -86,7 +96,7 @@ export default function Detail({ id }: { id: number }) {
               <p className="font-semibold text-lg">{board?.writer.nickname}</p>
               <p className="text-sm">{changeKoTime(board!.createTime)}</p>
             </div>
-            <div className="mt-12 max-w-[70vw]">
+            <div className="mt-12 max-w-[65vw]">
               <MDEditor.Markdown source={board?.context} />
             </div>
             <div className="mt-10">
@@ -122,7 +132,10 @@ export default function Detail({ id }: { id: number }) {
                   </div>
                   {board.replyCount > 0 ? (
                     <p className=" line-clamp-1 items-center hover:cursor-pointer" onClick={toggleComments}>
-                      {board.replyCount}개의 답글 더보기
+                      {board.replyCount}
+                      <span className="text-base font-semibold hover:text-main transition-all duration-200">
+                        개의 댓글 더보기
+                      </span>
                     </p>
                   ) : (
                     <p className=" line-clamp-1 items-center">{board.replyCount}</p>
@@ -130,9 +143,17 @@ export default function Detail({ id }: { id: number }) {
                 </div>
               </div>
               <div>
-                <CreateComment />
+                <CreateComment troubleSeq={board.seq} />
               </div>
-              {showComments && <div className="border-t-2">gkgk</div>}
+              <div>
+                {showComments && (
+                  <div className="border-t-2 mt-5">
+                    {board.replies?.map((comment, idx) => (
+                      <CommentItem key={idx} comment={comment} userSeq={user?.member.seq} troubleSeq={board.seq} />
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
 
             <div className={`mt-5  px-3 border-black border rounded-lg min-h-16 ${showAnswerForm && "pb-5"}`}>

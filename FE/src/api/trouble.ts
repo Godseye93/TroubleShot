@@ -5,6 +5,7 @@ import {
   GetTroubleList,
   RequestTroubleShooting,
   RequestTroubleShootingAnswer,
+  RequestTroubleShootingReply,
   SearchParams,
 } from "@/types/TroubleType";
 import { apiInstance } from ".";
@@ -53,9 +54,9 @@ export const getMostTags = async (userSeq: number): Promise<GetMostTags> => {
   const { data } = await api.get(`/members/${userSeq}/most-used`, { params });
   return data;
 };
-export const getTroubleDetail = async (userSeq: number, troubleSeq: number): Promise<GetTroubleDetail> => {
+export const getTroubleDetail = async (userSeq: number | null, troubleSeq: number): Promise<GetTroubleDetail> => {
   const params = {
-    loginSeq: userSeq,
+    ...(userSeq && { loginSeq: userSeq }),
     type: 0,
   };
   const { data } = await api.get(`/trouble-shootings/${troubleSeq}`, { params });
@@ -97,5 +98,32 @@ export const postAnswerLike = async (
     `/members/${userSeq}/trouble-shootings/${troubleSeq}/answers/${answerSeq}/like`,
     body
   );
+  return data;
+};
+export const postComment = async (userSeq: number, troubleSeq: number, content: string): Promise<DefaultRespense> => {
+  const body: RequestTroubleShootingReply = {
+    loginSeq: userSeq,
+    type: 0,
+    troubleShootingReply: {
+      context: content,
+      writer: {
+        seq: userSeq,
+      },
+      troubleSeq: troubleSeq,
+    },
+  };
+  const { data } = await api.post(`/trouble-shootings/${troubleSeq}/reply`, body);
+  return data;
+};
+export const deleteComment = async (
+  userSeq: number,
+  troubleSeq: number,
+  commentSeq: number
+): Promise<DefaultRespense> => {
+  const params = {
+    loginSeq: userSeq,
+    type: 0,
+  };
+  const { data } = await api.delete(`/trouble-shootings/${troubleSeq}/reply/${commentSeq}`, { params });
   return data;
 };

@@ -110,6 +110,7 @@ export interface Answer {
   troubleSeq: number;
   replies: Reply[];
   loginLike: boolean;
+  selected: boolean;
 }
 export interface TroubleShootingAnswer {
   context: string;
@@ -124,4 +125,16 @@ export interface RequestTroubleShootingAnswer {
   loginSeq: number;
   type: 0;
   troubleShootingAnswer: TroubleShootingAnswer;
+}
+export interface TroubleShootingReply {
+  context: string;
+  writer: {
+    seq: number;
+  };
+  troubleSeq: number;
+}
+export interface RequestTroubleShootingReply {
+  loginSeq: number;
+  type: 0;
+  troubleShootingReply: TroubleShootingReply;
 }

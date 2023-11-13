@@ -16,8 +16,7 @@ export default function AnswerPost({ answer, troubleSeq }: { answer: Answer; tro
   const onLike = async () => {
     if (!user) return toast.error("로그인이 필요합니다.");
     try {
-      const res = await postAnswerLike(user.member.seq, troubleSeq, answer.seq);
-      console.log(res);
+      await postAnswerLike(user.member.seq, troubleSeq, answer.seq);
       queryClient.invalidateQueries({
         queryKey: ["detail"],
         exact: true,
@@ -26,7 +25,6 @@ export default function AnswerPost({ answer, troubleSeq }: { answer: Answer; tro
       console.log(err);
     }
   };
-  console.log(answer);
   return (
     <div>
       {answer && (
