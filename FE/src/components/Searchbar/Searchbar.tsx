@@ -6,6 +6,7 @@ import { SetStateAction, useEffect, useState } from "react";
 import { BsSearch } from "react-icons/bs";
 import { RiEqualizerLine } from "react-icons/ri";
 import { useLoginStore } from "@/stores/useLoginStore";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface Props {
   setPropsOptions: React.Dispatch<SetStateAction<SearchParams>>;
@@ -19,6 +20,7 @@ export default function Searchbar({ setPropsOptions, isCommunity }: Props) {
   const [searchCriteria, setSearchCriteria] = useState("제목");
   const [options, setOptions] = useState<SearchParams>({});
   const { user } = useLoginStore();
+  const queryClient = useQueryClient();
   const onSearch = () => {
     const searchOption: SearchParams = {
       ...options,
@@ -26,6 +28,15 @@ export default function Searchbar({ setPropsOptions, isCommunity }: Props) {
       ...(searchCriteria === "제목" ? { keyword: keyword } : { writer: keyword }),
     };
     setPropsOptions(searchOption);
+    queryClient.resetQueries({
+      queryKey: ["boards"],
+      exact: true,
+    });
+    queryClient.removeQueries({
+      queryKey: ["postList"],
+      exact: true,
+    });
+
     console.log(searchOption);
   };
 
@@ -56,6 +67,9 @@ export default function Searchbar({ setPropsOptions, isCommunity }: Props) {
                 defaultValue={keyword}
                 onChange={(e) => {
                   setKeyword(e.target.value);
+                }}
+                onKeyUp={(e) => {
+                  if (e.key === "Enter") onSearch();
                 }}
               />
             </div>

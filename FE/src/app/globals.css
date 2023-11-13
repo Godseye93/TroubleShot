@@ -189,3 +189,7 @@ height: 10px;
     animation-fill-mode: forwards;
     top: 100%;
   }
+.code-highlight{
+  max-height: 40rem;
+
+}

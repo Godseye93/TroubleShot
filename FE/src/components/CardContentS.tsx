@@ -13,9 +13,10 @@ interface Content {
 interface Props {
   keyword: string;
   contents: Content[];
+  queryKey?: string;
 }
 
-export default function CardContentS({ keyword, contents }: Props) {
+export default function CardContentS({ keyword, contents, queryKey }: Props) {
   return (
     <div className="rounded-lg w-52 bg-white shadow-md">
       <div className="w-full h-7 px-2 bg-main rounded-t-lg flex items-center justify-between">
