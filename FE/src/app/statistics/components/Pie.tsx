@@ -19,7 +19,7 @@ const Pie = ({ userSeq }: Props) => {
   });
 
   const colors = ["hsl(244, 70%, 50%)", "hsl(86, 70%, 50%)", "hsl(10, 70%, 50%)"];
-
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const myData = data?.data.troubleShootingTypeGroupList.map((troubleType: any, idx: number) => ({
     id: troubleType.name,
     label: troubleType.name,
