@@ -1,3 +1,4 @@
+import ScrollTop from "@/components/ScrollTop";
 import dynamic from "next/dynamic";
 // import Rsidebar from "./Rsidebar";
 // import UseSidebar from "./UseSidebar";
@@ -18,6 +19,8 @@ export default function Layout({ children }: Props) {
         <UseSidebar />
         {children}
         <Rsidebar />
+
+        <ScrollTop />
       </div>
     </>
   );

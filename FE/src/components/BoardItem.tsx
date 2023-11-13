@@ -93,7 +93,7 @@ export default function BoardItem({
     }
   };
   return (
-    <div className={`${idx !== last && "border-b-2"} py-3 mt-2 w-full flex justify-center`}>
+    <div className={`${idx !== last && "border-b-2"} py-4 mt-2 w-full flex justify-center px-4`}>
       {/* 상단바 */}
       <div className="flex-1">
         <div className="flex justify-between items-center">
