@@ -1,7 +1,13 @@
 import React, { useState } from "react";
 import { BsSearch } from "react-icons/bs";
 
-export default function InputTag({ setTags }: { setTags: React.Dispatch<React.SetStateAction<string[]>> }) {
+export default function InputTag({
+  setTags,
+  showTitle,
+}: {
+  setTags: React.Dispatch<React.SetStateAction<string[]>>;
+  showTitle: boolean;
+}) {
   const [inputText, setInputText] = useState("");
   const addTag = () => {
     if (!inputText) return;
@@ -11,7 +17,7 @@ export default function InputTag({ setTags }: { setTags: React.Dispatch<React.Se
   return (
     <div className="mt-5">
       <div className="flex items-center">
-        <div className="w-20 font-semibold">태그 추가</div>
+        {showTitle && <div className="w-20 font-semibold">태그 추가</div>}
         <div className="relative flex-1">
           <div className="absolute left-4 top-[50%] -translate-y-[50%]">
             <BsSearch />

@@ -2,32 +2,64 @@ pipeline {
     agent any
     environment {
         DOCKER = 'sudo docker'
+        NEXT_PUBLIC_BASE_URL1 = credentials('NEXT_PUBLIC_BASE_URL1')
+        NEXT_PUBLIC_BASE_URL = credentials('NEXT_PUBLIC_BASE_URL')
+        NEXT_PUBLIC_ACCESS_KEY = credentials('NEXT_PUBLIC_ACCESS_KEY')
+        NEXT_PUBLIC_SECRET_KEY = credentials('NEXT_PUBLIC_SECRET_KEY')
+        NEXT_PUBLIC_BUCKEYT_REGION = credentials('NEXT_PUBLIC_BUCKEYT_REGION')
+        NEXT_PUBLIC_BUCKEYT_NAME = credentials('NEXT_PUBLIC_BUCKEYT_NAME')
+        NEXT_PUBLIC_BUCKEYT_URL = credentials('NEXT_PUBLIC_BUCKEYT_URL')
     }
 
     stages {
         stage('Check directory') {
             steps {
                 sh 'ls -al'
+                script {
+                    def commitAuthor = sh(script: 'git log -1 --pretty=%an', returnStdout: true).trim()
+                    env.COMMIT_AUTHOR = commitAuthor
+
+                    def commitMessage = sh(script: 'git log -1 --pretty=%B', returnStdout: true).trim()
+                    env.COMMIT_MESSAGE = commitMessage
+                }
             }
         }
 
         stage('Clone Repository') {
             steps {
+                mattermostSend color: 'warning', message: ":angry_jenkins_face: 배포 시작! :angry_jenkins_face: \n`front - #${env.BUILD_NUMBER}`\nStarted by GitLab push by ${env.COMMIT_AUTHOR}\n링크: ${env.BUILD_URL}"
                 checkout scm
                 echo 'Checkout Scm'
             }
         }
 
+        stage('Remove Old Docker Image') {
+            steps {
+                script {
+                    try {
+                        sh 'docker rmi godseye93/front:latest || true'
+                    } catch (e) {
+                        echo 'Failed to remove old Docker image'
+                    }
+                }
+            }
+        }
+
         stage('Build image') {
             steps {
-                dir('user') {
+                dir('FE') {
                     sh 'ls -al'
-                    sh 'npm install'
-                    sh 'npm run build'
                     sh 'docker login -u godseye93 -p wjdtmfgh123'
                     sh 'docker build -t godseye93/front:latest .'
                 }
                 echo 'Build image...'
+            }
+        }
+
+        stage('Push image') {
+            steps {
+                sh 'docker push godseye93/front:latest'
+                echo 'Push image to DockerHub...'
             }
         }
 
@@ -46,9 +78,18 @@ pipeline {
 
         stage('Run New image') {
             steps {
-                sh 'docker run --name front -d -p 3000:3000 godseye93/front:latest'
+                sh 'docker run --name front -d -p 3000:3000 -e process.env.NEXT_PUBLIC_BASE_URL1=$NEXT_PUBLIC_BASE_URL1 -e process.env.NEXT_PUBLIC_BASE_URL=$NEXT_PUBLIC_BASE_URL -e process.env.NEXT_PUBLIC_ACCESS_KEY=$NEXT_PUBLIC_ACCESS_KEY -e process.env.NEXT_PUBLIC_SECRET_KEY=$NEXT_PUBLIC_SECRET_KEY -e process.env.NEXT_PUBLIC_BUCKEYT_REGION=$NEXT_PUBLIC_BUCKEYT_REGION -e process.env.NEXT_PUBLIC_BUCKEYT_NAME=$NEXT_PUBLIC_BUCKEYT_NAME -e process.env.NEXT_PUBLIC_BUCKEYT_URL=$NEXT_PUBLIC_BUCKEYT_URL godseye93/front:latest'
                 echo 'Run New member image'
             }
         }
     }
+    post {
+        success {
+            mattermostSend color: 'good', message: ":jampepebyyeah: 배포 완료! :jampepebyyeah: \n`front - #${env.BUILD_NUMBER}`\nStarted by changes from ${env.COMMIT_AUTHOR}\n**${env.COMMIT_MESSAGE}** \n링크: ${env.BUILD_URL}"
+        }
+        failure {
+            mattermostSend color: 'danger', message: ":angry_pepe_2: 배포 실패! :angry_pepe_2: \n:angry_pepe_2: :angry_pepe_2: :angry_pepe_2: :angry_pepe_2: :angry_pepe_2: \n:angry_pepe_2: :angry_pepe_2: :angry_pepe_2: :angry_pepe_2: :angry_pepe_2:"
+        }
+    }
+
 }

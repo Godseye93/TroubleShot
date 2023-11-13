@@ -14,7 +14,7 @@ export default function Footer() {
         </li>
       </ul>
       <div className="flex">
-        <ul className="w-fit me-10 p-3">
+        <ul className="w-fit me-10 p-3 list-none">
           <li className="mb-2">
             <p className="border-b border-main">오리엔탈 샐러드</p>
           </li>
@@ -25,7 +25,7 @@ export default function Footer() {
           <li>손재형</li>
           <li>장진욱</li>
         </ul>
-        <ul className="w-fit me-5 p-3">
+        <ul className="w-fit me-5 p-3 list-none">
           <li className="mb-2">
             <p className="border-b border-main">관련 사이트</p>
           </li>
