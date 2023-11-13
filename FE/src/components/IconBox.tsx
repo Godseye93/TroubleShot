@@ -12,7 +12,7 @@ interface Props {
   m?: string;
   isLike?: boolean;
   troubleSeq?: number;
-  queryKey: string;
+  queryKey?: string;
 }
 
 export default function IconBox({ likes, views, comments, m, isLike, troubleSeq, queryKey }: Props) {
@@ -20,6 +20,7 @@ export default function IconBox({ likes, views, comments, m, isLike, troubleSeq,
   // const queryClient = getQueryClient();
   const { user } = useLoginStore();
   const onLike = async () => {
+    if (!queryKey) return;
     if (!troubleSeq) return;
     if (!user) return toast.error("로그인이 필요합니다.");
     try {
@@ -35,7 +36,7 @@ export default function IconBox({ likes, views, comments, m, isLike, troubleSeq,
   };
   return (
     <div className="flex  items-center gap-1">
-      <div className={`flex items-center max-w-[33%] ${troubleSeq && "hover:cursor-pointer"}`} onClick={onLike}>
+      <div className={`flex items-center max-w-[33%] ${queryKey && "hover:cursor-pointer"}`} onClick={onLike}>
         {isLike ? (
           <div className={`w-4 ${m && m} text-red-600`}>
             <AiFillHeart />

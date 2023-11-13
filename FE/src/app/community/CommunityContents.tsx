@@ -27,12 +27,13 @@ export default function CommunityContents() {
     ...(user && { loginSeq: user.member.seq }),
   });
 
-  const { data: tags } = useQuery({
+  const { data: tags, error } = useQuery({
     queryKey: ["tags"],
     queryFn: async () => {
       const data = await getMostTags(user!.member.seq);
       return data;
     },
+    enabled: !!user,
   });
 
   const { data: contents1 } = useQuery({
@@ -70,13 +71,6 @@ export default function CommunityContents() {
     },
   });
 
-  useEffect(() => {
-    queryClient.refetchQueries({
-      queryKey: ["contents1", "contents2"],
-      exact: true,
-    });
-  }, [tags]);
-
   return (
     <>
       <Searchbar setPropsOptions={setOptions} isCommunity={true} />
@@ -86,8 +80,16 @@ export default function CommunityContents() {
           <div className="grid grid-cols-2 gap-2">
             {tags && (
               <>
-                <CardContentL keyword={tags.tagList[0]} contents={contents1?.troubleShootingList} />
-                <CardContentL keyword={tags.tagList[1]} contents={contents2?.troubleShootingList} />
+                <CardContentL
+                  queryKey="contents1"
+                  keyword={tags.tagList[0]}
+                  contents={contents1?.troubleShootingList}
+                />
+                <CardContentL
+                  queryKey="contents2"
+                  keyword={tags.tagList[1]}
+                  contents={contents2?.troubleShootingList}
+                />
               </>
             )}
           </div>

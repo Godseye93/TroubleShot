@@ -8,9 +8,10 @@ import { getImageLink } from "@/utils/getImageLink";
 interface Props {
   keyword: string;
   contents?: TroubleShootingBoard[];
+  queryKey: string;
 }
 
-export default function CardContentL({ keyword, contents }: Props) {
+export default function CardContentL({ keyword, contents, queryKey }: Props) {
   return (
     <div className="rounded-lg flex-1 bg-white shadow-md">
       <div className="w-full bg-main rounded-t-lg text-start px-3 py-2 font-semibold text-lg flex justify-between items-center">
@@ -47,7 +48,12 @@ export default function CardContentL({ keyword, contents }: Props) {
                   <div className="cover-bar"></div>
                 </div>
                 <div className="mt-3 mb-2 text-sm">
-                  <IconBox likes={content.likeCount} views={content.viewCount} comments={content.replyCount} />
+                  <IconBox
+                    queryKey={queryKey}
+                    likes={content.likeCount}
+                    views={content.viewCount}
+                    comments={content.replyCount}
+                  />
                 </div>
               </div>
               {content.context && getImageLink(content.context).length > 0 && (

@@ -12,11 +12,16 @@ import { toast } from "react-toastify";
 import { useState } from "react";
 import UiwEditor from "@/components/Create/UiwEditor";
 import AnswerPost from "./AnswerPost";
+import CreateComment from "@/components/CreateComment";
 
 export default function Detail({ id }: { id: number }) {
   const queryClient = useQueryClient();
   const { user } = useLoginStore();
   const [showAnswerForm, setShowAnswerForm] = useState(false);
+  const [showComments, setShowComments] = useState(false);
+  const toggleComments = () => {
+    setShowComments((prev) => !prev);
+  };
   const onLike = async () => {
     if (!user) return toast.error("로그인이 필요합니다.");
     try {
@@ -43,6 +48,7 @@ export default function Detail({ id }: { id: number }) {
   const [answerContent, setAnswerContent] = useState("");
 
   const onPostAnswer = async () => {
+    if (!user) return toast.error("로그인이 필요합니다");
     if (answerTitle.trim() === "") return toast.error("제목을 입력해 주세요");
     if (answerContent.trim() === "") return toast.error("내용을 입력해 주세요");
     try {
@@ -114,9 +120,19 @@ export default function Detail({ id }: { id: number }) {
                   <div className="w-4 ">
                     <MdComment />
                   </div>
-                  <p className=" line-clamp-1 items-center">{board.replyCount}</p>
+                  {board.replyCount > 0 ? (
+                    <p className=" line-clamp-1 items-center hover:cursor-pointer" onClick={toggleComments}>
+                      {board.replyCount}개의 답글 더보기
+                    </p>
+                  ) : (
+                    <p className=" line-clamp-1 items-center">{board.replyCount}</p>
+                  )}
                 </div>
               </div>
+              <div>
+                <CreateComment />
+              </div>
+              {showComments && <div className="border-t-2">gkgk</div>}
             </div>
 
             <div className={`mt-5  px-3 border-black border rounded-lg min-h-16 ${showAnswerForm && "pb-5"}`}>

@@ -15,7 +15,6 @@ axios.defaults.paramsSerializer = (params) => {
   return qs.stringify(params);
 };
 const api = apiInstance();
-const api2 = tmpApi();
 export const getTrouble = async (params: SearchParams = {}): Promise<GetTroubleList> => {
   const { data } = await api.get("/trouble-shootings", { params });
   return data;
@@ -51,7 +50,7 @@ export const getMostTags = async (userSeq: number): Promise<GetMostTags> => {
     count: 2,
     userSeq,
   };
-  const { data } = await api2.get(`/members/${userSeq}/tags/most-used`, { params });
+  const { data } = await api.get(`/members/${userSeq}/most-used`, { params });
   return data;
 };
 export const getTroubleDetail = async (userSeq: number, troubleSeq: number): Promise<GetTroubleDetail> => {
