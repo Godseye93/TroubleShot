@@ -1,11 +1,11 @@
 import { getUsedLotTags } from "@/api/account";
-import { useLoginStore } from "@/stores/useLoginStore";
-import { ReqTags } from "@/types/CommonType";
 import { useState, useEffect } from "react";
 
-export default function UsedLotTags() {
-  const { user } = useLoginStore();
-  const userSeq = user?.member.seq;
+interface Params {
+  userSeq: number;
+}
+export default function UsedLotTags(params: Params) {
+  const { userSeq } = params;
   const requestMostUsedTagDTO = {
     userSeq: userSeq!,
     count: 6,
@@ -24,14 +24,16 @@ export default function UsedLotTags() {
 
   useEffect(() => {
     getTags();
-  }, [user]);
+  }, []);
 
   return (
     <div className="flex flex-wrap w-full">
       {tags?.length ? (
         tags?.map((tag, i) => (
-          <div key={i} className="w-1/2 py-2">
-            <div className="w-3/4 bg-gray-300 rounded-lg fcc">{tag}</div>
+          <div key={i} className="w-1/2 p-2">
+            <div className="w-full min-w-fit bg-gray-300 rounded-lg fcc">
+              <p className="text-3xl my-1">{tag}</p>
+            </div>
           </div>
         ))
       ) : (
