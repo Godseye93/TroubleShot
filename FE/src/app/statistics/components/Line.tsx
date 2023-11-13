@@ -22,7 +22,7 @@ export function getLastDays(count: number): string[] {
 }
 
 const getTopTagChange = (userSeq: number) => {
-  const url = `https://orientalsalad.kro.kr:8101/members/${userSeq}/tags/most-used-history?userSeq=${userSeq}&day=10&count=5`;
+  const url = `https://orientalsalad.kro.kr:8101/members/${userSeq}/tags/most-used-history?userSeq=${userSeq}&day=5&count=4`;
   return axios.get(url);
 };
 
@@ -39,7 +39,7 @@ const Line = ({ userSeq }: Props) => {
     "hsl(293, 70%, 50%)",
   ];
 
-  const days = getLastDays(10).reverse();
+  const days = getLastDays(5).reverse();
   const myData = data?.data.tagHistoryList.map((tagHistory: any, idx: number) => ({
     id: tagHistory.name,
     color: colors[idx],
@@ -61,19 +61,18 @@ const Line = ({ userSeq }: Props) => {
         xScale={{ type: "point" }}
         yScale={{
           type: "linear",
-          min: "auto",
+          min: "0",
           max: "auto",
           stacked: true,
           reverse: false,
         }}
-        yFormat=" >-.2f"
+        yFormat=">-.2d"
         axisTop={null}
         axisRight={null}
         axisBottom={{
           tickSize: 5,
           tickPadding: 5,
           tickRotation: 0,
-          legend: "transportation",
           legendOffset: 36,
           legendPosition: "middle",
         }}
@@ -84,6 +83,12 @@ const Line = ({ userSeq }: Props) => {
           legend: "count",
           legendOffset: -40,
           legendPosition: "middle",
+          format: (e) => {
+            if (Math.floor(e) === e) {
+              return e;
+            }
+            return "";
+          },
         }}
         pointSize={10}
         pointColor={{ theme: "background" }}

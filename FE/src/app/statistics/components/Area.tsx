@@ -1,80 +1,59 @@
 "use client";
 import { ResponsiveLine } from "@nivo/line";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import { getLastDays } from "./Line";
 
 interface Props {
   userSeq: number;
 }
 
+const getAccumulation = (userSeq: number) => {
+  const url = `https://orientalsalad.kro.kr:8101/members/${userSeq}/trouble-shootings/history?userSeq=${userSeq}&day=4`;
+  return axios.get(url);
+};
+
 const Area = ({ userSeq }: Props) => {
-  const data = [
+  const { data } = useQuery({
+    queryKey: ["getAccumulation", userSeq],
+    queryFn: () => getAccumulation(userSeq),
+  });
+  const days = getLastDays(5).reverse();
+  const myData = [
     {
-      id: "japan",
+      id: "작성한 트러블 슈팅",
       color: "hsl(85, 70%, 50%)",
-      data: [
-        {
-          x: "plane",
-          y: 88,
-        },
-        {
-          x: "helicopter",
-          y: 269,
-        },
-        {
-          x: "boat",
-          y: 25,
-        },
-        {
-          x: "train",
-          y: 267,
-        },
-        {
-          x: "subway",
-          y: 216,
-        },
-        {
-          x: "bus",
-          y: 69,
-        },
-        {
-          x: "car",
-          y: 100,
-        },
-        {
-          x: "moto",
-          y: 219,
-        },
-        {
-          x: "bicycle",
-          y: 239,
-        },
-        {
-          x: "horse",
-          y: 155,
-        },
-        {
-          x: "skateboard",
-          y: 168,
-        },
-        {
-          x: "others",
-          y: 14,
-        },
-      ],
+      data: days.reduce((acc: { x: string; y: number }[], day) => {
+        // 현재 날짜의 count를 찾거나 0을 할당
+        const currentCount =
+          data?.data.troubleShootingHistoryList.find((history: any) => history.date === day)?.count || 0;
+
+        // 이전 날짜까지의 누적값을 가져오거나 초기값 0 설정
+        const previousTotal = acc.length > 0 ? acc[acc.length - 1].y : 0;
+
+        // 현재 날짜의 누적값 계산
+        const cumulativeTotal = previousTotal + currentCount;
+
+        // 누적값을 포함하여 배열에 추가
+        acc.push({ x: day, y: cumulativeTotal });
+        return acc;
+      }, []),
     },
   ];
+
   return (
     <ResponsiveLine
-      data={data}
+      data={myData}
       margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
       xScale={{ type: "point" }}
       yScale={{
         type: "linear",
-        min: "auto",
+        min: "0",
         max: "auto",
         stacked: true,
         reverse: false,
       }}
-      yFormat=" >-.2f"
+      yFormat=">-.2d"
       axisTop={null}
       axisRight={null}
       enableArea={true}
@@ -82,7 +61,6 @@ const Area = ({ userSeq }: Props) => {
         tickSize: 5,
         tickPadding: 5,
         tickRotation: 0,
-        legend: "transportation",
         legendOffset: 36,
         legendPosition: "middle",
       }}
@@ -93,6 +71,12 @@ const Area = ({ userSeq }: Props) => {
         legend: "count",
         legendOffset: -40,
         legendPosition: "middle",
+        format: (e) => {
+          if (Math.floor(e) === e) {
+            return e;
+          }
+          return "";
+        },
       }}
       pointSize={10}
       pointColor={{ theme: "background" }}
