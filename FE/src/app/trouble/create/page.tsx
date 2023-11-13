@@ -44,7 +44,13 @@ export default function Page() {
       },
     };
     try {
-      await postTrouble(req);
+      await postTrouble(req)
+        .then(() => {
+          router.back();
+        })
+        .then(() => {
+          toast.success("게시물이 등록되었습니다.");
+        });
     } catch (err) {
       console.log(err);
     }

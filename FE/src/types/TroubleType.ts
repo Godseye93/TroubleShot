@@ -69,7 +69,7 @@ export interface TroubleShootingBoard {
   answerCount: number;
   tags: string[];
   replies: null | Reply[];
-  answers: null;
+  answers: Answer[];
   loginLike: false;
   favorite: false;
 }
@@ -79,6 +79,12 @@ export interface GetTroubleList {
   message: string;
   troubleShootingList: TroubleShootingBoard[];
   totalCount: number;
+}
+
+export interface GetTroubleDetail {
+  success: boolean;
+  message: string;
+  troubleShooting: TroubleShootingBoard;
 }
 export interface Reply {
   seq: number;
@@ -104,4 +110,18 @@ export interface Answer {
   troubleSeq: number;
   replies: Reply[];
   loginLike: boolean;
+}
+export interface TroubleShootingAnswer {
+  context: string;
+  title: string;
+  writer: {
+    seq: number;
+  };
+  troubleSeq: number;
+}
+
+export interface RequestTroubleShootingAnswer {
+  loginSeq: number;
+  type: 0;
+  troubleShootingAnswer: TroubleShootingAnswer;
 }
