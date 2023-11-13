@@ -72,7 +72,7 @@ export default function Rsidebar() {
   ];
 
   return (
-    <div className={`mt-4 ${!path.includes("create") && "lg:block"} hidden`}>
+    <div className={`mt-4 ${!path.includes("create") && !path.includes("update") && "lg:block"} hidden`}>
       <CardContent keyword={tmpkeyword} contents={tempdata} />
     </div>
   );

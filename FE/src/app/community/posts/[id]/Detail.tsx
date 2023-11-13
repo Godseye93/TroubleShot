@@ -1,11 +1,10 @@
 "use client";
-import { getTroubleDetail, postAnswer, postTroubleLike } from "@/api/trouble";
+import { getTroubleDetail, postAnswer, postTroubleFavorite, postTroubleLike } from "@/api/trouble";
 import Tagbox from "@/components/TagBox";
 import { useLoginStore } from "@/stores/useLoginStore";
 import { changeKoTime } from "@/utils/getTimeAgo";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import MDEditor from "@uiw/react-md-editor";
-import { BsThreeDotsVertical } from "react-icons/bs";
 import { AiOutlineEye, AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { MdComment } from "react-icons/md";
 import { toast } from "react-toastify";
@@ -15,6 +14,8 @@ import AnswerPost from "./AnswerPost";
 import CreateComment from "@/components/CreateComment";
 import { useRouter } from "next/navigation";
 import CommentItem from "@/components/CommentItem";
+import BoardMenu from "./BoardMenu";
+import { BsBookmarkStar, BsBookmarkStarFill } from "react-icons/bs";
 export default function Detail({ id }: { id: number }) {
   const queryClient = useQueryClient();
   const router = useRouter();
@@ -46,7 +47,7 @@ export default function Detail({ id }: { id: number }) {
   const board = data?.troubleShooting;
   const [answerTitle, setAnswerTitle] = useState(board?.title);
   useEffect(() => {
-    setAnswerTitle(board?.title);
+    if (board) setAnswerTitle(board.title);
   }, [board]);
   const [answerContent, setAnswerContent] = useState("");
   const onPostAnswer = async () => {
@@ -71,6 +72,22 @@ export default function Detail({ id }: { id: number }) {
       console.log(err);
     }
   };
+  const onBookmark = async () => {
+    if (!user) return toast.error("로그인이 필요합니다");
+    if (board) {
+      try {
+        await postTroubleFavorite(user.member.seq, board.seq);
+        if (!board.favorite) toast.success("북마크에 저장되었습니다");
+        else if (board.favorite) toast.success("북마크에서 제거되었습니다");
+        await queryClient.invalidateQueries({
+          queryKey: ["detail"],
+          exact: true,
+        });
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  };
   const [showUpdate, setShowUpdate] = useState(false);
 
   return (
@@ -79,22 +96,46 @@ export default function Detail({ id }: { id: number }) {
         <>
           <div className="flex-1 bg-white rounded-lg shadow-md  p-7">
             <div className="flex justify-between items-center">
-              <p className="text-sub text-lg">{board?.category}</p>
-              <div className="text-2xl">
-                <BsThreeDotsVertical />
+              <p className="text-sub text-lg font-semibold">{board.category}</p>
+              {user?.member.seq === board.writer.seq && (
+                <div className="text-2xl me-5">
+                  <BoardMenu troubleSeq={board.seq} userSeq={user.member.seq} />
+                </div>
+              )}
+            </div>
+            <div className="flex items-center justify-between">
+              <div className="flex-1 line-clamp-1 text-2xl font-semibold mt-5">{board.title}</div>
+              <div
+                className={`inline-block text-xl font-semibold py-1 px-3 rounded-full shadow-md ${
+                  board.solved ? "bg-main" : "bg-sub text-white"
+                }`}
+              >
+                {board.solved ? "해결됨" : "미해결"}
               </div>
             </div>
-            <div className="w-full line-clamp-1 text-2xl font-semibold mt-5">{board?.title}</div>
-            <div className="flex gap-2 items-center mt-8 border-b-2 pb-5">
-              <img
-                src={board!.writer.profileImg}
-                className="rounded-full shadow-md w-12 h-12"
-                // height={40}
-                // width={40}
-                alt=""
-              />
-              <p className="font-semibold text-lg">{board?.writer.nickname}</p>
-              <p className="text-sm">{changeKoTime(board!.createTime)}</p>
+            <div className="w-full flex justify-between items-center mt-8 border-b-2 pb-5">
+              <div className="flex gap-2 items-center ">
+                <img
+                  src={board.writer.profileImg}
+                  className="rounded-full shadow-md w-12 h-12"
+                  // height={40}
+                  // width={40}
+                  alt=""
+                />
+                <p className="font-semibold text-lg">{board?.writer.nickname}</p>
+                <p className="text-sm">{changeKoTime(board!.createTime)}</p>
+              </div>
+              <div className="me-5 text-4xl" onClick={onBookmark}>
+                {!user || !board.favorite ? (
+                  <button className=" hover:text-main transition-all hover:shadow-md duration-200">
+                    <BsBookmarkStar />
+                  </button>
+                ) : (
+                  <button className=" text-main transition-all hover:shadow-md duration-200 hover:text-sub">
+                    <BsBookmarkStarFill />
+                  </button>
+                )}
+              </div>
             </div>
             <div className="mt-12 max-w-[65vw]">
               <MDEditor.Markdown source={board?.context} />
@@ -104,17 +145,17 @@ export default function Detail({ id }: { id: number }) {
             </div>
             <div className="mt-2 shadow-md rounded-lg">
               <div className="bg-main rounded-t-lg flex items-center ps-5 h-12 font-semibold mt-5">사용 기술 스택</div>
-              <MDEditor.Markdown source={"```" + board.dependency + "```"} />
+              <MDEditor.Markdown source={"```ts\n" + board.dependency + "\n```"} />
             </div>
             <div className=" border-b-2 pb-2 pt-10">
               <div className="flex  items-center gap-3 mt-5 text-xl">
                 <div className="flex items-center max-w-[33%]  hover:cursor-pointer gap-2" onClick={onLike}>
                   {board.loginLike ? (
-                    <div className="w-4 text-red-600">
+                    <div className="w-4 text-red-600 hover:text-red-400 transition-colors duration-200">
                       <AiFillHeart />
                     </div>
                   ) : (
-                    <div className="w-4 ">
+                    <div className="w-4 hover:text-red-400 transition-colors duration-200">
                       <AiOutlineHeart />
                     </div>
                   )}
@@ -147,24 +188,34 @@ export default function Detail({ id }: { id: number }) {
               </div>
               <div>
                 {showComments && (
-                  <div className="border-t-2 mt-5">
+                  <div className="border-t-2 mt-5 waterfall-comments ">
                     {board.replies?.map((comment, idx) => (
                       <CommentItem key={idx} comment={comment} userSeq={user?.member.seq} troubleSeq={board.seq} />
                     ))}
+                    <div
+                      className="mt-5 pt-5 border-t-2 flex justify-center items-start text-xl font-semibold w-full rounded-md hover:text-main hover:cursor-pointer duration-200 transition-colors"
+                      onClick={() => setShowComments(false)}
+                    >
+                      닫기
+                    </div>
                   </div>
                 )}
               </div>
             </div>
 
-            <div className={`mt-5  px-3 border-black border rounded-lg min-h-16 ${showAnswerForm && "pb-5"}`}>
+            <div
+              className={`mt-5 ${!showAnswerForm && "bg-sub text-white"}    px-3 shadow-md border rounded-lg min-h-16 ${
+                showAnswerForm && "pb-5"
+              }`}
+            >
               <div
                 className={`flex justify-between  items-center rounded-lg h-16 ${showAnswerForm && "border-b mb-5"}`}
               >
-                <p>답변을 남겨주세요!</p>
+                <p className=" font-semibold text-lg">답변을 남겨주세요!</p>
                 {!showAnswerForm && (
                   <button
                     onClick={() => setShowAnswerForm((prev) => !prev)}
-                    className="bg-main hover:bg-amber-500 shadow-md hover:shadow-none transition-all duration-200 rounded-lg p-2"
+                    className="bg-main hover:bg-amber-500 shadow-md hover:shadow-none transition-all duration-200 rounded-lg font-semibold text-black p-2"
                   >
                     답변하기
                   </button>
@@ -174,7 +225,7 @@ export default function Detail({ id }: { id: number }) {
                 <div className="">
                   <input
                     type="text"
-                    defaultValue={`답변 : ${board!.title}`}
+                    defaultValue={board!.title}
                     className="w-full text-xl font-semibold rounded-t-lg px-5 bg-slate-200 h-12 flex items-center"
                     onChange={(e) => setAnswerTitle(e.target.value)}
                   />
@@ -197,6 +248,8 @@ export default function Detail({ id }: { id: number }) {
                 </div>
               )}
             </div>
+            <p className="text-2xl font-semibold mt-7">총 {board.answerCount}개의 답변</p>
+
             <div>
               {board.answers.map((answer, idx) => (
                 <AnswerPost troubleSeq={board.seq} key={idx} answer={answer} />

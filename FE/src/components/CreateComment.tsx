@@ -1,19 +1,20 @@
 "use client";
 
-import { postComment } from "@/api/trouble";
+import { postAnswerComment, postComment } from "@/api/trouble";
 import { useLoginStore } from "@/stores/useLoginStore";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { SetStateAction, useState } from "react";
 import { toast } from "react-toastify";
 
 export default function CreateComment({
   troubleSeq,
   answerSeq,
+  setShowCreateAnswer,
 }: {
-  defaultComment?: string;
   troubleSeq: number;
   answerSeq?: number;
+  setShowCreateAnswer?: React.Dispatch<SetStateAction<boolean>>;
 }) {
   const [showCreate, setShowCreate] = useState(false);
   const router = useRouter();
@@ -26,10 +27,20 @@ export default function CreateComment({
       toast.warn("로그인이 필요합니다");
       return;
     }
-    setShowCreate((prev) => !prev);
+    if (setShowCreateAnswer) {
+      setShowCreateAnswer((prev) => !prev);
+      return;
+    }
+    if (!answerSeq) setShowCreate((prev) => !prev);
   };
   const [comment, setComment] = useState("");
   const onSubmit = async () => {
+    if (!user) {
+      router.push("/login");
+      await new Promise((resolve) => setTimeout(resolve, 0)); // 비동기 작업을 기다림
+      toast.warn("로그인이 필요합니다");
+      return;
+    }
     if (comment.trim() === "") return toast.error("댓글을 입력해 주세요");
     if (!answerSeq) {
       try {
@@ -38,6 +49,19 @@ export default function CreateComment({
         toast.success("댓글이 등록되었습니다.");
         setShowCreate(false);
         setComment("");
+        return;
+      } catch (err) {
+        console.log(err);
+        return;
+      }
+    } else if (answerSeq) {
+      try {
+        await postAnswerComment(user.member.seq, troubleSeq, answerSeq, comment);
+        queryClient.invalidateQueries({ queryKey: ["detail"], exact: true });
+        toast.success("댓글이 등록되었습니다.");
+
+        setShowCreateAnswer!(false);
+        setComment("");
       } catch (err) {
         console.log(err);
       }
@@ -45,15 +69,16 @@ export default function CreateComment({
   };
   return (
     <div className="border-t-2 mt-3 pt-3">
-      <div className={`flex gap-3 ${showCreate ? "items-start" : "items-center"}`}>
+      <div className={`flex gap-3 ${showCreate || answerSeq ? "items-start" : "items-center"}`}>
         {user && <img src={user.member.profileImg} alt="" className="w-12 h-12 rounded-full" />}
-        {showCreate ? (
+        {showCreate || answerSeq ? (
           <>
-            <div className="w-full">
+            <div className="w-full ">
               <textarea
-                className="border w-full rounded-lg h-[10rem] resize-none p-3"
+                className="border w-full rounded-lg h-[10rem] resize-none p-3 waterfall"
                 placeholder="댓글을 입력해 주세요"
                 onChange={(e) => setComment(e.target.value)}
+                value={comment}
               />
               <div className="flex items-center gap-2 justify-end">
                 <button

@@ -38,11 +38,11 @@ export default function IconBox({ likes, views, comments, m, isLike, troubleSeq,
     <div className="flex  items-center gap-1">
       <div className={`flex items-center max-w-[33%] ${queryKey && "hover:cursor-pointer"}`} onClick={onLike}>
         {isLike ? (
-          <div className={`w-4 ${m && m} text-red-600`}>
+          <div className={`w-4 ${m && m} text-red-600 hover:text-red-400 transition-colors duration-200`}>
             <AiFillHeart />
           </div>
         ) : (
-          <div className={`w-4 ${m && m}`}>
+          <div className={`w-4 ${m && m} hover:text-red-400 transition-colors duration-200`}>
             <AiOutlineHeart />
           </div>
         )}

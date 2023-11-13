@@ -16,7 +16,7 @@ interface Props {
 
 export default function Options({ categorys, options, setOptions, setShowOptions, onSubmit }: Props) {
   const [isdrop, setIsdrop] = useState(false);
-  const [tags, setTags] = useState<string[]>([]);
+  const [tags, setTags] = useState<string[]>(options.tags);
   const [inputText, setInputText] = useState("");
   const [isClicked, setIsClicked] = useState(false);
   const addTag = () => {
@@ -98,11 +98,27 @@ export default function Options({ categorys, options, setOptions, setShowOptions
           <div className="flex items-center justify-between w-[20rem]">
             <label htmlFor="open" className="flex-1 items-center flex">
               공개
-              <input className="ms-2" type="radio" name="scope" id="open" value={1} onChange={() => setScope(1)} />
+              <input
+                className="ms-2"
+                type="radio"
+                name="scope"
+                id="open"
+                value={0}
+                defaultChecked={options.scope === 0}
+                onChange={() => setScope(0)}
+              />
             </label>
             <label htmlFor="close" className="flex-1 items-center flex">
               비공개
-              <input className="ms-2" type="radio" name="scope" id="close" value={0} onChange={() => setScope(0)} />
+              <input
+                className="ms-2"
+                type="radio"
+                name="scope"
+                id="close"
+                value={1}
+                onChange={() => setScope(1)}
+                defaultChecked={options.scope === 1}
+              />
             </label>
           </div>
         </form>
@@ -121,6 +137,7 @@ export default function Options({ categorys, options, setOptions, setShowOptions
                 id="solved"
                 value={1}
                 onChange={() => setSolved(true)}
+                defaultChecked={options.solved === true}
               />
             </label>
             <label htmlFor="notSolved" className="flex-1 items-center flex">
@@ -132,6 +149,7 @@ export default function Options({ categorys, options, setOptions, setShowOptions
                 id="notSolved"
                 value={0}
                 onChange={() => setSolved(false)}
+                defaultChecked={options.solved === false}
               />
             </label>
           </div>

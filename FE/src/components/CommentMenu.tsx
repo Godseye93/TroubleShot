@@ -6,7 +6,7 @@ import { useEffect, useRef } from "react";
 
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { HiMiniPencilSquare } from "react-icons/hi2";
-import { deleteComment } from "@/api/trouble";
+import { deleteAnswerComment, deleteComment } from "@/api/trouble";
 import { toast } from "react-toastify";
 import { useQueryClient } from "@tanstack/react-query";
 
@@ -15,11 +15,13 @@ export default function CommentMenu({
   troubleSeq,
   answerSeq,
   commentSeq,
+  toggleShowCreate,
 }: {
   userSeq: number;
   troubleSeq: number;
   answerSeq?: number;
   commentSeq: number;
+  toggleShowCreate: () => void;
 }) {
   const [showMenu, setShowMenu] = useState(false);
   const queryClient = useQueryClient();
@@ -33,9 +35,12 @@ export default function CommentMenu({
       try {
         if (!answerSeq) {
           await deleteComment(userSeq, troubleSeq, commentSeq);
-          queryClient.invalidateQueries({ queryKey: ["detail"], exact: true });
+          toast.success("삭제되었습니다");
+        } else if (typeof answerSeq === "number") {
+          await deleteAnswerComment(userSeq, troubleSeq, answerSeq, commentSeq);
           toast.success("삭제되었습니다");
         }
+        queryClient.invalidateQueries({ queryKey: ["detail"], exact: true });
       } catch (err) {
         console.log(err);
       }
@@ -62,7 +67,7 @@ export default function CommentMenu({
       {showMenu && (
         <div className="absolute right-0 ">
           <div className="text-base w-28 border bg-white text-center rounded-lg shadow-md">
-            <div className=" hover:bg-gray-200 h-12 flex items-center justify-center">
+            <div className=" hover:bg-gray-200 h-12 flex items-center justify-center" onClick={toggleShowCreate}>
               <div className="me-1">
                 <HiMiniPencilSquare />
               </div>

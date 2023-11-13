@@ -41,6 +41,7 @@ export default function Page() {
         writer: { seq: user!.member.seq },
         tags: options.tags,
         solved: options.solved,
+        postType: 0 as const,
       },
     };
     try {
