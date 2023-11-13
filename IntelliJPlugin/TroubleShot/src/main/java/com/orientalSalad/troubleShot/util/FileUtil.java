@@ -9,18 +9,19 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiFileFactory;
 import com.intellij.psi.PsiManager;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.attribute.UserDefinedFileAttributeView;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static com.orientalSalad.troubleShot.endpoint.TroubleShotToolWindow.project;
+import static com.orientalSalad.troubleShot.util.TroubleAutomation.parsingKey;
 
 public class FileUtil {
 
@@ -77,7 +78,29 @@ public class FileUtil {
 
     }
 
-    // 파일 이름 가져오기
+    public String[] getFileContents(String fileName) {
+        StringBuilder sb = new StringBuilder();
+
+        try {
+            String userHomePath = System.getProperty("user.home");
+            String filePath = userHomePath + "/Documents/TroubleShot1.0-OrientalSalad/error_history/" + fileName + ".txt";
+            BufferedReader reader = new BufferedReader(new FileReader(filePath));
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                sb.append(line).append("\n");
+            }
+            reader.close();
+
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return sb.toString().split(parsingKey);
+    }
+
+    // 최신 순으로 파일 이름 가져오기
     public String[] getFileNameList(String path) {
         String userHomePath = System.getProperty("user.home");
         String documentsPath = userHomePath + "/Documents/TroubleShot1.0-OrientalSalad/";
@@ -88,7 +111,22 @@ public class FileUtil {
             return null;
         }
 
-        return folder.list();
+        File[] files = folder.listFiles();
+
+        if (files == null) {
+            return null;
+        }
+
+        // 최신순으로 정렬
+        Arrays.sort(files, (f1, f2) -> Long.compare(f2.lastModified(), f1.lastModified()));
+
+        List<String> fileNames = new ArrayList<>();
+        for (File file : files) {
+            if (file.isFile()) {
+                fileNames.add(file.getName());
+            }
+        }
+        return fileNames.toArray(new String[fileNames.size()]);
     }
 
     // 파일 삭제

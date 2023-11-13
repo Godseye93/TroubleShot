@@ -10,6 +10,7 @@ import com.intellij.psi.PsiFileFactory;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.xml.XmlFile;
 import com.orientalSalad.troubleShot.component.ErrorHistory;
+import com.orientalSalad.troubleShot.component.logoutVersion.LogoutVersionMain;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -29,28 +30,22 @@ import static com.orientalSalad.troubleShot.endpoint.TroubleShotToolWindow.proje
 
 public class TroubleAutomation {
 
-    private String parsingKey = "\n<<parsingKey>>\n";
+    public static String parsingKey = "\n<<parsingKey>>\n";
 
-    public String getTroubleInfo() {
+    public void getTroubleInfo() {
         // logback-spring.xml 설정
         setSpringLogFile();
 
         // Error messge, 발생 코드 가져오기
         String[] errorLogList = getErrorLog().split(parsingKey);
-        ErrorHistory errorHistory = ErrorHistory.getInstance();
         for (int i = 0; i < errorLogList.length; i++) {
             System.out.println(i + "번째 에러로그 확인");
             saveErrorHistory(errorLogList[i]);
             System.out.println();
-//            String[] errorInfo = getErrorInfo(errorLogList[i]);
-//            if (errorInfo != null) {
-//                errorHistory.addErrorHistory(errorInfo);
-//            }
         }
-        return "";
     }
 
-    private void saveErrorHistory(String errorLog) {
+    public void saveErrorHistory(String errorLog) {
 
         // 현재 프로젝트 내의 모든 파일 이름 구하기
         Set<String> fileNameSet = new HashSet<>();
@@ -67,7 +62,7 @@ public class TroubleAutomation {
         String[] errorLine = errorLog.split("\n");
         Pattern errorCodepattern = Pattern.compile("\\(([^:]+):(\\d+)\\)");
         Pattern exceptionTypePattern = Pattern.compile("([a-zA-Z.]*Exception)");
-        String title = "[Trouble] ";
+        String title = "";
         String errorDateTIme = null;
         String errorType = null;
         String errorFilePath = null; // 에러 발생 파일 경로
@@ -179,11 +174,15 @@ public class TroubleAutomation {
             writer.write(errorLog);
             writer.write(parsingKey);
             writer.write(errorCode);
+            writer.write(parsingKey);
+            TechStackAutomation techStackAutomation = new TechStackAutomation();
+            writer.write(techStackAutomation.extractTechStack());
 
             writer.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
+        LogoutVersionMain.getInstance().updateErrorHistory();
     }
 
     private String getErrorLog() {

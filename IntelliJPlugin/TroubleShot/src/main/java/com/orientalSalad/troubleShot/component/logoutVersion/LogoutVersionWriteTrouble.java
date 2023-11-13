@@ -51,7 +51,6 @@ public class LogoutVersionWriteTrouble {
 
         // 추출된 의존성 텍스트에 자동 입력
         techStackInput.setText(techStackAutomation.extractTechStack());
-        consoleLogInput.setText("과연 이번에는");
 
         // shoot 버튼 클릭 시
         shootButton.addActionListener(e -> {
@@ -70,12 +69,10 @@ public class LogoutVersionWriteTrouble {
         mdCopyButton.addActionListener(e -> {
             copyMDCode();
             TroubleAutomation troubleAutomation = new TroubleAutomation();
-            consoleLogInput.setText(troubleAutomation.getTroubleInfo());
+            troubleAutomation.getTroubleInfo();
         });
 
     }
-
-
 
     private void copyMDCode() {
 
@@ -106,6 +103,16 @@ public class LogoutVersionWriteTrouble {
 
     public JPanel getPanel() {
         return wrapperPanel;
+    }
+
+    public void setAutomaticTrouble(String title, String[] troubleInfo) {
+        String errorLog = troubleInfo[0];
+        String errorCode = troubleInfo[1];
+        String techStack = troubleInfo[2];
+        titleInput.setText(title);
+        consoleLogInput.setText(errorLog);
+        troubleCodeInput.setText(errorCode);
+        techStackInput.setText(techStack);
     }
 
 }

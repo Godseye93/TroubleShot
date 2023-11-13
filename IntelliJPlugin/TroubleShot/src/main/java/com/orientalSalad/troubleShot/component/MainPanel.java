@@ -5,6 +5,7 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.ui.SimpleToolWindowPanel;
 import com.orientalSalad.troubleShot.component.loginVersion.LoginVersionMain;
 import com.orientalSalad.troubleShot.component.logoutVersion.LogoutVersionMain;
+import com.orientalSalad.troubleShot.endpoint.SpringLogWatcher;
 import com.orientalSalad.troubleShot.util.FileUtil;
 import com.orientalSalad.troubleShot.util.TroubleAutomation;
 
@@ -18,7 +19,14 @@ public class MainPanel extends SimpleToolWindowPanel {
         System.out.println("windowTool 시작");
 
         fileUtil = new FileUtil();
-
+        SpringLogWatcher springLogWatcher = new SpringLogWatcher();
+        new Thread(() -> {
+            try {
+                springLogWatcher.watch();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
 
         // 자동 로그인 돼있는 경우
         if (PropertiesComponent.getInstance().isValueSet("loginInfo")) {

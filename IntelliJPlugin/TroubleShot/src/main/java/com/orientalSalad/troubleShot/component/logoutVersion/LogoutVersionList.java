@@ -23,7 +23,7 @@ public class LogoutVersionList {
 
     public LogoutVersionList() {
         // 파일 제목들 가져오기
-        String[] fileNames = fileUtil.getFileNameList("troubleShooting_documents");
+        String[] fileNames = fileUtil.getFileNameList("TroubleShooting_documents");
         if (fileNames == null) {
             // todo : 작성한 트러블 슈팅이 존재하지 않습니다. 텍스트로 보여주기
             System.out.println("fileNames null입니다");

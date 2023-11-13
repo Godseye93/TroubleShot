@@ -97,4 +97,16 @@ public class LogoutVersionMain {
         cardLayout.show(detailPanel, "My Trouble Shooting");
         System.out.println("selectedValue : My Trouble Shooting");
     }
+
+    public void showAutomaticWriteTroublePanel(String title, String[] troubleInfo) {
+        LogoutVersionWriteTrouble logoutVersionWriteTrouble = new LogoutVersionWriteTrouble();
+        logoutVersionWriteTrouble.setAutomaticTrouble(title, troubleInfo);
+        detailPanel.add(logoutVersionWriteTrouble.getPanel(), "Write Trouble");
+        cardLayout.show(detailPanel, "Write Trouble");
+    }
+
+    public void updateErrorHistory() {
+        detailPanel.add(new ErrorHistory().getPanel(), "Error History");
+        cardLayout.show(detailPanel, "My Trouble Shooting");
+    }
 }
