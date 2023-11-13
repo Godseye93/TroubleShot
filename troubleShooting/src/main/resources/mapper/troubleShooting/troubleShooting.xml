@@ -30,9 +30,10 @@
         <association property="writer" resultMap="simpleMember"/>
     </resultMap>
     <resultMap id="TroubleShootingAnswer" type="com.orientalSalad.troubleShot.troubleShooting.dto.TroubleShootingAnswerDTO">
-        <id property="seq" column="seq" />
+        <id property="seq" column="seq"/>
         <result property="title" column="title"/>
         <result property="context" column="context"/>
+        <result property="selected" column="selected"/>
         <result property="replyCount" column="reply_count"/>
         <association property="writer" resultMap="simpleMember"/>
     </resultMap>
@@ -72,6 +73,7 @@
                 a.seq AS seq,
                 a.title AS title,
                 a.context AS context,
+                a.selected AS selected,
                 m.seq AS writer_seq,
                 m.nickname AS writer_nickname,
                 m.email AS writer_email,
@@ -145,6 +147,7 @@
                     JSON_AGG(json_build_object(
                     'seq', a.seq,
                     'title',a.title,
+                    'selected', a.selected,
                     'context',a.context,
                     'createTime',a.create_time,
                     'deleteTime',a.delete_time,

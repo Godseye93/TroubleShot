@@ -36,13 +36,15 @@ public class TroubleShootingAnswerEntity extends BaseEntity {
 		long writerSeq,
 		int likeCount,
 		int replyCount,
-		long troubleSeq){
+		long troubleSeq,
+		boolean selected){
 		this.title = title;
 		this.context = context;
 		this.writerSeq = writerSeq;
 		this.likeCount = likeCount;
 		this.replyCount = replyCount;
 		this.troubleSeq = troubleSeq;
+		this.selected = selected;
 	}
 	public void update(TroubleShootingAnswerDTO troubleShootingAnswerDTO){
 		this.title = troubleShootingAnswerDTO.getTitle();

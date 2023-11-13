@@ -19,6 +19,7 @@ public class TroubleShootingAnswerConverter implements ObjectConverter<TroubleSh
 			.context(troubleShootingAnswerDTO.getContext())
 			.title(troubleShootingAnswerDTO.getTitle())
 			.writerSeq(troubleShootingAnswerDTO.getWriter().getSeq())
+			.selected(troubleShootingAnswerDTO.isSelected())
 			.build();
 	}
 
@@ -32,6 +33,7 @@ public class TroubleShootingAnswerConverter implements ObjectConverter<TroubleSh
 				.seq(troubleShootingAnswerEntity.getWriterSeq())
 				.build())
 			.seq(troubleShootingAnswerEntity.getSeq())
+			.selected(troubleShootingAnswerEntity.isSelected())
 			.build();
 	}
 }
