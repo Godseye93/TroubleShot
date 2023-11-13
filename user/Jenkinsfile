@@ -27,6 +27,18 @@ pipeline {
             }
         }
 
+        stage('Remove Old Docker Image') {
+            steps {
+                script {
+                    try {
+                        sh 'docker rmi godseye93/user:latest || true'
+                    } catch (e) {
+                        echo 'Failed to remove old Docker image'
+                    }
+                }
+            }
+        }
+
         stage('Build image') {
             steps {
                 dir('user') {
@@ -38,6 +50,13 @@ pipeline {
                     sh 'docker build -t godseye93/user:latest .'
                 }
                 echo 'Build image...'
+            }
+        }
+
+        stage('Push image') {
+            steps {
+                sh 'docker push godseye93/user:latest'
+                echo 'Push image to DockerHub...'
             }
         }
 
