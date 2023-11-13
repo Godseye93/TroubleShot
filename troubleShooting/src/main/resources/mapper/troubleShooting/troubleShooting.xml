@@ -237,10 +237,7 @@
             tsl.user_seq,
             ts.seq,
             m.seq,
-            answer_m.seq,
-            login_tsal.seq,
             login_tsl.seq,
-            login_tsal.seq,
             f.seq
     </select>
     <select id="countTroubleShootingList"
