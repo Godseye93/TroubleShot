@@ -2,7 +2,7 @@
 import { usePathname } from "next/navigation";
 
 import { IoHomeSharp } from "react-icons/io5";
-import { BsFillBookmarkStarFill } from "react-icons/bs";
+import { FaSignsPost } from "react-icons/fa6";
 import Link from "next/link";
 import Sidebar from "@/components/Sidebar";
 
@@ -10,15 +10,15 @@ export default function UseCommunitySidebar() {
   const path = usePathname();
   const menus = [
     // eslint-disable-next-line react/jsx-key
-    <Link className={`${path === "/trouble" && "bg-softmain shadow-md"} menu-btn line-clamp-1`} href="/trouble">
-      <IoHomeSharp /> <p className="ms-3 line-clamp-1">전체글</p>
+    <Link className={`${path === "/community" && "bg-softmain shadow-md"} menu-btn line-clamp-1`} href="/community">
+      <IoHomeSharp /> <p className="ms-3 line-clamp-1">메인</p>
     </Link>,
     // eslint-disable-next-line react/jsx-key
     <Link
-      className={`${path === "/trouble/bookmark" && "bg-softmain shadow-md"} menu-btn line-clamp-1`}
-      href="/trouble/bookmark"
+      className={`${path.includes("/community/posts") && "bg-softmain shadow-md"} menu-btn line-clamp-1`}
+      href="/community/posts"
     >
-      <BsFillBookmarkStarFill /> <p className="ms-3 line-clamp-1">북마크</p>
+      <FaSignsPost /> <p className="ms-3 line-clamp-1">전체글 보기</p>
     </Link>,
   ];
   return <Sidebar link="/trouble" menus={menus} />;

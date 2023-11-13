@@ -12,7 +12,7 @@ export default function BoardList() {
     ...(user && { loginSeq: user.member.seq }),
     writerSeq: user?.member.seq,
   });
-  const { data } = useInfiniteList(options);
+  const { data } = useInfiniteList(options, "boards");
   // const { data, error } = useQuery({
   //   queryKey: ["boards"],
   //   queryFn: async () => {
@@ -30,7 +30,14 @@ export default function BoardList() {
           data.pages.map((page, i) => (
             <React.Fragment key={i}>
               {page.troubleShootingList.map((content, idx) => (
-                <BoardItem key={idx} board={content} idx={idx} last={page.troubleShootingList.length - 1} />
+                <BoardItem
+                  nowUrl="trouble"
+                  key={idx}
+                  board={content}
+                  idx={idx}
+                  last={page.troubleShootingList.length - 1}
+                  queryKey="boards"
+                />
               ))}
             </React.Fragment>
           ))}
