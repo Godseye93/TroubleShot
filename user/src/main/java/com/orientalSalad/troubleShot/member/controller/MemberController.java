@@ -20,6 +20,7 @@ import com.orientalSalad.troubleShot.global.utill.Authentication;
 import com.orientalSalad.troubleShot.global.utill.Validation;
 import com.orientalSalad.troubleShot.member.dto.MemberDTO;
 import com.orientalSalad.troubleShot.member.dto.RequestMemberDTO;
+import com.orientalSalad.troubleShot.member.dto.ResponseMemberDTO;
 import com.orientalSalad.troubleShot.member.dto.ResponseMemberListDTO;
 import com.orientalSalad.troubleShot.member.dto.SearchMemberDTO;
 import com.orientalSalad.troubleShot.member.service.MemberService;
@@ -93,8 +94,14 @@ public class MemberController {
 
 		log.info(memberDTO);
 
+		ResponseMemberDTO resultDTO = ResponseMemberDTO.builder()
+			.success(true)
+			.message(userSeq+"번 유저 탐색을 성공했습니다.")
+			.member(memberDTO)
+			.build();
+
 		log.info("==== 유저 찾기 끝 ====");
-		return new ResponseEntity<>("success", HttpStatus.ACCEPTED);
+		return new ResponseEntity<>(resultDTO, HttpStatus.OK);
 	}
 	@Operation(summary = "회원정보 수정")
 	@PutMapping("/{userSeq}")
