@@ -69,7 +69,7 @@ export function MyResponsiveRadar() {
       indexBy="rank"
       maxValue={100}
       valueFormat=">-.2f"
-      margin={{ top: 40, right: 80, bottom: 40, left: 80 }}
+      margin={{ top: 20, bottom: 20 }}
       borderWidth={3}
       borderColor={{ from: "color", modifiers: [] }}
       // gridLevels={10}
