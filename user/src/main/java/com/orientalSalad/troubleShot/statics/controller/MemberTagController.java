@@ -28,23 +28,24 @@ import lombok.extern.log4j.Log4j2;
 public class MemberTagController {
 	private final StaticsService staticsService;
 
-	@Operation(summary = "많이 사용한 태그 API")
+	@Operation(summary = "게시물에 많이 사용한 태그 API")
 	@GetMapping("/most-used")
 	public ResponseEntity<?> findMostUsedTag (
 		@ModelAttribute RequestMostUsedTagDTO requestMostUsedTagDTO){
-		log.info("==== 유저의 많이 사용한 태그 가져오기 시작 ====");
+		log.info("==== 유저가 게시물에 많이 사용한 태그 가져오기 시작 ====");
 
 		List<String> tagList = staticsService.getMostUsedTagList(requestMostUsedTagDTO);
 
 		ResponseTagDTO resultDTO = ResponseTagDTO.builder()
 			.success(true)
-			.message("유저의 많이 사용한 태그 가져오기를 성공했습니다.")
+			.message("유저가 게시물에 많이 사용한 태그 가져오기를 성공했습니다.")
 			.tagList(tagList)
 			.build();
 
-		log.info("==== 유저의 많이 사용한 태그 가져오기 끝 ====");
+		log.info("==== 유저가 게시물에 많이 사용한 태그 가져오기 끝 ====");
 		return new ResponseEntity<>(resultDTO, HttpStatus.OK);
 	}
+
 	@Operation(summary = "내가 사용한 태그 목록 API")
 	@GetMapping("")
 	public ResponseEntity<?> findAllTagsByUserSeq (
