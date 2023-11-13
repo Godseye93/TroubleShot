@@ -25,18 +25,6 @@ pipeline {
             }
         }
 
-        stage('Print environment variable') {
-            steps {
-                echo "NEXT_PUBLIC_BASE_URL1: ${env.NEXT_PUBLIC_BASE_URL1}"
-                echo "NEXT_PUBLIC_BASE_URL: ${env.NEXT_PUBLIC_BASE_URL}"
-                echo "NEXT_PUBLIC_ACCESS_KEY: ${env.NEXT_PUBLIC_ACCESS_KEY}"
-                echo "NEXT_PUBLIC_SECRET_KEY: ${env.NEXT_PUBLIC_SECRET_KEY}"
-                echo "NEXT_PUBLIC_BUCKEYT_REGION: ${env.NEXT_PUBLIC_BUCKEYT_REGION}"
-                echo "NEXT_PUBLIC_BUCKEYT_NAME: ${env.NEXT_PUBLIC_BUCKEYT_NAME}"
-                echo "NEXT_PUBLIC_BUCKEYT_URL: ${env.NEXT_PUBLIC_BUCKEYT_URL}"
-            }
-        }
-
         stage('Clone Repository') {
             steps {
                 mattermostSend color: 'warning', message: ":angry_jenkins_face: 배포 시작! :angry_jenkins_face: \n`front - #${env.BUILD_NUMBER}`\nStarted by GitLab push by ${env.COMMIT_AUTHOR}\n링크: ${env.BUILD_URL}"
@@ -90,7 +78,7 @@ pipeline {
 
         stage('Run New image') {
             steps {
-                sh 'docker run --name front -d -p 3000:3000 -e NEXT_PUBLIC_BASE_URL1=$NEXT_PUBLIC_BASE_URL1 -e NEXT_PUBLIC_BASE_URL=$NEXT_PUBLIC_BASE_URL -e NEXT_PUBLIC_ACCESS_KEY=$NEXT_PUBLIC_ACCESS_KEY -e NEXT_PUBLIC_SECRET_KEY=$NEXT_PUBLIC_SECRET_KEY -e NEXT_PUBLIC_BUCKEYT_REGION=$NEXT_PUBLIC_BUCKEYT_REGION -e NEXT_PUBLIC_BUCKEYT_NAME=$NEXT_PUBLIC_BUCKEYT_NAME -e NEXT_PUBLIC_BUCKEYT_URL=$NEXT_PUBLIC_BUCKEYT_URL godseye93/front:latest'
+                sh 'docker run --name front -d -p 3000:3000 -e process.env.NEXT_PUBLIC_BASE_URL1=$NEXT_PUBLIC_BASE_URL1 -e process.env.NEXT_PUBLIC_BASE_URL=$NEXT_PUBLIC_BASE_URL -e process.env.NEXT_PUBLIC_ACCESS_KEY=$NEXT_PUBLIC_ACCESS_KEY -e process.env.NEXT_PUBLIC_SECRET_KEY=$NEXT_PUBLIC_SECRET_KEY -e process.env.NEXT_PUBLIC_BUCKEYT_REGION=$NEXT_PUBLIC_BUCKEYT_REGION -e process.env.NEXT_PUBLIC_BUCKEYT_NAME=$NEXT_PUBLIC_BUCKEYT_NAME -e process.env.NEXT_PUBLIC_BUCKEYT_URL=$NEXT_PUBLIC_BUCKEYT_URL godseye93/front:latest'
                 echo 'Run New member image'
             }
         }
