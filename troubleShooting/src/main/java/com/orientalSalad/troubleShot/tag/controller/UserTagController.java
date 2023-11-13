@@ -26,17 +26,18 @@ import lombok.extern.log4j.Log4j2;
 public class UserTagController {
 	private final UserTagService userTagService;
 
-	@Operation(summary = "유저가 많이 사용한 태그 검색")
+	@Operation(summary = "유저가 검색에 많이 사용한 태그 검색")
 	@GetMapping("/most-used")
 	public ResponseEntity<?> MostUsedTagList(
 		@ModelAttribute RequestMostUsedTagDTO requestMostUsedTagDTO) {
-		log.info("====== 유저가 많이 사용한 태그 검색 시작 =====");
+		log.info("====== 유저가 검색에 많이 사용한 태그 검색 시작 =====");
+		log.info("[PARAM] : "+requestMostUsedTagDTO	);
 
 		List<String> tagList = userTagService.findMostUsedTagByUserSeq(requestMostUsedTagDTO);
 
 		ResponseTagListDTO resultDTO = ResponseTagListDTO.builder()
 			.success(true)
-			.message("유저가 많이 사용한 태그 검색을 성공했습니다.")
+			.message("유저가 검색에 많이 사용한 태그 검색을 성공했습니다.")
 			.tagList(tagList)
 			.build();
 
