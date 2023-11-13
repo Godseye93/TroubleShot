@@ -69,7 +69,7 @@ public class TroubleShootingController {
 	@DeleteMapping("/{seq}")
 	public ResponseEntity<?> deleteTroubleShooting(
 		HttpServletRequest request,
-		@RequestBody RequestDTO requestDTO,
+		@ModelAttribute RequestDTO requestDTO,
 		@PathVariable(name = "seq") Long seq) throws
 		Exception {
 		log.info("====== 트러블 슈팅 문서 삭제 시작 =====");
@@ -214,7 +214,7 @@ public class TroubleShootingController {
 	public ResponseEntity<?> deleteReply(
 		@PathVariable(name = "troubleSeq") long troubleSeq,
 		@PathVariable(name = "replySeq") long replySeq,
-		@RequestBody RequestDTO requestDTO,
+		@ModelAttribute RequestDTO requestDTO,
 		HttpServletRequest request) throws Exception {
 		log.info("====== 트러블 슈팅 문서 덧글 삭제 시작 =====");
 		log.info(requestDTO.toString());

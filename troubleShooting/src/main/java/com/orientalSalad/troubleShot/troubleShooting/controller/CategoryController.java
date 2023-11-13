@@ -66,7 +66,7 @@ public class CategoryController {
 	@DeleteMapping("/{categorySeq}")
 	public ResponseEntity<?> deleteCategory(
 		HttpServletRequest request,
-		@RequestBody RequestDTO requestDTO,
+		@ModelAttribute RequestDTO requestDTO,
 		@PathVariable(name = "userSeq") Long userSeq,
 		@PathVariable(name = "categorySeq") Long categorySeq) throws
 		Exception {
