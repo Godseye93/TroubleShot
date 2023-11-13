@@ -37,7 +37,7 @@ const ResponsePie = ({ userSeq }: Props) => {
     queryKey: ["getResponseTag", userSeq],
     queryFn: () => getResponseTag(userSeq),
   });
-
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const myData = data?.data.tagHistoryList.map((tag: any, idx: number) => ({
     id: tag.name,
     label: tag.name,

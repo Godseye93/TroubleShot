@@ -17,6 +17,7 @@ const Calendar = ({ userSeq }: Props) => {
     queryKey: ["getCalendar", userSeq],
     queryFn: () => getCalendar(userSeq),
   });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const myData = data?.data.troubleShootingHistoryList?.map((item: any) => ({
     value: item.count,
     day: item.date,

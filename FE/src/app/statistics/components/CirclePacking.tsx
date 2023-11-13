@@ -20,6 +20,7 @@ const CirclePacking = ({ userSeq }: Props) => {
 
   const myData = {
     name: "root",
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     children: data?.data.tagHistoryList.map((item: any) => ({
       name: item.name,
       value: item.totalCount,
