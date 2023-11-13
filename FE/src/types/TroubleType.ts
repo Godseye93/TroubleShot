@@ -22,6 +22,7 @@ export interface PostTroubleShooting {
   };
   solved: boolean;
   tags: string[];
+  postType: 0;
 }
 export interface RequestTroubleShooting {
   loginSeq: number;
@@ -60,7 +61,7 @@ export interface TroubleShootingBoard {
   category: string;
   context: string;
   dependency: null | string;
-  scope: number;
+  scope: 0 | 1 | null;
   writer: Writer;
   solved: boolean;
   viewCount: number;
@@ -110,8 +111,18 @@ export interface Answer {
   troubleSeq: number;
   replies: Reply[];
   loginLike: boolean;
+  selected: boolean;
 }
 export interface TroubleShootingAnswer {
+  context: string;
+  title: string;
+  writer: {
+    seq: number;
+  };
+  troubleSeq: number;
+  selected: boolean;
+}
+export interface TroubleShootingAnswerReq {
   context: string;
   title: string;
   writer: {
@@ -123,5 +134,42 @@ export interface TroubleShootingAnswer {
 export interface RequestTroubleShootingAnswer {
   loginSeq: number;
   type: 0;
-  troubleShootingAnswer: TroubleShootingAnswer;
+  troubleShootingAnswer: TroubleShootingAnswerReq;
+}
+export interface TroubleShootingReply {
+  context: string;
+  writer: {
+    seq: number;
+  };
+  troubleSeq: number;
+}
+export interface TroubleShootingAnswerReply {
+  context: string;
+  writer: {
+    seq: number;
+  };
+  answerSeq: number;
+}
+export interface RequestTroubleShootingReply {
+  loginSeq: number;
+  type: 0;
+  troubleShootingReply: TroubleShootingReply;
+}
+export interface RequestTroubleShootingAnswerReply {
+  loginSeq: number;
+  type: 0;
+  troubleShootingAnswerReply: TroubleShootingAnswerReply;
+}
+export interface ResponseCategory {
+  success: boolean;
+  message: string;
+  categoryList: Category[];
+  totalCount: number;
+}
+export interface Category {
+  seq: number;
+  createTime: string;
+  updateTime: string;
+  name: string;
+  userSeq: number;
 }
