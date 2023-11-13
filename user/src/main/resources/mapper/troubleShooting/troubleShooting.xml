@@ -41,7 +41,7 @@
             trouble_shooting ts
         where
             writer_seq = #{searchParam.userSeq}
-          and data(ts.create_time) >= NOW() -(#{searchParam.day} ||  ' DAY')::INTERVAL
+          and date(ts.create_time) >= NOW() -(#{searchParam.day} ||  ' DAY')::INTERVAL
         group by date(ts.create_time)
         order by date(ts.create_time) asc
     </select>
