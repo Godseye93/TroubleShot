@@ -40,10 +40,12 @@ const Line = ({ userSeq }: Props) => {
   ];
 
   const days = getLastDays(5).reverse();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const myData = data?.data.tagHistoryList.map((tagHistory: any, idx: number) => ({
     id: tagHistory.name,
     color: colors[idx],
     data: days.map((day: string) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const historyForDay = tagHistory.dailyHistoryList.find((history: any) => history.date === day);
 
       return {

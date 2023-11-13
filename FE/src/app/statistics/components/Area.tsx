@@ -26,6 +26,7 @@ const Area = ({ userSeq }: Props) => {
       data: days.reduce((acc: { x: string; y: number }[], day) => {
         // 현재 날짜의 count를 찾거나 0을 할당
         const currentCount =
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           data?.data.troubleShootingHistoryList.find((history: any) => history.date === day)?.count || 0;
 
         // 이전 날짜까지의 누적값을 가져오거나 초기값 0 설정
@@ -71,7 +72,8 @@ const Area = ({ userSeq }: Props) => {
         legend: "count",
         legendOffset: -40,
         legendPosition: "middle",
-        format: (e) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        format: (e: any) => {
           if (Math.floor(e) === e) {
             return e;
           }
