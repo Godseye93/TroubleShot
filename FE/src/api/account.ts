@@ -3,6 +3,7 @@ import {
   CommonType,
   EmailCertResponse,
   EmailCode,
+  Member,
   PieGraphInfo,
   RadarGraphInfo,
   ReqLogin,
@@ -14,6 +15,7 @@ import {
 } from "@/types/CommonType";
 import { apiInstance } from ".";
 import { AxiosRequestConfig } from "axios";
+import { GetTroubleList, SearchParams } from "@/types/TroubleType";
 
 const api = apiInstance();
 
@@ -71,7 +73,8 @@ export const getPieGraphInfo = async (params: number): Promise<PieGraphInfo> => 
   return { solvedCount, notSolvedCount };
 };
 
-export const getUsedLotTags = async (params: ReqTags) => {
+// 유저가 많이 사용한 태그 요청
+export const getUsedLotTags = async (params: ReqTags): Promise<[]> => {
   const userSeq = params.userSeq;
   const config: AxiosRequestConfig = {
     params: params, // 여기서 나머지 파라미터를 설정
@@ -80,4 +83,19 @@ export const getUsedLotTags = async (params: ReqTags) => {
   const { tagList } = data;
   const filterTagList = tagList.filter((item: string) => item !== "이있어 답할 단어 없습니다");
   return filterTagList;
+};
+
+// 유저가 추가한 북마크 목록
+// 게이트웨이 되면 코드 수정하기
+export const getBookmarkList = async (params: SearchParams): Promise<GetTroubleList> => {
+  const Url = "https://orientalsalad.kro.kr:8102/trouble-shootings";
+  const { data } = await api.get(Url, { params });
+  return data;
+};
+
+// 유저 pk로 유저의 정보 가져오기
+export const getUserInfo = async (params: number) => {
+  const { data } = await api.get(`/members/${params}`);
+  const { member } = data;
+  return member;
 };
