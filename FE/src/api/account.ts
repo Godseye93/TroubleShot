@@ -94,7 +94,7 @@ export const getBookmarkList = async (params: SearchParams): Promise<GetTroubleL
 };
 
 // 유저 pk로 유저의 정보 가져오기
-export const getUserInfo = async (params: number): Promise<Member> => {
+export const getUserInfo = async (params: number) => {
   const { data } = await api.get(`/members/${params}`);
   const { member } = data;
   return member;

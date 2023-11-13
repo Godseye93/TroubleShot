@@ -1,12 +1,14 @@
 import { getBarChartInfo } from "@/api/account";
-import { useLoginStore } from "@/stores/useLoginStore";
 import { PieGraphInfo } from "@/types/CommonType";
 import { ResponsivePie } from "@nivo/pie";
 import { useState, useEffect } from "react";
 
-export function MyResponsivePie() {
-  const { user } = useLoginStore();
-  const userSeq = user?.member.seq;
+interface Params {
+  userSeq: number;
+}
+
+export function MyResponsivePie(params: Params) {
+  const { userSeq } = params;
 
   const [userData, setUserData] = useState<PieGraphInfo | null>(null);
 

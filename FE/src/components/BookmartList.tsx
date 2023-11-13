@@ -1,13 +1,15 @@
 import { getBookmarkList } from "@/api/account";
-import { useLoginStore } from "@/stores/useLoginStore";
 import { SearchParams, TroubleShootingBoard } from "@/types/TroubleType";
 import { useState, useEffect } from "react";
 import { AiOutlineEye, AiFillHeart } from "react-icons/ai";
 import { MdComment } from "react-icons/md";
 
-export default function BookmartList() {
-  const { user } = useLoginStore();
-  const userSeq = user?.member.seq;
+interface Params {
+  userSeq: number;
+}
+
+export default function BookmartList(params: Params) {
+  const { userSeq } = params;
 
   const [bookmarkList, setBookmarkList] = useState<TroubleShootingBoard[] | null>(null);
 
@@ -40,7 +42,7 @@ export default function BookmartList() {
               <div className="flex w-3/4 mb-3">
                 {bookmark.tags.map((v, i) => {
                   return (
-                    <div key={i} className="bg-gray-300 rounded-lg me-2 w-3/12 text-center">
+                    <div key={i} className="bg-gray-300 rounded-lg me-2 w-[70px] min-w-fit text-center">
                       {v}
                     </div>
                   );
