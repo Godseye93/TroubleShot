@@ -25,6 +25,18 @@ pipeline {
             }
         }
 
+        stage('Print environment variable') {
+            steps {
+                echo "NEXT_PUBLIC_BASE_URL1: ${env.NEXT_PUBLIC_BASE_URL1}"
+                echo "NEXT_PUBLIC_BASE_URL: ${env.NEXT_PUBLIC_BASE_URL}"
+                echo "NEXT_PUBLIC_ACCESS_KEY: ${env.NEXT_PUBLIC_ACCESS_KEY}"
+                echo "NEXT_PUBLIC_SECRET_KEY: ${env.NEXT_PUBLIC_SECRET_KEY}"
+                echo "NEXT_PUBLIC_BUCKEYT_REGION: ${env.NEXT_PUBLIC_BUCKEYT_REGION}"
+                echo "NEXT_PUBLIC_BUCKEYT_NAME: ${env.NEXT_PUBLIC_BUCKEYT_NAME}"
+                echo "NEXT_PUBLIC_BUCKEYT_URL: ${env.NEXT_PUBLIC_BUCKEYT_URL}"
+            }
+        }
+
         stage('Clone Repository') {
             steps {
                 mattermostSend color: 'warning', message: ":angry_jenkins_face: 배포 시작! :angry_jenkins_face: \n`front - #${env.BUILD_NUMBER}`\nStarted by GitLab push by ${env.COMMIT_AUTHOR}\n링크: ${env.BUILD_URL}"
