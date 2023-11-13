@@ -192,7 +192,12 @@
                                 )
                             )
                         FROM
-                             trouble_shooting_answer_reply ar
+                            trouble_shooting_answer_reply ar
+                                LEFT JOIN
+                            trouble_shooting_answer_reply_like login_tsarl ON ar.seq = login_tsarl.answer_reply_seq
+                                AND login_tsarl.user_seq = #{searchParam.loginSeq}
+                                LEFT JOIN
+                            member arm ON arm.seq = ar.writer_seq
                         WHERE
                               a.seq = ar.answer_seq
                         )
@@ -216,18 +221,12 @@
         LEFT JOIN
             member answer_m ON a.writer_seq  = answer_m.seq
         LEFT JOIN
-            trouble_shooting_answer_reply ar ON a.seq = ar.answer_seq
-        LEFT JOIN
-            member arm ON arm.seq = ar.writer_seq
-        LEFT JOIN
             trouble_shooting_answer_like tsal ON tsal.answer_seq  = a.seq
         LEFT JOIN
             trouble_shooting_like login_tsl ON ts.seq  = login_tsl.trouble_seq AND login_tsl.user_seq = #{searchParam.loginSeq}
         LEFT JOIN
             trouble_shooting_answer_like login_tsal ON a.seq  = login_tsal.answer_seq AND login_tsal.user_seq =#{searchParam.loginSeq}
-        LEFT JOIN
-            trouble_shooting_answer_reply_like login_tsarl ON ar.seq = login_tsarl.answer_reply_seq AND login_tsarl.user_seq = #{searchParam.loginSeq}
-        LEFT JOIN
+      LEFT JOIN
             trouble_shooting_reply_like login_tsrl ON tsr.seq  = login_tsrl.reply_seq AND login_tsrl.user_seq = #{searchParam.loginSeq}
         LEFT JOIN
             favorite f ON ts.seq = f.trouble_seq AND f.user_seq = #{searchParam.loginSeq}
