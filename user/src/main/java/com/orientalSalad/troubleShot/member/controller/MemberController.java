@@ -124,7 +124,7 @@ public class MemberController {
 	@DeleteMapping("/{userSeq}")
 	public ResponseEntity<?> deleteMember (
 		@PathVariable(name = "userSeq") Long userSeq,
-		@RequestBody RequestDTO requestDTO,
+		@ModelAttribute RequestDTO requestDTO,
 		HttpServletRequest request) throws Exception {
 		log.info("==== 회원 정보 삭제 시작 ====");
 		//로그인 확인
