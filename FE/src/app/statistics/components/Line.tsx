@@ -22,7 +22,7 @@ export function getLastDays(count: number): string[] {
 }
 
 const getTopTagChange = (userSeq: number) => {
-  const url = `https://orientalsalad.kro.kr:8101/members/${userSeq}/tags/most-used-history?userSeq=${userSeq}&day=5&count=4`;
+  const url = `https://orientalsalad.kro.kr:8101/members/${userSeq}/tags/most-used-history?userSeq=${userSeq}&day=5&count=5`;
   return axios.get(url);
 };
 
@@ -61,7 +61,7 @@ const Line = ({ userSeq }: Props) => {
         xScale={{ type: "point" }}
         yScale={{
           type: "linear",
-          min: "0",
+          min: 0,
           max: "auto",
           stacked: true,
           reverse: false,
@@ -80,7 +80,7 @@ const Line = ({ userSeq }: Props) => {
           tickSize: 5,
           tickPadding: 5,
           tickRotation: 0,
-          legend: "count",
+          legend: "사용 횟수",
           legendOffset: -40,
           legendPosition: "middle",
           format: (e) => {

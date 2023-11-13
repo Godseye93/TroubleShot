@@ -7,66 +7,52 @@ interface Props {
   userSeq: number;
 }
 
+const getAllTag = (userSeq: number) => {
+  const url = `https://orientalsalad.kro.kr:8101/members/${userSeq}/tags/most-used-history?userSeq=${userSeq}`;
+  return axios.get(url);
+};
+
 const CirclePacking = ({ userSeq }: Props) => {
-  const data2 = {
+  const { data } = useQuery({
+    queryKey: ["getAllTag", userSeq],
+    queryFn: () => getAllTag(userSeq),
+  });
+
+  const myData = {
     name: "root",
-    children: [
-      {
-        name: "node.15",
-        value: 59,
-      },
-      {
-        name: "node.16",
-        value: 43,
-      },
-      {
-        name: "node.17",
-        value: 69,
-      },
-      {
-        name: "node.18",
-        value: 82,
-      },
-      {
-        name: "node.19",
-        value: 75,
-      },
-      {
-        name: "node.20",
-        value: 27,
-      },
-      {
-        name: "node.21",
-        value: 66,
-      },
-    ],
+    children: data?.data.tagHistoryList.map((item: any) => ({
+      name: item.name,
+      value: item.totalCount,
+    })),
   };
 
   return (
-    <ResponsiveCirclePackingCanvas
-      data={data2}
-      margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
-      id="name"
-      colors={{ scheme: "spectral" }}
-      colorBy="id"
-      childColor={{
-        from: "color",
-        modifiers: [["brighter", 0.4]],
-      }}
-      padding={1}
-      leavesOnly={true}
-      enableLabels={true}
-      label="id"
-      labelTextColor={{
-        from: "color",
-        modifiers: [["darker", 2.4]],
-      }}
-      borderColor={{
-        from: "color",
-        modifiers: [["darker", 0.3]],
-      }}
-      animate={false}
-    />
+    myData && (
+      <ResponsiveCirclePackingCanvas
+        data={myData}
+        margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
+        id="name"
+        colors={{ scheme: "spectral" }}
+        colorBy="id"
+        childColor={{
+          from: "color",
+          modifiers: [["brighter", 0.4]],
+        }}
+        padding={1}
+        leavesOnly={true}
+        enableLabels={true}
+        label="id"
+        labelTextColor={{
+          from: "color",
+          modifiers: [["darker", 2.4]],
+        }}
+        borderColor={{
+          from: "color",
+          modifiers: [["darker", 0.3]],
+        }}
+        animate={false}
+      />
+    )
   );
 };
 

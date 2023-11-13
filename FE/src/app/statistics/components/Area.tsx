@@ -22,7 +22,7 @@ const Area = ({ userSeq }: Props) => {
   const myData = [
     {
       id: "작성한 트러블 슈팅",
-      color: "hsl(85, 70%, 50%)",
+      color: "hsl(285, 70%, 50%)",
       data: days.reduce((acc: { x: string; y: number }[], day) => {
         // 현재 날짜의 count를 찾거나 0을 할당
         const currentCount =
@@ -48,7 +48,7 @@ const Area = ({ userSeq }: Props) => {
       xScale={{ type: "point" }}
       yScale={{
         type: "linear",
-        min: "0",
+        min: 0,
         max: "auto",
         stacked: true,
         reverse: false,

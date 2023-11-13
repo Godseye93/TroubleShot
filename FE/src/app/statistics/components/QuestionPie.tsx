@@ -12,7 +12,25 @@ const getQuestionTag = (userSeq: number) => {
   return axios.get(url);
 };
 
-const colors = ["hsl(244, 70%, 50%)", "hsl(86, 70%, 50%)", "hsl(10, 70%, 50%)"];
+const colors = [
+  "hsl(10, 70%, 50%)",
+  "hsl(30, 70%, 50%)",
+  "hsl(50, 70%, 50%)",
+  "hsl(70, 70%, 50%)",
+  "hsl(90, 70%, 50%)",
+  "hsl(110, 70%, 50%)",
+  "hsl(130, 70%, 50%)",
+  "hsl(150, 70%, 50%)",
+  "hsl(170, 70%, 50%)",
+  "hsl(190, 70%, 50%)",
+  "hsl(210, 70%, 50%)",
+  "hsl(230, 70%, 50%)",
+  "hsl(250, 70%, 50%)",
+  "hsl(270, 70%, 50%)",
+  "hsl(290, 70%, 50%)",
+  "hsl(310, 70%, 50%)",
+  "hsl(330, 70%, 50%)",
+];
 
 const QuestionPie = ({ userSeq }: Props) => {
   const { data } = useQuery({
@@ -27,38 +45,6 @@ const QuestionPie = ({ userSeq }: Props) => {
     color: colors[idx],
   }));
 
-  const data2 = [
-    {
-      id: "python",
-      label: "python",
-      value: 464,
-      color: "hsl(136, 70%, 50%)",
-    },
-    {
-      id: "stylus",
-      label: "stylus",
-      value: 68,
-      color: "hsl(86, 70%, 50%)",
-    },
-    {
-      id: "ruby",
-      label: "ruby",
-      value: 466,
-      color: "hsl(85, 70%, 50%)",
-    },
-    {
-      id: "erlang",
-      label: "erlang",
-      value: 172,
-      color: "hsl(183, 70%, 50%)",
-    },
-    {
-      id: "go",
-      label: "go",
-      value: 220,
-      color: "hsl(244, 70%, 50%)",
-    },
-  ];
   return (
     myData && (
       <ResponsivePie
@@ -82,101 +68,6 @@ const QuestionPie = ({ userSeq }: Props) => {
           from: "color",
           modifiers: [["darker", 2]],
         }}
-        defs={[
-          {
-            id: "dots",
-            type: "patternDots",
-            background: "inherit",
-            color: "rgba(255, 255, 255, 0.3)",
-            size: 4,
-            padding: 1,
-            stagger: true,
-          },
-          {
-            id: "lines",
-            type: "patternLines",
-            background: "inherit",
-            color: "rgba(255, 255, 255, 0.3)",
-            rotation: -45,
-            lineWidth: 6,
-            spacing: 10,
-          },
-        ]}
-        fill={[
-          {
-            match: {
-              id: "ruby",
-            },
-            id: "dots",
-          },
-          {
-            match: {
-              id: "c",
-            },
-            id: "dots",
-          },
-          {
-            match: {
-              id: "go",
-            },
-            id: "dots",
-          },
-          {
-            match: {
-              id: "python",
-            },
-            id: "dots",
-          },
-          {
-            match: {
-              id: "scala",
-            },
-            id: "lines",
-          },
-          {
-            match: {
-              id: "lisp",
-            },
-            id: "lines",
-          },
-          {
-            match: {
-              id: "elixir",
-            },
-            id: "lines",
-          },
-          {
-            match: {
-              id: "javascript",
-            },
-            id: "lines",
-          },
-        ]}
-        legends={[
-          {
-            anchor: "bottom",
-            direction: "row",
-            justify: false,
-            translateX: 0,
-            translateY: 56,
-            itemsSpacing: 0,
-            itemWidth: 100,
-            itemHeight: 18,
-            itemTextColor: "#999",
-            itemDirection: "left-to-right",
-            itemOpacity: 1,
-            symbolSize: 18,
-            symbolShape: "circle",
-            effects: [
-              {
-                on: "hover",
-                style: {
-                  itemTextColor: "#000",
-                },
-              },
-            ],
-          },
-        ]}
       />
     )
   );

@@ -47,8 +47,8 @@ const Calendar = ({ userSeq }: Props) => {
             itemHeight: 36,
             itemsSpacing: 14,
             itemDirection: "right-to-left",
-            translateX: -60,
-            translateY: -270,
+            translateX: -100,
+            translateY: -90,
             symbolSize: 20,
           },
         ]}
