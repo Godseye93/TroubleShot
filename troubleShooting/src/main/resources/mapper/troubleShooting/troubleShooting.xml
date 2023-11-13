@@ -131,7 +131,6 @@
                 'updateTime', tsr.update_time,
                 'deleteTime', tsr.delete_time,
                 'context',tsr.context,
-                'writerSeq',tsr.writer_seq,
                 'writer',json_build_object(
                 'seq', reply_m.seq,
                 'nickname',reply_m.nickname,
@@ -235,7 +234,14 @@
         WHERE
             ts.seq =  #{searchParam.troubleSeq}
         GROUP BY
-            tsl.user_seq,ts.seq, m.seq,a.seq,answer_m.seq, login_tsal.seq, login_tsl.seq, login_tsal.seq, f.seq
+            tsl.user_seq,
+            ts.seq,
+            m.seq,
+            answer_m.seq,
+            login_tsal.seq,
+            login_tsl.seq,
+            login_tsal.seq,
+            f.seq
     </select>
     <select id="countTroubleShootingList"
             parameterType="com.orientalSalad.troubleShot.troubleShooting.dto.SearchTroubleShootingDTO"
