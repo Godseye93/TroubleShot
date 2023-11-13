@@ -1,12 +1,12 @@
-package com.orientalSalad.troubleShot.common;
+package com.orientalSalad.troubleShot.component;
 
 import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.ui.SimpleToolWindowPanel;
-import com.orientalSalad.troubleShot.loginVersion.LoginVersionMain;
-import com.orientalSalad.troubleShot.logoutVersion.FileUtil;
-import com.orientalSalad.troubleShot.logoutVersion.LogoutVersionMain;
-import com.orientalSalad.troubleShot.common.*;
+import com.orientalSalad.troubleShot.component.loginVersion.LoginVersionMain;
+import com.orientalSalad.troubleShot.component.logoutVersion.LogoutVersionMain;
+import com.orientalSalad.troubleShot.util.FileUtil;
+import com.orientalSalad.troubleShot.util.TroubleAutomation;
 
 public class MainPanel extends SimpleToolWindowPanel {
     public static FileUtil fileUtil;

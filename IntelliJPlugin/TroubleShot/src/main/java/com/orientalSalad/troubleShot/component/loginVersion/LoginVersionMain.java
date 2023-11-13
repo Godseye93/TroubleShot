@@ -1,4 +1,4 @@
-package com.orientalSalad.troubleShot.loginVersion;
+package com.orientalSalad.troubleShot.component.loginVersion;
 
 import javax.swing.*;
 import java.awt.*;

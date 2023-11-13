@@ -1,4 +1,4 @@
-package com.orientalSalad.troubleShot.common;
+package com.orientalSalad.troubleShot.util;
 
 import com.intellij.lang.Language;
 import com.intellij.openapi.editor.Document;

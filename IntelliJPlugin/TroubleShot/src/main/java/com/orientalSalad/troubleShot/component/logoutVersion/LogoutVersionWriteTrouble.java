@@ -1,8 +1,8 @@
-package com.orientalSalad.troubleShot.logoutVersion;
+package com.orientalSalad.troubleShot.component.logoutVersion;
 
 
-import com.orientalSalad.troubleShot.common.TechStackAutomation;
-import com.orientalSalad.troubleShot.common.TroubleAutomation;
+import com.orientalSalad.troubleShot.util.TechStackAutomation;
+import com.orientalSalad.troubleShot.util.TroubleAutomation;
 
 import javax.swing.*;
 
@@ -10,7 +10,7 @@ import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 
-import static com.orientalSalad.troubleShot.common.MainPanel.fileUtil;
+import static com.orientalSalad.troubleShot.component.MainPanel.fileUtil;
 import static com.orientalSalad.troubleShot.endpoint.TroubleShotToolWindow.mainPanel;
 import static com.orientalSalad.troubleShot.endpoint.TroubleShotToolWindow.toolWindow;
 

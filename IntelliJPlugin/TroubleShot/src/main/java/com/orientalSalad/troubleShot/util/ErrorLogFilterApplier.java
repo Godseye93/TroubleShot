@@ -1,4 +1,4 @@
-package com.orientalSalad.troubleShot.common;
+package com.orientalSalad.troubleShot.util;
 
 
 import com.intellij.execution.filters.Filter;

@@ -1,11 +1,11 @@
-package com.orientalSalad.troubleShot.logoutVersion;
+package com.orientalSalad.troubleShot.component.logoutVersion;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 
-import static com.orientalSalad.troubleShot.common.MainPanel.fileUtil;
+import static com.orientalSalad.troubleShot.component.MainPanel.fileUtil;
 import static com.orientalSalad.troubleShot.endpoint.TroubleShotToolWindow.mainPanel;
 import static com.orientalSalad.troubleShot.endpoint.TroubleShotToolWindow.toolWindow;
 

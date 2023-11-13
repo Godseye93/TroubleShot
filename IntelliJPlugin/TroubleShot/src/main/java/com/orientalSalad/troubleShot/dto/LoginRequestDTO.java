@@ -1,4 +1,4 @@
-package com.orientalSalad.troubleShot.loginVersion.dto;
+package com.orientalSalad.troubleShot.dto;
 
 public class LoginRequestDTO {
     private String email;

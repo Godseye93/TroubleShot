@@ -1,4 +1,4 @@
-package com.orientalSalad.troubleShot.common;
+package com.orientalSalad.troubleShot.util;
 
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.roots.ProjectFileIndex;
@@ -9,13 +9,16 @@ import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiFileFactory;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.xml.XmlFile;
+import com.orientalSalad.troubleShot.component.ErrorHistory;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -34,19 +37,24 @@ public class TroubleAutomation {
 
         // Error messge, 발생 코드 가져오기
         String[] errorLogList = getErrorLog().split(parsingKey);
-        System.out.println("------");
+        ErrorHistory errorHistory = ErrorHistory.getInstance();
         for (int i = 0; i < errorLogList.length; i++) {
-            getErrorCode(errorLogList[i]);
+            System.out.println(i + "번째 에러로그 확인");
+            saveErrorHistory(errorLogList[i]);
+            System.out.println();
+//            String[] errorInfo = getErrorInfo(errorLogList[i]);
+//            if (errorInfo != null) {
+//                errorHistory.addErrorHistory(errorInfo);
+//            }
         }
         return "";
     }
 
-    private String[] getErrorCode(String errorLog) {
+    private void saveErrorHistory(String errorLog) {
 
         // 현재 프로젝트 내의 모든 파일 이름 구하기
         Set<String> fileNameSet = new HashSet<>();
         ProjectFileIndex projectFileIndex = ProjectRootManager.getInstance(project).getFileIndex();
-
         projectFileIndex.iterateContent(fileOrDir -> {
             if (!fileOrDir.isDirectory()) {
                 fileNameSet.add(fileOrDir.getName());
@@ -54,24 +62,128 @@ public class TroubleAutomation {
             return true;
         });
 
-        for (String fn : fileNameSet) {
-            System.out.print(fn + " ");
-        }
 
+        // 에러 발생 코드 위치 찾기
         String[] errorLine = errorLog.split("\n");
-        Pattern pattern = Pattern.compile("\\(([^:]+):(\\d+)\\)");
+        Pattern errorCodepattern = Pattern.compile("\\(([^:]+):(\\d+)\\)");
+        Pattern exceptionTypePattern = Pattern.compile("([a-zA-Z.]*Exception)");
+        String title = "[Trouble] ";
+        String errorDateTIme = null;
+        String errorType = null;
+        String errorFilePath = null; // 에러 발생 파일 경로
+        String errorFileName = null; // 에러 발생 파일 이름
+        String errorFileType = null; // 무슨 파일인지 ex) .java
+        int errorlineNumber = -1;
+        boolean finished = false;
         for (String line : errorLine) {
-            Matcher matcher = pattern.matcher(line);
+            // 에러 발생 시간 얻기
+            if (line.contains(" ERROR ")) {
+                errorDateTIme = line.substring(5, 19).replace(":", ".").replace("-", ".");
+                continue;
+            }
+            // Exception Type 얻기
+            if (line.contains("Exception")) {
+                Matcher matcher = exceptionTypePattern.matcher(line);
+                if (matcher.find()) {
+                    errorType = matcher.group(1);
+                }
+                continue;
+            }
+            // error 발생 코드 얻기
+            Matcher matcher = errorCodepattern.matcher(line);
             while (matcher.find()) {
-                String fileName = matcher.group(1);
-                String lineNumber = matcher.group(2);
-                System.out.println(fileName + " : " + lineNumber);
-                if (fileNameSet.contains(fileName)) {
-                    return new String[] {line, fileName, lineNumber};
+                errorFileName = matcher.group(1);
+                String[] errorFileNameAndType = errorFileName.split("\\.");
+                System.out.println("errorFileName : " + errorFileName);
+                System.out.println("errorFileNameAndType  length : " + errorFileNameAndType.length);
+                for (String ent : errorFileNameAndType) {
+                    System.out.print(ent + " ");
+                }
+                System.out.println();
+                if (errorFileNameAndType.length < 2) {
+                    System.out.println("errorFileNameAndType.length < 2");
+                    break;
+                }
+                errorFileType = "." + errorFileNameAndType[1];
+                errorlineNumber = Integer.parseInt(matcher.group(2));
+                System.out.println("errorFileType : " + errorFileType + ", errorlineNumber : " + errorlineNumber);
+                if (fileNameSet.contains(errorFileName)) {
+                    String filePath = "at (([a-zA-Z0-9.]+)\\." + errorFileNameAndType[0] + ")";
+                    Pattern filePathPattern = Pattern.compile(filePath);
+                    matcher = filePathPattern.matcher(line);
+                    if (matcher.find()) {
+                        errorFilePath = matcher.group(1).replace(".", "/");
+                        System.out.println("erorFilePath : " + errorFilePath);
+                    }
+                    finished = true;
+                    break;
                 }
             }
+            if (finished) {
+                break;
+            }
         }
-        return null;
+        // 에러 발생 코드 구하기
+        if (errorFilePath == null) {
+            System.out.println("errorFilePath == null");
+            return;
+        }
+        title += errorType + " " + errorDateTIme;
+        System.out.println("title : " + title);
+        try {
+            String filePath = project.getBasePath() + "/src/main/java/" + errorFilePath + errorFileType;
+            BufferedReader reader = new BufferedReader(new FileReader(filePath));
+            String line;
+            List<String> contents = new ArrayList<>();
+            while ((line = reader.readLine()) != null) {
+                contents.add(line);
+            }
+            reader.close();
+            int upperIndex = errorlineNumber;
+            for (int i = errorlineNumber - 1; i >= 0; i--) {
+                upperIndex = i;
+                if (contents.get(i).contains("{")) {
+                    break;
+                }
+            }
+            int downIndex = errorlineNumber;
+            for (int i = errorlineNumber; i < contents.size(); i++) {
+                downIndex = i;
+                if (contents.get(i).contains("}")) {
+                    break;
+                }
+            }
+            StringBuilder errorCode = new StringBuilder();
+            for (int i = upperIndex; i <= downIndex; i++) {
+                errorCode.append(contents.get(i)).append("\n");
+            }
+            createErrorHistory(title, errorLog, errorCode.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void createErrorHistory(String fileName, String errorLog, String errorCode) {
+        try {
+            String userHomePath = System.getProperty("user.home");
+            String directoryPath = userHomePath + "/Documents/TroubleShot1.0-OrientalSalad/error_history";
+
+            File documentsDir = new File(directoryPath);
+            if (!documentsDir.exists()) {
+                documentsDir.mkdirs();
+            }
+
+            String filePath = directoryPath + "/" + fileName + ".txt";
+            BufferedWriter writer = new BufferedWriter(new FileWriter(filePath));
+
+            writer.write(errorLog);
+            writer.write(parsingKey);
+            writer.write(errorCode);
+
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private String getErrorLog() {

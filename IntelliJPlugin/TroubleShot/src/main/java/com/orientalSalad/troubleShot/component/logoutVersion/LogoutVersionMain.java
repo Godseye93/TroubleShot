@@ -1,6 +1,6 @@
-package com.orientalSalad.troubleShot.logoutVersion;
+package com.orientalSalad.troubleShot.component.logoutVersion;
 
-import com.orientalSalad.troubleShot.loginVersion.Login;
+import com.orientalSalad.troubleShot.component.ErrorHistory;
 
 import javax.swing.*;
 import java.awt.*;
@@ -42,6 +42,8 @@ public class LogoutVersionMain {
 //        detailPanel.add(login.getPanel(), "Login");
         LogoutVersionList logoutVersionList = new LogoutVersionList();
         detailPanel.add(logoutVersionList.getPanel(), "My Trouble Shooting");
+        ErrorHistory errorHistory = new ErrorHistory();
+        detailPanel.add(errorHistory.getPanel(), "Error History");
         // main에 list, detail, foot 배치
         panel.setLayout(new BorderLayout());
         panel.add(new JScrollPane(mainList), BorderLayout.WEST);

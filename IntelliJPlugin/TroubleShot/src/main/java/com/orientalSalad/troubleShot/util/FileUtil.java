@@ -1,4 +1,4 @@
-package com.orientalSalad.troubleShot.logoutVersion;
+package com.orientalSalad.troubleShot.util;
 
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.fileEditor.FileEditorManager;
@@ -27,7 +27,7 @@ public class FileUtil {
     // trouble을 Md파일로 만들기
     public void createMDFile(String fileName, String contents) {
         String userHomePath = System.getProperty("user.home");
-        String documentsPath = userHomePath + "/Documents/troubleshooting_documents";
+        String documentsPath = userHomePath + "/Documents/TroubleShot1.0-OrientalSalad/troubleshooting_documents";
 
         File documentsDir = new File(documentsPath);
         if (!documentsDir.exists()) {
@@ -66,7 +66,7 @@ public class FileUtil {
     // solution을 Md파일에 합치기
     public void createSolutionMD(String fileName, String contents) {
         String userHomePath = System.getProperty("user.home");
-        String filePath = userHomePath + "/Documents/troubleshooting_documents/" + fileName;
+        String filePath = userHomePath + "/Documents/TroubleShot1.0-OrientalSalad/troubleshooting_documents/" + fileName;
 
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath, true))) { // FileWriter의 두번째 인자를 true로 설정하면 파일에 이어서 내용을 작성할 수 있습니다.
             bw.write(contents);
@@ -78,9 +78,10 @@ public class FileUtil {
     }
 
     // 파일 이름 가져오기
-    public String[] getFileNameList() {
+    public String[] getFileNameList(String path) {
         String userHomePath = System.getProperty("user.home");
-        String documentsPath = userHomePath + "/Documents/troubleshooting_documents";
+        String documentsPath = userHomePath + "/Documents/TroubleShot1.0-OrientalSalad/";
+        documentsPath += path;
         File folder = new File(documentsPath);
         // 폴더가 존재하지 않거나, 파일일 경우
         if (!folder.exists() || !folder.isDirectory()) {
@@ -93,7 +94,7 @@ public class FileUtil {
     // 파일 삭제
     public void deleteFile(String fileName) {
         String userHomePath = System.getProperty("user.home");
-        String filePath = userHomePath + "/Documents/troubleshooting_documents/" + fileName;
+        String filePath = userHomePath + "/Documents/TroubleShot1.0-OrientalSalad/troubleshooting_documents/" + fileName;
         File file = new File(filePath);
         if (file.delete()) {
             System.out.println("파일이 성공적으로 삭제되었습니다.");
@@ -117,7 +118,7 @@ public class FileUtil {
     public String getFileAttribute(String filePath, String attributeName) {
         try {
             String userHomePath = System.getProperty("user.home");
-            String documentsPath = userHomePath + "/Documents/troubleshooting_documents/";
+            String documentsPath = userHomePath + "/Documents/TroubleShot1.0-OrientalSalad/troubleshooting_documents/";
             Path file = Paths.get(documentsPath + filePath);
 
             // 파일로부터 사용자 정의 속성 읽기
@@ -138,7 +139,7 @@ public class FileUtil {
     // 파일 내용 에디터에 표시
     public void loadAndDisplayFile(String fileName) {
         String userHomePath = System.getProperty("user.home");
-        String filePath = userHomePath + "/Documents/troubleshooting_documents/" + fileName;
+        String filePath = userHomePath + "/Documents/TroubleShot1.0-OrientalSalad/troubleshooting_documents/" + fileName;
         VirtualFile file = LocalFileSystem.getInstance().findFileByPath(filePath);
         FileEditorManager.getInstance(project).openFile(file, true);
     }
