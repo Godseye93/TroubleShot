@@ -11,6 +11,23 @@ export const useLoginStore = create(
       user: null,
       userLogin: (res: ResLogin) => set({ user: res }),
       userLogout: () => set({ user: null }),
+      editStoreNickname: (nickname: string) => {
+        set((prev) => {
+          if (!prev.user) {
+            return prev;
+          }
+          const updatedUser: ResLogin = {
+            ...prev.user,
+            member: {
+              ...prev.user.member,
+              nickname: nickname,
+            },
+          };
+          return {
+            user: updatedUser,
+          };
+        });
+      },
     }),
     {
       name: StorageKey,

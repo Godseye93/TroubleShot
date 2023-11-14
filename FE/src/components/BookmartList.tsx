@@ -37,7 +37,7 @@ export default function BookmartList(params: Params) {
       {bookmarkList ? (
         bookmarkList?.map((bookmark, i) => {
           return (
-            <div key={i} className="w-full p-3 h-2/4 content-between border border-b-gray-300">
+            <div key={i} className="w-full p-3 h-2/4 content-between border-b border-gray-300">
               <div className="text-xl mb-3 font-semibold">{bookmark.title}</div>
               <div className="flex w-3/4 mb-3">
                 {bookmark.tags.map((v, i) => {
