@@ -24,6 +24,7 @@ interface Message {
   troubleId?: string;
   defaultErrorMsg?: string;
   defaultCode?: string;
+  solution?: string;
 }
 
 function App() {
@@ -35,6 +36,7 @@ function App() {
   const [troubleId, setTroubleId] = useState<string>();
   const [errorMsg, setErrorMsg] = useState<any>();
   const [defaultCode, setDefaultCode] = useState<string>();
+  const [solution, setSolution] = useState<string>();
 
   useEffect(() => {
     window.addEventListener("message", onHandleInitMessage);
@@ -70,6 +72,9 @@ function App() {
           setDefaultCode(message.defaultCode);
         }
         break;
+      case "setSolution":
+        setSolution(message.solution);
+        break;
     }
   }
 
@@ -78,7 +83,7 @@ function App() {
       {troubleShootingType === TROUBLE_SHOOTING_TYPE.TROUBLE ? (
         <Trouble sessionId={sessionId} defaultSkills={defaultSkills} />
       ) : troubleShootingType === TROUBLE_SHOOTING_TYPE.SOLUTION ? (
-        <Solution sessionId={sessionId} troubleId={troubleId} />
+        <Solution sessionId={sessionId} troubleId={troubleId} solution={solution} />
       ) : troubleShootingType === TROUBLE_SHOOTING_TYPE.LOGIN_FORM ? (
         <LoginForm />
       ) : troubleShootingType === TROUBLE_SHOOTING_TYPE.TROUBLE_WITH_ERROR ? (

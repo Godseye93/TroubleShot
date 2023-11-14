@@ -5,6 +5,7 @@ export class MyTroubleListProviderLogin extends MyTroubleListProvider {
   constructor(readonly globalState: vscode.Memento) {
     super(globalState);
   }
+  static curTroubleList: Trouble[] = [];
 
   refresh() {
     this._onDidChangeTreeData.fire();
@@ -31,6 +32,7 @@ export class MyTroubleListProviderLogin extends MyTroubleListProvider {
         trouble.solved ? "solved" : "unSolved"
       );
     });
+    MyTroubleListProviderLogin.curTroubleList = troubleList;
     return troubleList;
   }
 
@@ -53,5 +55,10 @@ export class MyTroubleListProviderLogin extends MyTroubleListProvider {
     } else {
       vscode.window.showErrorMessage("Delete trouble shooting failed");
     }
+  }
+
+  static getTroubleContent(id: string) {
+    const trouble = MyTroubleListProviderLogin.curTroubleList.find((trouble) => trouble.id === id);
+    return trouble?.content;
   }
 }

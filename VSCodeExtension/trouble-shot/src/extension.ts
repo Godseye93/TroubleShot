@@ -12,6 +12,8 @@ import { ErrHistoryProvider, Err } from "./TreeDataProvider/ErrHistoryProvider";
 import { v4 as uuidv4 } from "uuid";
 import { MyTroubleListProviderLogin } from "./TreeDataProvider/MyTroubleListProviderLogin";
 import { isOffLineTrouble } from "./utilities/isOnline";
+import { Uri } from "vscode";
+import { MarkdownViewPanel } from "./panels/MarkdownViewPanel";
 
 export const TROUBLE_SHOOTING_TYPE = {
   TROUBLE: 0 as const,
@@ -173,15 +175,17 @@ export async function activate(context: vscode.ExtensionContext) {
         const troubleList = context.globalState.get<Trouble[]>("troubleList");
         const trouble = troubleList?.find((troubleShoot) => troubleShoot.id === troubleShootId);
         if (!trouble) return;
-        const panel = vscode.window.createWebviewPanel(
-          "viewTroubleShooting",
-          trouble.title,
-          vscode.ViewColumn.One,
-          {
-            enableScripts: true,
-          }
-        );
-        panel.webview.html = getMarkdownView(trouble.content, context.extensionUri);
+        // const panel = vscode.window.createWebviewPanel(
+        //   "viewTroubleShooting",
+        //   trouble.title,
+        //   vscode.ViewColumn.One,
+        //   {
+        //     enableScripts: true,
+        //     localResourceRoots: [Uri.joinPath(context.extensionUri, "src/panels/assets")],
+        //   }
+        // );
+        // panel.webview.html = getMarkdownView(panel, trouble.content, context.extensionUri);
+        MarkdownViewPanel.render(context.extensionUri, trouble.content, trouble.title);
       } else {
         const res = await fetch(
           `https://orientalsalad.kro.kr:8102/trouble-shootings/${Number(
@@ -190,22 +194,28 @@ export async function activate(context: vscode.ExtensionContext) {
         );
         const { troubleShooting } = await res.json();
         if (!troubleShooting) return;
-        const panel = vscode.window.createWebviewPanel(
-          "viewTroubleShooting",
-          troubleShooting.title,
-          vscode.ViewColumn.One,
-          {
-            enableScripts: true,
-          }
-        );
+        // const panel = vscode.window.createWebviewPanel(
+        //   "viewTroubleShooting",
+        //   troubleShooting.title,
+        //   vscode.ViewColumn.One,
+        //   {
+        //     enableScripts: true,
+        //   }
+        // );
         let solvedContent = "";
         troubleShooting.answers.forEach((answer: any) => {
           solvedContent += answer.context;
         });
 
-        panel.webview.html = getMarkdownView(
+        // panel.webview.html = getMarkdownView(
+        //   panel,
+        //   troubleShooting.context + solvedContent,
+        //   context.extensionUri
+        // );
+        MarkdownViewPanel.render(
+          context.extensionUri,
           troubleShooting.context + solvedContent,
-          context.extensionUri
+          troubleShooting.title
         );
       }
     })

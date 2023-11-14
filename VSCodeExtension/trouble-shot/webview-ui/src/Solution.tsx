@@ -1,19 +1,31 @@
-import { VSCodeTextArea, VSCodeButton } from "@vscode/webview-ui-toolkit/react";
+import { VSCodeTextArea, VSCodeButton, VSCodeProgressRing } from "@vscode/webview-ui-toolkit/react";
 import { useEffect, useState } from "react";
 import { BsReplyAll } from "react-icons/bs";
 import { VscCopy } from "react-icons/vsc";
 import { vscode } from "./utilities/vscode";
+import { GoCopilot } from "react-icons/go";
 
 interface Props {
   sessionId: number;
   troubleId: string | undefined;
+  solution: string | undefined;
 }
 
-const Solution = ({ sessionId, troubleId }: Props) => {
+const Solution = ({ sessionId, troubleId, solution }: Props) => {
   const [articleInfo, setArticleInfo] = useState({
     description: "",
     code: "",
   });
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isClick, setIsClick] = useState<boolean>(false);
+
+  useEffect(() => {
+    setArticleInfo((prev) => ({
+      ...prev,
+      description: solution || "",
+    }));
+    if (solution) setIsLoading(false);
+  }, [solution]);
 
   const { description, code } = articleInfo;
   function onChange(e: any) {
@@ -76,12 +88,21 @@ const Solution = ({ sessionId, troubleId }: Props) => {
     });
   }
 
+  function onGetSolution() {
+    vscode.postMessage({
+      command: "getSolution",
+      troubleId,
+    });
+    setIsClick(true);
+    setIsLoading(true);
+  }
+
   return (
     <section className="flex flex-col w-2/3 gap-1 ">
-      <VSCodeTextArea value={code} onInput={onChange} name="code">
+      <VSCodeTextArea value={code} onInput={onChange} name="code" rows={7}>
         해결 코드
       </VSCodeTextArea>
-      <VSCodeTextArea value={description} onInput={onChange} name="description">
+      <VSCodeTextArea value={description} onInput={onChange} name="description" rows={4}>
         상세 설명
       </VSCodeTextArea>
       <div className="flex items-center justify-center gap-5 mt-5">
@@ -98,6 +119,16 @@ const Solution = ({ sessionId, troubleId }: Props) => {
             SOLUTION 달기
           </VSCodeButton>
         </div>
+        {!isClick ? (
+          <div onClick={onGetSolution}>
+            <VSCodeButton>
+              <GoCopilot className="mr-3 " />
+              AI 추천 솔루션
+            </VSCodeButton>
+          </div>
+        ) : isLoading ? (
+          <VSCodeProgressRing />
+        ) : null}
       </div>
     </section>
   );

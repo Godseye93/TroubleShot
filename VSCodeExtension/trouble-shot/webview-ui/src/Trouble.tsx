@@ -60,7 +60,7 @@ const Trouble = ({ sessionId, defaultSkills, errMsg, defaultCode }: Props) => {
     markdownText += `## TROUBLE\n\n`;
     markdownText += `---------------------------------------\n\n`;
     if (!upLoad) markdownText += `### 사용 기술 및 의존성\n\`${skill}\`\n\n`;
-    markdownText += `### 문제 코드\n\`\`\`\n${code}\n\`\`\`\n\n`;
+    markdownText += `### 문제 코드\n\`\`\`ts\n${code}\n\`\`\`\n\n`;
     markdownText += `### 콘솔 로그\n\`${errorMsg}\`\n\n`;
     markdownText += `### 문제 설명\n${description}\n\n`;
 
@@ -161,9 +161,10 @@ const Trouble = ({ sessionId, defaultSkills, errMsg, defaultCode }: Props) => {
       <VSCodeTextArea value={errorMsg} name="errorMsg" onInput={onChange} rows={1}>
         콘솔 로그
       </VSCodeTextArea>
-      <VSCodeTextArea value={description} name="description" onInput={onChange}>
+      <VSCodeTextArea value={description} name="description" onInput={onChange} rows={4}>
         상세 설명
       </VSCodeTextArea>
+
       <div className="flex items-center justify-center gap-5 mt-5">
         <div onClick={onCopyMarkdown}>
           <VSCodeButton>

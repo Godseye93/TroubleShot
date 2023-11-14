@@ -9,6 +9,7 @@ import { v4 as uuidv4 } from "uuid";
 import { TROUBLE_SHOOTING_TYPE } from "../extension";
 import { Err } from "../TreeDataProvider/ErrHistoryProvider";
 import { getCode } from "../utilities/getCode";
+import { MyTroubleListProviderLogin } from "../TreeDataProvider/MyTroubleListProviderLogin";
 
 type TroubleShootingType = typeof TROUBLE_SHOOTING_TYPE[keyof typeof TROUBLE_SHOOTING_TYPE];
 
@@ -340,7 +341,7 @@ export class TroubleShotPanel {
               type: 2,
               troubleShooting: {
                 title: message.articleInfo.title,
-                category: "",
+                category: "VSCode",
                 context: message.articleInfo.content,
                 dependency: message.articleInfo.dependency,
                 scope: message.articleInfo.scope,
@@ -377,6 +378,51 @@ export class TroubleShotPanel {
                 console.error("Error:", error);
               });
             return;
+          case "getSolution":
+            if (isOffLineTrouble(message.troubleId)) {
+              const troubleList = this._globalState.get<Trouble[]>("troubleList");
+              const trouble = troubleList?.find((trouble) => trouble.id === message.troubleId);
+              if (!trouble) return;
+              const res = await fetch("https://orientalsalad.kro.kr:8102/gpt/error-feedback", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  context: trouble.content,
+                }),
+              });
+              const resJson = await res.json();
+              if (resJson.success) {
+                webview.postMessage({
+                  command: "setSolution",
+                  solution: resJson.context,
+                });
+                return;
+              }
+              vscode.window.showErrorMessage("Failed to get solution!");
+            } else {
+              const context = MyTroubleListProviderLogin.getTroubleContent(message.troubleId);
+              if (!context) return;
+              const res = await fetch("https://orientalsalad.kro.kr:8102/gpt/error-feedback", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  context,
+                }),
+              });
+              const resJson = await res.json();
+              if (resJson.success) {
+                webview.postMessage({
+                  command: "setSolution",
+                  solution: resJson.context,
+                });
+                return;
+              }
+              vscode.window.showErrorMessage("Failed to get solution!");
+            }
           // Add more switch case statements here as more webview message commands
           // are created within the webview context (i.e. inside media/main.js)
         }
