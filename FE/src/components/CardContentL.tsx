@@ -10,7 +10,7 @@ interface Props {
   contents?: TroubleShootingBoard[];
   queryKey: string;
 }
-
+console.log(process.env.NEXT_PUBLIC_BASE_URL);
 export default function CardContentL({ keyword, contents, queryKey }: Props) {
   return (
     <div className="rounded-lg flex-1 bg-white shadow-md">
@@ -25,7 +25,10 @@ export default function CardContentL({ keyword, contents, queryKey }: Props) {
         <div className="flex flex-col items-center px-2 w-full">
           {contents.map((content, idx) => (
             <Link href={`/community/posts/${content.seq}`} key={idx}>
-              <div className={`mt-2 w-full flex ${idx !== contents.length - 1 && "border-b-2"} `} key={idx}>
+              <div
+                className={`mt-2 w-full flex ${idx !== contents.length - 1 && "border-b-2"} max-w-[30vh] `}
+                key={idx}
+              >
                 <div className={content.context && getImageLink(content.context).length > 0 ? "w-2/3 me-2" : "w-full"}>
                   <div className=" flex items-center justify-between me-1">
                     <p className="text-base font-semibold">
