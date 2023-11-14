@@ -12,10 +12,10 @@ export default function BoardList() {
     favorite: true,
   });
 
-  const { data } = useInfiniteList(options, "bookmark");
+  const { data } = useInfiniteList({ options: options, queryKey: "bookmark" });
   return (
     <>
-      <Searchbar setPropsOptions={setOptions} />
+      <Searchbar setPropsOptions={setOptions} baseUrl="/trouble/bookmark" />
       <div className="bg-white rounded-lg shadow-md px-2 mt-2 flex-col items-center">
         {data &&
           data.pages.map((page, i) => (

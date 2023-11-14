@@ -7,37 +7,42 @@ import { BsSearch } from "react-icons/bs";
 import { RiEqualizerLine } from "react-icons/ri";
 import { useLoginStore } from "@/stores/useLoginStore";
 import { useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 
 interface Props {
-  setPropsOptions: React.Dispatch<SetStateAction<SearchParams>>;
+  PropsOptions: SearchParams;
   isCommunity?: boolean;
-  // propsOptions: SearchParams;
+  baseUrl: string;
+  queryKey: string;
 }
-export default function Searchbar({ setPropsOptions, isCommunity }: Props) {
+export default function Searchbar({ PropsOptions, isCommunity, baseUrl, queryKey }: Props) {
   const [showOptions, setShowOptions] = useState(false);
   const [isChanged, setIsChanged] = useState(false);
-  const [keyword, setKeyword] = useState("");
+  const [keyword, setKeyword] = useState(PropsOptions.keyword);
   const [searchCriteria, setSearchCriteria] = useState("제목");
-  const [options, setOptions] = useState<SearchParams>({});
+  const [options, setOptions] = useState<SearchParams>(PropsOptions);
   const { user } = useLoginStore();
   const queryClient = useQueryClient();
+  const router = useRouter();
+
   const onSearch = () => {
     const searchOption: SearchParams = {
       ...options,
       ...(user && { loginSeq: user.member.seq }),
-      ...(searchCriteria === "제목" ? { keyword: keyword } : { writer: keyword }),
+      ...(searchCriteria === "제목" ? { keyword: keyword, writer: "" } : { writer: keyword, keyword: "" }),
     };
-    setPropsOptions(searchOption);
-    queryClient.resetQueries({
-      queryKey: ["boards"],
-      exact: true,
-    });
-    queryClient.removeQueries({
-      queryKey: ["postList"],
-      exact: true,
-    });
+    const params = new URLSearchParams();
 
-    console.log(searchOption);
+    // searchOption을 반복하면서 쿼리 문자열 추가
+    Object.entries(searchOption).forEach(([key, value]) => {
+      // value가 undefined 또는 null이 아닌 경우에만 추가
+      if (value !== undefined && value !== null) {
+        params.append(key, value.toString());
+      }
+    });
+    console.log();
+    router.push(`${baseUrl}?${params.toString()}`);
+    queryClient.removeQueries({ queryKey: [queryKey], exact: true });
   };
 
   return (

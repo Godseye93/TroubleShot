@@ -40,7 +40,6 @@ export const signUpSubmit = async (params: SignUpType): Promise<CommonType> => {
 // 로그인 요청
 export const loginSubmit = async (params: ReqLogin): Promise<ResLogin> => {
   const { data } = await api.post("login/login", params);
-  console.log(process.env.NEXT_PUBLIC_BASE_URL);
   return data;
 };
 

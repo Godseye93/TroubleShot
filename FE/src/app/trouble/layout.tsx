@@ -5,10 +5,13 @@ import dynamic from "next/dynamic";
 interface Props {
   children: React.ReactNode;
 }
-const Rsidebar = dynamic(() => import("./Rsidebar"), {
+const Profile = dynamic(() => import("../../components/Profile"), {
   loading: () => <p> Loading...,</p>,
 });
 const UseSidebar = dynamic(() => import("./UseSidebar"), {
+  loading: () => <p> Loading...,</p>,
+});
+const Rsidebar = dynamic(() => import("./Rsidebar"), {
   loading: () => <p> Loading...,</p>,
 });
 export default function Layout({ children }: Props) {
@@ -18,7 +21,10 @@ export default function Layout({ children }: Props) {
       <div className="px-2 flex justify-between w-full">
         <UseSidebar />
         {children}
-        <Rsidebar />
+        <div>
+          <Profile />
+          <Rsidebar />
+        </div>
 
         <ScrollTop />
       </div>

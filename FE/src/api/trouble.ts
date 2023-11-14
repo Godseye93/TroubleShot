@@ -18,8 +18,32 @@ axios.defaults.paramsSerializer = (params) => {
   return qs.stringify(params);
 };
 const api = apiInstance();
+
 export const getTrouble = async (params: SearchParams = {}): Promise<GetTroubleList> => {
   const { data } = await api.get("/trouble-shootings", { params });
+  return data;
+};
+export const getBookmark = async (params: SearchParams = {}): Promise<GetTroubleList> => {
+  const req: SearchParams = {
+    ...params,
+    favorite: true,
+  };
+  const { data } = await api.get("/trouble-shootings", { params: req });
+  return data;
+};
+export const getUserTrouble = async (params: SearchParams = {}): Promise<GetTroubleList> => {
+  const req: SearchParams = {
+    ...params,
+  };
+  const { data } = await api.get("/trouble-shootings", { params: req });
+  return data;
+};
+export const getUserCategoryTrouble = async (params: SearchParams = {}): Promise<GetTroubleList> => {
+  const req: SearchParams = {
+    ...params,
+    favorite: true,
+  };
+  const { data } = await api.get("/trouble-shootings", { params: req });
   return data;
 };
 

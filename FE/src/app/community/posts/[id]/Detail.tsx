@@ -89,7 +89,7 @@ export default function Detail({ id }: { id: number }) {
     }
   };
   const [showUpdate, setShowUpdate] = useState(false);
-
+  console.log(board);
   return (
     <>
       {board && (
@@ -137,14 +137,14 @@ export default function Detail({ id }: { id: number }) {
                 )}
               </div>
             </div>
-            <div className="mt-12 max-w-[65vw]">
+            <div className="mt-12 max-w-[64vw]">
               <MDEditor.Markdown source={board?.context} />
             </div>
             <div className="mt-10">
               <Tagbox tags={board!.tags} />
             </div>
-            <div className="mt-2 shadow-md rounded-lg">
-              <div className="bg-main rounded-t-lg flex items-center ps-5 h-12 font-semibold mt-5">사용 기술 스택</div>
+            <div className="mt-2 shadow-md rounded-lg max-w-[64vw]">
+              <div className="bg-main rounded-t-lg flex items-center ps-5 h-12 font-semibold mt-5 ">사용 기술 스택</div>
               <MDEditor.Markdown source={"```ts\n" + board.dependency + "\n```"} />
             </div>
             <div className=" border-b-2 pb-2 pt-10">

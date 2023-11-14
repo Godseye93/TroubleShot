@@ -7,12 +7,12 @@ import React, { useState } from "react";
 import useInfiniteList from "@/hooks/useInfiniteList";
 
 export default function BoardList() {
+  const 
   const { user } = useLoginStore();
   const [options, setOptions] = useState<SearchParams>({
     ...(user && { loginSeq: user.member.seq }),
-    writerSeq: user?.member.seq,
   });
-  const { data } = useInfiniteList(options, "boards");
+  const { data } = useInfiniteList({ options: options, queryKey: "trouble" });
   // const { data, error } = useQuery({
   //   queryKey: ["boards"],
   //   queryFn: async () => {
@@ -24,7 +24,7 @@ export default function BoardList() {
 
   return (
     <>
-      <Searchbar setPropsOptions={setOptions} />
+      <Searchbar setPropsOptions={setOptions} baseUrl="/trouble" />
       <div className="bg-white rounded-lg shadow-md px-2 mt-2 flex-col items-center">
         {data &&
           data.pages.map((page, i) => (
