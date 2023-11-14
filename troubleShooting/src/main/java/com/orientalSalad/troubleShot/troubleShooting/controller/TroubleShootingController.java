@@ -3,8 +3,10 @@ package com.orientalSalad.troubleShot.troubleShooting.controller;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -140,7 +142,9 @@ public class TroubleShootingController {
 
 		//솔루션 정렬
 		if(troubleShootingDTO.getAnswers() != null){
+			// log.info("솔루션 정렬");
 			List<TroubleShootingAnswerDTO> answerDTOList = new ArrayList<>(troubleShootingDTO.getAnswers());
+			// log.info(answerDTOList);
 			answerDTOList.sort((o1, o2) -> {
 				if(o1.getLikeCount() == o2.getLikeCount()){
 					if(o1.getCreateTime().isBefore(o2.getCreateTime())){
@@ -151,12 +155,13 @@ public class TroubleShootingController {
 				}
 				return o2.getLikeCount() - o1.getLikeCount();
 			});
-
-			Set<TroubleShootingAnswerDTO> answerSet = new HashSet(answerDTOList);
+			// log.info(answerDTOList);
+			Set<TroubleShootingAnswerDTO> answerSet = new LinkedHashSet(answerDTOList);
+			// log.info(answerSet);
 
 			troubleShootingDTO.setAnswers(answerSet);
 		}
-
+		// log.info(troubleShootingDTO.getAnswers());
 		ResponseTroubleShootingDTO resultDTO = ResponseTroubleShootingDTO.builder()
 			.success(true)
 			.message(seq+"번 트러블 슈팅 문서 검색을 성공했습니다.")

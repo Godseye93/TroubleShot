@@ -55,4 +55,72 @@ public class TroubleShootingDTO extends BaseDTO {
 	private boolean favorite;
 	@Schema(description = "등록한 기기")
 	private long postType;
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
+	}
+
+	public void setContext(String context) {
+		this.context = context;
+	}
+
+	public void setDependency(String dependency) {
+		this.dependency = dependency;
+	}
+
+	public void setScope(int scope) {
+		this.scope = scope;
+	}
+
+	public void setWriter(SimpleMemberDTO writer) {
+		this.writer = writer;
+	}
+
+	public void setSolved(boolean solved) {
+		this.solved = solved;
+	}
+
+	public void setViewCount(int viewCount) {
+		this.viewCount = viewCount;
+	}
+
+	public void setLikeCount(int likeCount) {
+		this.likeCount = likeCount;
+	}
+
+	public void setReplyCount(int replyCount) {
+		this.replyCount = replyCount;
+	}
+
+	public void setAnswerCount(int answerCount) {
+		this.answerCount = answerCount;
+	}
+
+	public void setTags(List<String> tags) {
+		this.tags = tags;
+	}
+
+	public void setReplies(Set<TroubleShootingReplyDTO> replies) {
+		this.replies = replies;
+	}
+
+	public void setAnswers(Set<TroubleShootingAnswerDTO> answers) {
+		this.answers = answers;
+	}
+
+	public void setLoginLike(boolean loginLike) {
+		this.loginLike = loginLike;
+	}
+
+	public void setFavorite(boolean favorite) {
+		this.favorite = favorite;
+	}
+
+	public void setPostType(long postType) {
+		this.postType = postType;
+	}
 }
