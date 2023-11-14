@@ -9,6 +9,8 @@ import com.orientalSalad.troubleShot.global.constant.Pagination;
 import com.orientalSalad.troubleShot.global.dto.RequestDTO;
 import com.orientalSalad.troubleShot.global.utill.ObjectConverter;
 import com.orientalSalad.troubleShot.tag.serivice.TagService;
+import com.orientalSalad.troubleShot.troubleShooting.dto.CategoryDTO;
+import com.orientalSalad.troubleShot.troubleShooting.dto.RequestCategoryDTO;
 import com.orientalSalad.troubleShot.troubleShooting.dto.RequestTroubleShootingDTO;
 import com.orientalSalad.troubleShot.troubleShooting.dto.RequestTroubleShootingReplyDTO;
 import com.orientalSalad.troubleShot.troubleShooting.dto.SearchTroubleShootingDTO;
@@ -44,10 +46,24 @@ public class TroubleShootingService {
 	private final ObjectConverter<TroubleShootingReplyDTO, TroubleShootingReplyEntity> troubleShootingReplyConverter;
 	private final FavoriteRepository favoriteRepository;
 	private final SearchTagRepository searchTagRepository;
+	private final CategoryService categoryService;
 	private final TagService tagService;
 
-	public boolean insertTroubleShooting(RequestTroubleShootingDTO requestTroubleShootingDTO){
+	public boolean insertTroubleShooting(RequestTroubleShootingDTO requestTroubleShootingDTO) throws Exception {
 		requestTroubleShootingDTO.getTroubleShooting().setPostType(requestTroubleShootingDTO.getType());
+
+		//카테고리 확인
+
+		//카테고리 없으면 카테고리 추가
+		categoryService.insertCategory(
+			RequestCategoryDTO.builder()
+				.loginSeq(requestTroubleShootingDTO.getLoginSeq())
+				.type(requestTroubleShootingDTO.getType())
+				.category(CategoryDTO.builder()
+					.name(requestTroubleShootingDTO.getTroubleShooting().getCategory())
+					.userSeq(requestTroubleShootingDTO.getLoginSeq())
+					.build())
+				.build());
 
 		TroubleShootingEntity troubleShootingEntity = troubleShootingConverter.toEntity(requestTroubleShootingDTO.getTroubleShooting());
 		troubleShootingEntity = troubleShootingRepository.save(troubleShootingEntity);

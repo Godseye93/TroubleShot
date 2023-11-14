@@ -11,7 +11,7 @@ import com.orientalSalad.troubleShot.troubleShooting.entity.TroubleShootingEntit
 
 @Repository
 public interface CategoryRepository extends JpaRepository<CategoryEntity,Long> {
-	CategoryEntity findByName(String name);
+	CategoryEntity findByUserSeqAndName(Long userSeq,String name);
 	CategoryEntity findBySeq(Long seq);
 	List<CategoryEntity> findByUserSeq(Long userSeq);
 }

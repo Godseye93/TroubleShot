@@ -39,7 +39,7 @@ public class CategoryService {
 	private final CategoryRepository categoryRepository;
 	private final ObjectConverter<CategoryDTO,CategoryEntity> categoryConverter;
 
-	public List<CategoryDTO> findUserCategory(Long userSeq){
+	public List<CategoryDTO> findUserCategoryList(Long userSeq){
 		List<CategoryEntity> categoryEntityList = categoryRepository.findByUserSeq(userSeq);
 
 		List<CategoryDTO> categoryDTOList = new ArrayList<>();
@@ -50,10 +50,31 @@ public class CategoryService {
 
 		return categoryDTOList;
 	}
-	public boolean insertCategory(RequestCategoryDTO requestCategoryDTO){
+	public CategoryDTO findUserCategoryByName(Long userSeq,String name){
+		CategoryEntity categoryEntity = categoryRepository.findByUserSeqAndName(userSeq,name);
+
+		if(categoryEntity == null){
+			return null;
+		}
+
+		CategoryDTO categoryDTO =  categoryConverter.toDTO(categoryEntity);
+
+		return categoryDTO;
+	}
+	public boolean insertCategory(RequestCategoryDTO requestCategoryDTO) throws Exception{
+		CategoryDTO categoryDTO = findUserCategoryByName(requestCategoryDTO.getLoginSeq(),requestCategoryDTO.getCategory().getName());
+
+		if(categoryDTO != null){
+			log.info("이미 있는 카테고리입니다.");
+			return false;
+		}
+
+		log.info("카테고리 추가");
+
 		CategoryEntity categoryEntity = categoryConverter.toEntity(requestCategoryDTO.getCategory());
 
 		categoryRepository.save(categoryEntity);
+
 		return true;
 	}
 	public boolean updateCategory(RequestCategoryDTO requestCategoryDTO) throws Exception{

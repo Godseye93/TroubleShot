@@ -129,7 +129,7 @@ public class CategoryController {
 		@PathVariable(name = "userSeq") Long userSeq) throws Exception {
 		log.info("====== 카테고리 목록 불러오기 시작 =====");
 
-		List<CategoryDTO> categoryDTOList = categoryService.findUserCategory(userSeq);
+		List<CategoryDTO> categoryDTOList = categoryService.findUserCategoryList(userSeq);
 
 		ResponseCategoryListDTO resultDTO = ResponseCategoryListDTO.builder()
 			.success(true)
