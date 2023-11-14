@@ -51,6 +51,7 @@ export type LoginStore = {
   userLogin: (res: ResLogin) => void;
   userLogout: () => void;
   editStoreNickname: (nickname: string) => void;
+  changeProfileImg: (profileImg: string) => void;
 };
 
 export interface RadarGraphInfo {

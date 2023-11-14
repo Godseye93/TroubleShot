@@ -28,6 +28,23 @@ export const useLoginStore = create(
           };
         });
       },
+      changeProfileImg: (profileImg: string) => {
+        set((prev) => {
+          if (!prev.user) {
+            return prev;
+          }
+          const updatedUser: ResLogin = {
+            ...prev.user,
+            member: {
+              ...prev.user.member,
+              profileImg: profileImg,
+            },
+          };
+          return {
+            user: updatedUser,
+          };
+        });
+      },
     }),
     {
       name: StorageKey,
