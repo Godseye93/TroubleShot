@@ -6,8 +6,8 @@ import { SearchParams } from "@/types/TroubleType";
 import React, { useEffect, useState } from "react";
 import useInfiniteList from "@/hooks/useInfiniteList";
 import { useSearchParams } from "next/navigation";
-
-export default function PostList() {
+export default function BoardList({ name }: { name: string }) {
+  const { user } = useLoginStore();
   const searchParams = useSearchParams();
   const keyword = searchParams.get("keyword");
   const solved = searchParams.get("solved");
@@ -26,7 +26,6 @@ export default function PostList() {
     ...(endTime && { endTime }),
     ...(order && { order }),
   });
-  const { data } = useInfiniteList({ options: options, queryKey: "boards" });
   useEffect(() => {
     setOptions({
       ...(keyword && { keyword: keyword }),
@@ -38,16 +37,16 @@ export default function PostList() {
     });
     console.log(options);
   }, [searchParams.toString()]);
-  console.log(data);
+
+  const { data } = useInfiniteList({ options: options, queryKey: "trouble", category: name });
 
   return (
     <>
       <Searchbar
-        PropsOptions={options}
-        isCommunity={true}
-        baseUrl="/community/posts"
-        queryKey="boards"
         setPropsOptions={setOptions}
+        PropsOptions={options}
+        baseUrl={`trouble/category/${name}`}
+        queryKey="trouble"
       />
       <div className="bg-white rounded-lg shadow-md px-2 mt-2 flex-col items-center">
         {data &&
@@ -55,12 +54,12 @@ export default function PostList() {
             <React.Fragment key={i}>
               {page.troubleShootingList.map((content, idx) => (
                 <BoardItem
-                  nowUrl="community/posts"
+                  nowUrl={`trouble/category/${name}`}
                   key={idx}
                   board={content}
                   idx={idx}
                   last={page.troubleShootingList.length - 1}
-                  queryKey="boards"
+                  queryKey="trouble"
                 />
               ))}
             </React.Fragment>

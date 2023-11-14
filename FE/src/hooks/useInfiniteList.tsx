@@ -17,7 +17,12 @@ export default function useInfiniteList({ options, queryKey, category, userSeq }
     queryFn: async ({ pageParam = 1 }) => {
       const data =
         queryKey === "boards"
-          ? await getTrouble({ ...options, pageSize: 10, pageNo: pageParam })
+          ? await getTrouble({
+              ...options,
+              pageSize: 10,
+              pageNo: pageParam,
+              ...(user && { loginSeq: user.member.seq }),
+            })
           : queryKey === "bookmark"
           ? await getBookmark({ ...options, pageSize: 10, pageNo: pageParam, loginSeq: user?.member.seq })
           : queryKey === "trouble"
@@ -56,9 +61,12 @@ export default function useInfiniteList({ options, queryKey, category, userSeq }
       return data;
     },
     initialPageParam: 1,
-    getNextPageParam: (lastPage, pages) => pages.length + 1,
+    // 이건잘됨
+    getNextPageParam: (lastPage, pages) => {
+      return pages.length < Math.ceil(lastPage.totalCount / 10) ? pages.length + 1 : undefined;
+    },
   });
-  const totalPage = Math.ceil(data && data ? data.pages[0].totalCount / 10 : 1);
+
   useEffect(() => {
     let fetching = false;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -66,7 +74,7 @@ export default function useInfiniteList({ options, queryKey, category, userSeq }
       const { scrollHeight, scrollTop, clientHeight } = e.target.scrollingElement;
       if (!fetching && scrollHeight - scrollTop <= clientHeight * 1.2) {
         fetching = true;
-        if (data && data.pageParams.length < totalPage) {
+        if (hasNextPage) {
           console.log(data);
           await fetchNextPage();
         }

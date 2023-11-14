@@ -3,16 +3,44 @@ import BoardItem from "@/components/BoardItem";
 import Searchbar from "@/components/Searchbar/Searchbar";
 import { useLoginStore } from "@/stores/useLoginStore";
 import { SearchParams } from "@/types/TroubleType";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import useInfiniteList from "@/hooks/useInfiniteList";
+import { useSearchParams } from "next/navigation";
 
 export default function BoardList() {
-  const 
   const { user } = useLoginStore();
+  const searchParams = useSearchParams();
+  const keyword = searchParams.get("keyword");
+  const solved = searchParams.get("solved");
+  const tags = searchParams
+    .get("tags")
+    ?.split(",")
+    .filter((tag) => !(tag.trim() === ""));
+  const startTime = searchParams.get("startTime");
+  const endTime = searchParams.get("endTime");
+  const order = Number(searchParams.get("order"));
   const [options, setOptions] = useState<SearchParams>({
-    ...(user && { loginSeq: user.member.seq }),
+    ...(keyword && { keyword }),
+    ...(solved !== null && { solved: Boolean(solved) }),
+    ...(tags && { tags }),
+    ...(startTime && { startTime }),
+    ...(endTime && { endTime }),
+    ...(order && { order }),
   });
+  useEffect(() => {
+    setOptions({
+      ...(keyword && { keyword: keyword }),
+      ...(solved !== null && { solved: Boolean(solved) }),
+      ...(tags && { tags }),
+      ...(startTime && { startTime }),
+      ...(endTime && { endTime }),
+      ...(order && { order }),
+    });
+    console.log(options);
+  }, [searchParams.toString()]);
+
   const { data } = useInfiniteList({ options: options, queryKey: "trouble" });
+  console.log;
   // const { data, error } = useQuery({
   //   queryKey: ["boards"],
   //   queryFn: async () => {
@@ -21,10 +49,9 @@ export default function BoardList() {
   //     return data;
   //   },
   // });
-
   return (
     <>
-      <Searchbar setPropsOptions={setOptions} baseUrl="/trouble" />
+      <Searchbar PropsOptions={options} baseUrl="/trouble" queryKey="trouble" setPropsOptions={setOptions} />
       <div className="bg-white rounded-lg shadow-md px-2 mt-2 flex-col items-center">
         {data &&
           data.pages.map((page, i) => (
@@ -36,7 +63,7 @@ export default function BoardList() {
                   board={content}
                   idx={idx}
                   last={page.troubleShootingList.length - 1}
-                  queryKey="boards"
+                  queryKey="trouble"
                 />
               ))}
             </React.Fragment>

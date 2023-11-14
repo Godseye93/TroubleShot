@@ -73,7 +73,7 @@ export default function CommunityContents() {
 
   return (
     <>
-      {/* <Searchbar setPropsOptions={setOptions} queryKey="boards" isCommunity={true} isCommunitymain={true} /> */}
+      <Searchbar setPropsOptions={setOptions} queryKey="boards" isCommunity={true} baseUrl="/community/posts" />
       {mounted && user && (
         <div className="mt-2">
           <p className="text-xl font-semibold my-2">자주 이용한 태그</p>

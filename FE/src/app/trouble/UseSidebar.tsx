@@ -5,14 +5,34 @@ import { IoHomeSharp } from "react-icons/io5";
 import { BsFillBookmarkStarFill } from "react-icons/bs";
 import Link from "next/link";
 import Sidebar from "@/components/Sidebar";
+import { getCategories } from "@/api/trouble";
+import { useLoginStore } from "@/stores/useLoginStore";
+import { useQuery } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
 
 export default function UseSidebar() {
   const path = usePathname();
-  const categorys = ["낙서장", "javascript", "react", "typescript", "nextjs", "vuejs", "긴놈오오오오오ㅗ옹오오오오옴"];
+  const { user } = useLoginStore();
+  // const categorys = ["낙서장", "javascript", "react", "typescript", "nextjs", "vuejs", "긴놈오오오오오ㅗ옹오오오오옴"];
+  const { data, error, isLoading } = useQuery({
+    queryKey: ["categories"],
+    queryFn: async () => {
+      if (!user) return;
+      const data = await getCategories(user?.member.seq);
+      return data;
+    },
+  });
+  const [categories, setCategories] = useState<string[]>([]);
+  useEffect(() => {
+    if (data) {
+      const list = data.categoryList.map((category) => category.name);
+      setCategories(list);
+    }
+  }, [data]);
   const menus = [
     // eslint-disable-next-line react/jsx-key
     <Link
-      className={`${path === "/trouble/bookmark" && "bg-softmain shadow-md"} menu-btn line-clamp-1`}
+      className={`${path.includes("/trouble/bookmark") && "bg-softmain shadow-md"} menu-btn line-clamp-1`}
       href="/trouble/bookmark"
     >
       <BsFillBookmarkStarFill /> <p className="ms-3 line-clamp-1">북마크</p>
@@ -22,5 +42,5 @@ export default function UseSidebar() {
       <IoHomeSharp /> <p className="ms-3 line-clamp-1">전체글</p>
     </Link>,
   ];
-  return <Sidebar link="/trouble" menus={menus} categorys={categorys} />;
+  return <Sidebar link="/trouble" menus={menus} categorys={categories} isLogged={true} />;
 }

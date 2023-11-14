@@ -11,6 +11,7 @@ import { postTroubleFavorite } from "@/api/trouble";
 import { toast } from "react-toastify";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
+import { checkWriterImg, checkWriterName } from "@/utils/nullWriter";
 // interface SetQueryType {
 //   pages: GetTroubleList[];
 //   // 다른 필드들도 필요에 따라 추가
@@ -63,7 +64,7 @@ export default function BoardItem({
   //     queryClient.invalidateQueries(["boards"]);
   //   },
   // });
-
+  // console.log(board.);
   const onBookmark = async () => {
     if (!user) return toast.error("로그인이 필요합니다");
     try {
@@ -98,8 +99,8 @@ export default function BoardItem({
       <div className="flex-1">
         <div className="flex justify-between items-center">
           <div className="flex items-center">
-            <img src={board.writer.profileImg} className="rounded-full w-10 h-10 shadow-md" />
-            <p className="mx-2 font-semibold">{board.writer.nickname}</p>
+            <img src={checkWriterImg(board.writer)} className="rounded-full w-10 h-10 shadow-md" />
+            <p className="mx-2 font-semibold">{checkWriterName(board.writer)}</p>
             <p className="text-xs">{getTimeAgo(board.createTime)}</p>
           </div>
           <div

@@ -19,8 +19,8 @@ export default function Options({ propsSetOption }: Props) {
   const [isSelected, setIsSelected] = useState(false);
   useEffect(() => {
     propsSetOption({
-      tags: tags,
       order: selectSort,
+      ...(tags.length > 0 && { tags }),
       ...(selecSolved !== 0 && { solved: selecSolved === 1 ? true : false }),
       ...(isSelected && {
         startTime: startDate.toISOString().slice(0, -1),
