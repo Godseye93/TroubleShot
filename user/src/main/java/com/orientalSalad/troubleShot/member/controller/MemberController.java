@@ -110,6 +110,8 @@ public class MemberController {
 		@RequestBody RequestMemberDTO requestMemberDTO,
 		HttpServletRequest request) throws Exception {
 		log.info("==== 회원 정보 변경 시작 ====");
+		log.info(requestMemberDTO.toString());
+
 		//로그인 확인
 		authentication.checkLogin(request, requestMemberDTO);
 

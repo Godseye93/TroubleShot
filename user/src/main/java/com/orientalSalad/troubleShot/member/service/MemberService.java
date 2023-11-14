@@ -99,7 +99,7 @@ public class MemberService {
 		return memberDTO;
 	}
 	public MemberDTO updateMember(RequestMemberDTO requestMemberDTO) throws Exception {
-		if(requestMemberDTO.getLoginSeq() != requestMemberDTO.getMemberDTO().getSeq()){
+		if(!requestMemberDTO.getLoginSeq().equals(requestMemberDTO.getMemberDTO().getSeq())){
 			throw new Exception("로그인 정보와 회원 정보가 다릅니다.");
 		}
 
