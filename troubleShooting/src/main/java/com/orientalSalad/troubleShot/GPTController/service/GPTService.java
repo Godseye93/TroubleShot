@@ -40,7 +40,7 @@ public class GPTService {
 
 		//요청 변수 생성
 		RequestGPTDTO request = RequestGPTDTO.builder()
-			.model("gpt-4")
+			.model("gpt-4-1106-preview")
 			.messages(messages)
 			.build();
 
