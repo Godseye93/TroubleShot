@@ -1,6 +1,10 @@
 package com.orientalSalad.troubleShot.troubleShooting.controller;
 
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +26,7 @@ import com.orientalSalad.troubleShot.troubleShooting.dto.RequestTroubleShootingR
 import com.orientalSalad.troubleShot.troubleShooting.dto.ResponseTroubleShootingDTO;
 import com.orientalSalad.troubleShot.troubleShooting.dto.ResponseTroubleShootingListDTO;
 import com.orientalSalad.troubleShot.troubleShooting.dto.SearchTroubleShootingDTO;
+import com.orientalSalad.troubleShot.troubleShooting.dto.TroubleShootingAnswerDTO;
 import com.orientalSalad.troubleShot.troubleShooting.dto.TroubleShootingDTO;
 import com.orientalSalad.troubleShot.troubleShooting.dto.TroubleShootingReplyDTO;
 import com.orientalSalad.troubleShot.troubleShooting.service.TroubleShootingAnswerService;
@@ -133,9 +138,25 @@ public class TroubleShootingController {
 			throw new Exception(seq+"번 트러블 슈팅 문서가 없습니다.");
 		}
 
-		log.info(troubleShootingDTO);
-		log.info("솔루션 목록");
-		log.info(troubleShootingDTO.getAnswers());
+		//솔루션 정렬
+		if(troubleShootingDTO.getAnswers() != null){
+			List<TroubleShootingAnswerDTO> answerDTOList = new ArrayList<>(troubleShootingDTO.getAnswers());
+			answerDTOList.sort((o1, o2) -> {
+				if(o1.getLikeCount() == o2.getLikeCount()){
+					if(o1.getCreateTime().isBefore(o2.getCreateTime())){
+						return 1;
+					}else{
+						return -1;
+					}
+				}
+				return o2.getLikeCount() - o1.getLikeCount();
+			});
+
+			Set<TroubleShootingAnswerDTO> answerSet = new HashSet(answerDTOList);
+
+			troubleShootingDTO.setAnswers(answerSet);
+		}
+
 		ResponseTroubleShootingDTO resultDTO = ResponseTroubleShootingDTO.builder()
 			.success(true)
 			.message(seq+"번 트러블 슈팅 문서 검색을 성공했습니다.")
