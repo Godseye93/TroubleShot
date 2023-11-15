@@ -130,9 +130,9 @@ public class TroubleShootingController {
 	@GetMapping("/{seq}")
 	public ResponseEntity<?> findTroubleShooting(@PathVariable(name = "seq") long seq,
 		@ModelAttribute RequestDTO requestDTO) throws Exception {
-		log.info("====== 트러블 슈팅 문서 pk 탐색 시작 =====");
-		log.info("pk : "+seq);
-		log.info("request : "+requestDTO.toString());
+		// log.info("====== 트러블 슈팅 문서 pk 탐색 시작 =====");
+		// log.info("pk : "+seq);
+		// log.info("request : "+requestDTO.toString());
 
 		TroubleShootingDTO troubleShootingDTO = troubleShootingService.findTroubleShootingBySeq(seq,requestDTO);
 
@@ -168,7 +168,7 @@ public class TroubleShootingController {
 			.troubleShooting(troubleShootingDTO)
 			.build();
 		
-		log.info("====== 트러블 슈팅 문서 pk 탐색 끝 =====");
+		// log.info("====== 트러블 슈팅 문서 pk 탐색 끝 =====");
 		return new ResponseEntity<ResponseTroubleShootingDTO>(resultDTO, HttpStatus.OK);
 	}
 	@Operation(summary = "트러블 슈팅 문서 목록 검색",description = "입력 DTO :SearchTroubleShootingDTO")

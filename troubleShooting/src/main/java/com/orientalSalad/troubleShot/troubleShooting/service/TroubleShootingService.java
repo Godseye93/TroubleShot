@@ -3,7 +3,11 @@ package com.orientalSalad.troubleShot.troubleShooting.service;
 import java.util.Collections;
 import java.util.List;
 
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.orientalSalad.troubleShot.global.constant.Pagination;
 import com.orientalSalad.troubleShot.global.dto.RequestDTO;
@@ -36,6 +40,7 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional
 public class TroubleShootingService {
 	private final TroubleShootingMapper troubleShootingMapper;
 	private final TroubleShootingRepository troubleShootingRepository;
@@ -72,9 +77,10 @@ public class TroubleShootingService {
 
 		return true;
 	}
+	@CachePut(value = "troubleshooting", key = "#requestTroubleShootingDTO.getTroubleShooting.seq")
 	public boolean updateTroubleShooting(RequestTroubleShootingDTO requestTroubleShootingDTO) throws Exception{
 		//작성자와 로그인 유저 확인
-		if(requestTroubleShootingDTO.getLoginSeq() != requestTroubleShootingDTO.getTroubleShooting().getWriter().getSeq()){
+		if(requestTroubleShootingDTO.getLoginSeq().equals(requestTroubleShootingDTO.getTroubleShooting().getWriter().getSeq())){
 			throw new Exception("작성자와 로그인유저가 다릅니다.");
 		}
 
@@ -94,7 +100,7 @@ public class TroubleShootingService {
 			= this.findTroubleShootingBySeq(requestTroubleShootingDTO.getTroubleShooting().getSeq(),
 			requestTroubleShootingDTO);
 		//작성자와 로그인 유저 확인
-		if(requestTroubleShootingDTO.getLoginSeq() != troubleShootingDTO.getWriter().getSeq()){
+		if(requestTroubleShootingDTO.getLoginSeq().equals(troubleShootingDTO.getWriter().getSeq())){
 			throw new Exception("작성자와 로그인유저가 다릅니다.");
 		}
 
@@ -112,7 +118,7 @@ public class TroubleShootingService {
 		//작성자와 로그인 유저 확인
 		long writerSeq = requestTroubleShootingReplyDTO.getTroubleShootingReply().getWriter().getSeq();
 
-		if(requestTroubleShootingReplyDTO.getLoginSeq() != writerSeq){
+		if(requestTroubleShootingReplyDTO.getLoginSeq().equals(writerSeq)){
 			throw new Exception("작성자와 로그인유저가 다릅니다.");
 		}
 
@@ -126,7 +132,7 @@ public class TroubleShootingService {
 	public boolean updateTroubleShooingReply(RequestTroubleShootingReplyDTO requestTroubleShootingReplyDTO) throws Exception {
 		//작성자와 로그인 유저 확인
 		long writerSeq = requestTroubleShootingReplyDTO.getTroubleShootingReply().getWriter().getSeq();
-		if(requestTroubleShootingReplyDTO.getLoginSeq() != writerSeq){
+		if(requestTroubleShootingReplyDTO.getLoginSeq().equals(writerSeq)){
 			throw new Exception("작성자와 로그인유저가 다릅니다.");
 		}
 
@@ -153,7 +159,7 @@ public class TroubleShootingService {
 
 		//작성자와 로그인 유저 확인
 
-		if(requestTroubleShootingReplyDTO.getLoginSeq() != replyEntity.getWriterSeq()){
+		if(requestTroubleShootingReplyDTO.getLoginSeq().equals(replyEntity.getWriterSeq())){
 			throw new Exception("작성자와 로그인유저가 다릅니다.");
 		}
 
@@ -161,11 +167,12 @@ public class TroubleShootingService {
 
 		return true;
 	}
+	@Cacheable(value = "troubleshooting",key = "#seq")
 	public TroubleShootingDTO findTroubleShootingBySeq(long seq, RequestDTO requestDTO) throws Exception {
 		SearchTroubleShootingDTO searchParam = SearchTroubleShootingDTO.builder()
 			.troubleSeq(seq)
 			.build();
-		
+		log.info("쿼리 실행");
 		//로그인 좋아요 확인을위한 로그인 유저의 pk 넣기
 		if(requestDTO != null){
 			searchParam.setLoginSeq(requestDTO.getLoginSeq());
@@ -177,7 +184,7 @@ public class TroubleShootingService {
 			throw new Exception(seq+"번 게시물은 없습니다.");
 		}
 
-		log.info(troubleShootingDTO.toString());
+		// log.info(troubleShootingDTO.toString());
 		troubleShootingDTO.setViewCount(troubleShootingDTO.getViewCount()+1);
 		//조회수 증가
 		troubleShootingMapper.updateTroubleShootingView(troubleShootingDTO.getSeq());
