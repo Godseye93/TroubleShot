@@ -20,11 +20,13 @@ const CirclePacking = ({ userSeq }: Props) => {
 
   const myData = {
     name: "root",
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    children: data?.data.tagHistoryList.map((item: any) => ({
-      name: item.name,
-      value: item.totalCount,
-    })),
+    children: data?.data.tagHistoryList
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .map((item: any) => ({
+        name: item.name,
+        value: item.totalCount,
+      }))
+      .filter((data: { name: string; value: number }) => data.name !== "이있어 답할 단어 없습니다"),
   };
 
   return (
