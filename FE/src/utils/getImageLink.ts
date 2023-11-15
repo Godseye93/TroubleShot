@@ -1,4 +1,5 @@
 export const getImageLink = (markdownText: string) => {
+  if (!markdownText) return [];
   const imageLinks = markdownText.match(/!\[.*\]\((.*?)\)/g);
   if (imageLinks) {
     return imageLinks.map((link) => {

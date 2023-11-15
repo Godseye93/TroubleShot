@@ -73,7 +73,7 @@ export default function CommunityContents() {
 
   return (
     <>
-      <Searchbar setPropsOptions={setOptions} isCommunity={true} />
+      <Searchbar setPropsOptions={setOptions} queryKey="boards" isCommunity={true} baseUrl="community/posts" />
       {mounted && user && (
         <div className="mt-2">
           <p className="text-xl font-semibold my-2">자주 이용한 태그</p>
@@ -81,12 +81,12 @@ export default function CommunityContents() {
             {tags && (
               <>
                 <CardContentL
-                  queryKey="contents1"
+                  queryKey={["contents1"]}
                   keyword={tags.tagList[0]}
                   contents={contents1?.troubleShootingList}
                 />
                 <CardContentL
-                  queryKey="contents2"
+                  queryKey={["contents2"]}
                   keyword={tags.tagList[1]}
                   contents={contents2?.troubleShootingList}
                 />
@@ -105,7 +105,7 @@ export default function CommunityContents() {
               board={content}
               idx={idx}
               last={hotBoard.troubleShootingList.length - 1}
-              queryKey="hotBoard"
+              queryKey={["hotBoard"]}
             />
           ))}
         <Link href={"/community/posts"}>

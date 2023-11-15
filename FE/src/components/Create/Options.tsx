@@ -12,9 +12,10 @@ interface Props {
   setOptions: React.Dispatch<SetStateAction<CreateOptions>>;
   setShowOptions: React.Dispatch<SetStateAction<boolean>>;
   onSubmit: () => Promise<Id | undefined>;
+  userSeq: number;
 }
 
-export default function Options({ categorys, options, setOptions, setShowOptions, onSubmit }: Props) {
+export default function Options({ categorys, options, setOptions, setShowOptions, onSubmit, userSeq }: Props) {
   const [isdrop, setIsdrop] = useState(false);
   const [tags, setTags] = useState<string[]>(options.tags);
   const [inputText, setInputText] = useState("");
@@ -39,7 +40,7 @@ export default function Options({ categorys, options, setOptions, setShowOptions
       return { ...prev, solved: value };
     });
   };
-  const setScope = (value: 0 | 1) => {
+  const setScope = (value: number) => {
     setOptions((prev) => {
       return { ...prev, scope: value };
     });
@@ -115,8 +116,8 @@ export default function Options({ categorys, options, setOptions, setShowOptions
                 type="radio"
                 name="scope"
                 id="close"
-                value={1}
-                onChange={() => setScope(1)}
+                value={userSeq}
+                onChange={() => setScope(userSeq)}
                 defaultChecked={options.scope === 1}
               />
             </label>
