@@ -226,7 +226,6 @@ public class TroubleShootingService {
 		}
 		return troubleShootingDTOList;
 	}
-	@Cacheable(value = "countTroubleShootingList")
 	public Long countTroubleShootingList(SearchTroubleShootingDTO searchParam) throws Exception {
 		int tageSize = 0;
 
