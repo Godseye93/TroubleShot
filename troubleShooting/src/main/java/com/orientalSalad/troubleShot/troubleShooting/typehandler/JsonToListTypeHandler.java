@@ -15,7 +15,10 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.orientalSalad.troubleShot.troubleShooting.dto.TroubleShootingReplyDTO;
 
+import lombok.extern.slf4j.Slf4j;
+
 @MappedTypes(Set.class)
+@Slf4j
 public class JsonToListTypeHandler extends BaseTypeHandler<Set<TroubleShootingReplyDTO>> {
 	private static final ObjectMapper mapper = new ObjectMapper();
 
@@ -29,6 +32,8 @@ public class JsonToListTypeHandler extends BaseTypeHandler<Set<TroubleShootingRe
 		Set<TroubleShootingReplyDTO> result = new HashSet<>();
 		try{
 			result = fromJson(rs.getString(columnName));
+			log.info(result.toString());
+
 			if(result.size() == 1){
 				for(TroubleShootingReplyDTO replyDTO : result){
 					if(replyDTO.getSeq() == null){
