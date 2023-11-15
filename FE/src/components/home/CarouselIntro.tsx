@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { MouseEvent, UIEvent, useState } from "react";
 import Image from "next/image";
 
 import exImage1 from "../../../public/carousel/seul.jpg";
@@ -12,7 +12,7 @@ import { IoArrowForwardCircleSharp } from "react-icons/io5";
 
 export default function CarouselIntro() {
   const imageList = [
-    { index: 0, Image: exImage1, text: "안녕하세요" },
+    { index: 0, Image: exImage1, text: "팀장 정슬호" },
     { index: 1, Image: exImage2, text: "정슬호입니다." },
     { index: 2, Image: exImage3, text: "테스트테스트" },
     { index: 3, Image: exImage4, text: "원투원투쓰리" },
@@ -40,28 +40,88 @@ export default function CarouselIntro() {
     });
   };
 
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [visible, setVisible] = useState(false);
+  const [cursorText, setCursorText] = useState("팀 오리엔탈 샐러드");
+  const [customCursor, setCustomCursor] = useState("custom-cursor");
+
+  const trackCursor = (event) => {
+    setPosition({ x: event.clientX, y: event.clientY });
+    setVisible(true);
+  };
+
+  const hideCursor = () => {
+    setVisible(false); // 마우스가 영역을 벗어났을 때 커서가 보이지 않게 설정
+  };
+
+  const changeCursorText = (text: string) => {
+    setCursorText(text);
+  };
+
+  const changeCss = (css: string) => {
+    setCustomCursor(css);
+  };
+
   return (
-    <div id="carouselIntor" className="fcc mt-36 bg-softmain w-full">
-      <div className="w-9/12 mt-8">
-        <div className="flex justify-between items-center">
-          <button className="hover:scale-150" onClick={prevHandler}>
-            <IoArrowBackCircleSharp />
-          </button>
+    <div className="w-full h-3/4">
+      <h1 className="w-full text-3xl font-bold m-5 ms-10">만든 사람들</h1>
+      <div
+        id="carouselIntor"
+        className="w-full h-3/4 bg-softmain flex "
+        onMouseMove={trackCursor}
+        onMouseLeave={hideCursor}
+      >
+        {visible && (
+          <div
+            className={`${customCursor} fcc text-center`}
+            style={{ left: `${position.x}px`, top: `${position.y}px` }}
+          >
+            <p className="w-3/4 text-white">{cursorText}</p>
+          </div>
+        )}
+        <div
+          className="w-3/12 active:bg-orange-400 "
+          onClick={prevHandler}
+          onMouseEnter={() => {
+            changeCursorText("이전으로");
+            changeCss("custom-cursor-left");
+          }}
+          onMouseLeave={() => {
+            changeCursorText("팀 오리엔탈 샐러드");
+            changeCss("custom-cursor");
+          }}
+        ></div>
+        <div className="w-6/12 flex justify-between items-center">
           {imageList.map((item, index) => (
-            <div className=" w-5/12 fcc" key={index} style={{ display: index === current ? "block" : "none" }}>
-              <Image className="w-3/6 h-[300px] rounded-lg" src={item.Image} alt={item.text} />
+            <div className="w-2/6" key={index} style={{ display: index === current ? "block" : "none" }}>
+              <Image className="rounded-lg" src={item.Image} alt={item.text} />
             </div>
           ))}
           {imageList.map((item, index) => (
-            <div className=" w-5/12 me-5" key={index} style={{ display: index === current ? "block" : "none" }}>
-              <div className="w-7/12">{item.text}</div>
+            <div className=" w-3/6 me-5 " key={index} style={{ display: index === current ? "block" : "none" }}>
+              <div className="w-fit text-4xl ">{item.text}</div>
             </div>
           ))}
-          <button className=" hover:scale-150" onClick={nextHandler}>
-            <IoArrowForwardCircleSharp />
-          </button>
         </div>
-        <ul className="flex w-full justify-center gap-4 mb-2">
+        <div
+          className="w-3/12 active:bg-orange-400"
+          onClick={nextHandler}
+          onMouseEnter={() => {
+            changeCursorText("앞으로");
+            changeCss("custom-cursor-right");
+          }}
+          onMouseLeave={() => {
+            changeCursorText("팀 오리엔탈 샐러드");
+            changeCss("custom-cursor");
+          }}
+        ></div>
+      </div>
+    </div>
+  );
+}
+
+{
+  /* <ul className="flex w-full justify-center gap-4 mb-2">
           {imageList.map((_, idx) => (
             <li
               key={idx}
@@ -69,8 +129,5 @@ export default function CarouselIntro() {
               onClick={() => setCurrent(idx)}
             />
           ))}
-        </ul>
-      </div>
-    </div>
-  );
+        </ul> */
 }
