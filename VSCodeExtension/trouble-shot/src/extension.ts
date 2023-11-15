@@ -4,7 +4,6 @@ import { getSessionId } from "./utilities/getSessionId";
 import { NodeDependenciesProvider } from "./TreeDataProvider/NodeDependenciesProvider";
 import { getRootPath } from "./utilities/getRootPath";
 import { MyTroubleListProviderWithoutLogin } from "./TreeDataProvider/MyTroubleListProviderWithoutLogin";
-import { getMarkdownView } from "./panels/getMarkdownView";
 import { Trouble } from "./TreeDataProvider/MyTroubleListProvider";
 import { exec } from "child_process";
 import { parsingErrMsg } from "./utilities/parsingErrMsg";
@@ -12,7 +11,6 @@ import { ErrHistoryProvider, Err } from "./TreeDataProvider/ErrHistoryProvider";
 import { v4 as uuidv4 } from "uuid";
 import { MyTroubleListProviderLogin } from "./TreeDataProvider/MyTroubleListProviderLogin";
 import { isOffLineTrouble } from "./utilities/isOnline";
-import { Uri } from "vscode";
 import { MarkdownViewPanel } from "./panels/MarkdownViewPanel";
 
 export const TROUBLE_SHOOTING_TYPE = {
@@ -192,7 +190,8 @@ export async function activate(context: vscode.ExtensionContext) {
             troubleShootId
           )}?loginSeq=0&type=2`
         );
-        const { troubleShooting } = await res.json();
+        const resJson = await res.json();
+        const { troubleShooting } = resJson;
         if (!troubleShooting) return;
         // const panel = vscode.window.createWebviewPanel(
         //   "viewTroubleShooting",

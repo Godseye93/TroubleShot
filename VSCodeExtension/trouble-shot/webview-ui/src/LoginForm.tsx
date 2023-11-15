@@ -5,8 +5,8 @@ import { vscode } from "./utilities/vscode";
 
 const LoginForm = () => {
   const [loginForm, setLoginForm] = useState({
-    email: "test@test.com",
-    password: "test",
+    email: "",
+    password: "",
   });
   function onChange(e: any) {
     setLoginForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -22,7 +22,7 @@ const LoginForm = () => {
   }
   return (
     <section className="flex flex-col w-2/3 gap-3 ">
-      <VSCodeTextField value={loginForm.email} name="id" onInput={onChange}>
+      <VSCodeTextField value={loginForm.email} name="email" onInput={onChange}>
         ID
       </VSCodeTextField>
       <VSCodeTextField

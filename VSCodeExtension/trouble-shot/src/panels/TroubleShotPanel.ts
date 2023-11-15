@@ -293,6 +293,7 @@ export class TroubleShotPanel {
                         seq: sessionId,
                       },
                       troubleSeq: message.articleInfo.troubleId,
+                      selected: true,
                     },
                   }),
                 }
@@ -344,7 +345,10 @@ export class TroubleShotPanel {
                 category: "VSCode",
                 context: message.articleInfo.content,
                 dependency: message.articleInfo.dependency,
-                scope: message.articleInfo.scope,
+                scope:
+                  message.articleInfo.scope === "1"
+                    ? this._globalState.get<string>("sessionId")
+                    : 0,
                 writer: {
                   seq: this._globalState.get<string>("sessionId"),
                 },

@@ -38,16 +38,17 @@ export class MyTroubleListProviderLogin extends MyTroubleListProvider {
 
   async deleteTroubleShooting(trouble: Trouble) {
     const sessionId = this.globalState.get<number>("sessionId");
-    const res = await fetch(`https://orientalsalad.kro.kr:8102/trouble-shootings/${trouble.id}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        loginSeq: sessionId,
-        type: 2,
-      }),
-    });
+    const res = await fetch(
+      `https://orientalsalad.kro.kr:8102/trouble-shootings/${
+        trouble.id
+      }?loginSeq=${sessionId}&type=${2}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
     const resJson = await res.json();
     if (resJson.success) {
       this.refresh();

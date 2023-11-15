@@ -138,38 +138,38 @@ const Trouble = ({ sessionId, defaultSkills, errMsg, defaultCode }: Props) => {
   return (
     <section className="flex flex-col w-2/3 gap-1 ">
       <VSCodeTextField value={title} onInput={onChange} name="title" className="w-2/3 ">
-        제목
+        Title
       </VSCodeTextField>
       {isLogin && (
         <VSCodeRadioGroup onChange={handleRadioChange}>
-          <label slot="label">공개 범위</label>
+          <label slot="label">Open Coverage</label>
           <VSCodeRadio value="1" checked={openScope === "1"}>
-            비공개
+            Private
           </VSCodeRadio>
           <VSCodeRadio value="0" checked={openScope === "0"}>
-            전체 공개
+            Public
           </VSCodeRadio>
         </VSCodeRadioGroup>
       )}
 
       <VSCodeTextArea value={skill} name="skill" onInput={onChange} rows={4}>
-        사용 기술 스택
+        Skill & Dependency
       </VSCodeTextArea>
       <VSCodeTextArea value={code} onInput={onChange} name="code" rows={7}>
-        문제 코드
+        Trouble Code
       </VSCodeTextArea>
       <VSCodeTextArea value={errorMsg} name="errorMsg" onInput={onChange} rows={1}>
-        콘솔 로그
+        Console Error Message
       </VSCodeTextArea>
       <VSCodeTextArea value={description} name="description" onInput={onChange} rows={4}>
-        상세 설명
+        Trouble Description
       </VSCodeTextArea>
 
       <div className="flex items-center justify-center gap-5 mt-5">
         <div onClick={onCopyMarkdown}>
           <VSCodeButton>
             <VscCopy className="mr-3 " />
-            마크다운 코드 복사
+            Copy Markdown Source
           </VSCodeButton>
         </div>
 
@@ -177,14 +177,14 @@ const Trouble = ({ sessionId, defaultSkills, errMsg, defaultCode }: Props) => {
           <div onClick={onUploadTrouble}>
             <VSCodeButton>
               <BiUpload className="mr-3 " />
-              TROUBLE SHOT 게시물 업로드
+              Upload to TROUBLE Shot
             </VSCodeButton>
           </div>
         ) : (
           <div onClick={onAddTrouble}>
             <VSCodeButton>
               <BiUpload className="mr-3 " />
-              TROUBLE LIST에 추가
+              Add to Trouble List
             </VSCodeButton>
           </div>
         )}

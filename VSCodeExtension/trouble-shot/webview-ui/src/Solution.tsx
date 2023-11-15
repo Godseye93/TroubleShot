@@ -100,30 +100,30 @@ const Solution = ({ sessionId, troubleId, solution }: Props) => {
   return (
     <section className="flex flex-col w-2/3 gap-1 ">
       <VSCodeTextArea value={code} onInput={onChange} name="code" rows={7}>
-        해결 코드
+        Solution Code
       </VSCodeTextArea>
       <VSCodeTextArea value={description} onInput={onChange} name="description" rows={4}>
-        상세 설명
+        Solution Description
       </VSCodeTextArea>
       <div className="flex items-center justify-center gap-5 mt-5">
         <div onClick={onCopyMarkdown}>
           <VSCodeButton>
             <VscCopy className="mr-3 " />
-            마크다운 코드 복사
+            Copy Markdown Source
           </VSCodeButton>
         </div>
 
         <div onClick={onSolveTrouble}>
           <VSCodeButton>
             <BsReplyAll className="mr-3 " />
-            SOLUTION 달기
+            Reply Solution
           </VSCodeButton>
         </div>
         {!isClick ? (
           <div onClick={onGetSolution}>
             <VSCodeButton>
               <GoCopilot className="mr-3 " />
-              AI 추천 솔루션
+              Recommended Solution by AI
             </VSCodeButton>
           </div>
         ) : isLoading ? (

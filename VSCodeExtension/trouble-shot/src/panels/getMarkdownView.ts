@@ -37,7 +37,7 @@ export function getMarkdownView(
         </head>
         <body>
           <div id="content">${htmlString}</div>
-          <button id="myButton">AI기반 트러블 슈팅 문서 피드백 받기</button>
+          <button id="myButton">Get Feedback by AI</button>
           <script type="module" nonce="${nonce}" src="${scriptUri}"></script>
         </body>
       </html>
