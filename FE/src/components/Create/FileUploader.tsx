@@ -9,6 +9,7 @@ interface Handle {
   getState?: (() => false | commands.TextState) | undefined;
   textApi?: commands.TextAreaTextApi | undefined;
   dispatch?: React.Dispatch<ContextStore> | undefined;
+  onUploadComplete?: (params: string) => void;
 }
 
 export default function FileUploader({ handle }: { handle: Handle }) {
@@ -57,6 +58,9 @@ export default function FileUploader({ handle }: { handle: Handle }) {
       const url_key = process.env.NEXT_PUBLIC_BUCKEYT_URL + `trouble/${name}.${fileType}`;
 
       console.log(url_key);
+
+      //프로필 사진 변경을 위한 코드
+      handle.onUploadComplete?.(url_key);
       // 가져온 위치에 이미지를 삽입한다
       return [fileName, url_key];
     } catch (error) {

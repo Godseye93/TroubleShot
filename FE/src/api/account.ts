@@ -1,6 +1,7 @@
 import {
   BarChartInfo,
   CommonType,
+  EditReq,
   EmailCertResponse,
   EmailCode,
   Member,
@@ -99,7 +100,14 @@ export const getUserInfo = async (params: number): Promise<Member> => {
   const { member } = data;
   return member;
 };
+
+// 회원정보 수정
+export const putUserInfo = async (params: EditReq) => {
+  const requestBody = params.reqBody;
+  const { data } = await api.put(`/members/${params.userSeq}`, requestBody);
+  return data;
+};
 export const getSearchUser = async (params: SearchMember): Promise<ResponeseSearchMember> => {
-  const { data } = await api.get("/members", { params });
+  const { data } = await api.put("/members", { params });
   return data;
 };

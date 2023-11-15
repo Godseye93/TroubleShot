@@ -85,8 +85,8 @@ export default function Header() {
 
         {user ? (
           <div className="flex items-center justify-end w-full">
-            <Link href={`/mypage/${user?.member.seq}`} className="me-3">
-              <img src={user.member.profileImg} alt="" className="w-[2.5rem] h-[2.5rm] rounded-full" />
+            <Link href={`/mypage/${user?.member.seq}`} className="me-3 rounded-full">
+              <img src={user.member.profileImg} alt="" className="w-[2.5rem]" />
             </Link>
             <div
               onClick={() => {
