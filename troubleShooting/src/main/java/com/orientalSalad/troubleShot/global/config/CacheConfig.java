@@ -15,6 +15,6 @@ public class CacheConfig {
 	@Bean
 	public CacheManager cacheManager() {
 		log.info("[+] CacheConfig Start !!! ");
-		return new ConcurrentMapCacheManager("troubleShooting");
+		return new ConcurrentMapCacheManager("troubleShooting","troubleShootingInfo");
 	}
 }
