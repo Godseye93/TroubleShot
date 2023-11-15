@@ -270,26 +270,4 @@ public class TroubleShootingController {
 		log.info("====== 트러블 슈팅 문서 덧글 삭제 끝 =====");
 		return new ResponseEntity<ResultDTO>(resultDTO, HttpStatus.OK);
 	}
-	@Operation(summary = "트러블 슈팅 솔루션 채택")
-	@PutMapping("/{troubleSeq}/answer/{answerSeq}")
-	public ResponseEntity<?> updateReply(
-		@PathVariable(name = "troubleSeq") long troubleSeq,
-		@PathVariable(name = "answerSeq") long answerSeq,
-		@RequestBody RequestDTO requestDTO,
-		HttpServletRequest request) throws Exception {
-		log.info("====== 트러블 슈팅 솔루션 채택 시작 =====");
-
-		//로그인 확인
-		authentication.checkLogin(request,requestDTO);
-
-		troubleShootingAnswerService.selectAnswerForSolve(answerSeq,troubleSeq,requestDTO);
-
-		ResultDTO resultDTO = ResultDTO.builder()
-			.success(true)
-			.message("솔루션 채택을 성공했습니다.")
-			.build();
-
-		log.info("====== 트러블 슈팅 문서 솔루션 채택 끝 =====");
-		return new ResponseEntity<ResultDTO>(resultDTO, HttpStatus.OK);
-	}
 }
