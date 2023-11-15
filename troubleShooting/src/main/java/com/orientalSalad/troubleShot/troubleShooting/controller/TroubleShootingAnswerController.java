@@ -43,6 +43,9 @@ public class TroubleShootingAnswerController {
 		@PathVariable(name = "troubleSeq") Long troubleSeq,
 		@RequestBody RequestTroubleShootingAnswerDTO requestTroubleShootingAnswerDTO) throws Exception {
 		log.info("====== 트러블 슈팅 솔루션 등록 시작 =====");
+		log.info("trouble Seq : "+troubleSeq);
+
+		requestTroubleShootingAnswerDTO.getTroubleShootingAnswer().setTroubleSeq(troubleSeq);
 		log.info(requestTroubleShootingAnswerDTO.toString());
 
 		//로그인 확인
