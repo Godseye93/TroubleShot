@@ -67,7 +67,7 @@ export default function Page({ params }: { params: { user: number } }) {
                 <div className="w-[300px] h-[200px]">
                   <MyResponsivePie userSeq={userSeq} />
                 </div>
-                <Link href={`/statistic/${userSeq}`} className="text-sub">
+                <Link href={`/statistics/${userSeq}`} className="text-sub">
                   전체 통계 데이터 확인하기
                 </Link>
               </div>
