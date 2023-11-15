@@ -41,7 +41,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Slf4j
 @Transactional
-@CacheConfig(cacheNames = "troubleshooting")
+@CacheConfig(cacheNames = "troubleShooting")
 public class TroubleShootingService {
 	private final TroubleShootingMapper troubleShootingMapper;
 	private final TroubleShootingRepository troubleShootingRepository;
@@ -76,7 +76,7 @@ public class TroubleShootingService {
 
 		return true;
 	}
-	@CachePut(value = "troubleshootingInfo", key = "#requestTroubleShootingDTO.getTroubleShooting.seq")
+	@CachePut(value = "troubleShootingInfo", key = "#requestTroubleShootingDTO.getTroubleShooting.seq")
 	public boolean updateTroubleShooting(RequestTroubleShootingDTO requestTroubleShootingDTO) throws Exception{
 		//작성자와 로그인 유저 확인
 		if(!requestTroubleShootingDTO.getLoginSeq().equals(requestTroubleShootingDTO.getTroubleShooting().getWriter().getSeq())){
@@ -166,7 +166,7 @@ public class TroubleShootingService {
 
 		return true;
 	}
-	@Cacheable(value = "troubleshooting",key = "#seq")
+	@Cacheable(value = "troubleShooting",key = "#seq")
 	public TroubleShootingDTO findTroubleShootingBySeq(long seq, RequestDTO requestDTO) throws Exception {
 		SearchTroubleShootingDTO searchParam = SearchTroubleShootingDTO.builder()
 			.troubleSeq(seq)
@@ -226,6 +226,7 @@ public class TroubleShootingService {
 		}
 		return troubleShootingDTOList;
 	}
+	@Cacheable(value = "countTroubleShootingList")
 	public Long countTroubleShootingList(SearchTroubleShootingDTO searchParam) throws Exception {
 		int tageSize = 0;
 
