@@ -17,6 +17,6 @@ public class TroubleShootingApplication {
 	}
 
 	@Scheduled(fixedDelay = 10000) // 10s에 한번씩 실행
-	@CacheEvict(value = {"troubleShootingInfo","troubleShooting","troubleShootingList","countTroubleShooting"}, allEntries = true) // 캐시 제거
+	@CacheEvict(value = "troubleShooting", allEntries = true) // 캐시 제거
 	public void cacheInitialization(){}
 }
