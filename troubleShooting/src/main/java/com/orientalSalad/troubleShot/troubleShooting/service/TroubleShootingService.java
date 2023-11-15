@@ -76,8 +76,8 @@ public class TroubleShootingService {
 
 		return true;
 	}
-	@CachePut(value = "troubleShootingInfo", key = "#requestTroubleShootingDTO.getTroubleShooting.seq")
-	public boolean updateTroubleShooting(RequestTroubleShootingDTO requestTroubleShootingDTO) throws Exception{
+	// @CachePut(value = "troubleShootingInfo", key = "#requestTroubleShootingDTO.getTroubleShooting.seq+'_'+requestTroubleShootingDTO.loginSeq")
+	public TroubleShootingDTO updateTroubleShooting(RequestTroubleShootingDTO requestTroubleShootingDTO) throws Exception{
 		//작성자와 로그인 유저 확인
 		if(!requestTroubleShootingDTO.getLoginSeq().equals(requestTroubleShootingDTO.getTroubleShooting().getWriter().getSeq())){
 			throw new Exception("작성자와 로그인유저가 다릅니다.");
@@ -92,7 +92,7 @@ public class TroubleShootingService {
 
 		tagService.updateTag(troubleShootingDTO.getTags(),troubleShootingDTO.getSeq());
 
-		return true;
+		return troubleShootingDTO;
 	}
 	public boolean deleteTroubleShooting(RequestTroubleShootingDTO requestTroubleShootingDTO) throws Exception{
 		TroubleShootingDTO troubleShootingDTO
@@ -128,6 +128,7 @@ public class TroubleShootingService {
 
 		return true;
 	}
+	// @CachePut(value = "troubleShootingInfo", key = "#requestTroubleShootingDTO.getTroubleShooting.seq")
 	public boolean updateTroubleShooingReply(RequestTroubleShootingReplyDTO requestTroubleShootingReplyDTO) throws Exception {
 		//작성자와 로그인 유저 확인
 		long writerSeq = requestTroubleShootingReplyDTO.getTroubleShootingReply().getWriter().getSeq();
@@ -166,7 +167,7 @@ public class TroubleShootingService {
 
 		return true;
 	}
-	@Cacheable(value = "troubleShootingInfo",key = "#seq")
+	// @Cacheable(value = "troubleShootingInfo",key = "#seq")
 	public TroubleShootingDTO findTroubleShootingBySeq(long seq, RequestDTO requestDTO) throws Exception {
 		SearchTroubleShootingDTO searchParam = SearchTroubleShootingDTO.builder()
 			.troubleSeq(seq)

@@ -1,12 +1,9 @@
 package com.orientalSalad.troubleShot.troubleShooting.controller;
 
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -131,10 +128,10 @@ public class TroubleShootingController {
 	@GetMapping("/{seq}")
 	public ResponseEntity<?> findTroubleShooting(@PathVariable(name = "seq") long seq,
 		@ModelAttribute RequestDTO requestDTO) throws Exception {
-		// log.info("====== 트러블 슈팅 문서 pk 탐색 시작 =====");
-		// log.info("pk : "+seq);
-		// log.info("request : "+requestDTO.toString());
-
+		log.info("====== 트러블 슈팅 문서 pk 탐색 시작 =====");
+		log.info("pk : "+seq);
+		log.info("request : "+requestDTO.toString());
+		//
 		TroubleShootingDTO troubleShootingDTO = troubleShootingService.findTroubleShootingBySeq(seq,requestDTO);
 
 		if(troubleShootingDTO == null){
