@@ -29,6 +29,7 @@ public class TroubleShootingConverter implements ObjectConverter<TroubleShooting
 			.category(troubleShootingDTO.getCategory())
 			.dependency(troubleShootingDTO.getDependency())
 			.postType(troubleShootingDTO.getPostType())
+			.scope(troubleShootingDTO.getScope())
 			.build();
 	}
 
@@ -48,6 +49,7 @@ public class TroubleShootingConverter implements ObjectConverter<TroubleShooting
 			.category(troubleShootingEntity.getCategory())
 			.dependency(troubleShootingEntity.getDependency())
 			.postType(troubleShootingEntity.getPostType())
+			.scope(troubleShootingEntity.getScope())
 			.build();
 	}
 }

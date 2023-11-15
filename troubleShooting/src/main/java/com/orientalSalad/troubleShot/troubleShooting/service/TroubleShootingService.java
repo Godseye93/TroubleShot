@@ -3,9 +3,9 @@ package com.orientalSalad.troubleShot.troubleShooting.service;
 import java.util.Collections;
 import java.util.List;
 
+import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,6 +41,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Slf4j
 @Transactional
+@CacheConfig(cacheNames = "troubleshooting")
 public class TroubleShootingService {
 	private final TroubleShootingMapper troubleShootingMapper;
 	private final TroubleShootingRepository troubleShootingRepository;
@@ -56,9 +57,7 @@ public class TroubleShootingService {
 
 	public boolean insertTroubleShooting(RequestTroubleShootingDTO requestTroubleShootingDTO) throws Exception {
 		requestTroubleShootingDTO.getTroubleShooting().setPostType(requestTroubleShootingDTO.getType());
-
 		//카테고리 확인
-
 		//카테고리 없으면 카테고리 추가
 		categoryService.insertCategory(
 			RequestCategoryDTO.builder()
@@ -77,7 +76,7 @@ public class TroubleShootingService {
 
 		return true;
 	}
-	@CachePut(value = "troubleshooting", key = "#requestTroubleShootingDTO.getTroubleShooting.seq")
+	@CachePut(value = "troubleshootingInfo", key = "#requestTroubleShootingDTO.getTroubleShooting.seq")
 	public boolean updateTroubleShooting(RequestTroubleShootingDTO requestTroubleShootingDTO) throws Exception{
 		//작성자와 로그인 유저 확인
 		if(!requestTroubleShootingDTO.getLoginSeq().equals(requestTroubleShootingDTO.getTroubleShooting().getWriter().getSeq())){
