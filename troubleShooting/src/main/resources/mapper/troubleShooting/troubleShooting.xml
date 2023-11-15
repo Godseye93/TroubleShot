@@ -441,13 +441,16 @@
             m.seq
         <choose>
             <when test="searchParam.order == 1">
-                ORDER BY ts.like_count DESC
+                ORDER BY ts.like_count DESC,
+                        ts.create_time DESC
             </when>
             <when test="searchParam.order == 2">
-                ORDER BY ts.reply_count DESC
+                ORDER BY ts.reply_count DESC,
+                         ts.create_time DESC
             </when>
             <when test="searchParam.order == 3">
-                ORDER BY ts.view_count DESC
+                ORDER BY ts.view_count DESC,
+                        ts.create_time DESC
             </when>
             <otherwise>
                 ORDER BY ts.create_time DESC
