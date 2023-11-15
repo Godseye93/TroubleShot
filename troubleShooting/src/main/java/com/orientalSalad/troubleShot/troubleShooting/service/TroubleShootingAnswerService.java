@@ -37,6 +37,7 @@ public class TroubleShootingAnswerService {
 	public TroubleShootingAnswerDTO insertTroubleShootingAnswer(RequestTroubleShootingAnswerDTO requestTroubleShootingAnswerDTO){
 		TroubleShootingAnswerEntity troubleShootingAnswerEntity = answerConverter.toEntity(
 			requestTroubleShootingAnswerDTO.getTroubleShootingAnswer());
+
 		troubleShootingAnswerEntity = answerRepository.save(troubleShootingAnswerEntity);
 
 		TroubleShootingAnswerDTO answerDTO = answerConverter.toDTO(troubleShootingAnswerEntity);

@@ -8,7 +8,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
 @SpringBootApplication
-@EnableCaching
 @EnableScheduling
 public class TroubleShootingApplication {
 	public static void main(String[] args) {

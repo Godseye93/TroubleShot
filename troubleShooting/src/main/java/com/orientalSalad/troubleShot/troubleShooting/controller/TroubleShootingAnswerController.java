@@ -18,6 +18,7 @@ import com.orientalSalad.troubleShot.troubleShooting.dto.RequestTroubleShootingA
 import com.orientalSalad.troubleShot.troubleShooting.dto.ResponseTroubleShootingAnswerDTO;
 import com.orientalSalad.troubleShot.troubleShooting.dto.TroubleShootingAnswerDTO;
 import com.orientalSalad.troubleShot.troubleShooting.service.TroubleShootingAnswerService;
+import com.orientalSalad.troubleShot.troubleShooting.service.TroubleShootingService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -32,6 +33,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class TroubleShootingAnswerController {
 	private final TroubleShootingAnswerService troubleShootingAnswerService;
+	private final TroubleShootingService troubleShootingService;
 	private final Authentication authentication;
 
 	@Operation(summary = "트러블 슈팅 솔루션 등록",description = "입력 DTO :RequestTroubleShootingAnswerDTO")
@@ -48,11 +50,18 @@ public class TroubleShootingAnswerController {
 		//트러블슈팅 솔루션 등록
 		TroubleShootingAnswerDTO answerDTO = troubleShootingAnswerService.insertTroubleShootingAnswer(requestTroubleShootingAnswerDTO);
 
+		//웹이 아닌겨우 자동 채택처리
+		if(!requestTroubleShootingAnswerDTO.getType().equals(0)){
+			troubleShootingService.solveTroubleShooting(requestTroubleShootingAnswerDTO.getTroubleShootingAnswer().getTroubleSeq());
+		}
+		
 		ResponseTroubleShootingAnswerDTO resultDTO = ResponseTroubleShootingAnswerDTO.builder()
 			.success(true)
 			.message("트러블 슈팅 솔루션 등록이 성공했습니다.")
 			.troubleShootingAnswer(answerDTO)
 			.build();
+		
+		
 		
 		log.info("====== 트러블 슈팅 솔루션 등록 끝 =====");
 		return new ResponseEntity<ResultDTO>(resultDTO, HttpStatus.OK);

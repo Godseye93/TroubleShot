@@ -3,6 +3,7 @@ package com.orientalSalad.troubleShot.troubleShooting.service;
 import java.util.Collections;
 import java.util.List;
 
+import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -40,6 +41,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Slf4j
 @Transactional
+@CacheConfig(cacheNames = "troubleShooting")
 public class TroubleShootingService {
 	private final TroubleShootingMapper troubleShootingMapper;
 	private final TroubleShootingRepository troubleShootingRepository;
@@ -74,7 +76,7 @@ public class TroubleShootingService {
 
 		return true;
 	}
-	@CachePut(value = "troubleShooting", key = "#requestTroubleShootingDTO.getTroubleShooting.seq")
+	@CachePut(value = "troubleShootingInfo", key = "#requestTroubleShootingDTO.getTroubleShooting.seq")
 	public boolean updateTroubleShooting(RequestTroubleShootingDTO requestTroubleShootingDTO) throws Exception{
 		//작성자와 로그인 유저 확인
 		if(!requestTroubleShootingDTO.getLoginSeq().equals(requestTroubleShootingDTO.getTroubleShooting().getWriter().getSeq())){
@@ -164,7 +166,7 @@ public class TroubleShootingService {
 
 		return true;
 	}
-	@Cacheable(value = "troubleShooting",key = "#seq")
+	@Cacheable(value = "troubleShootingInfo",key = "#seq")
 	public TroubleShootingDTO findTroubleShootingBySeq(long seq, RequestDTO requestDTO) throws Exception {
 		SearchTroubleShootingDTO searchParam = SearchTroubleShootingDTO.builder()
 			.troubleSeq(seq)
@@ -309,5 +311,17 @@ public class TroubleShootingService {
 		}
 		return true;
 	}
+	public boolean solveTroubleShooting(Long troubleSeq) throws Exception{
+		TroubleShootingEntity troubleShootingEntity = troubleShootingRepository.findBySeq(troubleSeq);
 
+		if(troubleShootingEntity == null){
+			throw new Exception("해당 문서가 없습니다.");
+		}
+
+		troubleShootingEntity.updateSolved();
+
+		troubleShootingRepository.save(troubleShootingEntity);
+
+		return true;
+	}
 }
