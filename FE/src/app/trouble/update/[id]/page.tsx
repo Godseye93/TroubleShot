@@ -117,6 +117,7 @@ export default function Page() {
                 {Changed && (
                   <div className={`absolute ${showOptions ? "waterfall" : "waterfall2re"} z-50`}>
                     <Options
+                      userSeq={user!.member.seq}
                       options={options}
                       setOptions={setOptions}
                       categorys={categories!}

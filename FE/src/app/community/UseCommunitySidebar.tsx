@@ -21,6 +21,7 @@ export default function UseCommunitySidebar() {
     >
       <FaSignsPost /> <p className="ms-3 line-clamp-1">전체글 보기</p>
     </Link>,
+    // eslint-disable-next-line react/jsx-key
     <Link
       className={`${path.includes("/community/searchusers") && "bg-softmain shadow-md"} menu-btn line-clamp-1`}
       href="/community/searchusers"
