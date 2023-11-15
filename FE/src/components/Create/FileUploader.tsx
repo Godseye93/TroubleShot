@@ -9,7 +9,7 @@ interface Handle {
   getState?: (() => false | commands.TextState) | undefined;
   textApi?: commands.TextAreaTextApi | undefined;
   dispatch?: React.Dispatch<ContextStore> | undefined;
-  onUploadComplete?: (url: string) => void;
+  onUploadComplete?: (params: string) => void;
 }
 
 export default function FileUploader({ handle }: { handle: Handle }) {

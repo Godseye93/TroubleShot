@@ -11,7 +11,6 @@ import { useLoginStore } from "@/stores/useLoginStore";
 
 export default function Page({ params }: { params: { user: number } }) {
   const { user } = useLoginStore();
-  console.log(user);
   const LoginSeq = user?.member.seq;
   const userSeq = params.user;
   const [mounted, setMounted] = useState<boolean>(false);
