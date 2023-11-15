@@ -20,7 +20,7 @@ export default function PostList() {
   const order = Number(searchParams.get("order"));
   const [options, setOptions] = useState<SearchParams>({
     ...(keyword && { keyword }),
-    ...(solved !== null && { solved: Boolean(solved) }),
+    ...(solved !== null && { solved: solved === "true" ? true : false }),
     ...(tags && { tags }),
     ...(startTime && { startTime }),
     ...(endTime && { endTime }),
@@ -30,13 +30,12 @@ export default function PostList() {
   useEffect(() => {
     setOptions({
       ...(keyword && { keyword: keyword }),
-      ...(solved !== null && { solved: Boolean(solved) }),
+      ...(solved !== null && { solved: solved === "true" ? true : false }),
       ...(tags && { tags }),
       ...(startTime && { startTime }),
       ...(endTime && { endTime }),
       ...(order && { order }),
     });
-    console.log(options);
   }, [searchParams.toString()]);
   console.log(data);
 
@@ -45,7 +44,7 @@ export default function PostList() {
       <Searchbar
         PropsOptions={options}
         isCommunity={true}
-        baseUrl="/community/posts"
+        baseUrl="community/posts"
         queryKey="boards"
         setPropsOptions={setOptions}
       />
@@ -60,7 +59,7 @@ export default function PostList() {
                   board={content}
                   idx={idx}
                   last={page.troubleShootingList.length - 1}
-                  queryKey="boards"
+                  queryKey={["boards", options]}
                 />
               ))}
             </React.Fragment>

@@ -2,13 +2,13 @@ import IconBox from "./IconBox";
 import Link from "next/link";
 import Tagbox from "./TagBox";
 import { AiFillTag } from "react-icons/ai";
-import { GetTroubleList, TroubleShootingBoard } from "@/types/TroubleType";
+import { GetTroubleList, SearchParams, TroubleShootingBoard } from "@/types/TroubleType";
 import { getImageLink } from "@/utils/getImageLink";
 
 interface Props {
   keyword: string;
   contents?: TroubleShootingBoard[];
-  queryKey: string;
+  queryKey: [string, SearchParams?];
 }
 export default function CardContentL({ keyword, contents, queryKey }: Props) {
   return (

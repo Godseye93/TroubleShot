@@ -49,6 +49,7 @@ export const getUserCategoryTrouble = async (params: SearchParams = {}): Promise
 
 export const postTrouble = async (req: RequestTroubleShooting): Promise<DefaultRespense> => {
   const { data } = await api.post("/trouble-shootings", req);
+  console.log(req);
   return data;
 };
 export const postTroubleLike = async (
@@ -309,5 +310,38 @@ export const deleteTrouble = async (userSeq: number, troubleSeq: number): Promis
     type: 0,
   };
   const { data } = await api.delete(`/trouble-shootings/${troubleSeq}`, { params });
+  return data;
+};
+
+export const postCategory = async (userSeq: number, category: string) => {
+  const body = {
+    loginSeq: userSeq,
+    type: 0,
+    category: {
+      name: category,
+      userSeq,
+    },
+  };
+  const { data } = await api.post(`/users/${userSeq}/categories`, body);
+  return data;
+};
+export const putCategory = async (userSeq: number, category: string, categorySeq: number) => {
+  const body = {
+    loginSeq: userSeq,
+    type: 0,
+    category: {
+      name: category,
+      userSeq,
+    },
+  };
+  const { data } = await api.put(`/users/${userSeq}/categories/${categorySeq}`, body);
+  return data;
+};
+export const deleteCategory = async (userSeq: number, categorySeq: number) => {
+  const params = {
+    loginSeq: userSeq,
+    type: 0,
+  };
+  const { data } = await api.delete(`/users/${userSeq}/categories/${categorySeq}`, { params });
   return data;
 };

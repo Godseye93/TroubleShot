@@ -1,7 +1,7 @@
 "use client";
 import { BsBookmarkStar, BsBookmarkStarFill } from "react-icons/bs";
 import IconBox from "./IconBox";
-import { GetTroubleList, TroubleShootingBoard } from "@/types/TroubleType";
+import { GetTroubleList, SearchParams, TroubleShootingBoard } from "@/types/TroubleType";
 import { removeHtmlAndMarkdownTags } from "@/utils/removeHtmlAndMarkdownTags";
 import { getImageLink } from "@/utils/getImageLink";
 import Tagbox from "./TagBox";
@@ -27,7 +27,7 @@ export default function BoardItem({
   board: TroubleShootingBoard;
   last: number;
   idx: number;
-  queryKey: string;
+  queryKey: [string, SearchParams?];
   nowUrl: string;
 }) {
   const imgList = getImageLink(board.context);
@@ -72,7 +72,7 @@ export default function BoardItem({
       if (!board.favorite) toast.success("북마크에 저장되었습니다");
       else if (board.favorite) toast.success("북마크에서 제거되었습니다");
       await queryClient.invalidateQueries({
-        queryKey: [queryKey],
+        queryKey: queryKey,
         exact: true,
       });
 

@@ -1,7 +1,6 @@
 import ScrollTop from "@/components/ScrollTop";
-import Rsidebar from "../trouble/Rsidebar";
 import UseCommunitySidebar from "./UseCommunitySidebar";
-
+import Rsidebar from "./Rsidebar";
 interface Props {
   children: React.ReactNode;
 }

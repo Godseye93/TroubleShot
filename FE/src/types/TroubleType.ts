@@ -7,7 +7,7 @@ export interface GetMostTags extends DefaultRespense {
 }
 export interface CreateOptions {
   category: string;
-  scope: 0 | 1 | null;
+  scope: number | null;
   tags: string[];
   solved: boolean | null;
 }
@@ -16,7 +16,7 @@ export interface PostTroubleShooting {
   category: string;
   context: string;
   dependency: string;
-  scope: 0 | 1;
+  scope: number;
   writer: {
     seq: number;
   } | null;
@@ -61,7 +61,7 @@ export interface TroubleShootingBoard {
   category: string;
   context: string;
   dependency: null | string;
-  scope: 0 | 1 | null;
+  scope: number;
   writer: Writer | null;
   solved: boolean;
   viewCount: number;

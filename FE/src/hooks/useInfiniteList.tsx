@@ -13,7 +13,7 @@ interface Props {
 export default function useInfiniteList({ options, queryKey, category, userSeq }: Props) {
   const { user } = useLoginStore();
   const { data, error, fetchNextPage, hasNextPage, status } = useInfiniteQuery({
-    queryKey: [queryKey],
+    queryKey: [queryKey, options],
     queryFn: async ({ pageParam = 1 }) => {
       const data =
         queryKey === "boards"

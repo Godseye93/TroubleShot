@@ -1,4 +1,5 @@
-import Detail from "./Detail";
+// import Detail from "./Detail";
+import Detail from "@components/Detail/Detail";
 type PageParams = {
   id: string;
 };

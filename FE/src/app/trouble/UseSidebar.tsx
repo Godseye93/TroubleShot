@@ -22,13 +22,7 @@ export default function UseSidebar() {
       return data;
     },
   });
-  const [categories, setCategories] = useState<string[]>([]);
-  useEffect(() => {
-    if (data) {
-      const list = data.categoryList.map((category) => category.name);
-      setCategories(list);
-    }
-  }, [data]);
+
   const menus = [
     // eslint-disable-next-line react/jsx-key
     <Link
@@ -42,5 +36,17 @@ export default function UseSidebar() {
       <IoHomeSharp /> <p className="ms-3 line-clamp-1">전체글</p>
     </Link>,
   ];
-  return <Sidebar link="/trouble" menus={menus} categorys={categories} isLogged={true} />;
+  return (
+    <>
+      {data && user && (
+        <Sidebar
+          link="/trouble"
+          userSeq={user.member.seq}
+          menus={menus}
+          categories={data.categoryList}
+          isLogged={true}
+        />
+      )}
+    </>
+  );
 }

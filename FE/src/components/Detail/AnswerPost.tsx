@@ -16,7 +16,15 @@ import BoardMenu from "./BoardMenu";
 import UiwEditor from "@/components/Create/UiwEditor";
 import { checkWriterImg, checkWriterName } from "@/utils/nullWriter";
 
-export default function AnswerPost({ answer, troubleSeq }: { answer: Answer; troubleSeq: number }) {
+export default function AnswerPost({
+  answer,
+  troubleSeq,
+  boardWriterSeq,
+}: {
+  answer: Answer;
+  troubleSeq: number;
+  boardWriterSeq: number | null;
+}) {
   const [showCreateAnswers, setShowCreateAnswer] = useState(false);
   const [showComments, setShowComments] = useState(false);
   const [showUpdate, setShowUpdate] = useState(false);
@@ -58,17 +66,22 @@ export default function AnswerPost({ answer, troubleSeq }: { answer: Answer; tro
           <div className="flex-1 bg-white rounded-lg shadow-md  mt-5">
             <div className="bg-slate-200 rounded-t-md px-5 pt-5">
               <div className="flex items-center">
-                <div className="w-full line-clamp-1 text-xl font-semibold mt-5">
+                <div className="flex-1 line-clamp-1 text-xl font-semibold mt-5">
                   <span className="text-2xl text-amber-600 me-2"> Answer </span> {answer.title}
                 </div>
-                <div className="text-2xl">
-                  {answer.writer && user?.member.seq === answer.writer.seq && (
-                    <BoardMenu
-                      userSeq={user.member.seq}
-                      troubleSeq={troubleSeq}
-                      answerSeq={answer.seq}
-                      setShowUpdate={setShowUpdate}
-                    />
+                <div className="flex flex-col gap-2">
+                  <div className="text-2xl flex justify-center">
+                    {answer.writer && user?.member.seq === answer.writer.seq && (
+                      <BoardMenu
+                        userSeq={user.member.seq}
+                        troubleSeq={troubleSeq}
+                        answerSeq={answer.seq}
+                        setShowUpdate={setShowUpdate}
+                      />
+                    )}
+                  </div>
+                  {boardWriterSeq === user?.member.seq && (
+                    <button className="text-lg font-semibold py-1 px-3 rounded-full shadow-md bg-main">채택하기</button>
                   )}
                 </div>
               </div>

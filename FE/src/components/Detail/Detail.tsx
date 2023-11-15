@@ -145,7 +145,7 @@ export default function Detail({ id }: { id: number }) {
             </div>
             <div className="mt-2 shadow-md rounded-lg">
               <div className="bg-main rounded-t-lg flex items-center ps-5 h-12 font-semibold mt-5">사용 기술 스택</div>
-              <MDEditor.Markdown source={"```ts\n" + board.dependency + "\n```"} />
+              <MDEditor.Markdown className="max-w-[65vw]" source={"```ts\n" + board.dependency + "\n```"} />
             </div>
             <div className=" border-b-2 pb-2 pt-10">
               <div className="flex  items-center gap-3 mt-5 text-xl">
@@ -203,56 +203,63 @@ export default function Detail({ id }: { id: number }) {
               </div>
             </div>
 
-            <div
-              className={`mt-5 ${!showAnswerForm && "bg-sub text-white"}    px-3 shadow-md border rounded-lg min-h-16 ${
-                showAnswerForm && "pb-5"
-              }`}
-            >
+            {!board.solved && (
               <div
-                className={`flex justify-between  items-center rounded-lg h-16 ${showAnswerForm && "border-b mb-5"}`}
+                className={`mt-5 ${
+                  !showAnswerForm && "bg-sub text-white"
+                }    px-3 shadow-md border rounded-lg min-h-16 ${showAnswerForm && "pb-5"}`}
               >
-                <p className=" font-semibold text-lg">답변을 남겨주세요!</p>
-                {!showAnswerForm && (
-                  <button
-                    onClick={() => setShowAnswerForm((prev) => !prev)}
-                    className="bg-main hover:bg-amber-500 shadow-md hover:shadow-none transition-all duration-200 rounded-lg font-semibold text-black p-2"
-                  >
-                    답변하기
-                  </button>
+                <div
+                  className={`flex justify-between  items-center rounded-lg h-16 ${showAnswerForm && "border-b mb-5"}`}
+                >
+                  <p className=" font-semibold text-lg">답변을 남겨주세요!</p>
+                  {!showAnswerForm && (
+                    <button
+                      onClick={() => setShowAnswerForm((prev) => !prev)}
+                      className="bg-main hover:bg-amber-500 shadow-md hover:shadow-none transition-all duration-200 rounded-lg font-semibold text-black p-2"
+                    >
+                      답변하기
+                    </button>
+                  )}
+                </div>
+                {showAnswerForm && (
+                  <div className="">
+                    <input
+                      type="text"
+                      defaultValue={board!.title}
+                      className="w-full text-xl font-semibold rounded-t-lg px-5 bg-slate-200 h-12 flex items-center"
+                      onChange={(e) => setAnswerTitle(e.target.value)}
+                    />
+                    <UiwEditor markdown={answerContent} setMarkdown={setAnswerContent} />
+                    <div className="flex gap-2 justify-end items-center mt-5">
+                      <button
+                        className="rounded-lg bg-sub text-white shadow-md p-2 hover:shadow-sm hover:bg-pink-700 transition-all duration-200 relative"
+                        onClick={() => setShowAnswerForm(false)}
+                      >
+                        닫기
+                      </button>
+
+                      <button
+                        className="rounded-lg bg-main shadow-md p-2 hover:shadow-sm hover:bg-amber-500 transition-all duration-200"
+                        onClick={onPostAnswer}
+                      >
+                        등록
+                      </button>
+                    </div>
+                  </div>
                 )}
               </div>
-              {showAnswerForm && (
-                <div className="">
-                  <input
-                    type="text"
-                    defaultValue={board!.title}
-                    className="w-full text-xl font-semibold rounded-t-lg px-5 bg-slate-200 h-12 flex items-center"
-                    onChange={(e) => setAnswerTitle(e.target.value)}
-                  />
-                  <UiwEditor markdown={answerContent} setMarkdown={setAnswerContent} />
-                  <div className="flex gap-2 justify-end items-center mt-5">
-                    <button
-                      className="rounded-lg bg-sub text-white shadow-md p-2 hover:shadow-sm hover:bg-pink-700 transition-all duration-200 relative"
-                      onClick={() => setShowAnswerForm(false)}
-                    >
-                      닫기
-                    </button>
-
-                    <button
-                      className="rounded-lg bg-main shadow-md p-2 hover:shadow-sm hover:bg-amber-500 transition-all duration-200"
-                      onClick={onPostAnswer}
-                    >
-                      등록
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
+            )}
             <p className="text-2xl font-semibold mt-7">총 {board.answerCount}개의 답변</p>
 
             <div>
               {board.answers.map((answer, idx) => (
-                <AnswerPost troubleSeq={board.seq} key={idx} answer={answer} />
+                <AnswerPost
+                  troubleSeq={board.seq}
+                  key={idx}
+                  answer={answer}
+                  boardWriterSeq={board.writer ? board.writer.seq : null}
+                />
               ))}
             </div>
           </div>

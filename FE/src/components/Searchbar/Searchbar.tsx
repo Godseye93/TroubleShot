@@ -44,10 +44,9 @@ export default function Searchbar({ PropsOptions, isCommunity, baseUrl, queryKey
         params.append(key, value.toString());
       }
     });
-
-    router.push(`${baseUrl}?${params.toString()}`);
-
-    queryClient.removeQueries({ queryKey: [queryKey], exact: true });
+    setPropsOptions(searchOption);
+    router.push(`/${baseUrl}?${params.toString()}`);
+    console.log(`/${baseUrl}?${params.toString()}`);
   };
 
   return (
@@ -104,7 +103,7 @@ export default function Searchbar({ PropsOptions, isCommunity, baseUrl, queryKey
       </div>
       {
         <div className={`w-full  ${showOptions ? "menu-anim-on" : isChanged ? "menu-anim-off" : "hidden"}`}>
-          <Options propsSetOption={setOptions} />
+          <Options propsSetOption={setOptions} propsTags={options.tags} />
         </div>
       }
       <div
