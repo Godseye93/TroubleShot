@@ -60,13 +60,6 @@ export default function CommunityContents() {
   const { data: hotBoard } = useQuery({
     queryKey: ["hotBoard"],
     queryFn: async () => {
-      console.log({
-        order: 1,
-        pageSize: 10,
-        startTime: getOneWeekAgoDate(),
-        endTime: getToday(),
-        ...(user && { loginSeq: user.member.seq }),
-      });
       const data = await getTrouble({
         order: 1,
         pageSize: 10,

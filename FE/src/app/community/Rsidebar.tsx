@@ -14,10 +14,9 @@ export default function Rsidebar() {
   const { data } = useQuery({
     queryKey: ["notSolved"],
     queryFn: async () => {
-      const data = await getTrouble({ pageSize: 3, loginSeq: user?.member.seq, solved: false });
+      const data = await getTrouble({ pageSize: 3, ...(user && { loginSeq: user.member.seq }), solved: false });
       return data;
     },
-    enabled: !!user,
   });
   return (
     <div className={`mt-4 ${!path.includes("create") && !path.includes("update") && "lg:block"} hidden`}>

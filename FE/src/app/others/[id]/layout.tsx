@@ -2,13 +2,13 @@
 import ScrollTop from "@/components/ScrollTop";
 import { useLoginStore } from "@/stores/useLoginStore";
 import dynamic from "next/dynamic";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 interface Props {
   children: React.ReactNode;
 }
-const Profile = dynamic(() => import("../../components/Profile"), {
+const Profilebar = dynamic(() => import("./Profilebar"), {
   loading: () => <p> Loading...,</p>,
 });
 const UseSidebar = dynamic(() => import("./UseSidebar"), {
@@ -18,23 +18,24 @@ const Rsidebar = dynamic(() => import("./Rsidebar"), {
   loading: () => <p> Loading...,</p>,
 });
 export default function Layout({ children }: Props) {
-  const { user } = useLoginStore();
-  const router = useRouter();
+  const params = useParams();
+  const userSeq = Number(params.id);
+  const [mounted, setMounted] = useState<boolean>(false);
   useEffect(() => {
-    if (!user) router.push("/login");
+    setMounted(true);
   });
 
   return (
     <>
-      {user && (
+      {mounted && (
         <>
           <div className="h-12"></div>
           <div className="px-2 flex justify-between w-full">
-            <UseSidebar />
+            <UseSidebar userSeq={userSeq} />
             {children}
             <div>
-              <Profile />
-              <Rsidebar />
+              <Profilebar userSeq={userSeq} />
+              <Rsidebar userSeq={userSeq} />
             </div>
 
             <ScrollTop />

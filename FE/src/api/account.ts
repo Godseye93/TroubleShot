@@ -15,7 +15,7 @@ import {
 } from "@/types/CommonType";
 import { apiInstance } from ".";
 import { AxiosRequestConfig } from "axios";
-import { GetTroubleList, SearchParams } from "@/types/TroubleType";
+import { GetTroubleList, ResponeseSearchMember, SearchMember, SearchParams } from "@/types/TroubleType";
 
 const api = apiInstance();
 
@@ -94,8 +94,12 @@ export const getBookmarkList = async (params: SearchParams): Promise<GetTroubleL
 };
 
 // 유저 pk로 유저의 정보 가져오기
-export const getUserInfo = async (params: number) => {
+export const getUserInfo = async (params: number): Promise<Member> => {
   const { data } = await api.get(`/members/${params}`);
   const { member } = data;
   return member;
+};
+export const getSearchUser = async (params: SearchMember): Promise<ResponeseSearchMember> => {
+  const { data } = await api.get("/members", { params });
+  return data;
 };

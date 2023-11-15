@@ -2,16 +2,6 @@ import Link from "next/link";
 import IconBox from "./IconBox";
 import { GetTroubleList } from "@/types/TroubleType";
 import { changeKoTime } from "@/utils/getTimeAgo";
-interface Content {
-  seq: number;
-  title: string;
-  tags: string[];
-  likes: number;
-  views: number;
-  comments: number;
-  content: string;
-  date: string;
-}
 interface Props {
   keyword: string;
   contents: GetTroubleList;

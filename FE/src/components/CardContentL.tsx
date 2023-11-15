@@ -16,7 +16,7 @@ export default function CardContentL({ keyword, contents, queryKey }: Props) {
       <div className="w-full bg-main rounded-t-lg text-start px-3 py-2 font-semibold text-lg flex justify-between items-center">
         {keyword}
 
-        <Link href={""}>
+        <Link href={`/community/posts?tags=${keyword}`}>
           <p>전체보기 {">"} </p>
         </Link>
       </div>

@@ -10,14 +10,13 @@ import {
   ResponseCategory,
   SearchParams,
 } from "@/types/TroubleType";
-import { apiInstance } from ".";
-import { apiInstance as tmpApi } from "./tempApi";
+import { troubleApiInstance } from "./troubleApi";
 import qs from "qs";
 import axios from "axios";
 axios.defaults.paramsSerializer = (params) => {
   return qs.stringify(params);
 };
-const api = apiInstance();
+const api = troubleApiInstance();
 
 export const getTrouble = async (params: SearchParams = {}): Promise<GetTroubleList> => {
   const { data } = await api.get("/trouble-shootings", { params });
@@ -343,5 +342,13 @@ export const deleteCategory = async (userSeq: number, categorySeq: number) => {
     type: 0,
   };
   const { data } = await api.delete(`/users/${userSeq}/categories/${categorySeq}`, { params });
+  return data;
+};
+export const putSelectAnswer = async (userSeq: number, troubleSeq: number, answerSeq: number) => {
+  const body = {
+    loginSeq: userSeq,
+    type: 0,
+  };
+  const { data } = await api.put(`/trouble-shootings/${troubleSeq}/answers/${answerSeq}/select`, body);
   return data;
 };

@@ -1,19 +1,24 @@
 "use client";
 import { useLoginStore } from "@/stores/useLoginStore";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function Profile() {
   const { user } = useLoginStore();
   const [mounted, setMounted] = useState(false);
   const router = useRouter();
+  const path = usePathname();
 
   useEffect(() => {
     setMounted(true);
   });
   return (
-    <div className="rounded-lg w-60 h-72 bg-white shadow-md mt-4 lg:block hidden">
+    <div
+      className={`mt-4 ${
+        !path.includes("create") && !path.includes("update") && "lg:block"
+      } hidden rounded-lg w-60 h-72 bg-white shadow-md`}
+    >
       {mounted && user && (
         <>
           <div

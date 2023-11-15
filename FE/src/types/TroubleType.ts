@@ -173,3 +173,22 @@ export interface Category {
   name: string;
   userSeq: number;
 }
+export interface SearchMember {
+  pageSize?: number;
+  pageNo?: number;
+  nickname: string;
+}
+
+export interface ResponeseSearchMember extends DefaultRespense {
+  memberList: Member[];
+}
+
+export interface Member {
+  seq: number;
+  createTime: string;
+  updateTime: string;
+  email: string;
+  profileImg: string;
+  nickname: string;
+  locale: string;
+}

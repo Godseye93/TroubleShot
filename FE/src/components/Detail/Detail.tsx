@@ -17,6 +17,7 @@ import CommentItem from "@/components/CommentItem";
 import BoardMenu from "./BoardMenu";
 import { BsBookmarkStar, BsBookmarkStarFill } from "react-icons/bs";
 import { checkWriterImg, checkWriterName } from "@/utils/nullWriter";
+import Link from "next/link";
 export default function Detail({ id }: { id: number }) {
   const queryClient = useQueryClient();
   const router = useRouter();
@@ -114,17 +115,19 @@ export default function Detail({ id }: { id: number }) {
               </div>
             </div>
             <div className="w-full flex justify-between items-center mt-8 border-b-2 pb-5">
-              <div className="flex gap-2 items-center ">
-                <img
-                  src={checkWriterImg(board.writer)}
-                  className="rounded-full shadow-md w-12 h-12"
-                  // height={40}
-                  // width={40}
-                  alt=""
-                />
-                <p className="font-semibold text-lg">{checkWriterName(board.writer)}</p>
-                <p className="text-sm">{changeKoTime(board!.createTime)}</p>
-              </div>
+              <Link href={board.writer ? `/mypage/${board.writer.seq}` : ""}>
+                <div className="flex gap-2 items-center ">
+                  <img
+                    src={checkWriterImg(board.writer)}
+                    className="rounded-full shadow-md w-12 h-12"
+                    // height={40}
+                    // width={40}
+                    alt=""
+                  />
+                  <p className="font-semibold text-lg">{checkWriterName(board.writer)}</p>
+                  <p className="text-sm">{changeKoTime(board!.createTime)}</p>
+                </div>
+              </Link>
               <div className="me-5 text-4xl" onClick={onBookmark}>
                 {!user || !board.favorite ? (
                   <button className=" hover:text-main transition-all hover:shadow-md duration-200">

@@ -1,12 +1,13 @@
 import Detail from "@/components/Detail/Detail";
 type PageParams = {
-  userSeq: string;
+  trouble: string;
 };
 
 export default function Page({ params }: { params: PageParams }) {
+  console.log(params);
   return (
-    <main className="mt-4  mx-3 flex-1 ">
-      <Detail id={Number(params.userSeq)} />
+    <main className="mt-4  mx-3 flex-1 bg-white">
+      <Detail id={Number(params.trouble)} />
     </main>
   );
 }

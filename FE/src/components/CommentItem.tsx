@@ -7,6 +7,7 @@ import { postLikeAnswerComment, postLikeComment, putAnswerComment, putComment } 
 import { toast } from "react-toastify";
 import { useQueryClient } from "@tanstack/react-query";
 import { checkWriterImg, checkWriterName } from "@/utils/nullWriter";
+import Link from "next/link";
 
 export default function CommentItem({
   comment,
@@ -66,13 +67,17 @@ export default function CommentItem({
   return (
     <div className="mt-3 pt-3 flex items-start gap-5">
       <div className="">
-        <img src={checkWriterImg(comment.writer)} alt="" className="rounded-full w-12 h-12 mt-2" />
+        <Link href={comment.writer ? `/mypage/${comment.writer.seq}` : ""}>
+          <img src={checkWriterImg(comment.writer)} alt="" className="rounded-full w-12 h-12 mt-2" />
+        </Link>
       </div>
       {!isUpdate ? (
         <div className="w-full">
           <div className="flex justify-between w-full items-center">
             <div className="flex items-center gap-2">
-              <p className="font-semibold">{checkWriterName(comment.writer)}</p>
+              <Link href={comment.writer ? `/mypage/${comment.writer.seq}` : ""}>
+                <p className="font-semibold">{checkWriterName(comment.writer)}</p>
+              </Link>
               <p className="text-slate-500 text-xs my-2">{getTimeAgo(comment.createTime)}</p>
             </div>
             {comment.writer && comment.writer.seq === userSeq && (
