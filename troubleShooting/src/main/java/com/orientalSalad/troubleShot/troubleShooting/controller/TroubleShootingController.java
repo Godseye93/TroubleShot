@@ -80,6 +80,7 @@ public class TroubleShootingController {
 		@PathVariable(name = "seq") Long seq) throws
 		Exception {
 		log.info("====== 트러블 슈팅 문서 삭제 시작 =====");
+		log.info(requestDTO.toString());
 		//로그인 확인
 		authentication.checkLogin(request,requestDTO);
 		//pk 설정

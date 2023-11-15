@@ -51,7 +51,9 @@ dependencies {
 	//redis-세션 의존성
 	implementation 'org.springframework.session:spring-session-data-redis'
 	implementation 'org.springframework.session:spring-session-core'
-
+	//캐싱
+	implementation 'org.springframework.boot:spring-boot-starter-cache'
+	implementation group: 'redis.clients', name: 'jedis', version: '3.3.0'
 //	implementation group: 'org.bgee.log4jdbc-log4j2', name:'log4jdbc-log4j2-jdbc4.1', version: '1.16'
 }
 

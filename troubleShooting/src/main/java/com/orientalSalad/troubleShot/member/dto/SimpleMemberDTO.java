@@ -1,5 +1,7 @@
 package com.orientalSalad.troubleShot.member.dto;
 
+import java.io.Serializable;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,7 +16,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @Builder
 @ToString
-public class SimpleMemberDTO{
+public class SimpleMemberDTO implements Serializable {
 	@Schema(description = "유저 pk")
 	private long seq;
 	@Schema(description = "이메일",hidden = true)
