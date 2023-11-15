@@ -1,6 +1,6 @@
 "use client";
 
-import { postAnswerLike, putAnswer } from "@/api/trouble";
+import { postAnswerLike, putAnswer, putSelectAnswer } from "@/api/trouble";
 import CommentItem from "@/components/CommentItem";
 import CreateComment from "@/components/CreateComment";
 import { useLoginStore } from "@/stores/useLoginStore";
@@ -14,8 +14,18 @@ import { MdComment } from "react-icons/md";
 import { toast } from "react-toastify";
 import BoardMenu from "./BoardMenu";
 import UiwEditor from "@/components/Create/UiwEditor";
-
-export default function AnswerPost({ answer, troubleSeq }: { answer: Answer; troubleSeq: number }) {
+import { checkWriterImg, checkWriterName } from "@/utils/nullWriter";
+import { GiPin } from "react-icons/gi";
+import Link from "next/link";
+export default function AnswerPost({
+  answer,
+  troubleSeq,
+  boardWriterSeq,
+}: {
+  answer: Answer;
+  troubleSeq: number;
+  boardWriterSeq: number | null;
+}) {
   const [showCreateAnswers, setShowCreateAnswer] = useState(false);
   const [showComments, setShowComments] = useState(false);
   const [showUpdate, setShowUpdate] = useState(false);
@@ -49,39 +59,69 @@ export default function AnswerPost({ answer, troubleSeq }: { answer: Answer; tro
       toast.error("수정에 실패했습니다");
     }
   };
-
+  const onSelectAnswer = async () => {
+    if (window.confirm("채택 후에는 취소가 불가능합니다. 정말 채택하시겠습니까?")) {
+      try {
+        const res = await putSelectAnswer(user!.member.seq, troubleSeq, answer.seq);
+        console.log(res);
+        toast.success("답변이 채택되었습니다");
+        queryClient.invalidateQueries({ queryKey: ["detail"], exact: true });
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  };
   return (
     <div>
       {answer && (
         <>
           <div className="flex-1 bg-white rounded-lg shadow-md  mt-5">
-            <div className="bg-slate-200 rounded-t-md px-5 pt-5">
+            <div className={`${answer.selected ? "bg-softmain" : "bg-slate-200"} rounded-t-md px-5 pt-5`}>
+              {answer.selected && (
+                <div className="flex items-center gap-2 text-sub font-semibold">
+                  <div>
+                    <GiPin />
+                  </div>
+                  <p>채택된 답변입니다</p>
+                </div>
+              )}
               <div className="flex items-center">
-                <div className="w-full line-clamp-1 text-xl font-semibold mt-5">
+                <div className="flex-1 line-clamp-1 text-xl font-semibold mt-5">
                   <span className="text-2xl text-amber-600 me-2"> Answer </span> {answer.title}
                 </div>
-                <div className="text-2xl">
-                  {user?.member.seq === answer.writer.seq && (
-                    <BoardMenu
-                      userSeq={user.member.seq}
-                      troubleSeq={troubleSeq}
-                      answerSeq={answer.seq}
-                      setShowUpdate={setShowUpdate}
-                    />
-                  )}
+                <div className="flex flex-col gap-2">
+                  <div className="text-2xl flex justify-center">
+                    {answer.writer && user?.member.seq === answer.writer.seq && (
+                      <BoardMenu
+                        userSeq={user.member.seq}
+                        troubleSeq={troubleSeq}
+                        answerSeq={answer.seq}
+                        setShowUpdate={setShowUpdate}
+                      />
+                    )}
+                  </div>
+                  {boardWriterSeq === user?.member.seq &&
+                    (!answer.selected ? (
+                      <button
+                        className="text-lg font-semibold py-1 px-3 rounded-full shadow-md bg-main"
+                        onClick={onSelectAnswer}
+                      >
+                        채택하기
+                      </button>
+                    ) : (
+                      <button disabled className="text-lg font-semibold py-1 px-3 rounded-full shadow-md bg-silver">
+                        채택된 글
+                      </button>
+                    ))}
                 </div>
               </div>
-              <div className="flex gap-2 items-center mt-8 border-b-2 pb-5">
-                <img
-                  src={answer!.writer.profileImg}
-                  className="rounded-full shadow-md w-12 h-12"
-                  // height={40}
-                  // width={40}
-                  alt=""
-                />
-                <p className="font-semibold text-lg">{answer.writer.nickname}</p>
-                <p className="text-sm">{changeKoTime(answer.createTime)}</p>
-              </div>
+              <Link href={answer.writer ? `/mypage/${answer.writer.seq}` : ""}>
+                <div className="flex gap-2 items-center mt-8 border-b-2 pb-5">
+                  <img src={checkWriterImg(answer.writer)} className="rounded-full shadow-md w-12 h-12" alt="" />
+                  <p className="font-semibold text-lg">{checkWriterName(answer.writer)}</p>
+                  <p className="text-sm">{changeKoTime(answer.createTime)}</p>
+                </div>
+              </Link>
             </div>
             <div className="mt-12 px-5">
               {showUpdate ? (

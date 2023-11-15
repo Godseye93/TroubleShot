@@ -95,7 +95,10 @@ export type ReqTags = {
   userSeq: number;
   count: number;
 };
-
+export interface UserTab {
+  nickname: string | null;
+  seq: number | null;
+}
 export interface EditReq {
   userSeq: number;
   reqBody: {

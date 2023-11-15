@@ -1,7 +1,7 @@
 "use client";
 import { BsBookmarkStar, BsBookmarkStarFill } from "react-icons/bs";
 import IconBox from "./IconBox";
-import { GetTroubleList, TroubleShootingBoard } from "@/types/TroubleType";
+import { SearchParams, TroubleShootingBoard } from "@/types/TroubleType";
 import { removeHtmlAndMarkdownTags } from "@/utils/removeHtmlAndMarkdownTags";
 import { getImageLink } from "@/utils/getImageLink";
 import Tagbox from "./TagBox";
@@ -9,8 +9,9 @@ import { getTimeAgo } from "@/utils/getTimeAgo";
 import { useLoginStore } from "@/stores/useLoginStore";
 import { postTroubleFavorite } from "@/api/trouble";
 import { toast } from "react-toastify";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
+import { checkWriterImg, checkWriterName } from "@/utils/nullWriter";
 // interface SetQueryType {
 //   pages: GetTroubleList[];
 //   // 다른 필드들도 필요에 따라 추가
@@ -26,7 +27,7 @@ export default function BoardItem({
   board: TroubleShootingBoard;
   last: number;
   idx: number;
-  queryKey: string;
+  queryKey: [string, SearchParams?];
   nowUrl: string;
 }) {
   const imgList = getImageLink(board.context);
@@ -63,7 +64,7 @@ export default function BoardItem({
   //     queryClient.invalidateQueries(["boards"]);
   //   },
   // });
-
+  // console.log(board.);
   const onBookmark = async () => {
     if (!user) return toast.error("로그인이 필요합니다");
     try {
@@ -71,7 +72,7 @@ export default function BoardItem({
       if (!board.favorite) toast.success("북마크에 저장되었습니다");
       else if (board.favorite) toast.success("북마크에서 제거되었습니다");
       await queryClient.invalidateQueries({
-        queryKey: [queryKey],
+        queryKey: queryKey,
         exact: true,
       });
 
@@ -93,15 +94,17 @@ export default function BoardItem({
     }
   };
   return (
-    <div className={`${idx !== last && "border-b-2"} py-4 mt-2 w-full flex justify-center px-4`}>
+    <div className={"border-b-2 py-4 mt-2 w-full flex justify-center px-4"}>
       {/* 상단바 */}
       <div className="flex-1">
         <div className="flex justify-between items-center">
-          <div className="flex items-center">
-            <img src={board.writer.profileImg} className="rounded-full w-10 h-10 shadow-md" />
-            <p className="mx-2 font-semibold">{board.writer.nickname}</p>
-            <p className="text-xs">{getTimeAgo(board.createTime)}</p>
-          </div>
+          <Link href={board.writer ? `/mypage/${board.writer.seq}` : ""}>
+            <div className="flex items-center">
+              <img src={checkWriterImg(board.writer)} className="rounded-full w-10 h-10 shadow-md" />
+              <p className="mx-2 font-semibold">{checkWriterName(board.writer)}</p>
+              <p className="text-xs">{getTimeAgo(board.createTime)}</p>
+            </div>
+          </Link>
           <div
             className="text-center me-2"
             onClick={() => {
@@ -123,7 +126,7 @@ export default function BoardItem({
         {/* 중단 */}
         <Link href={`/${nowUrl + "/" + board.seq}`}>
           <div className=" hover:bg-slate-100 rounded-md duration-300 transition-all">
-            <div className="text-lg font-semibold px-1">{board.title}</div>
+            <div className="text-lg font-semibold px-1 my-2">{board.title}</div>
             <div className="flex items-center justify-between ">
               <div
                 className={`text-sm text-start mt-2 h-full px-1 max-w-[60vw]   ${
@@ -138,19 +141,22 @@ export default function BoardItem({
                 </div>
               )}
             </div>
-            {board.tags.length > 0 && <Tagbox tags={board.tags} />}
+            <div className="mt-5">{board.tags.length > 0 && <Tagbox tags={board.tags} />}</div>
           </div>
         </Link>
-        <div className="mt-3 text-lg">
-          <IconBox
-            queryKey={queryKey}
-            m={"me-1"}
-            comments={board.replyCount}
-            likes={board.likeCount}
-            views={board.viewCount}
-            isLike={board.loginLike}
-            troubleSeq={board.seq}
-          />
+        <div className="mt-3 text-lg flex justify-between gap-2  items-center">
+          <div className="flex-1">
+            <IconBox
+              queryKey={queryKey}
+              m={"me-1"}
+              comments={board.replyCount}
+              likes={board.likeCount}
+              views={board.viewCount}
+              isLike={board.loginLike}
+              troubleSeq={board.seq}
+            />
+          </div>
+          <p className="font-semibold inline-block">답변 수 {board.answerCount}</p>
         </div>
       </div>
     </div>
