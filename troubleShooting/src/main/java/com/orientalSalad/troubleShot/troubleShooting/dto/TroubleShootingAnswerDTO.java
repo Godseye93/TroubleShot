@@ -58,6 +58,6 @@ public class TroubleShootingAnswerDTO extends BaseDTO {
 
 	@Override
 	public String toString(){
-		return this.seq+" title: "+this.title+" context: "+context+" creatTime : "+createTime+" like count : "+likeCount;
+		return this.seq+" title: "+this.title+" context: "+context+" creatTime : "+createTime+" like count : "+likeCount+" trouble seq : "+troubleSeq;
 	}
 }
