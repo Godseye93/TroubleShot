@@ -80,7 +80,7 @@ public class TroubleShootingService {
 	@CachePut(value = "troubleshooting", key = "#requestTroubleShootingDTO.getTroubleShooting.seq")
 	public boolean updateTroubleShooting(RequestTroubleShootingDTO requestTroubleShootingDTO) throws Exception{
 		//작성자와 로그인 유저 확인
-		if(requestTroubleShootingDTO.getLoginSeq().equals(requestTroubleShootingDTO.getTroubleShooting().getWriter().getSeq())){
+		if(!requestTroubleShootingDTO.getLoginSeq().equals(requestTroubleShootingDTO.getTroubleShooting().getWriter().getSeq())){
 			throw new Exception("작성자와 로그인유저가 다릅니다.");
 		}
 
@@ -100,7 +100,7 @@ public class TroubleShootingService {
 			= this.findTroubleShootingBySeq(requestTroubleShootingDTO.getTroubleShooting().getSeq(),
 			requestTroubleShootingDTO);
 		//작성자와 로그인 유저 확인
-		if(requestTroubleShootingDTO.getLoginSeq().equals(troubleShootingDTO.getWriter().getSeq())){
+		if(!requestTroubleShootingDTO.getLoginSeq().equals(troubleShootingDTO.getWriter().getSeq())){
 			throw new Exception("작성자와 로그인유저가 다릅니다.");
 		}
 
@@ -118,7 +118,7 @@ public class TroubleShootingService {
 		//작성자와 로그인 유저 확인
 		long writerSeq = requestTroubleShootingReplyDTO.getTroubleShootingReply().getWriter().getSeq();
 
-		if(requestTroubleShootingReplyDTO.getLoginSeq().equals(writerSeq)){
+		if(!requestTroubleShootingReplyDTO.getLoginSeq().equals(writerSeq)){
 			throw new Exception("작성자와 로그인유저가 다릅니다.");
 		}
 
@@ -132,7 +132,7 @@ public class TroubleShootingService {
 	public boolean updateTroubleShooingReply(RequestTroubleShootingReplyDTO requestTroubleShootingReplyDTO) throws Exception {
 		//작성자와 로그인 유저 확인
 		long writerSeq = requestTroubleShootingReplyDTO.getTroubleShootingReply().getWriter().getSeq();
-		if(requestTroubleShootingReplyDTO.getLoginSeq().equals(writerSeq)){
+		if(!requestTroubleShootingReplyDTO.getLoginSeq().equals(writerSeq)){
 			throw new Exception("작성자와 로그인유저가 다릅니다.");
 		}
 
@@ -159,7 +159,7 @@ public class TroubleShootingService {
 
 		//작성자와 로그인 유저 확인
 
-		if(requestTroubleShootingReplyDTO.getLoginSeq().equals(replyEntity.getWriterSeq())){
+		if(!requestTroubleShootingReplyDTO.getLoginSeq().equals(replyEntity.getWriterSeq())){
 			throw new Exception("작성자와 로그인유저가 다릅니다.");
 		}
 

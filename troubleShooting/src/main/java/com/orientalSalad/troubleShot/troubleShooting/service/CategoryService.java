@@ -78,7 +78,7 @@ public class CategoryService {
 		return true;
 	}
 	public boolean updateCategory(RequestCategoryDTO requestCategoryDTO) throws Exception{
-		if(requestCategoryDTO.getCategory().getUserSeq() != requestCategoryDTO.getLoginSeq()){
+		if(!requestCategoryDTO.getCategory().getUserSeq().equals(requestCategoryDTO.getLoginSeq())){
 			throw new Exception("로그인 유저와 카테고리 작성자가 다릅니다.");
 		}
 
@@ -95,7 +95,7 @@ public class CategoryService {
 		return true;
 	}
 	public boolean deleteCategory(RequestCategoryDTO requestCategoryDTO) throws Exception {
-		if(requestCategoryDTO.getCategory().getUserSeq() != requestCategoryDTO.getLoginSeq()){
+		if(!requestCategoryDTO.getCategory().getUserSeq().equals(requestCategoryDTO.getLoginSeq())){
 			throw new Exception("로그인 유저와 카테고리 작성자가 다릅니다.");
 		}
 

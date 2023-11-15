@@ -48,7 +48,7 @@ public class TroubleShootingAnswerService {
 			= answerRepository.findBySeq(requestTroubleShootingAnswerDTO.getTroubleShootingAnswer().getSeq());
 
 		//작성자와 로그인 유저 확인
-		if(requestTroubleShootingAnswerDTO.getLoginSeq().equals(answerEntity.getWriterSeq())){
+		if(!requestTroubleShootingAnswerDTO.getLoginSeq().equals(answerEntity.getWriterSeq())){
 			throw new Exception("작성자와 로그인유저가 다릅니다.");
 		}
 
@@ -63,7 +63,7 @@ public class TroubleShootingAnswerService {
 			= answerRepository.findBySeq(requestTroubleShootingAnswerDTO.getTroubleShootingAnswer().getSeq());
 
 		//작성자와 로그인 유저 확인
-		if(requestTroubleShootingAnswerDTO.getLoginSeq().equals(answerEntity.getWriterSeq())){
+		if(!requestTroubleShootingAnswerDTO.getLoginSeq().equals(answerEntity.getWriterSeq())){
 			throw new Exception("작성자와 로그인유저가 다릅니다.");
 		}
 
@@ -85,7 +85,7 @@ public class TroubleShootingAnswerService {
 			= answerReplyRepository.findBySeq(requestTroubleShootingAnswerReplyDTO.getTroubleShootingAnswerReply().getSeq());
 
 			//작성자와 로그인 유저 확인
-		if(requestTroubleShootingAnswerReplyDTO.getLoginSeq().equals(answerReplyEntity.getWriterSeq())){
+		if(!requestTroubleShootingAnswerReplyDTO.getLoginSeq().equals(answerReplyEntity.getWriterSeq())){
 			throw new Exception("작성자와 로그인유저가 다릅니다.");
 		}
 
@@ -102,7 +102,7 @@ public class TroubleShootingAnswerService {
 			= answerReplyRepository.findBySeq(requestTroubleShootingAnswerReplyDTO.getTroubleShootingAnswerReply().getSeq());
 
 		//작성자와 로그인 유저 확인
-		if(requestTroubleShootingAnswerReplyDTO.getLoginSeq().equals(answerReplyEntity.getWriterSeq())){
+		if(!requestTroubleShootingAnswerReplyDTO.getLoginSeq().equals(answerReplyEntity.getWriterSeq())){
 			throw new Exception("작성자와 로그인유저가 다릅니다.");
 		}
 
