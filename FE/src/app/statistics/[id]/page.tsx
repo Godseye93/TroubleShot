@@ -37,7 +37,6 @@ export default function Page({ params }: Props) {
     queryKey: ["getMyQuestionAndAnswer", Number(params.id)],
     queryFn: () => getMyQuestionAndAnswer(Number(params.id)),
   });
-
   return (
     <main className="flex flex-col items-center justify-center gap-10">
       <div className=" flex flex-col  shadow-md bg-white rounded-2xl p-5  w-[1200px] h-[550px]">
@@ -86,12 +85,16 @@ export default function Page({ params }: Props) {
                 <div style={{ width: 200, height: 200 }}>
                   {data ? (
                     <CircularProgressbar
-                      value={Math.round(
-                        (data?.data.solvedCount / (data?.data.notSolvedCount + data?.data.solvedCount)) * 100
-                      )}
-                      text={`${Math.round(
-                        (data?.data.solvedCount / (data?.data.notSolvedCount + data?.data.solvedCount)) * 100
-                      )}%`}
+                      value={
+                        Math.round(
+                          (data?.data.solvedCount / (data?.data.notSolvedCount + data?.data.solvedCount)) * 100
+                        ) || 0
+                      }
+                      text={`${
+                        Math.round(
+                          (data?.data.solvedCount / (data?.data.notSolvedCount + data?.data.solvedCount)) * 100
+                        ) || 0
+                      }%`}
                       styles={buildStyles({
                         textSize: "25px",
                       })}
@@ -163,7 +166,7 @@ export default function Page({ params }: Props) {
               <p>질문 수 </p>
               <ProgressBar
                 completed={data2?.data.troubleCount.toString() || "0"}
-                maxCompleted={Math.max(data2?.data.troubleCount, data2?.data.answerCount) * 1.2}
+                maxCompleted={Math.max(data2?.data.troubleCount, data2?.data.answerCount) * 1.2 || 10}
                 width="600px"
                 height="20px"
                 bgColor="#41dc46"
@@ -174,7 +177,7 @@ export default function Page({ params }: Props) {
               <p>답변 수 </p>
               <ProgressBar
                 completed={data2?.data.answerCount.toString() || "0"}
-                maxCompleted={Math.max(data2?.data.troubleCount, data2?.data.answerCount) * 1.2}
+                maxCompleted={Math.max(data2?.data.troubleCount, data2?.data.answerCount) * 1.2 || 10}
                 width="600px"
                 height="20px"
                 bgColor="#41a8dc"
@@ -195,8 +198,8 @@ export default function Page({ params }: Props) {
             >
               {data2 && (
                 <CircularProgressbar
-                  value={Math.round(data2?.data.selectedRate)}
-                  text={`${Math.round(data2?.data.selectedRate)}%`}
+                  value={Math.round(data2?.data.selectedRate) || 0}
+                  text={`${Math.round(data2?.data.selectedRate) || 0}%`}
                   circleRatio={0.75} /* Make the circle only 0.75 of the full diameter */
                   styles={{
                     trail: {
