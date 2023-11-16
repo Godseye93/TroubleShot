@@ -1,7 +1,6 @@
 "use client";
 import { getMostTags, getTrouble } from "@/api/trouble";
 import CardContentL from "@/components/CardContentL";
-import Searchbar from "@/components/Searchbar/Searchbar";
 import { useLoginStore } from "@/stores/useLoginStore";
 import { SearchParams } from "@/types/TroubleType";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -11,9 +10,15 @@ import axios from "axios";
 import { getOneWeekAgoDate, getToday } from "@/utils/getDate";
 import BoardItem from "@/components/BoardItem";
 import Link from "next/link";
+import CardContentLSkeleton from "@/components/Skeletons/CardContentLSkeleton";
+import SearchbarSkeleton from "@/components/Skeletons/SearchbarSkeleton";
+import dynamic from "next/dynamic";
 axios.defaults.paramsSerializer = (params) => {
   return qs.stringify(params);
 };
+const Searchbar = dynamic(() => import("@/components/Searchbar/Searchbar"), {
+  loading: () => <SearchbarSkeleton />,
+});
 
 export default function CommunityContents() {
   const [mounted, setMounted] = useState<boolean>(false);
@@ -36,7 +41,7 @@ export default function CommunityContents() {
     enabled: !!user,
   });
 
-  const { data: contents1 } = useQuery({
+  const { data: contents1, isLoading: loading1 } = useQuery({
     queryKey: ["contents1"],
     queryFn: async () => {
       if (tags && tags?.tagList.length > 1) {
@@ -46,7 +51,7 @@ export default function CommunityContents() {
     },
     enabled: Boolean(tags),
   });
-  const { data: contents2 } = useQuery({
+  const { data: contents2, isLoading: loading2 } = useQuery({
     queryKey: ["contents2"],
     queryFn: async () => {
       if (tags && tags?.tagList.length > 1) {
@@ -73,42 +78,53 @@ export default function CommunityContents() {
   return (
     <>
       <Searchbar setPropsOptions={setOptions} queryKey="boards" isCommunity={true} baseUrl="community/posts" />
-      {mounted && user && tags && tags.tagList.length > 1 && (
-        <div className="mt-2">
-          <p className="text-xl font-semibold my-2">자주 이용한 태그</p>
-
-          <div className="grid grid-cols-2 gap-2">
-            <>
-              <CardContentL
-                queryKey={["contents1"]}
-                keyword={tags.tagList[0]}
-                contents={contents1?.troubleShootingList}
-              />
-              <CardContentL
-                queryKey={["contents2"]}
-                keyword={tags.tagList[1]}
-                contents={contents2?.troubleShootingList}
-              />
-            </>
+      {mounted &&
+        user &&
+        tags &&
+        tags.tagList.length > 1 &&
+        (loading1 && loading2 ? (
+          <div className="flex gap-2 mt-2">
+            <CardContentLSkeleton />
+            <CardContentLSkeleton />
           </div>
-        </div>
-      )}
+        ) : (
+          <div className="mt-2">
+            <p className="text-xl font-semibold my-2">자주 이용한 태그</p>
+
+            <div className="grid grid-cols-2 gap-2">
+              <>
+                <CardContentL
+                  queryKey={["contents1"]}
+                  keyword={tags.tagList[0]}
+                  contents={contents1?.troubleShootingList}
+                />
+                <CardContentL
+                  queryKey={["contents2"]}
+                  keyword={tags.tagList[1]}
+                  contents={contents2?.troubleShootingList}
+                />
+              </>
+            </div>
+          </div>
+        ))}
       <p className="text-xl font-semibold my-2">🔥실시간 인기글 Top 10</p>
       <div className="bg-white rounded-lg shadow-md px-2 mt-2 flex-col items-center">
         {hotBoard &&
           hotBoard.troubleShootingList.map((content, idx) => (
-            <BoardItem
-              nowUrl="community/posts"
-              key={idx}
-              board={content}
-              idx={idx}
-              last={hotBoard.troubleShootingList.length - 1}
-              queryKey={["hotBoard"]}
-            />
+            <>
+              <BoardItem
+                nowUrl="community/posts"
+                key={idx}
+                board={content}
+                idx={idx}
+                last={hotBoard.troubleShootingList.length - 1}
+                queryKey={["hotBoard"]}
+              />
+              <Link href={"/community/posts"}>
+                <div className="flex justify-center items-center text-xl font-semibold h-20 border-t-2">전체보기</div>
+              </Link>
+            </>
           ))}
-        <Link href={"/community/posts"}>
-          <div className="flex justify-center items-center text-xl font-semibold h-20 border-t-2">전체보기</div>
-        </Link>
       </div>
     </>
   );
