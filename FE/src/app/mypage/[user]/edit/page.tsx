@@ -104,7 +104,7 @@ export default function page() {
           </div>
           <div className="w-full">
             <div className="relative fcc ">
-              <img src={user?.member.profileImg} alt="trosProfileImg" className="my-2 " />
+              <img src={user?.member.profileImg} alt="trosProfileImg" className="my-2 max-w-[20rem]" />
               <span
                 className="absolute bottom-3 right-10 bg-main p-4 rounded-full cursor-pointer"
                 onClick={showFileUploaderModal}
