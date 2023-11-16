@@ -37,17 +37,17 @@ export default function FileUploader({ handle }: { handle: Handle }) {
       //s3 관련 설정들
 
       const s3client = new S3Client({
-        region: process.env.NEXT_PUBLIC_BUCKEYT_REGION,
+        region: "ap-northeast-2",
         credentials: {
-          accessKeyId: process.env.NEXT_PUBLIC_ACCESS_KEY ?? "",
-          secretAccessKey: process.env.NEXT_PUBLIC_SECRET_KEY ?? "",
+          accessKeyId: "AKIA3UO2YUWUS67CF7UG",
+          secretAccessKey: "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",
         },
       });
 
       //앞서 생성한
       const params = {
         // ACL: "public-read",
-        Bucket: process.env.NEXT_PUBLIC_BUCKEYT_NAME!,
+        Bucket: "k9d205-troubleshot",
         Key: `trouble/${name}.${fileType}`,
         Body: blobImg,
       };
@@ -55,7 +55,7 @@ export default function FileUploader({ handle }: { handle: Handle }) {
       //이미지 업로드
       //업로드 된 이미지 url을 가져오기
       await s3client.send(new PutObjectCommand(params));
-      const url_key = process.env.NEXT_PUBLIC_BUCKEYT_URL + `trouble/${name}.${fileType}`;
+      const url_key = "https://k9d205-troubleshot.s3.ap-northeast-2.amazonaws.com/" + `trouble/${name}.${fileType}`;
 
       console.log(url_key);
 
