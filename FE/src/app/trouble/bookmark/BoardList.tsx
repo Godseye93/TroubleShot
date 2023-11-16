@@ -7,7 +7,6 @@ import React, { useEffect, useState } from "react";
 import useInfiniteList from "@/hooks/useInfiniteList";
 import { useSearchParams } from "next/navigation";
 export default function BoardList() {
-  const { user } = useLoginStore();
   const searchParams = useSearchParams();
   const keyword = searchParams.get("keyword");
   const solved = searchParams.get("solved");
@@ -35,7 +34,6 @@ export default function BoardList() {
       ...(endTime && { endTime }),
       ...(order && { order }),
     });
-    console.log(options);
   }, [searchParams.toString()]);
 
   const { data } = useInfiniteList({ options: options, queryKey: "bookmark" });

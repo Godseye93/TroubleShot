@@ -3,7 +3,7 @@ import ScrollTop from "@/components/ScrollTop";
 import { useLoginStore } from "@/stores/useLoginStore";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 interface Props {
   children: React.ReactNode;
@@ -23,10 +23,13 @@ export default function Layout({ children }: Props) {
   useEffect(() => {
     if (!user) router.push("/login");
   });
-
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  });
   return (
     <>
-      {user && (
+      {mounted && user && (
         <>
           <div className="h-12"></div>
           <div className="px-2 flex justify-between w-full">

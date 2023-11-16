@@ -10,9 +10,9 @@ import {
   ResponseCategory,
   SearchParams,
 } from "@/types/TroubleType";
-import { troubleApiInstance } from "./troubleApi";
 import qs from "qs";
 import axios from "axios";
+import { troubleApiInstance } from "./troubleApi";
 axios.defaults.paramsSerializer = (params) => {
   return qs.stringify(params);
 };

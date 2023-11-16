@@ -75,7 +75,6 @@ export default function useInfiniteList({ options, queryKey, category, userSeq }
       if (!fetching && scrollHeight - scrollTop <= clientHeight * 1.2) {
         fetching = true;
         if (hasNextPage) {
-          console.log(data);
           await fetchNextPage();
         }
         fetching = false;
