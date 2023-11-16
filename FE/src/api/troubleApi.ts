@@ -1,7 +1,9 @@
 import axios from "axios";
 
 function troubleApiInstance(path?: string) {
-  const baseURL = path ? `http://orientalsalad.kro.kr:8102${path}` : "http://orientalsalad.kro.kr:8102";
+  const baseURL = path
+    ? `${process.env.NEXT_PUBLIC_BASE_URL_TROUBLE}${path}`
+    : process.env.NEXT_PUBLIC_BASE_URL_TROUBLE;
   const instance = axios.create({
     withCredentials: true,
     baseURL: baseURL,
