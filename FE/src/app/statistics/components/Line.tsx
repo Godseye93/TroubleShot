@@ -22,7 +22,7 @@ export function getLastDays(count: number): string[] {
 }
 
 const getTopTagChange = (userSeq: number) => {
-  const url = `https://orientalsalad.kro.kr:8101/members/${userSeq}/tags/most-used-history?userSeq=${userSeq}&day=5&count=5`;
+  const url = `http://orientalsalad.kro.kr:8101/members/${userSeq}/tags/most-used-history?userSeq=${userSeq}&day=5&count=5`;
   return axios.get(url);
 };
 

@@ -18,12 +18,12 @@ interface Props {
   };
 }
 const getSolvedAndUnSolvedCnt = (userSeq: number) => {
-  const url = `https://orientalsalad.kro.kr:8101/members/${userSeq}/trouble-shootings/by-solve`;
+  const url = `http://orientalsalad.kro.kr:8101/members/${userSeq}/trouble-shootings/by-solve`;
   return axios.get(url);
 };
 
 const getMyQuestionAndAnswer = (userSeq: number) => {
-  const url = `https://orientalsalad.kro.kr:8101/members/${userSeq}/statics/count-trouble-and-answer`;
+  const url = `http://orientalsalad.kro.kr:8101/members/${userSeq}/statics/count-trouble-and-answer`;
   return axios.get(url);
 };
 

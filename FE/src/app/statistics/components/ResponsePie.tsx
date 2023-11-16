@@ -8,7 +8,7 @@ interface Props {
 }
 
 const getResponseTag = (userSeq: number) => {
-  const url = `https://orientalsalad.kro.kr:8101/members/${userSeq}/tags/answers`;
+  const url = `http://orientalsalad.kro.kr:8101/members/${userSeq}/tags/answers`;
   return axios.get(url);
 };
 
