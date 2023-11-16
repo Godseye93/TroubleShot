@@ -12,3 +12,5 @@
   - fix our web domain
 - 0.0.6 - 20203.11.16
   - api call URL fix
+- 0.0.7 - 20203.11.16
+  - rollback api call URL fix
