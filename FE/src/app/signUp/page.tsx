@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useRef } from "react";
+import { useRouter } from "next/navigation";
 
 import Link from "next/link";
 import Image from "next/image";
@@ -12,6 +13,7 @@ import { EmailcodeSuccess, CodeCheckSuccess, CodeCheckFail, SubmitFail, SignUpSu
 import { toast } from "react-toastify";
 
 export default function page() {
+  const router = useRouter();
   const [email, setEmail] = useState<string>(""); // 이메일
   const [nickname, setNickname] = useState<string>(""); // 닉네임
   const [password, setPassword] = useState<string>(""); // 비밀번호
@@ -116,6 +118,7 @@ export default function page() {
         if (res === "success") {
           SignUpSuccess();
           setisCodeCorrect(true);
+          router.push("/login");
         }
       } catch (err) {
         SubmitFail();
