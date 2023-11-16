@@ -2,7 +2,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import function1 from "../../../public/function/function1.gif";
-import trous_favicon_white from "/public/logo/trous_favicon_white.png";
+import function2 from "../../../public/function/function2.gif";
 import function3 from "../../../public/function/function3.gif";
 
 export default function FeatureIntro() {
@@ -25,7 +25,7 @@ export default function FeatureIntro() {
   if (content == 1) {
     contentsFile = function1;
   } else if (content == 2) {
-    contentsFile = trous_favicon_white;
+    contentsFile = function2;
   } else if (content == 3) {
     contentsFile = function3;
   }
