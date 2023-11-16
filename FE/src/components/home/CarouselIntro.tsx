@@ -9,6 +9,7 @@ import yerim from "../../../public/carousel/yerim.png";
 import jongryul from "../../../public/carousel/jongryul.jpg";
 import jaehyung from "../../../public/carousel/jaehyung.jpeg";
 import { FaQuoteLeft, FaQuoteRight } from "react-icons/fa";
+import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 
 type SlideTab = 0 | 1 | 2 | 3 | 4 | 5;
 
@@ -108,7 +109,7 @@ export default function CarouselIntro() {
             changeCss("custom-cursor");
           }}
         >
-          전으로
+          <IoIosArrowBack />
         </button>
         <div className=" w-[600vw] h-full flex relative transition-transform duration-500" ref={winRef}>
           {imageList.map((value, index) => (
@@ -139,7 +140,7 @@ export default function CarouselIntro() {
             changeCss("custom-cursor");
           }}
         >
-          다음으로
+          <IoIosArrowForward />
         </button>
       </div>
       <ul className="flex justify-center w-full gap-4 mb-2 list-none">
