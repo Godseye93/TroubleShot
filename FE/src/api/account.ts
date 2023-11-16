@@ -17,9 +17,10 @@ import {
 import { apiInstance } from ".";
 import { AxiosRequestConfig } from "axios";
 import { GetTroubleList, ResponeseSearchMember, SearchMember, SearchParams } from "@/types/TroubleType";
+import { troubleApiInstance } from "./troubleApi";
 
 const api = apiInstance();
-
+const troubleApi = troubleApiInstance();
 // 이메일로 인증번호 요청
 export const emailCert = async (email: string): Promise<EmailCertResponse> => {
   const { data } = await api.post("auth/email/send", email);
@@ -90,7 +91,7 @@ export const getUsedLotTags = async (params: ReqTags): Promise<[]> => {
 // 게이트웨이 되면 코드 수정하기
 export const getBookmarkList = async (params: SearchParams): Promise<GetTroubleList> => {
   const Url = "https://orientalsalad.kro.kr:8102/trouble-shootings";
-  const { data } = await api.get(Url, { params });
+  const { data } = await troubleApi.get("/trouble-shootings", { params });
   return data;
 };
 
@@ -108,6 +109,6 @@ export const putUserInfo = async (params: EditReq) => {
   return data;
 };
 export const getSearchUser = async (params: SearchMember): Promise<ResponeseSearchMember> => {
-  const { data } = await api.put("/members", { params });
+  const { data } = await api.get("/members", { params });
   return data;
 };
