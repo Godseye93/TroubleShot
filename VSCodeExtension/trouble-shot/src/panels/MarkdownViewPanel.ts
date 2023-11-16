@@ -184,7 +184,7 @@ export class MarkdownViewPanel {
               return;
             }
             // Code that should run in response to the hello message command
-            const res = await fetch("https://orientalsalad.kro.kr:8102/gpt/readme-feedback", {
+            const res = await fetch("http://orientalsalad.kro.kr:8102/gpt/readme-feedback", {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",

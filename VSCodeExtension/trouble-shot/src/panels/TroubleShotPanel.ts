@@ -277,7 +277,7 @@ export class TroubleShotPanel {
             } else {
               const sessionId = this._globalState.get<string>("sessionId");
               const res = await fetch(
-                `https://orientalsalad.kro.kr:8102/trouble-shootings/${message.articleInfo.troubleId}/answers`,
+                `http://orientalsalad.kro.kr:8102/trouble-shootings/${message.articleInfo.troubleId}/answers`,
                 {
                   method: "POST",
                   headers: {
@@ -309,7 +309,7 @@ export class TroubleShotPanel {
             }
             return;
           case "onLogin":
-            fetch("https://orientalsalad.kro.kr:8101/login/login", {
+            fetch("http://orientalsalad.kro.kr:8101/login/login", {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
@@ -356,7 +356,7 @@ export class TroubleShotPanel {
                 tags: [],
               },
             };
-            fetch("https://orientalsalad.kro.kr:8102/trouble-shootings", {
+            fetch("http://orientalsalad.kro.kr:8102/trouble-shootings", {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
@@ -415,7 +415,7 @@ export class TroubleShotPanel {
             } else {
               const context = MyTroubleListProviderLogin.getTroubleContent(message.troubleId);
               if (!context) return;
-              const res = await fetch("https://orientalsalad.kro.kr:8102/gpt/error-feedback", {
+              const res = await fetch("http://orientalsalad.kro.kr:8102/gpt/error-feedback", {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
