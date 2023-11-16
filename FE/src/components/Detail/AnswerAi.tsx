@@ -45,7 +45,7 @@ export default function AnswerAi({ userSeq, context }: { userSeq: number; contex
           </div>
           <p>
             AI에게 답변을 요청해 보세요!{" "}
-            {data && <span className="text-sm font-semibold">남은횟수 : {data.count} / 10</span>}
+            {data && <span className="text-sm font-semibold">오늘 남은 횟수 : {data.count} / 10</span>}
           </p>
         </div>
         <button
