@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.orientalSalad.troubleShot.global.constant.Pagination;
 import com.orientalSalad.troubleShot.global.dto.RequestDTO;
@@ -38,6 +40,7 @@ import lombok.extern.slf4j.Slf4j;
 public class CategoryService {
 	private final CategoryRepository categoryRepository;
 	private final ObjectConverter<CategoryDTO,CategoryEntity> categoryConverter;
+	private final TroubleShootingMapper troubleShootingMapper;
 
 	public List<CategoryDTO> findUserCategoryList(Long userSeq){
 		List<CategoryEntity> categoryEntityList = categoryRepository.findByUserSeq(userSeq);
@@ -77,6 +80,7 @@ public class CategoryService {
 
 		return true;
 	}
+
 	public boolean updateCategory(RequestCategoryDTO requestCategoryDTO) throws Exception{
 		if(!requestCategoryDTO.getCategory().getUserSeq().equals(requestCategoryDTO.getLoginSeq())){
 			throw new Exception("로그인 유저와 카테고리 작성자가 다릅니다.");
@@ -87,6 +91,11 @@ public class CategoryService {
 		if(categoryEntity == null){
 			throw new Exception("없는 카테고리 입니다.");
 		}
+
+		log.info("새로운 카테고리 : "+requestCategoryDTO.getCategory().toString());
+		log.info("원래 이름 : "+categoryEntity.getName());
+
+		troubleShootingMapper.updateCategory(requestCategoryDTO.getCategory(),categoryEntity.getName());
 
 		categoryEntity.update(requestCategoryDTO.getCategory());
 

@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.SelectProvider;
 
+import com.orientalSalad.troubleShot.troubleShooting.dto.CategoryDTO;
 import com.orientalSalad.troubleShot.troubleShooting.dto.SearchTroubleShootingDTO;
 import com.orientalSalad.troubleShot.troubleShooting.dto.TroubleShootingAnswerDTO;
 import com.orientalSalad.troubleShot.troubleShooting.dto.TroubleShootingAnswerReplyDTO;
@@ -41,4 +42,8 @@ public interface TroubleShootingMapper {
 	public long countTroubleShootingListByUserSeq(
 		@Param("searchParam") SearchTroubleShootingDTO searchParam,
 		@Param("userSeq") Long userSeq);
+
+	public void updateCategory(
+		@Param("category") CategoryDTO category,
+		@Param("original") String original);
 }

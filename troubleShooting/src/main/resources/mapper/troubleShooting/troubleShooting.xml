@@ -459,5 +459,12 @@
         LIMIT #{searchParam.pageSize, javaType=Integer, jdbcType=INTEGER}
         OFFSET (#{searchParam.pageNo} - 1)* #{searchParam.pageSize, javaType=Integer, jdbcType=INTEGER}
     </select>
-
+    <update id="updateCategory">
+        UPDATE trouble_shooting
+        SET
+            category = #{category.name}
+        WHERE
+            category =  #{original}
+          AND writer_seq =  #{category.userSeq}
+    </update>
 </mapper>
