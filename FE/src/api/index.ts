@@ -1,7 +1,7 @@
 import axios from "axios";
 
 function apiInstance(path?: string) {
-  const baseURL = path ? `${process.env.NEXT_PUBLIC_BASE_URL}${path}` : process.env.NEXT_PUBLIC_BASE_URL;
+  const baseURL = path ? `http://orientalsalad.kro.kr:8101${path}` : "http://orientalsalad.kro.kr:8101";
   const instance = axios.create({
     withCredentials: true,
     baseURL: baseURL,
