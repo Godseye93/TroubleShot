@@ -51,7 +51,6 @@ export const getUserCategoryTrouble = async (params: SearchParams = {}): Promise
 
 export const postTrouble = async (req: RequestTroubleShooting): Promise<DefaultRespense> => {
   const { data } = await api.post("/trouble-shootings", req);
-  console.log(req);
   return data;
 };
 export const postTroubleLike = async (
@@ -304,7 +303,6 @@ export const getCategories = async (userSeq: number): Promise<ResponseCategory> 
 };
 export const putTrouble = async (troubleSeq: number, req: RequestTroubleShooting): Promise<DefaultRespense> => {
   const { data } = await api.put(`/trouble-shootings/${troubleSeq}`, req);
-  console.log(req);
   return data;
 };
 export const deleteTrouble = async (userSeq: number, troubleSeq: number): Promise<DefaultRespense> => {

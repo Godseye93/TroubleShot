@@ -46,7 +46,6 @@ export default function Searchbar({ PropsOptions, isCommunity, baseUrl, queryKey
     });
     setPropsOptions(searchOption);
     router.push(`/${baseUrl}?${params.toString()}`);
-    console.log(`/${baseUrl}?${params.toString()}`);
   };
 
   return (

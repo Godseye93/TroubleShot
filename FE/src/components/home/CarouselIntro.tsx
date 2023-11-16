@@ -93,7 +93,6 @@ export default function CarouselIntro() {
 
   useEffect(() => {
     winRef.current.style.transform = `translateX(-${(curSlideTab * 100) / 6}%)`;
-    console.log(curSlideTab);
   }, [curSlideTab]);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
