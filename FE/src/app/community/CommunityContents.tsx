@@ -120,11 +120,11 @@ export default function CommunityContents() {
                 last={hotBoard.troubleShootingList.length - 1}
                 queryKey={["hotBoard"]}
               />
-              <Link href={"/community/posts"}>
-                <div className="flex justify-center items-center text-xl font-semibold h-20 border-t-2">전체보기</div>
-              </Link>
             </>
           ))}
+        <Link href={"/community/posts"}>
+          <div className="flex justify-center items-center text-xl font-semibold h-20 border-t-2">전체보기</div>
+        </Link>
       </div>
     </>
   );
