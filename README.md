@@ -120,6 +120,22 @@
 
 ### VSCode 확장
 
+#### 에러 로그 검출
+
+![에러로그검출](https://github.com/Jeongseulho/sh-snippets/assets/110578739/d184b7ed-6b8b-4844-87d6-be2d0d85b46b)
+
+#### 트러블 슈팅 작성
+
+![트러블슈팅만들기](https://github.com/Jeongseulho/sh-snippets/assets/110578739/ef4c77bc-54da-47fa-b7c7-771e942edabc)
+
+#### AI 솔루션 추천
+
+![AI솔루션추천](https://github.com/Jeongseulho/sh-snippets/assets/110578739/56c21894-2c52-497f-aca9-8c64c72e1450)
+
+#### AI 트러블 슈팅 문서 피드백
+
+![피드백](https://github.com/Jeongseulho/sh-snippets/assets/110578739/498e5ee4-5c2c-43f2-8d30-ed641a95c514)
+
 ### IntelliJ 확장
 
 ### 웹
