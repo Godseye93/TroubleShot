@@ -26,6 +26,9 @@ public class CorsConfig {
 		config.addAllowedOrigin("http://orientalsalad.kro.kr:3000");
 		config.addAllowedOrigin("http://orientalsalad.kro.kr:80");
 
+		config.addAllowedOrigin("https://orientalsalad.kro.kr");
+		config.addAllowedOrigin("http://orientalsalad.kro.kr");
+
 		config.addAllowedHeader("*");
 		config.addAllowedMethod("*");
 
