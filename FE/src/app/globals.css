@@ -197,6 +197,11 @@ height: 10px;
 
 }
 
+.carousel {
+  overflow: hidden;
+  width: 100%
+}
+
 /* #carouselIntor:hover {
   cursor: none
 } */

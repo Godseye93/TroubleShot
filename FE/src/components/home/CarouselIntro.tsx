@@ -44,6 +44,7 @@ export default function CarouselIntro() {
   };
 
   const [value, setValue] = useState(0);
+  useEffect(() => {}, [value]);
 
   const testNext = () => {
     setValue((prev) => {
@@ -80,58 +81,15 @@ export default function CarouselIntro() {
   return (
     <div className="w-full h-3/4 flex flex-col justify-center">
       <h1 className="w-full text-3xl font-bold  m-5 ms-10">만든 사람들</h1>
-      <div
-        id="carouselIntor"
-        className="w-[600%] h-3/4 bg-main flex overflow-hidden"
-        onMouseMove={trackCursor}
-        onMouseLeave={hideCursor}
-      >
-        <div className={"flex w-full"} style={{ transform: `-translateX(${value}%)` }}>
-          {imageList.map((item, index) => (
-            <div key={index} className="flex w-1/6">
-              <div
-                className="w-1/6 active:bg-gray-200"
-                onClick={prevHandler}
-                onMouseEnter={() => {
-                  changeCursorText("이전으로");
-                  changeCss("custom-cursor-left");
-                }}
-                onMouseLeave={() => {
-                  changeCursorText("오리엔탈 샐러드");
-                  changeCss("custom-cursor");
-                }}
-              ></div>
-              <div className="w-4/6">
-                <Image className="w-1/6 rounded-lg" src={item.Image} alt={item.text} />
-                <div className="w-1/6 mt-3 text-2xl text-center font-bold">{item.text}</div>
-              </div>
-              <div
-                className="w-1/6 active:bg-gray-200"
-                onClick={nextHandler}
-                onMouseEnter={() => {
-                  changeCursorText("앞으로");
-                  changeCss("custom-cursor-right");
-                }}
-                onMouseLeave={() => {
-                  changeCursorText("오리엔탈 샐러드");
-                  changeCss("custom-cursor");
-                }}
-              ></div>
+      <div className="carousel">
+        <div style={{ width: `${imageList.length}00%`, transform: `translate3d(${index * -containerWidth}px, 0, 0)` }}>
+          {imageList.map((v, i) => (
+            <div key={i}>
+              <Image src={v.Image} alt=""></Image>
             </div>
           ))}
         </div>
       </div>
-      <ul className="flex w-full justify-center gap-4 mb-2 list-none">
-        {imageList.map((v, idx) => (
-          <li
-            key={idx}
-            className={`text-lg ${idx === current ? "opacity-100 font-bold" : "opacity-50"}`}
-            onClick={() => setCurrent(idx)}
-          >
-            {v.name}
-          </li>
-        ))}
-      </ul>
     </div>
   );
 }
@@ -237,3 +195,63 @@ export default function CarouselIntro() {
             </div>
           </div> */
 }
+
+// ----------------
+{
+  /* <div
+id="carouselIntor"
+className="w-full h-3/4 bg-main overflow-hidden relative"
+style={{ transform: `-translateX(${value}%)` }}
+onMouseMove={trackCursor}
+onMouseLeave={hideCursor}
+>
+<div className="flex w-[600%] absolute">
+  {imageList.map((item, index) => (
+    <div key={index} className="flex w-1/6">
+      <div
+        className="w-1/6 active:bg-gray-200"
+        onClick={prevHandler}
+        onMouseEnter={() => {
+          changeCursorText("이전으로");
+          changeCss("custom-cursor-left");
+        }}
+        onMouseLeave={() => {
+          changeCursorText("오리엔탈 샐러드");
+          changeCss("custom-cursor");
+        }}
+      ></div>
+      <div className="w-4/6">
+        <Image className="w-1/6 rounded-lg" src={item.Image} alt={item.text} />
+        <div className="w-1/6 mt-3 text-2xl text-center font-bold">{item.text}</div>
+      </div>
+      <div
+        className="w-1/6 active:bg-gray-200"
+        onClick={testNext}
+        onMouseEnter={() => {
+          changeCursorText("앞으로");
+          changeCss("custom-cursor-right");
+        }}
+        onMouseLeave={() => {
+          changeCursorText("오리엔탈 샐러드");
+          changeCss("custom-cursor");
+        }}
+      ></div>
+    </div>
+  ))}
+</div>
+</div> */
+}
+
+// -------------------------------
+
+// <ul className="flex w-full justify-center gap-4 mb-2 list-none">
+//         {imageList.map((v, idx) => (
+//           <li
+//             key={idx}
+//             className={`text-lg ${idx === current ? "opacity-100 font-bold" : "opacity-50"}`}
+//             onClick={() => setCurrent(idx)}
+//           >
+//             {v.name}
+//           </li>
+//         ))}
+//       </ul>
