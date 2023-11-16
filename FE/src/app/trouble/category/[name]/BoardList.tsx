@@ -8,6 +8,8 @@ import { useSearchParams } from "next/navigation";
 import SearchbarSkeleton from "@/components/Skeletons/SearchbarSkeleton";
 import dynamic from "next/dynamic";
 import BobySkeleton from "@/components/Skeletons/BobySkeleton";
+import Image from "next/image";
+import boxloading from "../../../../../public/boxloading.gif";
 const Searchbar = dynamic(() => import("@/components/Searchbar/Searchbar"), {
   loading: () => <SearchbarSkeleton />,
 });
@@ -42,7 +44,7 @@ export default function BoardList({ name }: { name: string }) {
     });
   }, [searchParams.toString()]);
 
-  const { data, isPending } = useInfiniteList({ options: options, queryKey: "trouble", category: name });
+  const { data, isPending, hasNextPage } = useInfiniteList({ options: options, queryKey: "trouble", category: name });
 
   return (
     <>
@@ -74,6 +76,11 @@ export default function BoardList({ name }: { name: string }) {
           ) : (
             <div className="flex justify-center items-center w-full h-[90vh] text-2xl font-semibold">
               아직 등록된 글이 없어요!
+            </div>
+          )}
+          {hasNextPage && (
+            <div className="flex justify-center items-center">
+              <Image alt="loading..." src={boxloading} width={100} height={100} />
             </div>
           )}
         </div>

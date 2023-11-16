@@ -9,7 +9,7 @@ export default function Footer() {
   return (
     <div
       id="footer"
-      className={`${path === "/" && "hidden"} flex w-full border-t-2 mt-20 bg-white justify-between py-5`}
+      className={`${path === "/" && "hidden"} flex w-full border-t-2 mt-20 bg-white  justify-between py-5`}
     >
       <ul className="w-fit mt-3 ms-3">
         <li>

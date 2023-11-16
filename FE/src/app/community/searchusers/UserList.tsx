@@ -6,7 +6,8 @@ import { BsSearch } from "react-icons/bs";
 import UserItem from "./UserItem";
 import { getSearchUser } from "@/api/account";
 import { useInfiniteQuery } from "@tanstack/react-query";
-
+import Image from "next/image";
+import boxloading from "../../../../public/boxloading.gif";
 export default function UserList() {
   const searchParams = useSearchParams();
   const [nickname, setNickname] = useState<string>(searchParams.get("nickname") ?? "");
@@ -87,6 +88,11 @@ export default function UserList() {
             </React.Fragment>
           ))}
       </main>
+      {hasNextPage && (
+        <div className="flex justify-center items-center">
+          <Image alt="loading..." src={boxloading} width={100} height={100} />
+        </div>
+      )}
     </>
   );
 }
