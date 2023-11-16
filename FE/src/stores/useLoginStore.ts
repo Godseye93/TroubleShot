@@ -3,7 +3,6 @@ import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 
 const StorageKey = "user-info";
-// export let user: ResLogin | undefined;
 
 export const useLoginStore = create(
   persist<LoginStore>(
