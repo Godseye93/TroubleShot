@@ -40,9 +40,9 @@ export default function Rsidebar() {
                   </div>
                   <div className="line-clamp-2 mt-2 text-sm">{content.context}</div>
                   <div className="tagbox">
-                    <div className="flex gap-2 line-clamp-1 tag-scroll overflow-scroll">
+                    <div className="flex tag-scroll overflow-scroll relative">
                       {content.tags.map((tag, idx) => (
-                        <div key={idx} className="bg-silver rounded-lg text-xs shadow-sm text-center p-1 mt-1">
+                        <div key={idx} className="bg-silver rounded-lg  text-xs me-2 shadow-sm text-center p-1 mt-1">
                           {tag}
                         </div>
                       ))}

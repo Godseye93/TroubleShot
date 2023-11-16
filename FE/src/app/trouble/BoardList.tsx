@@ -7,6 +7,7 @@ import useInfiniteList from "@/hooks/useInfiniteList";
 import { useSearchParams } from "next/navigation";
 import dynamic from "next/dynamic";
 import SearchbarSkeleton from "@/components/Skeletons/SearchbarSkeleton";
+// import Searchbar from "@/components/Searchbar/Searchbar";
 
 const Searchbar = dynamic(() => import("@/components/Searchbar/Searchbar"), {
   loading: () => <SearchbarSkeleton />,
