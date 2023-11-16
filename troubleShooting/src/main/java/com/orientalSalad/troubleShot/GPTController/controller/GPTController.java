@@ -3,6 +3,8 @@ package com.orientalSalad.troubleShot.GPTController.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.orientalSalad.troubleShot.GPTController.dto.RequestContextDTO;
 import com.orientalSalad.troubleShot.GPTController.dto.ResponseMessageDTO;
 import com.orientalSalad.troubleShot.GPTController.service.GPTService;
+import com.orientalSalad.troubleShot.global.dto.RequestDTO;
+import com.orientalSalad.troubleShot.global.dto.ResponseGPTCountDTO;
 import com.orientalSalad.troubleShot.global.dto.ResultDTO;
 import com.orientalSalad.troubleShot.global.utill.Authentication;
 
@@ -76,6 +80,24 @@ public class GPTController {
 			.build();
 
 		log.info("====== 에러 코드 조언 끝 =====");
+		return new ResponseEntity<ResultDTO>(resultDTO, HttpStatus.OK);
+	}
+	@Operation(summary = "유저의 남은 GPT 요청 횟수")
+	@GetMapping("/count")
+	public ResponseEntity<?> getCount(@ModelAttribute RequestDTO requestDTO,
+		HttpServletRequest request) throws Exception {
+		log.info("====== 남은 요청 횟수 불러오기 시작 =====");
+
+		int count = GPTService.getCount(requestDTO);
+
+		ResponseGPTCountDTO resultDTO = ResponseGPTCountDTO.builder()
+			.count(count)
+			.success(true)
+			.message("남은 요청 횟수 불러오기를 성공했습니다")
+			.build();
+
+		log.info("====== 남은 요청 횟수 불러오기 끝 =====");
+
 		return new ResponseEntity<ResultDTO>(resultDTO, HttpStatus.OK);
 	}
 }

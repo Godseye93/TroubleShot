@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.orientalSalad.troubleShot.GPTController.dto.RequestContextDTO;
+import com.orientalSalad.troubleShot.global.dto.RequestDTO;
 import com.orientalSalad.troubleShot.global.dto.RequestGPTDTO;
 import com.orientalSalad.troubleShot.global.dto.ResponseGPTDTO;
 import com.orientalSalad.troubleShot.global.dto.ResponseGPTMessageDTO;
@@ -22,9 +23,13 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequiredArgsConstructor
 public class GPTService {
+	private final RedisTemplate redisTemplate;
+
 	@Value("${gpt-key}")
 	String gptKey;
-	private final RedisTemplate redisTemplate;
+
+	@Value("${gpt-count}")
+	Integer limit;
 
 	private String uri = "https://api.openai.com/v1/chat/completions";
 
@@ -39,7 +44,7 @@ public class GPTService {
 		if(count == null){
 			count = 0;
 			hashOperations.put(redisKey,hashKey,count);
-		}else if(count >= 10){
+		}else if(count >= limit){
 			answer = "일일 요청 제한를 초과했습니다.";
 			return answer;
 		}
@@ -89,6 +94,21 @@ public class GPTService {
 		return answer;
 	}
 
+	public int getCount(RequestDTO requestDTO){
+		HashOperations hashOperations = redisTemplate.opsForHash();;
+		String redisKey = "gpt";
+		String hashKey = requestDTO.getLoginSeq()+"_"+requestDTO.getType();
+		Integer count = (Integer)hashOperations.get(redisKey,hashKey);
+
+		if(count == null){
+			count = limit;
+		}else{
+			count = limit - count;
+		}
+
+		return count;
+	}
+
 	public boolean checkLimitLength(String context){
 		String[] splited = context.split(" |\n");
 		if(splited.length >= 3000){
@@ -97,4 +117,5 @@ public class GPTService {
 
 		return true;
 	}
+
 }
