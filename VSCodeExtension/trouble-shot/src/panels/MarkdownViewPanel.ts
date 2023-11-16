@@ -18,6 +18,7 @@ export class MarkdownViewPanel {
   private readonly _panel: WebviewPanel;
   private _disposables: Disposable[] = [];
   private content: string;
+  private readonly _globalState: vscode.Memento;
 
   /**
    * The HelloWorldPanel class private constructor (called only from the render method).
@@ -25,7 +26,12 @@ export class MarkdownViewPanel {
    * @param panel A reference to the webview panel
    * @param extensionUri The URI of the directory containing the extension
    */
-  private constructor(panel: WebviewPanel, extensionUri: Uri, markdownContent: string) {
+  private constructor(
+    panel: WebviewPanel,
+    extensionUri: Uri,
+    markdownContent: string,
+    globalState: vscode.Memento
+  ) {
     this._panel = panel;
     this.content = markdownContent;
 
@@ -42,6 +48,8 @@ export class MarkdownViewPanel {
 
     // Set an event listener to listen for messages passed from the webview context
     this._setWebviewMessageListener(this._panel.webview);
+
+    this._globalState = globalState;
   }
 
   /**
@@ -50,7 +58,12 @@ export class MarkdownViewPanel {
    *
    * @param extensionUri The URI of the directory containing the extension.
    */
-  public static render(extensionUri: Uri, markdownContent: string, title: string) {
+  public static render(
+    extensionUri: Uri,
+    markdownContent: string,
+    title: string,
+    globalState: vscode.Memento
+  ) {
     // If a webview panel does not already exist create and show a new one
     const panel = window.createWebviewPanel(
       // Panel view type
@@ -71,7 +84,12 @@ export class MarkdownViewPanel {
       }
     );
 
-    MarkdownViewPanel.currentPanel = new MarkdownViewPanel(panel, extensionUri, markdownContent);
+    MarkdownViewPanel.currentPanel = new MarkdownViewPanel(
+      panel,
+      extensionUri,
+      markdownContent,
+      globalState
+    );
   }
 
   /**
@@ -156,6 +174,15 @@ export class MarkdownViewPanel {
 
         switch (command) {
           case "getFeedback":
+            const sessionId = this._globalState.get("sessionId");
+            if (sessionId === undefined || sessionId === -1) {
+              vscode.window.showErrorMessage("AI service need to logged in!");
+              webview.postMessage({
+                command: "setFeedback",
+                feedback: "AI service need to be logged in!",
+              });
+              return;
+            }
             // Code that should run in response to the hello message command
             const res = await fetch("https://orientalsalad.kro.kr:8102/gpt/readme-feedback", {
               method: "POST",
@@ -164,6 +191,8 @@ export class MarkdownViewPanel {
               },
               body: JSON.stringify({
                 context: this.content,
+                loginSeq: sessionId,
+                type: 2,
               }),
             });
             const resJson = await res.json();

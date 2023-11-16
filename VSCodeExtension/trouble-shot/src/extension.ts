@@ -183,7 +183,12 @@ export async function activate(context: vscode.ExtensionContext) {
         //   }
         // );
         // panel.webview.html = getMarkdownView(panel, trouble.content, context.extensionUri);
-        MarkdownViewPanel.render(context.extensionUri, trouble.content, trouble.title);
+        MarkdownViewPanel.render(
+          context.extensionUri,
+          trouble.content,
+          trouble.title,
+          context.globalState
+        );
       } else {
         const res = await fetch(
           `https://orientalsalad.kro.kr:8102/trouble-shootings/${Number(
@@ -214,7 +219,8 @@ export async function activate(context: vscode.ExtensionContext) {
         MarkdownViewPanel.render(
           context.extensionUri,
           troubleShooting.context + solvedContent,
-          troubleShooting.title
+          troubleShooting.title,
+          context.globalState
         );
       }
     })

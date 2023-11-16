@@ -133,14 +133,16 @@ const Trouble = ({ sessionId, defaultSkills, errMsg, defaultCode }: Props) => {
   }
 
   const { title, skill, code, errorMsg, description } = articleInfo;
-  const isLogin = sessionId !== -1;
+  const isOffline = sessionId === -1 || sessionId === undefined;
+
+  console.log("sessionId", sessionId);
 
   return (
     <section className="flex flex-col w-2/3 gap-1 ">
       <VSCodeTextField value={title} onInput={onChange} name="title" className="w-2/3 ">
         Title
       </VSCodeTextField>
-      {isLogin && (
+      {!isOffline && (
         <VSCodeRadioGroup onChange={handleRadioChange}>
           <label slot="label">Open Coverage</label>
           <VSCodeRadio value="1" checked={openScope === "1"}>
@@ -173,7 +175,7 @@ const Trouble = ({ sessionId, defaultSkills, errMsg, defaultCode }: Props) => {
           </VSCodeButton>
         </div>
 
-        {isLogin ? (
+        {!isOffline ? (
           <div onClick={onUploadTrouble}>
             <VSCodeButton>
               <BiUpload className="mr-3 " />

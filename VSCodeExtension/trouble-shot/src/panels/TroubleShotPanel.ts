@@ -384,27 +384,34 @@ export class TroubleShotPanel {
             return;
           case "getSolution":
             if (isOffLineTrouble(message.troubleId)) {
-              const troubleList = this._globalState.get<Trouble[]>("troubleList");
-              const trouble = troubleList?.find((trouble) => trouble.id === message.troubleId);
-              if (!trouble) return;
-              const res = await fetch("https://orientalsalad.kro.kr:8102/gpt/error-feedback", {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                  context: trouble.content,
-                }),
+              // const troubleList = this._globalState.get<Trouble[]>("troubleList");
+              // const trouble = troubleList?.find((trouble) => trouble.id === message.troubleId);
+              // if (!trouble) return;
+              // const res = await fetch("https://orientalsalad.kro.kr:8102/gpt/error-feedback", {
+              //   method: "POST",
+              //   headers: {
+              //     "Content-Type": "application/json",
+              //   },
+              //   body: JSON.stringify({
+              //     context: trouble.content,
+              //     loginSeq: this._globalState.get<string>("sessionId"),
+              //     type: 2,
+              //   }),
+              // });
+              // const resJson = await res.json();
+              // if (resJson.success) {
+              //   webview.postMessage({
+              //     command: "setSolution",
+              //     solution: resJson.context,
+              //   });
+              //   return;
+              // }
+              // vscode.window.showErrorMessage("Failed to get solution!");
+              webview.postMessage({
+                command: "setSolution",
+                solution: "AI service need to be logged in!",
               });
-              const resJson = await res.json();
-              if (resJson.success) {
-                webview.postMessage({
-                  command: "setSolution",
-                  solution: resJson.context,
-                });
-                return;
-              }
-              vscode.window.showErrorMessage("Failed to get solution!");
+              vscode.window.showErrorMessage("AI service need to be logged in!");
             } else {
               const context = MyTroubleListProviderLogin.getTroubleContent(message.troubleId);
               if (!context) return;
@@ -415,6 +422,8 @@ export class TroubleShotPanel {
                 },
                 body: JSON.stringify({
                   context,
+                  loginSeq: this._globalState.get<string>("sessionId"),
+                  type: 2,
                 }),
               });
               const resJson = await res.json();
