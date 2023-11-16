@@ -1,24 +1,46 @@
 "use client";
-import React, { MouseEvent, UIEvent, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 
 import seul from "../../../public/carousel/seul.jpg";
-import exImage2 from "../../../public/carousel/exImage2.jpg";
-import exImage3 from "../../../public/carousel/exImage3.jpg";
-import exImage4 from "../../../public/carousel/exImage4.jpg";
-import exImage5 from "../../../public/carousel/exImage5.jpg";
+import suhyun from "../../../public/carousel/suhyun.jpg";
+import jinwook from "../../../public/carousel/jinwook.jpg";
+import yerim from "../../../public/carousel/yerim.png";
+import jongryul from "../../../public/carousel/jongryul.jpg";
+import jaehyung from "../../../public/carousel/jaehyung.jpeg";
 import { FaQuoteLeft, FaQuoteRight } from "react-icons/fa";
+
+type SlideTab = 0 | 1 | 2 | 3 | 4 | 5;
 
 export default function CarouselIntro() {
   const imageList = [
-    { index: 0, Image: seul, name: "슬호", text: "정슬호 팀장", review: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaa" },
-    { index: 1, Image: exImage2, name: "예림", text: "고예림 팀원", review: "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb" },
-    { index: 2, Image: exImage3, name: "수현", text: "김수현 팀원", review: "ccccccccccccccccccccccccccccccccccc" },
-    { index: 3, Image: exImage4, name: "종률", text: "권종률 팀원", review: "dddddddddddddddddddddddddddddddddddd" },
-    { index: 4, Image: exImage5, name: "재형", text: "손재형 팀원", review: "eeeeeeeeeeeeeeeeeeeeeeeeeeeeee" },
-    { index: 5, Image: exImage2, name: "진욱", text: "장진욱 팀원", review: "fffffffffffffffffffffffffffffffffffffff" },
+    {
+      index: 0,
+      Image: seul,
+      name: "슬호",
+      review: "평소에 관심있던 플러그인 개발에 대해 관심이 있었습니다. 이번 기회에 많이 공부해서 좋았습니다.",
+    },
+    { index: 1, Image: yerim, name: "예림", review: "평소에 필요하다 느꼈던 부분을 직접 개발해서 뿌듯합니다." },
+    {
+      index: 2,
+      Image: suhyun,
+      name: "수현",
+      review: "쿼리 계산을 통해 백엔드 역량을 키울 수 있었습니다. \n좋은 경험이었어요.",
+    },
+    { index: 3, Image: jongryul, name: "종률", review: "트러블 샷은 공짜입니다." },
+    {
+      index: 4,
+      Image: jaehyung,
+      name: "재형",
+      review: "전역 상태 관리와 seo 최적화를 할 수 있었어요. 한층 더 성장한 것 같습니다.",
+    },
+    {
+      index: 5,
+      Image: jinwook,
+      name: "진욱",
+      review: "물 흐르듯 유연하고 확장 가능한 쿠버네티스로 효율적인 프로젝트를 경험해서 멋졌습니다",
+    },
   ];
-  const [current, setCurrent] = useState(0);
 
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [visible, setVisible] = useState(false);
@@ -43,83 +65,40 @@ export default function CarouselIntro() {
     setCustomCursor(css);
   };
 
-  const [value, setValue] = useState(0);
-  useEffect(() => {}, [value]);
+  const [curSlideTab, setCurSlideTab] = useState<SlideTab>(0);
 
   const testNext = () => {
-    setValue((prev) => {
-      if (Math.round(prev + 100 / 6) === 100) return prev;
-      return prev + 100 / 6;
+    setCurSlideTab((prev): SlideTab => {
+      if (prev === 5) return 0;
+      return (prev + 1) as SlideTab;
     });
   };
   const testPrevious = () => {
-    setValue((prev) => {
-      if (Math.round(prev - 100 / 6) === 0 || prev - 100 / 6 < 0) return 0;
-      return prev - 100 / 6;
+    setCurSlideTab((prev) => {
+      if (prev === 0) return 5;
+      return (prev - 1) as SlideTab;
     });
   };
 
   useEffect(() => {
-    winRef.current.style.transform = `translateX(-${value}%)`;
-    console.log(value);
-  }, [value]);
+    winRef.current.style.transform = `translateX(-${(curSlideTab * 100) / 6}%)`;
+    console.log(curSlideTab);
+  }, [curSlideTab]);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const winRef = React.useRef<any>();
   return (
-<<<<<<< HEAD
-    <div className="w-full h-3/4 flex flex-col justify-center">
-      <h1 className="w-full text-3xl font-bold  m-5 ms-10">만든 사람들</h1>
-      <div className="carousel">
-        <div style={{ width: `${imageList.length}00%`, transform: `translate3d(${index * -containerWidth}px, 0, 0)` }}>
-          {imageList.map((v, i) => (
-            <div key={i}>
-              <Image src={v.Image} alt=""></Image>
-            </div>
-          ))}
-=======
-    <div className="flex flex-col justify-center w-full h-3/4">
+    <div className="flex flex-col justify-center w-full h-3/4 overflow-hidden">
       <h1 className="w-full m-5 text-3xl font-bold ms-10">만든 사람들</h1>
-      <div id="carouselIntor" className="relative h-3/4 bg-main" onMouseMove={trackCursor} onMouseLeave={hideCursor}>
-        <button onClick={testPrevious} className="absolute left-0 z-10 w-20 h-full">
-          전으로
-        </button>
-        <div className=" w-[600vw] h-full flex relative" ref={winRef}>
-          <div className={" w-1/6 h-full bg-red-500"}>1</div>
-          <div className={" w-1/6 h-full bg-cyan-400"}>2</div>
-          <div className={" w-1/6 h-full bg-orange-200"}>3</div>
-          <div className={" w-1/6 h-full bg-lime-400"}>4</div>
-          <div className={" w-1/6 h-full bg-blue-600"}>5</div>
-          <div className={" w-1/6 h-full bg-purple-600"}>6</div>
->>>>>>> 46cfe85ed7499c3841e24262aef25be94e1e328f
+      {visible && (
+        <div className={`${customCursor} fcc text-center`} style={{ left: `${position.x}px`, top: `${position.y}px` }}>
+          <p className="w-3/4 text-white">{cursorText}</p>
         </div>
-
-        <button onClick={testNext} className="absolute top-0 right-0 z-10 w-20 h-full">
-          다음으로
-        </button>
-      </div>
-<<<<<<< HEAD
-=======
-      <ul className="flex justify-center w-full gap-4 mb-2 list-none">
-        {imageList.map((v, idx) => (
-          <li
-            key={idx}
-            className={`text-lg ${idx === current ? "opacity-100 font-bold" : "opacity-50"}`}
-            onClick={() => setCurrent(idx)}
-          >
-            {v.name}
-          </li>
-        ))}
-      </ul>
->>>>>>> 46cfe85ed7499c3841e24262aef25be94e1e328f
-    </div>
-  );
-}
-
-{
-  /* <div
-          className="w-3/12 active:bg-gray-200"
-          onClick={prevHandler}
+      )}
+      <div id="carouselIntor" className="relative h-3/4 bg-main " onMouseMove={trackCursor} onMouseLeave={hideCursor}>
+        <button
+          onClick={testPrevious}
+          className="absolute left-0 z-10 w-20 h-full"
           onMouseEnter={() => {
             changeCursorText("이전으로");
             changeCss("custom-cursor-left");
@@ -128,13 +107,29 @@ export default function CarouselIntro() {
             changeCursorText("오리엔탈 샐러드");
             changeCss("custom-cursor");
           }}
-        ></div> */
-}
+        >
+          전으로
+        </button>
+        <div className=" w-[600vw] h-full flex relative transition-transform duration-500" ref={winRef}>
+          {imageList.map((value, index) => (
+            <div key={index} className="w-4/6 fcc overflow-hidden">
+              <Image src={value.Image} alt="" className="w-1/6 rounded-lg" />
+              <div className="ms-10 py-6 w-3/6 h-full flex flex-col justify-between">
+                <div className="w-full text-2xl">
+                  <FaQuoteLeft />
+                </div>
+                <p className="p-5 px-5 text-2xl">{value.review}</p>
+                <div className="w-full text-2xl">
+                  <FaQuoteRight />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
 
-{
-  /* <div
-          className="w-3/12 active:bg-gray-200"
-          onClick={nextHandler}
+        <button
+          onClick={testNext}
+          className="absolute top-0 right-0 z-10 w-20 h-full"
           onMouseEnter={() => {
             changeCursorText("앞으로");
             changeCss("custom-cursor-right");
@@ -143,137 +138,17 @@ export default function CarouselIntro() {
             changeCursorText("오리엔탈 샐러드");
             changeCss("custom-cursor");
           }}
-        ></div> */
-}
-
-// {visible && (
-//   <div
-//     className={`${customCursor} fcc text-center`}
-//     style={{ left: `${position.x}px`, top: `${position.y}px` }}
-//   >
-//     <p className="w-3/4 text-white">{cursorText}</p>
-//   </div>
-// )}
-
-// {imageList.map((item, index) => (
-//   <li key={index}>
-//     <div className="w-2/6 opacity-100" style={{ display: index === current ? "block" : "none" }}>
-//       <Image className="rounded-lg" src={item.Image} alt={item.text} />
-//       <div className="w-full mt-3 text-2xl font-bold text-center">{item.text}</div>
-//     </div>
-//   </li>
-// ))}
-// <div className="opacity-100">
-//   <FaQuoteLeft />
-//   {imageList.map((item, index) => (
-//     <div
-//       className="flex flex-col justify-between w-3/6 h-full me-5"
-//       key={index}
-//       style={{ display: index === current ? "block" : "none" }}
-//     >
-//       {item.review}
-//     </div>
-//   ))}
-//   <FaQuoteRight />
-// </div>
-
-// ---------------
-
-{
-  /* <div className="flex h-full bg-red-600">
-            <div className="w-1/6" onClick={testPrevious}>
-            
-            </div>
-            <div className="w-4/6">3</div>
-            <div className="w-1/6" onClick={testNext}>
-              2
-            </div>
-          </div>
-          <div className="flex h-full bg-red-300">
-            <div className="w-1/6" onClick={testPrevious}>
-              1
-            </div>
-            <div className="w-4/6">3</div>
-            <div className="w-1/6" onClick={testNext}>
-              2
-            </div>
-          </div>
-          <div className="flex h-full bg-red-400">
-            <div className="w-1/6" onClick={testPrevious}>
-              1
-            </div>
-            <div className="w-4/6">3</div>
-            <div className="w-1/6" onClick={testNext}>
-              2
-            </div>
-          </div>
-          <div className="flex h-full bg-red-500">
-            <div className="w-1/6" onClick={testPrevious}>
-              1
-            </div>
-            <div className="w-4/6">3</div>
-            <div className="w-1/6" onClick={testNext}>
-              2
-            </div>
-          </div> */
-}
-
-// ----------------
-{
-  /* <div
-id="carouselIntor"
-className="w-full h-3/4 bg-main overflow-hidden relative"
-style={{ transform: `-translateX(${value}%)` }}
-onMouseMove={trackCursor}
-onMouseLeave={hideCursor}
->
-<div className="flex w-[600%] absolute">
-  {imageList.map((item, index) => (
-    <div key={index} className="flex w-1/6">
-      <div
-        className="w-1/6 active:bg-gray-200"
-        onClick={prevHandler}
-        onMouseEnter={() => {
-          changeCursorText("이전으로");
-          changeCss("custom-cursor-left");
-        }}
-        onMouseLeave={() => {
-          changeCursorText("오리엔탈 샐러드");
-          changeCss("custom-cursor");
-        }}
-      ></div>
-      <div className="w-4/6">
-        <Image className="w-1/6 rounded-lg" src={item.Image} alt={item.text} />
-        <div className="w-1/6 mt-3 text-2xl text-center font-bold">{item.text}</div>
+        >
+          다음으로
+        </button>
       </div>
-      <div
-        className="w-1/6 active:bg-gray-200"
-        onClick={testNext}
-        onMouseEnter={() => {
-          changeCursorText("앞으로");
-          changeCss("custom-cursor-right");
-        }}
-        onMouseLeave={() => {
-          changeCursorText("오리엔탈 샐러드");
-          changeCss("custom-cursor");
-        }}
-      ></div>
+      <ul className="flex justify-center w-full gap-4 mb-2 list-none">
+        {imageList.map((v, idx) => (
+          <li key={idx} className={`text-lg ${idx === curSlideTab ? "opacity-100 font-bold" : "opacity-50"}`}>
+            {v.name}
+          </li>
+        ))}
+      </ul>
     </div>
-  ))}
-</div>
-</div> */
+  );
 }
-
-// -------------------------------
-
-// <ul className="flex w-full justify-center gap-4 mb-2 list-none">
-//         {imageList.map((v, idx) => (
-//           <li
-//             key={idx}
-//             className={`text-lg ${idx === current ? "opacity-100 font-bold" : "opacity-50"}`}
-//             onClick={() => setCurrent(idx)}
-//           >
-//             {v.name}
-//           </li>
-//         ))}
-//       </ul>

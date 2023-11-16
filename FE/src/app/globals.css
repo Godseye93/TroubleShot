@@ -202,9 +202,9 @@ height: 10px;
   width: 100%
 }
 
-/* #carouselIntor:hover {
+#carouselIntor:hover {
   cursor: none
-} */
+}
 
 .custom-cursor {
   width: 5rem;
@@ -225,8 +225,8 @@ height: 10px;
 }
 
 .custom-cursor-left {
-  width: 7rem;
-  height: 7rem;
+  width: 6rem;
+  height: 6rem;
   border: 2px solid var(--color-texta);
   border-radius: 50%;
   position: absolute;
@@ -243,8 +243,8 @@ height: 10px;
 }
 
 .custom-cursor-right {
-  width: 7rem;
-  height: 7rem;
+  width: 6rem;
+  height: 6rem;
   border: 2px solid var(--color-texta);
   border-radius: 50%;
   position: absolute;
