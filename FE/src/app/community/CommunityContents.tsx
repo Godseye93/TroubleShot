@@ -70,7 +70,6 @@ export default function CommunityContents() {
       return data;
     },
   });
-  console.log(tags);
   return (
     <>
       <Searchbar setPropsOptions={setOptions} queryKey="boards" isCommunity={true} baseUrl="community/posts" />
