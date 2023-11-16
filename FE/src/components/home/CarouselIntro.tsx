@@ -16,7 +16,7 @@ export default function CarouselIntro() {
     { index: 2, Image: exImage3, name: "수현", text: "김수현 팀원", review: "ccccccccccccccccccccccccccccccccccc" },
     { index: 3, Image: exImage4, name: "종률", text: "권종률 팀원", review: "dddddddddddddddddddddddddddddddddddd" },
     { index: 4, Image: exImage5, name: "재형", text: "손재형 팀원", review: "eeeeeeeeeeeeeeeeeeeeeeeeeeeeee" },
-    { index: 5, Image: exImage5, name: "진욱", text: "장진욱 팀원", review: "fffffffffffffffffffffffffffffffffffffff" },
+    { index: 5, Image: exImage2, name: "진욱", text: "장진욱 팀원", review: "fffffffffffffffffffffffffffffffffffffff" },
   ];
   const [current, setCurrent] = useState(0);
 
@@ -47,81 +47,45 @@ export default function CarouselIntro() {
 
   const testNext = () => {
     setValue((prev) => {
+      if (Math.round(prev + 100 / 6) === 100) return prev;
       return prev + 100 / 6;
     });
   };
   const testPrevious = () => {
     setValue((prev) => {
+      if (Math.round(prev - 100 / 6) === 0 || prev - 100 / 6 < 0) return 0;
       return prev - 100 / 6;
     });
   };
 
-  const nextHandler = () => {
-    testNext();
-    setCurrent(() => {
-      if (current > 4) {
-        return 0;
-      } else {
-        return current + 1;
-      }
-    });
-  };
+  useEffect(() => {
+    winRef.current.style.transform = `translateX(-${value}%)`;
+    console.log(value);
+  }, [value]);
 
-  const prevHandler = () => {
-    testPrevious();
-    setCurrent(() => {
-      if (current === 0) {
-        return imageList.length - 1;
-      } else {
-        return current - 1;
-      }
-    });
-  };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const winRef = React.useRef<any>();
   return (
-    <div className="w-full h-3/4 flex flex-col justify-center">
-      <h1 className="w-full text-3xl font-bold  m-5 ms-10">만든 사람들</h1>
-      <div
-        id="carouselIntor"
-        className="w-[600%] h-3/4 bg-main flex overflow-hidden"
-        onMouseMove={trackCursor}
-        onMouseLeave={hideCursor}
-      >
-        <div className={"flex w-full"} style={{ transform: `-translateX(${value}%)` }}>
-          {imageList.map((item, index) => (
-            <div key={index} className="flex w-1/6">
-              <div
-                className="w-1/6 active:bg-gray-200"
-                onClick={prevHandler}
-                onMouseEnter={() => {
-                  changeCursorText("이전으로");
-                  changeCss("custom-cursor-left");
-                }}
-                onMouseLeave={() => {
-                  changeCursorText("오리엔탈 샐러드");
-                  changeCss("custom-cursor");
-                }}
-              ></div>
-              <div className="w-4/6">
-                <Image className="w-1/6 rounded-lg" src={item.Image} alt={item.text} />
-                <div className="w-1/6 mt-3 text-2xl text-center font-bold">{item.text}</div>
-              </div>
-              <div
-                className="w-1/6 active:bg-gray-200"
-                onClick={nextHandler}
-                onMouseEnter={() => {
-                  changeCursorText("앞으로");
-                  changeCss("custom-cursor-right");
-                }}
-                onMouseLeave={() => {
-                  changeCursorText("오리엔탈 샐러드");
-                  changeCss("custom-cursor");
-                }}
-              ></div>
-            </div>
-          ))}
+    <div className="flex flex-col justify-center w-full h-3/4">
+      <h1 className="w-full m-5 text-3xl font-bold ms-10">만든 사람들</h1>
+      <div id="carouselIntor" className="relative h-3/4 bg-main" onMouseMove={trackCursor} onMouseLeave={hideCursor}>
+        <button onClick={testPrevious} className="absolute left-0 z-10 w-20 h-full">
+          전으로
+        </button>
+        <div className=" w-[600vw] h-full flex relative" ref={winRef}>
+          <div className={" w-1/6 h-full bg-red-500"}>1</div>
+          <div className={" w-1/6 h-full bg-cyan-400"}>2</div>
+          <div className={" w-1/6 h-full bg-orange-200"}>3</div>
+          <div className={" w-1/6 h-full bg-lime-400"}>4</div>
+          <div className={" w-1/6 h-full bg-blue-600"}>5</div>
+          <div className={" w-1/6 h-full bg-purple-600"}>6</div>
         </div>
+
+        <button onClick={testNext} className="absolute top-0 right-0 z-10 w-20 h-full">
+          다음으로
+        </button>
       </div>
-      <ul className="flex w-full justify-center gap-4 mb-2 list-none">
+      <ul className="flex justify-center w-full gap-4 mb-2 list-none">
         {imageList.map((v, idx) => (
           <li
             key={idx}
@@ -179,7 +143,7 @@ export default function CarouselIntro() {
 //   <li key={index}>
 //     <div className="w-2/6 opacity-100" style={{ display: index === current ? "block" : "none" }}>
 //       <Image className="rounded-lg" src={item.Image} alt={item.text} />
-//       <div className="w-full mt-3 text-2xl text-center font-bold">{item.text}</div>
+//       <div className="w-full mt-3 text-2xl font-bold text-center">{item.text}</div>
 //     </div>
 //   </li>
 // ))}
@@ -187,7 +151,7 @@ export default function CarouselIntro() {
 //   <FaQuoteLeft />
 //   {imageList.map((item, index) => (
 //     <div
-//       className=" w-3/6 me-5 h-full flex flex-col justify-between"
+//       className="flex flex-col justify-between w-3/6 h-full me-5"
 //       key={index}
 //       style={{ display: index === current ? "block" : "none" }}
 //     >
@@ -200,7 +164,7 @@ export default function CarouselIntro() {
 // ---------------
 
 {
-  /* <div className="bg-red-600 flex h-full">
+  /* <div className="flex h-full bg-red-600">
             <div className="w-1/6" onClick={testPrevious}>
             
             </div>
@@ -209,7 +173,7 @@ export default function CarouselIntro() {
               2
             </div>
           </div>
-          <div className="bg-red-300 flex h-full">
+          <div className="flex h-full bg-red-300">
             <div className="w-1/6" onClick={testPrevious}>
               1
             </div>
@@ -218,7 +182,7 @@ export default function CarouselIntro() {
               2
             </div>
           </div>
-          <div className="bg-red-400 flex h-full">
+          <div className="flex h-full bg-red-400">
             <div className="w-1/6" onClick={testPrevious}>
               1
             </div>
@@ -227,7 +191,7 @@ export default function CarouselIntro() {
               2
             </div>
           </div>
-          <div className="bg-red-500 flex h-full">
+          <div className="flex h-full bg-red-500">
             <div className="w-1/6" onClick={testPrevious}>
               1
             </div>
