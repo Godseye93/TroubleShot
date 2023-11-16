@@ -8,7 +8,7 @@ interface Props {
 }
 
 const getResponseTag = (userSeq: number) => {
-  const url = `https://orientalsalad.kro.kr:8101/members/${userSeq}/tags/answers`;
+  const url = `http://orientalsalad.kro.kr:8101/members/${userSeq}/tags/answers`;
   return axios.get(url);
 };
 
@@ -45,7 +45,7 @@ const ResponsePie = ({ userSeq }: Props) => {
     color: colors[idx],
   }));
 
-  return myData?.length !== 0 ? (
+  return myData && myData.length !== 0 ? (
     <ResponsivePie
       data={myData}
       margin={{ top: 40, right: 80, bottom: 80, left: 80 }}

@@ -8,7 +8,7 @@ interface Props {
 }
 
 const getAllTag = (userSeq: number) => {
-  const url = `https://orientalsalad.kro.kr:8101/members/${userSeq}/tags/most-used-history?userSeq=${userSeq}`;
+  const url = `http://orientalsalad.kro.kr:8101/members/${userSeq}/tags/most-used-history?userSeq=${userSeq}`;
   return axios.get(url);
 };
 
@@ -29,7 +29,7 @@ const CirclePacking = ({ userSeq }: Props) => {
       .filter((data: { name: string; value: number }) => data.name !== "이있어 답할 단어 없습니다"),
   };
 
-  return myData?.children?.length !== 0 ? (
+  return myData && myData.children && myData.children.length !== 0 ? (
     <ResponsiveCirclePackingCanvas
       data={myData}
       margin={{ top: 20, right: 20, bottom: 20, left: 20 }}

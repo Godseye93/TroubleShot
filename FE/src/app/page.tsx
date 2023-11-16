@@ -9,7 +9,6 @@ import FirstIntro from "../components/home/FirstIntro";
 import FeatureIntro from "../components/home/FeatureIntro";
 import CarouselIntro from "../components/home/CarouselIntro";
 import HomeOutro from "../components/home/HomeOutro";
-// import Footer from "../components/Footer";
 
 export default function Page() {
   const outerDivRef = useRef<any>();
