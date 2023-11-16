@@ -1,7 +1,9 @@
 import axios from "axios";
 
-function apiInstance(path?: string) {
-  const baseURL = path ? `${process.env.NEXT_PUBLIC_BASE_URL1}${path}` : process.env.NEXT_PUBLIC_BASE_URL1;
+function troubleApiInstance(path?: string) {
+  const baseURL = path
+    ? `${process.env.NEXT_PUBLIC_BASE_URL_TROUBLE}${path}`
+    : process.env.NEXT_PUBLIC_BASE_URL_TROUBLE;
   const instance = axios.create({
     withCredentials: true,
     baseURL: baseURL,
@@ -12,4 +14,4 @@ function apiInstance(path?: string) {
   return instance;
 }
 
-export { apiInstance };
+export { troubleApiInstance };

@@ -29,33 +29,33 @@ const CirclePacking = ({ userSeq }: Props) => {
       .filter((data: { name: string; value: number }) => data.name !== "이있어 답할 단어 없습니다"),
   };
 
-  return (
-    myData && (
-      <ResponsiveCirclePackingCanvas
-        data={myData}
-        margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
-        id="name"
-        colors={{ scheme: "spectral" }}
-        colorBy="id"
-        childColor={{
-          from: "color",
-          modifiers: [["brighter", 0.4]],
-        }}
-        padding={1}
-        leavesOnly={true}
-        enableLabels={true}
-        label="id"
-        labelTextColor={{
-          from: "color",
-          modifiers: [["darker", 2.4]],
-        }}
-        borderColor={{
-          from: "color",
-          modifiers: [["darker", 0.3]],
-        }}
-        animate={false}
-      />
-    )
+  return myData?.children?.length !== 0 ? (
+    <ResponsiveCirclePackingCanvas
+      data={myData}
+      margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
+      id="name"
+      colors={{ scheme: "spectral" }}
+      colorBy="id"
+      childColor={{
+        from: "color",
+        modifiers: [["brighter", 0.4]],
+      }}
+      padding={1}
+      leavesOnly={true}
+      enableLabels={true}
+      label="id"
+      labelTextColor={{
+        from: "color",
+        modifiers: [["darker", 2.4]],
+      }}
+      borderColor={{
+        from: "color",
+        modifiers: [["darker", 0.3]],
+      }}
+      animate={false}
+    />
+  ) : (
+    <div className="flex items-center justify-center h-full">데이터가 없습니다</div>
   );
 };
 

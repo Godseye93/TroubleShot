@@ -16,10 +16,11 @@ import {
 } from "@/types/CommonType";
 import { apiInstance } from ".";
 import { AxiosRequestConfig } from "axios";
-import { GetTroubleList, SearchParams } from "@/types/TroubleType";
+import { GetTroubleList, ResponeseSearchMember, SearchMember, SearchParams } from "@/types/TroubleType";
+import { troubleApiInstance } from "./troubleApi";
 
 const api = apiInstance();
-
+const troubleApi = troubleApiInstance();
 // 이메일로 인증번호 요청
 export const emailCert = async (email: string): Promise<EmailCertResponse> => {
   const { data } = await api.post("auth/email/send", email);
@@ -41,7 +42,6 @@ export const signUpSubmit = async (params: SignUpType): Promise<CommonType> => {
 // 로그인 요청
 export const loginSubmit = async (params: ReqLogin): Promise<ResLogin> => {
   const { data } = await api.post("login/login", params);
-  console.log(process.env.NEXT_PUBLIC_BASE_URL);
   return data;
 };
 
@@ -91,12 +91,12 @@ export const getUsedLotTags = async (params: ReqTags): Promise<[]> => {
 // 게이트웨이 되면 코드 수정하기
 export const getBookmarkList = async (params: SearchParams): Promise<GetTroubleList> => {
   const Url = "https://orientalsalad.kro.kr:8102/trouble-shootings";
-  const { data } = await api.get(Url, { params });
+  const { data } = await troubleApi.get("/trouble-shootings", { params });
   return data;
 };
 
 // 유저 pk로 유저의 정보 가져오기
-export const getUserInfo = async (params: number) => {
+export const getUserInfo = async (params: number): Promise<Member> => {
   const { data } = await api.get(`/members/${params}`);
   const { member } = data;
   return member;
@@ -106,5 +106,9 @@ export const getUserInfo = async (params: number) => {
 export const putUserInfo = async (params: EditReq) => {
   const requestBody = params.reqBody;
   const { data } = await api.put(`/members/${params.userSeq}`, requestBody);
+  return data;
+};
+export const getSearchUser = async (params: SearchMember): Promise<ResponeseSearchMember> => {
+  const { data } = await api.get("/members", { params });
   return data;
 };

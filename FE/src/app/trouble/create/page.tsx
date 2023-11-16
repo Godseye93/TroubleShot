@@ -1,18 +1,20 @@
 "use client";
 import UiwEditor from "@/components/Create/UiwEditor";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Options from "@/components/Create/Options";
 import { CreateOptions } from "@/types/TroubleType";
 import { toast } from "react-toastify";
-import { postTrouble } from "@/api/trouble";
+import { getCategories, postTrouble } from "@/api/trouble";
 import { useLoginStore } from "@/stores/useLoginStore";
+import { useQuery } from "@tanstack/react-query";
 export default function Page() {
   const [title, setTitle] = useState("");
   const [markdown, setMarkdown] = useState("");
   const router = useRouter();
   const [showOptions, setShowOptions] = useState(false);
   const [dependency, setDependency] = useState("");
+  const [categories, setCategories] = useState<string[]>([]);
 
   const [options, setOptions] = useState<CreateOptions>({
     category: "",
@@ -21,9 +23,9 @@ export default function Page() {
     solved: null,
   });
   const [Changed, setChanged] = useState(false);
-  const categorys = ["java", "ts", "react"];
   const { user } = useLoginStore();
   const onSubmit = async () => {
+    console.log(options.scope);
     if (title.trim() === "") return toast.error("제목을 입력해 주세요");
     if (markdown.trim() === "") return toast.error("내용을 입력해 주세요");
     if (options.category.trim() === "") return toast.error("카테고리를 선택해 주세요");
@@ -56,6 +58,20 @@ export default function Page() {
       console.log(err);
     }
   };
+  const { data, error, isLoading } = useQuery({
+    queryKey: ["categories"],
+    queryFn: async () => {
+      if (!user) return;
+      const data = await getCategories(user?.member.seq);
+      return data;
+    },
+  });
+  useEffect(() => {
+    if (data) {
+      const list = data.categoryList.map((category) => category.name);
+      setCategories(list);
+    }
+  }, [data]);
 
   return (
     <div className="flex-1 me-2  min-h-[91vh]">
@@ -84,9 +100,10 @@ export default function Page() {
                   <Options
                     options={options}
                     setOptions={setOptions}
-                    categorys={categorys}
+                    categorys={categories}
                     setShowOptions={setShowOptions}
                     onSubmit={onSubmit}
+                    userSeq={user!.member.seq}
                   />
                 </div>
               )}

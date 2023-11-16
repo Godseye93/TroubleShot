@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Options from "@/components/Create/Options";
 import { CreateOptions, GetTroubleDetail } from "@/types/TroubleType";
 import { toast } from "react-toastify";
-import { getCategories, postTrouble, putTrouble } from "@/api/trouble";
+import { getCategories, putTrouble } from "@/api/trouble";
 import { useLoginStore } from "@/stores/useLoginStore";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 export default function Page() {
@@ -117,6 +117,7 @@ export default function Page() {
                 {Changed && (
                   <div className={`absolute ${showOptions ? "waterfall" : "waterfall2re"} z-50`}>
                     <Options
+                      userSeq={user!.member.seq}
                       options={options}
                       setOptions={setOptions}
                       categorys={categories!}
