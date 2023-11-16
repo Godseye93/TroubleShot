@@ -54,7 +54,7 @@ export default function FeatureIntro() {
             <p>기능 3</p>
           </div>
         </div>
-        <div className="w-8/12 h-[380px] bg-main rounded-lg">
+        <div className="w-8/12 h-[70vh] bg-main rounded-lg">
           <div className=" bg-main w-full rounded-lg fcc">
             <Image src={contentsFile} alt="" />
             <div>기능 소개 영상 들어가야 함</div>
