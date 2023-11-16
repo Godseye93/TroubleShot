@@ -56,7 +56,6 @@ export default function FileUploader({ handle }: { handle: Handle }) {
       await s3client.send(new PutObjectCommand(params));
       const url_key = process.env.NEXT_PUBLIC_BUCKEYT_URL + `trouble/${name}.${fileType}`;
 
-      console.log(url_key);
       // 가져온 위치에 이미지를 삽입한다
       return [fileName, url_key];
     } catch (error) {

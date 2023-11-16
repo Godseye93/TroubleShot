@@ -25,7 +25,6 @@ export default function Page() {
   const [Changed, setChanged] = useState(false);
   const { user } = useLoginStore();
   const onSubmit = async () => {
-    console.log(options.scope);
     if (title.trim() === "") return toast.error("제목을 입력해 주세요");
     if (markdown.trim() === "") return toast.error("내용을 입력해 주세요");
     if (options.category.trim() === "" || options.category.trim() === "선택안함")

@@ -4,7 +4,6 @@ type PageParams = {
 };
 
 export default function Page({ params }: { params: PageParams }) {
-  console.log(params);
   return (
     <main className="mt-4  mx-3 flex-1 bg-white">
       <Detail id={Number(params.trouble)} />

@@ -28,7 +28,6 @@ export default function useInfiniteUserList({ nickname }: { nickname: string }) 
       if (!fetching && scrollHeight - scrollTop <= clientHeight * 1.2) {
         fetching = true;
         if (hasNextPage) {
-          console.log(data);
           await fetchNextPage();
         }
         fetching = false;
