@@ -192,3 +192,19 @@ export interface Member {
   nickname: string;
   locale: string;
 }
+
+export interface RequestPostAiAnswer {
+  loginSeq: number;
+  type: 0;
+  context: string;
+}
+export interface ResponsePostAiAnswer extends DefaultRespense {
+  context?: string;
+}
+export interface RequestGetCount {
+  loginSeq: number;
+  type: 0;
+}
+export interface ResponeseGetCount extends DefaultRespense {
+  count: number;
+}

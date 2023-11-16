@@ -3,11 +3,14 @@ import {
   GetMostTags,
   GetTroubleDetail,
   GetTroubleList,
+  RequestPostAiAnswer,
   RequestTroubleShooting,
   RequestTroubleShootingAnswer,
   RequestTroubleShootingAnswerReply,
   RequestTroubleShootingReply,
+  ResponeseGetCount,
   ResponseCategory,
+  ResponsePostAiAnswer,
   SearchParams,
 } from "@/types/TroubleType";
 import qs from "qs";
@@ -350,5 +353,17 @@ export const putSelectAnswer = async (userSeq: number, troubleSeq: number, answe
     type: 0,
   };
   const { data } = await api.put(`/trouble-shootings/${troubleSeq}/answers/${answerSeq}/select`, body);
+  return data;
+};
+export const postAnswerAi = async (body: RequestPostAiAnswer): Promise<ResponsePostAiAnswer> => {
+  const { data } = await api.post("/gpt/error-feedback", body);
+  return data;
+};
+export const getCountAiAnswer = async (userSeq: number): Promise<ResponeseGetCount> => {
+  const params = {
+    loginSeq: userSeq,
+    type: 0,
+  };
+  const { data } = await api.get("/gpt/count", { params });
   return data;
 };
