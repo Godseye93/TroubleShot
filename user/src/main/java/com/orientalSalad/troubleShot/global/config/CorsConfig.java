@@ -26,6 +26,12 @@ public class CorsConfig {
 		config.addAllowedOrigin("http://k9d205.p.ssafy.io:3000");
 		config.addAllowedOrigin("https://k9d205.p.ssafy.io");
 		config.addAllowedOrigin("http://k9d205.p.ssafy.io");
+
+		config.addAllowedOrigin("https://orientalsalad.kro.kr:3000");
+		config.addAllowedOrigin("https://orientalsalad.kro.kr:80");
+		config.addAllowedOrigin("http://orientalsalad.kro.kr:3000");
+		config.addAllowedOrigin("http://orientalsalad.kro.kr:80");
+
 		config.addAllowedHeader("*");
 		config.addAllowedMethod("*");
 

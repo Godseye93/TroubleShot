@@ -33,7 +33,10 @@ public class Authentication {
 		// if(!loginDTO.getIp().equals(loginDTO.getIp())){
 		// 	throw new Exception("로그인한 기기가 다릅니다.");
 		// }
-
 		return true;
+
 	}
 }
+
+
+
