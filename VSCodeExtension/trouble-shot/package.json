@@ -2,7 +2,7 @@
   "name": "trouble-shot",
   "displayName": "trouble shot",
   "description": "make trouble shooting docs easily",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "publisher": "wjdtmfgh",
   "engines": {
     "vscode": "^1.75.0"
@@ -36,7 +36,7 @@
       },
       {
         "view": "more-info",
-        "contents": "Our website\n[Visit Trouble Shot Web Site](https://k9d205a.p.ssafy.io)\nMade by Oriental Salad Team - SEULHO JEONG"
+        "contents": "Our website\n[Visit Trouble Shot Web Site](http://orientalsalad.kro.kr/)\nMade by Oriental Salad Team - SEULHO JEONG"
       }
     ],
     "commands": [
