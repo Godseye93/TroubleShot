@@ -6,7 +6,8 @@ import { SearchParams } from "@/types/TroubleType";
 import React, { useEffect, useState } from "react";
 import useInfiniteList from "@/hooks/useInfiniteList";
 import { useSearchParams } from "next/navigation";
-
+import Image from "next/image";
+import boxloading from "../../../../public/boxloading.gif";
 export default function PostList() {
   const searchParams = useSearchParams();
   const keyword = searchParams.get("keyword");
@@ -26,7 +27,7 @@ export default function PostList() {
     ...(endTime && { endTime }),
     ...(order && { order }),
   });
-  const { data } = useInfiniteList({ options: options, queryKey: "boards" });
+  const { data, hasNextPage } = useInfiniteList({ options: options, queryKey: "boards" });
   useEffect(() => {
     setOptions({
       ...(keyword && { keyword: keyword }),
@@ -63,6 +64,11 @@ export default function PostList() {
               ))}
             </React.Fragment>
           ))}
+        {hasNextPage && (
+          <div className="flex justify-center items-center">
+            <Image alt="loading..." src={boxloading} width={100} height={100} />
+          </div>
+        )}
       </div>
     </>
   );

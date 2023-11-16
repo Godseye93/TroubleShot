@@ -72,7 +72,7 @@ export default function useInfiniteList({ options, queryKey, category, userSeq }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handleScroll = async (e: any) => {
       const { scrollHeight, scrollTop, clientHeight } = e.target.scrollingElement;
-      if (!fetching && scrollHeight - scrollTop <= clientHeight * 1.2) {
+      if (!fetching && scrollHeight - scrollTop <= clientHeight * 1.4) {
         fetching = true;
         if (hasNextPage) {
           await fetchNextPage();
@@ -86,5 +86,5 @@ export default function useInfiniteList({ options, queryKey, category, userSeq }
     };
   }, [fetchNextPage, hasNextPage]);
 
-  return { data, isPending };
+  return { data, isPending, hasNextPage };
 }
