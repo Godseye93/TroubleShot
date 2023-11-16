@@ -28,7 +28,8 @@ export default function Page() {
     console.log(options.scope);
     if (title.trim() === "") return toast.error("제목을 입력해 주세요");
     if (markdown.trim() === "") return toast.error("내용을 입력해 주세요");
-    if (options.category.trim() === "") return toast.error("카테고리를 선택해 주세요");
+    if (options.category.trim() === "" || options.category.trim() === "선택안함")
+      return toast.error("카테고리를 선택해 주세요");
     if (options.scope === null) return toast.error("공개 범위를 선택해 주세요");
     if (options.solved === null) return toast.error("해결 여부를 선택해 주세요");
     const req = {
