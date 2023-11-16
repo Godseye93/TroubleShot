@@ -70,28 +70,27 @@ export default function CommunityContents() {
       return data;
     },
   });
-
+  console.log(tags);
   return (
     <>
       <Searchbar setPropsOptions={setOptions} queryKey="boards" isCommunity={true} baseUrl="community/posts" />
-      {mounted && user && (
+      {mounted && user && tags && tags.tagList.length > 1 && (
         <div className="mt-2">
           <p className="text-xl font-semibold my-2">자주 이용한 태그</p>
+
           <div className="grid grid-cols-2 gap-2">
-            {tags && (
-              <>
-                <CardContentL
-                  queryKey={["contents1"]}
-                  keyword={tags.tagList[0]}
-                  contents={contents1?.troubleShootingList}
-                />
-                <CardContentL
-                  queryKey={["contents2"]}
-                  keyword={tags.tagList[1]}
-                  contents={contents2?.troubleShootingList}
-                />
-              </>
-            )}
+            <>
+              <CardContentL
+                queryKey={["contents1"]}
+                keyword={tags.tagList[0]}
+                contents={contents1?.troubleShootingList}
+              />
+              <CardContentL
+                queryKey={["contents2"]}
+                keyword={tags.tagList[1]}
+                contents={contents2?.troubleShootingList}
+              />
+            </>
           </div>
         </div>
       )}
