@@ -184,17 +184,20 @@ export class MarkdownViewPanel {
               return;
             }
             // Code that should run in response to the hello message command
-            const res = await fetch("http://orientalsalad.kro.kr:8102/gpt/readme-feedback", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                context: this.content,
-                loginSeq: sessionId,
-                type: 2,
-              }),
-            });
+            const res = await fetch(
+              "http://orientalsalad.kro.kr/api/troubleshooting/gpt/readme-feedback",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  context: this.content,
+                  loginSeq: sessionId,
+                  type: 2,
+                }),
+              }
+            );
             const resJson = await res.json();
             if (resJson.success) {
               webview.postMessage({

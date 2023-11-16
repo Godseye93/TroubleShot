@@ -10,3 +10,5 @@
   - fix old version api call
 - 0.0.5 - 20203.11.16
   - fix our web domain
+- 0.0.6 - 20203.11.16
+  - api call URL fix

@@ -30,7 +30,7 @@ export async function activate(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand("logout.trouble.shot", async () => {
       const body = { seq: sessionId, type: 2 };
       try {
-        await fetch("http://orientalsalad.kro.kr:8101/login/logout", {
+        await fetch("http://orientalsalad.kro.kr/api/user/login/logout", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -191,7 +191,7 @@ export async function activate(context: vscode.ExtensionContext) {
         );
       } else {
         const res = await fetch(
-          `http://orientalsalad.kro.kr:8102/trouble-shootings/${Number(
+          `http://orientalsalad.kro.kr/api/troubleshooting/trouble-shootings/${Number(
             troubleShootId
           )}?loginSeq=0&type=2`
         );
