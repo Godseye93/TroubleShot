@@ -22,7 +22,6 @@ export default function Page({ params }: { params: { user: number } }) {
     try {
       const userData = await getUserInfo(userSeq);
       setUserData(userData);
-      setMounted(true);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -30,6 +29,7 @@ export default function Page({ params }: { params: { user: number } }) {
 
   useEffect(() => {
     fetchUserData();
+    setMounted(true);
   }, []);
 
   return mounted ? (
@@ -91,13 +91,49 @@ export default function Page({ params }: { params: { user: number } }) {
     </div>
   ) : (
     <div className="mt-20 mb-5 flex justify-center w-full">
-      <Skeleton height={100} width={100} />
-      <Skeleton height={20} />
-      <Skeleton height={20} />
-      <Skeleton height={200} width={300} />
-      <Skeleton height={200} width={300} />
-      <Skeleton count={5} />
-      <Skeleton count={5} />
+      <div className="w-7/12 me-4">
+        <div className="flex justify-center items-center bg-white rounded-lg mb-4 w-full p-5">
+          <div className="w-1/6 flex flex-col items-center me-5">
+            <Skeleton width={150} height={100} />
+            <Skeleton width={150} height={30} />
+          </div>
+          <div className="me-10">
+            <Skeleton width={120} height={40} />
+            <Skeleton width={120} height={20} />
+          </div>
+          <div className="ms-5">
+            <Skeleton width={300} height={200} />
+          </div>
+        </div>
+        <div className="w-full bg-white rounded-lg">
+          <div className="w-full bg-main rounded-t-lg px-3 py-5"></div>
+          <div className="flex w-full rounded-b-lg">
+            <div className="w-1/2 px-3 py-5">
+              <Skeleton width={200} height={30} />
+              <div className="flex flex-wrap w-full mt-2">
+                <Skeleton width={200} height={50} count={3} />
+                <Skeleton width={200} height={50} count={3} className="ms-5" />
+              </div>
+            </div>
+            <div className="w-1/2 px-3 py-5 flex flex-col items-center">
+              <Skeleton width={300} height={200} />
+              <Skeleton width={200} height={20} />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="w-4/12 bg-white rounded-lg relative">
+        <div className="w-full bg-main rounded-t-lg px-3 py-5"></div>
+        <div className="p-5">
+          <Skeleton width={500} height={110} />
+          <Skeleton width={500} height={110} />
+          <Skeleton width={500} height={110} />
+          <Skeleton width={500} height={110} />
+        </div>
+        <div className="absolute w-full text-center bottom-0">
+          <Skeleton width={200} height={20} />
+        </div>
+      </div>
     </div>
   );
 }

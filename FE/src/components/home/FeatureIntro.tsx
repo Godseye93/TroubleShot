@@ -1,9 +1,9 @@
 "use client";
 import { useState } from "react";
 import Image from "next/image";
-import function1 from "../../../public/function/function1.gif";
-import function2 from "../../../public/function/function2.gif";
-import function3 from "../../../public/function/function3.gif";
+import function1 from "../../../public/functionFolder/function1.gif";
+import function2 from "../../../public/functionFolder/function2.gif";
+import function3 from "../../../public/functionFolder/function3.gif";
 
 export default function FeatureIntro() {
   type MyTabType = 1 | 2 | 3;
