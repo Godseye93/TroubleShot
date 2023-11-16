@@ -18,6 +18,9 @@ import BoardMenu from "./BoardMenu";
 import { BsBookmarkStar, BsBookmarkStarFill } from "react-icons/bs";
 import { checkWriterImg, checkWriterName } from "@/utils/nullWriter";
 import Link from "next/link";
+import { TbRobot } from "react-icons/tb";
+import AnswerAi from "./AnswerAi";
+
 export default function Detail({ id }: { id: number }) {
   const queryClient = useQueryClient();
   const router = useRouter();
@@ -150,6 +153,11 @@ export default function Detail({ id }: { id: number }) {
               <div className="bg-main rounded-t-lg flex items-center ps-5 h-12 font-semibold mt-5">사용 기술 스택</div>
               <MDEditor.Markdown className="max-w-[65vw]" source={"```ts\n" + board.dependency + "\n```"} />
             </div>
+
+            {user && board.writer?.seq === user.member.seq && (
+              <AnswerAi userSeq={user.member.seq} context={board.context} />
+            )}
+
             <div className=" border-b-2 pb-2 pt-10">
               <div className="flex  items-center gap-3 mt-5 text-xl">
                 <div className="flex items-center max-w-[33%]  hover:cursor-pointer gap-2" onClick={onLike}>
