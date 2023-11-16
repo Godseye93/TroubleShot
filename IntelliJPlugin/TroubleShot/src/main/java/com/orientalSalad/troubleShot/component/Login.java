@@ -1,8 +1,11 @@
-package com.orientalSalad.troubleShot.component.loginVersion;
+package com.orientalSalad.troubleShot.component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.intellij.openapi.components.ServiceManager;
 import com.orientalSalad.troubleShot.dto.LoginResponseDTO;
+import com.orientalSalad.troubleShot.endpoint.TroubleShotToolWindow;
+import com.orientalSalad.troubleShot.util.LoginManager;
 import net.minidev.json.JSONObject;
 import okhttp3.*;
 
@@ -15,21 +18,25 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 public class Login {
+    private JPanel wrapperPanel;
     private JPanel panel;
     private JTextField emailTextField;
     private JPasswordField passwordTextField;
     private JPanel loginMain;
     private JButton loginButton;
     private JLabel toJoinLinkText;
-    private LoginVersionMain loginVersionMain;
 
     public Login() {
         panel = new JPanel();
-        panel.add(loginMain);
-
+        JPanel wrapperPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        wrapperPanel.add(loginMain);
+        panel.setLayout(new BorderLayout());
+        panel.add(wrapperPanel, BorderLayout.NORTH);
+        emailTextField.setHorizontalAlignment(JTextField.LEFT);
+        passwordTextField.setHorizontalAlignment(JTextField.LEFT);
         // 로그인 액션
         loginButton.addActionListener(e -> {
-            System.out.println("login 액션 시작");
+            System.out.println("[login 요청]");
 
             // request body 생성
             JSONObject requestbody = new JSONObject();
@@ -40,7 +47,7 @@ public class Login {
             // login 요청
             OkHttpClient client = new OkHttpClient();
             Request request = new Request.Builder()
-                    .url("https://k9d205.p.ssafy.io:8101/login/login")
+                    .url("https://orientalsalad.kro.kr:8101/login/login")
                     .post(RequestBody.create(MediaType.parse("application/json"), requestbody.toString()))
                     .build();
 
@@ -56,28 +63,22 @@ public class Login {
 
                     System.out.println("응답 본문: " + loginResponseDTO.toString());
 
-                    // todo :  SEQ값 저장
-
-                    // todo : input값 깨끗이
-
-
-                    // 로그인 버튼 비활성화
-                    loginButton.setEnabled(false);
+                    // login 유저 정보 저장
+                    LoginManager loginManager = ServiceManager.getService(LoginManager.class);
+                    loginManager.setLoginUserSeq(loginResponseDTO.getMember().getSeq());
+                    System.out.println("loginInfo : " + loginManager.getLoginUserSeq());
 
                     // 로그인 화면 끄고, 트러블 작성 페이지 보여주기
-                    loginVersionMain = LoginVersionMain.getInstance();
-                    loginVersionMain.showTrouble();
-                    loginVersionMain.toLogoutLabel();
+                    TroubleShotToolWindow.addMainPanelToToolWindow();
 
                 }
                 else {
-                    System.out.println("요청 실패 : " + response.code());
-                    // todo: 실패 알림 뜨게 하기
+                    System.out.println("요청 실패 : " + response.code() + " responsebody:  " + response.body().string());
+                    // todo: dialog로 "아이디 혹은 비밀번호가 틀렸습니다"실패 알림 뜨게 하기
                 }
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
-            System.out.println("login 액션 끝");
         });
 
 
@@ -86,7 +87,7 @@ public class Login {
             @Override
             public void mouseClicked(MouseEvent e) {
                 try {
-                    Desktop.getDesktop().browse(new URI("https://k9d205a.p.ssafy.io/signUp"));
+                    Desktop.getDesktop().browse(new URI("https://orientalsalad.kro.kr/signUp"));
                 } catch (IOException | URISyntaxException ex) {
                     ex.printStackTrace();
                 }

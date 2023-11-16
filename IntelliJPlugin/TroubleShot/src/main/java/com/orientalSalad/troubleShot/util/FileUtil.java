@@ -8,6 +8,7 @@ import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiFileFactory;
 import com.intellij.psi.PsiManager;
+import com.orientalSalad.troubleShot.dto.TroubleShootingDTO;
 
 import java.io.*;
 import java.nio.ByteBuffer;
@@ -78,6 +79,24 @@ public class FileUtil {
 
     }
 
+    // 임시 파일 에디터에서 보여주기
+    public void showInEditor(String title, String context) {
+        try {
+            // 임시 파일 생성
+            File tempFile = File.createTempFile(title, ".md");
+            FileWriter writer = new FileWriter(tempFile);
+            writer.write(context);
+            writer.close();
+
+            // 에디터에서 임시 파일 열기
+            VirtualFile virtualFile = LocalFileSystem.getInstance().refreshAndFindFileByIoFile(tempFile);
+            FileEditorManager.getInstance(project).openFile(virtualFile, true);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public String[] getFileContents(String fileName) {
         StringBuilder sb = new StringBuilder();
 
@@ -91,8 +110,6 @@ public class FileUtil {
                 sb.append(line).append("\n");
             }
             reader.close();
-
-
 
         } catch (IOException e) {
             e.printStackTrace();

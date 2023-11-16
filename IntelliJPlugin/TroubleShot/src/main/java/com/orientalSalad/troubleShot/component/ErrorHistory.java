@@ -1,14 +1,11 @@
 package com.orientalSalad.troubleShot.component;
 
-import com.intellij.ui.components.JBList;
-import com.orientalSalad.troubleShot.component.logoutVersion.LogoutVersionMain;
-import com.orientalSalad.troubleShot.component.logoutVersion.LogoutVersionWriteTrouble;
-
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import java.awt.*;
 
-import static com.orientalSalad.troubleShot.component.MainPanel.fileUtil;
+import static com.orientalSalad.troubleShot.component.StartPanel.fileUtil;
 
 public class ErrorHistory {
     DefaultListModel<String> listModel;
@@ -19,9 +16,30 @@ public class ErrorHistory {
     public ErrorHistory() {
         listModel = new DefaultListModel<>();
 
+        errorList.setCellRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index,
+                                                          boolean isSelected, boolean cellHasFocus) {
+                Component renderer = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                if (renderer instanceof JLabel) {
+                    ((JLabel) renderer).setFont(new Font("Dialog", Font.PLAIN, 12));
+                }
+                return renderer;
+            }
+        });
 
         // errorHistory list에 추가
         String[] fileNames = fileUtil.getFileNameList("error_history");
+        if (fileNames == null || fileNames.length == 0) {
+            panel.setLayout(new BorderLayout());
+            JLabel messageLabel = new JLabel("에러 히스토리가 존재하지 않습니다.");
+            messageLabel.setHorizontalAlignment(JLabel.CENTER);
+            messageLabel.setVerticalAlignment(JLabel.CENTER);
+            panel.setLayout(new GridBagLayout());
+            panel.add(messageLabel);
+            return;
+        }
+
         for (int i = 0; i < fileNames.length; i++) {
             listModel.addElement(fileNames[i].replace(".txt", ""));
             System.out.println(fileNames[i]);
@@ -35,9 +53,8 @@ public class ErrorHistory {
 //                if (errorList.getSelectedIndex() < listModel.getSize()) {
                     String selectedFileName = errorList.getSelectedValue();
                     if (selectedFileName != null) {
-                        // todo : 선택한 파일의 내용을 가져와서, write troubleShooting에 넘기기
                         String[] troubleInfo = fileUtil.getFileContents(selectedFileName);
-                        LogoutVersionMain.getInstance().showAutomaticWriteTroublePanel(selectedFileName, troubleInfo);
+                        MainPanel.getInstance().showAutomaticWriteTroublePanel(selectedFileName, troubleInfo);
                         System.out.println("troubleInfo 길이 : " + troubleInfo.length);
 
                     }

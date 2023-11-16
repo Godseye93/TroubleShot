@@ -9,8 +9,7 @@ import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiFileFactory;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.xml.XmlFile;
-import com.orientalSalad.troubleShot.component.ErrorHistory;
-import com.orientalSalad.troubleShot.component.logoutVersion.LogoutVersionMain;
+import com.orientalSalad.troubleShot.component.MainPanel;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -73,7 +72,7 @@ public class TroubleAutomation {
         for (String line : errorLine) {
             // 에러 발생 시간 얻기
             if (line.contains(" ERROR ")) {
-                errorDateTIme = line.substring(5, 19).replace(":", ".").replace("-", ".");
+                errorDateTIme = line.substring(3, 19).replace(":", ".").replace("-", ".");
                 continue;
             }
             // Exception Type 얻기
@@ -182,7 +181,7 @@ public class TroubleAutomation {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        LogoutVersionMain.getInstance().updateErrorHistory();
+        MainPanel.getInstance().updateErrorHistory();
     }
 
     private String getErrorLog() {

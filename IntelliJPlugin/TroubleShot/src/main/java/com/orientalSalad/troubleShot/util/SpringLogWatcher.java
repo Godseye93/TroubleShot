@@ -1,8 +1,7 @@
-package com.orientalSalad.troubleShot.endpoint;
+package com.orientalSalad.troubleShot.util;
 
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.PersistentStateComponent;
-import com.orientalSalad.troubleShot.util.TroubleAutomation;
 import groovyjarjarantlr4.v4.runtime.misc.Nullable;
 import org.jetbrains.annotations.NotNull;
 
@@ -82,7 +81,7 @@ public class SpringLogWatcher implements PersistentStateComponent<SpringLogWatch
         StringBuilder sb = new StringBuilder();
         try {
 
-            file.seek(lastPosition); // Add this line
+            file.seek(lastPosition);
             String line;
             boolean errorLine = false;
             while ((line = file.readLine()) != null) {
