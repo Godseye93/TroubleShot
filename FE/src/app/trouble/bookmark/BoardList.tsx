@@ -8,7 +8,7 @@ import { useSearchParams } from "next/navigation";
 import SearchbarSkeleton from "@/components/Skeletons/SearchbarSkeleton";
 import dynamic from "next/dynamic";
 import Image from "next/image";
-import boxloading from "../../../public/boxloading.gif";
+import boxloading from "../../../../public/boxloading.gif";
 const Searchbar = dynamic(() => import("@/components/Searchbar/Searchbar"), {
   loading: () => <SearchbarSkeleton />,
 });
