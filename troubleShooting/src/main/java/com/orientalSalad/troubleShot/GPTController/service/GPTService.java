@@ -80,11 +80,10 @@ public class GPTService {
 				.timeout(Duration.ofSeconds(50))
 				.block();
 
-			// log.info(response.toString());
+			log.info(response.toString());
 
 			answer = response.getChoices().get(0).getMessage().getContent();
 
-			// log.info(answer);
 			hashOperations.put(redisKey,hashKey,count+1);
 		}catch (Exception e){
 			e.printStackTrace();
