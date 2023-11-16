@@ -1,5 +1,7 @@
 package com.orientalSalad.troubleShot.GPTController.dto;
 
+import com.orientalSalad.troubleShot.global.dto.RequestDTO;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,6 +15,6 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class RequestContextDTO {
+public class RequestContextDTO extends RequestDTO {
 	String context;
 }
