@@ -7,7 +7,12 @@ export default function Footer() {
   const path = usePathname();
 
   return (
-    <div id="footer" className={`${path === "/" && "hidden"} flex w-full border-t-2 border-gray-400 justify-between`}>
+    <div
+      id="footer"
+      className={`${
+        path === "/" && "hidden"
+      } flex w-full border-t-2 mt-20 bg-main border-gray-400 justify-between py-5`}
+    >
       <ul className="w-fit mt-3 ms-3">
         <li>
           <Image src={blackLogo} alt="" className="w-[25vw]" />
