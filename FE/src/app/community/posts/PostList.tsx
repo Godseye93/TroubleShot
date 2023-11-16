@@ -11,6 +11,7 @@ import boxloading from "../../../../public/boxloading.gif";
 export default function PostList() {
   const searchParams = useSearchParams();
   const keyword = searchParams.get("keyword");
+  const writer = searchParams.get("writer");
   const solved = searchParams.get("solved");
   const tags = searchParams
     .get("tags")
@@ -21,6 +22,7 @@ export default function PostList() {
   const order = Number(searchParams.get("order"));
   const [options, setOptions] = useState<SearchParams>({
     ...(keyword && { keyword }),
+    ...(writer && { keyword: writer }),
     ...(solved !== null && { solved: solved === "true" ? true : false }),
     ...(tags && { tags }),
     ...(startTime && { startTime }),
@@ -28,16 +30,6 @@ export default function PostList() {
     ...(order && { order }),
   });
   const { data, hasNextPage } = useInfiniteList({ options: options, queryKey: "boards" });
-  useEffect(() => {
-    setOptions({
-      ...(keyword && { keyword: keyword }),
-      ...(solved !== null && { solved: solved === "true" ? true : false }),
-      ...(tags && { tags }),
-      ...(startTime && { startTime }),
-      ...(endTime && { endTime }),
-      ...(order && { order }),
-    });
-  }, [searchParams.toString()]);
 
   return (
     <>

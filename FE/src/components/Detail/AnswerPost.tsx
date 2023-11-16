@@ -62,8 +62,7 @@ export default function AnswerPost({
   const onSelectAnswer = async () => {
     if (window.confirm("채택 후에는 취소가 불가능합니다. 정말 채택하시겠습니까?")) {
       try {
-        const res = await putSelectAnswer(user!.member.seq, troubleSeq, answer.seq);
-        console.log(res);
+        await putSelectAnswer(user!.member.seq, troubleSeq, answer.seq);
         toast.success("답변이 채택되었습니다");
         queryClient.invalidateQueries({ queryKey: ["detail"], exact: true });
       } catch (err) {
