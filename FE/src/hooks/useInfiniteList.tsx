@@ -12,7 +12,7 @@ interface Props {
 }
 export default function useInfiniteList({ options, queryKey, category, userSeq }: Props) {
   const { user } = useLoginStore();
-  const { data, error, fetchNextPage, hasNextPage, status } = useInfiniteQuery({
+  const { data, error, isPending, fetchNextPage, hasNextPage, status } = useInfiniteQuery({
     queryKey: [queryKey, options],
     queryFn: async ({ pageParam = 1 }) => {
       const data =
@@ -86,5 +86,5 @@ export default function useInfiniteList({ options, queryKey, category, userSeq }
     };
   }, [fetchNextPage, hasNextPage]);
 
-  return { data };
+  return { data, isPending };
 }

@@ -1,12 +1,16 @@
 "use client";
 import BoardItem from "@/components/BoardItem";
-import Searchbar from "@/components/Searchbar/Searchbar";
 import { useLoginStore } from "@/stores/useLoginStore";
 import { SearchParams } from "@/types/TroubleType";
 import React, { useEffect, useState } from "react";
 import useInfiniteList from "@/hooks/useInfiniteList";
 import { useSearchParams } from "next/navigation";
+import dynamic from "next/dynamic";
+import SearchbarSkeleton from "@/components/Skeletons/SearchbarSkeleton";
 
+const Searchbar = dynamic(() => import("@/components/Searchbar/Searchbar"), {
+  loading: () => <SearchbarSkeleton />,
+});
 export default function BoardList() {
   const { user } = useLoginStore();
   const searchParams = useSearchParams();
