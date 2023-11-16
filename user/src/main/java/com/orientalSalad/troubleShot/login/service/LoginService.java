@@ -56,9 +56,9 @@ public class LoginService {
 
 		LoginDTO loginDTO = (LoginDTO)valueOperations.get(key);
 
-		if(!loginDTO.getIp().equals(logOutDTO.getIp())){
-			throw new Exception("로그인한 기기가 다릅니다.");
-		}
+		// if(!loginDTO.getIp().equals(logOutDTO.getIp())){
+		// 	throw new Exception("로그인한 기기가 다릅니다.");
+		// }
 		
 		//로그인 만료
 		redisTemplate.delete(key);
