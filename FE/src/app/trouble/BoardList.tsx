@@ -39,7 +39,6 @@ export default function BoardList() {
   }, [searchParams.toString()]);
 
   const { data } = useInfiniteList({ options: options, queryKey: "trouble" });
-  console.log;
   // const { data, error } = useQuery({
   //   queryKey: ["boards"],
   //   queryFn: async () => {

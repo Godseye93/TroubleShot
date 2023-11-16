@@ -37,7 +37,6 @@ export default function PostList() {
       ...(order && { order }),
     });
   }, [searchParams.toString()]);
-  console.log(data);
 
   return (
     <>
