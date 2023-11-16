@@ -5,10 +5,10 @@ import { useRouter } from "next/navigation";
 import Options from "@/components/Create/Options";
 import { CreateOptions, GetTroubleDetail } from "@/types/TroubleType";
 import { toast } from "react-toastify";
-import { getCategories, putTrouble } from "@/api/trouble";
+import { getCategories, getTroubleDetail, putTrouble } from "@/api/trouble";
 import { useLoginStore } from "@/stores/useLoginStore";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-export default function Page() {
+export default function Page({ params }: { params: { id: string } }) {
   const { data, error, isLoading } = useQuery({
     queryKey: ["categories"],
     queryFn: async () => {
@@ -18,7 +18,14 @@ export default function Page() {
     },
   });
   const queryClient = useQueryClient();
-  const board = queryClient.getQueryData<GetTroubleDetail>(["detail"])?.troubleShooting;
+  const { data: getData } = useQuery({
+    queryKey: ["detail"],
+    queryFn: async () => {
+      const data = await getTroubleDetail(user ? user.member.seq : null, Number(params.id));
+      return data;
+    },
+  });
+
   const [title, setTitle] = useState("");
   const [markdown, setMarkdown] = useState("");
   const router = useRouter();
@@ -37,17 +44,18 @@ export default function Page() {
 
   const [Changed, setChanged] = useState(false);
   useEffect(() => {
-    if (board) {
+    if (getData && getData.troubleShooting) {
       setOptions({
-        category: board.category,
-        tags: board.tags,
-        solved: board.solved,
-        scope: board.scope,
+        category: getData.troubleShooting.category,
+        tags: getData.troubleShooting.tags,
+        solved: getData.troubleShooting.solved,
+        scope: getData.troubleShooting.scope,
       });
-      setMarkdown(board.context);
-      setTitle(board.title);
+      setMarkdown(getData.troubleShooting.context);
+      setTitle(getData.troubleShooting.title);
+      setDependency(getData.troubleShooting.dependency ?? "");
     }
-  }, [board]);
+  }, [getData]);
 
   useEffect(() => {
     if (data) {
@@ -78,7 +86,7 @@ export default function Page() {
       },
     };
     try {
-      await putTrouble(board!.seq, req)
+      await putTrouble(getData!.troubleShooting.seq, req)
         .then(() => {
           router.back();
         })
@@ -90,7 +98,6 @@ export default function Page() {
       console.log(err);
     }
   };
-
   return (
     <div className="flex-1 me-2  min-h-[91vh]">
       {!isLoading && (
@@ -143,6 +150,7 @@ export default function Page() {
                   "next": "13.5.6",
                   "react": "^18",
                 }`}
+                  value={dependency}
                   onChange={(e) => setDependency(e.target.value)}
                 ></textarea>
               </div>
