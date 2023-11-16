@@ -25,7 +25,7 @@ export default function UserList() {
     },
     initialPageParam: 1,
     getNextPageParam: (lastPage, pages) => {
-      return pages.length + 1;
+      return lastPage.memberList.length > 35 ? pages.length + 1 : undefined;
     },
   });
 
@@ -37,7 +37,6 @@ export default function UserList() {
       if (!fetching && scrollHeight - scrollTop <= clientHeight * 1.2) {
         fetching = true;
         if (hasNextPage) {
-          console.log(data);
           await fetchNextPage();
         }
         fetching = false;
