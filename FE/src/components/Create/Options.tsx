@@ -23,9 +23,6 @@ export default function Options({ categorys, options, setOptions, setShowOptions
   const addTag = () => {
     if (!inputText) return;
     setTags((prev) => [...prev, inputText]);
-    setOptions((prev) => {
-      return { ...prev, tags };
-    });
     setInputText("");
   };
   useEffect(() => {
@@ -34,6 +31,11 @@ export default function Options({ categorys, options, setOptions, setShowOptions
       setIsClicked(true);
     }
   }, [isClicked]);
+  useEffect(() => {
+    setOptions((prev) => {
+      return { ...prev, tags: tags };
+    });
+  }, [tags]);
 
   const setSolved = (value: boolean) => {
     setOptions((prev) => {
@@ -59,7 +61,7 @@ export default function Options({ categorys, options, setOptions, setShowOptions
             <p>{!options.category ? "선택안함" : options.category}</p>
             <IoIosArrowDown />
             {isdrop && (
-              <div className="absolute  bg-white w-[20rem] shadow-md rounded-lg border-2 -bottom-[8rem] z-50 left-0">
+              <div className="absolute  bg-white w-[20rem] shadow-md rounded-lg border-2 z-50  left-0 -bottom-0 translate-y-full">
                 <div
                   className="hvc hover:cursor-pointer h-7 flex items-center px-2 rounded-t-lg"
                   onClick={() => {
