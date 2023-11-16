@@ -29,6 +29,7 @@ export default function Header() {
       });
       if (res.success) {
         userLogout();
+        setDelTabUser();
         window.location.href = "/";
       }
     } catch (err) {
