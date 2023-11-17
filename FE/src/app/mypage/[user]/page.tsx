@@ -35,7 +35,7 @@ export default function Page({ params }: { params: { user: number } }) {
   return mounted ? (
     <div className="mt-20 mb-5 flex justify-center w-full">
       <div className="w-7/12 me-4">
-        <div className="flex justify-center items-center bg-white rounded-lg mb-4 w-full p-5">
+        <div className="flex justify-center items-center bg-white rounded-lg mb-4 w-full p-5 shadow-md">
           <div className="w-1/6 flex flex-col items-center me-5">
             <img src={userData?.profileImg} alt="trosProfileImg" className="mb-3" />
             {userSeq == LoginSeq && (
@@ -52,7 +52,7 @@ export default function Page({ params }: { params: { user: number } }) {
             <MyResponsiveRadar userSeq={userSeq} nickname={userData?.nickname} />
           </div>
         </div>
-        <div className="w-full bg-white rounded-lg">
+        <div className="w-full bg-white rounded-lg shadow-md">
           <div className="w-full bg-main rounded-t-lg px-3 py-2">
             <p className="text-lg">내 트러블 슈팅 요약</p>
           </div>
@@ -76,7 +76,7 @@ export default function Page({ params }: { params: { user: number } }) {
         </div>
       </div>
       {userSeq == LoginSeq && (
-        <div className="w-4/12 bg-white rounded-lg relative">
+        <div className="w-4/12 bg-white rounded-lg relative shadow-md">
           <div className="w-full bg-main rounded-t-lg px-3 py-2">
             <p className="text-lg">북마크</p>
           </div>
