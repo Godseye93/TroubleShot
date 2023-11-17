@@ -47,7 +47,6 @@ public class TroubleShotToolWindow implements ToolWindowFactory {
             Content newContent = contentFactory.createContent(startPanel, "", false);
 
             toolWindow.getContentManager().removeAllContents(true);  // 기존에 있던 Content를 모두 제거
-
             toolWindow.getContentManager().addContent(newContent);   // 새로운 Content 추가
 
         } catch (Exception ex) {

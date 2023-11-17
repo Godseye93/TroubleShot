@@ -17,12 +17,12 @@ public class ChatGPTFeedback {
     public void showFeedback(boolean solved, String title, String feedback) {
         StringBuilder sb = new StringBuilder();
         if (solved) {
-            sb.append("<h2>트러블 슈팅 피드백</h2>");
+            sb.append("<h2 style='text-align: center;'><strong>트러블 슈팅 피드백</strong></h2>");
         } else {
-            sb.append("<h2>에러 피드백</h2>");
+            sb.append("<h2 style='text-align: center;'><strong>에러 피드백</strong></h2>");
         }
         sb.append("<h1>").append(title).append("</h1>");
-        feedback = feedback.replace(".", ".\n");
+        feedback = feedback.replace("\n", "<br>");
         sb.append(feedback);
         editor.setText(sb.toString());
     }

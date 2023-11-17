@@ -56,10 +56,9 @@ public class LogoutVersionList {
             label.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                // 레이블 클릭 시 파일 로드 및 표시
                 fileUtil.loadAndDisplayFile(fileName);
-                String context = String.join("\n", fileUtil.getFileContents(fileName));
-                MainPanel.getInstance().getGPTFeedback("trouble".equals(type), fileName, context);
+//                String context = String.join("\n", fileUtil.getFileContents(fileName));
+//                MainPanel.getInstance().getGPTFeedback("trouble".equals(type), fileName, context);
                 }
             });
 
@@ -106,8 +105,6 @@ public class LogoutVersionList {
             panel.add(itemPanel);
         }
 
-        // 생성된 JPanel을 스크롤 패널에 추가합니다.
-//        scrollPane.setViewportView(panel);
         wrapperPanel.setLayout(new BorderLayout());
         JScrollPane scrollPane = new JScrollPane(panel);
         scrollPane.setBorder(null);
@@ -116,15 +113,13 @@ public class LogoutVersionList {
     }
 
     private void showDeleteDialog(String fileName) {
-        // '삭제하시겠습니까?' 확인 대화상자 표시
         int confirm = JOptionPane.showConfirmDialog(panel, "삭제하시겠습니까?", "삭제 확인", JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
-            // '예'를 선택한 경우, 삭제 로직 수행
+            // 삭제
             fileUtil.deleteFile(fileName);
             // 초기화
             MainPanel.getInstance().showLogoutVersionMyTroubleShooting();
         } else if (confirm == JOptionPane.NO_OPTION) {
-            // '아니오'를 선택한 경우, 메시지 출력
             System.out.println("삭제 취소");
         }
     }

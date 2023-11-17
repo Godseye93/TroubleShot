@@ -28,10 +28,10 @@ public class Login {
 
     public Login() {
         panel = new JPanel();
-        JPanel wrapperPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        wrapperPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         wrapperPanel.add(loginMain);
         panel.setLayout(new BorderLayout());
-        panel.add(wrapperPanel, BorderLayout.NORTH);
+        panel.add(wrapperPanel, BorderLayout.CENTER);
         emailTextField.setHorizontalAlignment(JTextField.LEFT);
         passwordTextField.setHorizontalAlignment(JTextField.LEFT);
         // 로그인 액션
@@ -47,7 +47,7 @@ public class Login {
             // login 요청
             OkHttpClient client = new OkHttpClient();
             Request request = new Request.Builder()
-                    .url("https://orientalsalad.kro.kr:8101/login/login")
+                    .url("http://orientalsalad.kro.kr:8101/login/login")
                     .post(RequestBody.create(MediaType.parse("application/json"), requestbody.toString()))
                     .build();
 
@@ -87,7 +87,7 @@ public class Login {
             @Override
             public void mouseClicked(MouseEvent e) {
                 try {
-                    Desktop.getDesktop().browse(new URI("https://orientalsalad.kro.kr/signUp"));
+                    Desktop.getDesktop().browse(new URI("http://orientalsalad.kro.kr/signUp"));
                 } catch (IOException | URISyntaxException ex) {
                     ex.printStackTrace();
                 }

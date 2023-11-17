@@ -3,17 +3,12 @@ package com.orientalSalad.troubleShot.component;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.fileEditor.FileEditorManager;
-import com.intellij.openapi.fileTypes.PlainTextFileType;
-import com.intellij.openapi.vfs.LocalFileSystem;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.testFramework.LightVirtualFile;
+
 import com.orientalSalad.troubleShot.dto.ListResponseDTO;
 import com.orientalSalad.troubleShot.dto.TroubleShootingDTO;
 
 import com.orientalSalad.troubleShot.util.LoginManager;
 
-import net.minidev.json.JSONObject;
 import okhttp3.*;
 
 import javax.swing.*;
@@ -135,7 +130,7 @@ public class LoginVersionList {
         System.out.println("[troubleshooting 삭제 요청]");
 
         OkHttpClient client = new OkHttpClient();
-        HttpUrl.Builder urlBuilder = HttpUrl.parse("https://orientalsalad.kro.kr:8102/trouble-shootings/" + trouble.getSeq()).newBuilder();
+        HttpUrl.Builder urlBuilder = HttpUrl.parse("http://orientalsalad.kro.kr:8102/trouble-shootings/" + trouble.getSeq()).newBuilder();
         urlBuilder.addQueryParameter("loginSeq", String.valueOf(loginManager.getLoginUserSeq()));
         urlBuilder.addQueryParameter("type", String.valueOf(1));
         String urlWithParameters = urlBuilder.build().toString();
@@ -164,7 +159,7 @@ public class LoginVersionList {
         Long userSeq = loginManager.getLoginUserSeq();
         List<TroubleShootingDTO> troubleShootingDTOList = null;
 
-        HttpUrl.Builder urlBuilder = HttpUrl.parse("https://orientalsalad.kro.kr:8102/trouble-shootings").newBuilder();
+        HttpUrl.Builder urlBuilder = HttpUrl.parse("http://orientalsalad.kro.kr:8102/trouble-shootings").newBuilder();
         urlBuilder.addQueryParameter("writerSeq", String.valueOf(userSeq));
         urlBuilder.addQueryParameter("pageSize", String.valueOf(100));
         String urlWithParameters = urlBuilder.build().toString();

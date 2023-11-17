@@ -4,25 +4,22 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.intellij.openapi.components.ServiceManager;
 import com.orientalSalad.troubleShot.dto.FeedbackResponseDTO;
-import com.orientalSalad.troubleShot.dto.ListResponseDTO;
 import com.orientalSalad.troubleShot.endpoint.TroubleShotToolWindow;
 import com.orientalSalad.troubleShot.util.LoginManager;
-import kotlinx.html.P;
 import net.minidev.json.JSONObject;
 import okhttp3.*;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
-import static com.orientalSalad.troubleShot.component.StartPanel.fileUtil;
 import static com.orientalSalad.troubleShot.endpoint.TroubleShotToolWindow.toolWindow;
 
 public class MainPanel {
     private JPanel panel;
     private JList<String> mainList;
     private JPanel detailPanel;
-    private JPanel paenl;
     private CardLayout cardLayout;
     private static MainPanel instance;
     LoginManager loginManager;
@@ -40,11 +37,9 @@ public class MainPanel {
     }
 
     public MainPanel() {
-
         System.out.println("LogoutVersionMain 시작");
 
         // detail에 trouble, solution 배치
-        panel = new JPanel();
         cardLayout = new CardLayout();
         detailPanel = new JPanel(cardLayout);
         WriteTrouble writeTrouble = new WriteTrouble();
@@ -53,6 +48,8 @@ public class MainPanel {
         detailPanel.add(errorHistory.getPanel(), "Error History");
 
         loginManager = ServiceManager.getService(LoginManager.class);
+        loginManager.setLoginUserSeq(null);
+        System.out.println("loginManager : " + loginManager.getLoginUserSeq());
 
         // 비로그인
         if (loginManager.getLoginUserSeq() == null) {
@@ -103,13 +100,14 @@ public class MainPanel {
 
     private void logout() {
         System.out.println("[logout 요청]");
+        System.out.println( "loginSeq "  + loginManager.getLoginUserSeq());
         JSONObject requestLogout = new JSONObject();
         requestLogout.put("seq", loginManager.getLoginUserSeq());
         requestLogout.put("type", 1);
 
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
-                .url("https://orientalsalad.kro.kr:8101/login/logout")
+                .url("http://orientalsalad.kro.kr:8101/login/logout")
                 .post(RequestBody.create(MediaType.parse("application/json"), requestLogout.toString()))
                 .build();
 
@@ -160,8 +158,9 @@ public class MainPanel {
     }
 
     public void updateErrorHistory() {
-        detailPanel.add(new ErrorHistory().getPanel(), "Error History");
-        cardLayout.show(detailPanel, "My Trouble Shooting");
+        ErrorHistory errorHistory = new ErrorHistory();
+        detailPanel.add(errorHistory.getPanel(), "Error History");
+        cardLayout.show(detailPanel, "Error History");
     }
 
     public void getGPTFeedback(boolean solved, String title, String context) {
@@ -177,11 +176,11 @@ public class MainPanel {
             feedback = getErrorFeedback(context);
         }
 
-//        // 피드백이 없는 경우
-//        if (feedback == null) {
-//            toolWindow.hide(null);
-//            return;
-//        }
+        // 피드백이 없는 경우
+        if (feedback == null) {
+            toolWindow.hide(null);
+            return;
+        }
 
         ChatGPTFeedback chatGPTFeedback = new ChatGPTFeedback();
         chatGPTFeedback.showFeedback(solved, title, feedback);
@@ -195,10 +194,14 @@ public class MainPanel {
 
         JSONObject requestFeedback = new JSONObject();
         requestFeedback.put("context", context);
+        requestFeedback.put("loginSeq", loginManager.getLoginUserSeq());
+        requestFeedback.put("type", 1);
 
-        OkHttpClient client = new OkHttpClient();
+        OkHttpClient client = new OkHttpClient.Builder()
+                .readTimeout(30, TimeUnit.SECONDS)
+                .build();
         Request request = new Request.Builder()
-                .url("https://orientalsalad.kro.kr:8102/gpt/error-feedback")
+                .url("http://orientalsalad.kro.kr:8102/gpt/error-feedback")
                 .post(RequestBody.create(MediaType.parse("application/json"), requestFeedback.toString()))
                 .build();
 
@@ -228,10 +231,14 @@ public class MainPanel {
 
         JSONObject requestFeedback = new JSONObject();
         requestFeedback.put("context", context);
+        requestFeedback.put("loginSeq", loginManager.getLoginUserSeq());
+        requestFeedback.put("type", 1);
 
-        OkHttpClient client = new OkHttpClient();
+        OkHttpClient client = new OkHttpClient.Builder()
+                .readTimeout(30, TimeUnit.SECONDS)
+                .build();
         Request request = new Request.Builder()
-                .url("https://orientalsalad.kro.kr:8102/gpt/readme-feedback")
+                .url("http://orientalsalad.kro.kr:8102/gpt/readme-feedback")
                 .post(RequestBody.create(MediaType.parse("application/json"), requestFeedback.toString()))
                 .build();
 

@@ -44,6 +44,19 @@ public class TroubleAutomation {
         }
     }
 
+    public void debugging(String errorLog) {
+//        try {
+//            System.out.println("에러로그 쓰기");
+//            BufferedWriter writer = new BufferedWriter(new FileWriter(project.getBasePath() +"/errorLog.txt", true));
+//            writer.write(errorLog);
+//            writer.newLine();
+//            writer.flush();
+//        } catch (Exception e) {
+//            System.out.println("에러로그 쓰기 실패");
+//            e.printStackTrace();
+//        }
+    }
+
     public void saveErrorHistory(String errorLog) {
 
         // 현재 프로젝트 내의 모든 파일 이름 구하기
@@ -56,8 +69,8 @@ public class TroubleAutomation {
             return true;
         });
 
-
         // 에러 발생 코드 위치 찾기
+        System.out.println("에러 발생 코드 위치 찾기");
         String[] errorLine = errorLog.split("\n");
         Pattern errorCodepattern = Pattern.compile("\\(([^:]+):(\\d+)\\)");
         Pattern exceptionTypePattern = Pattern.compile("([a-zA-Z.]*Exception)");
@@ -71,8 +84,10 @@ public class TroubleAutomation {
         boolean finished = false;
         for (String line : errorLine) {
             // 에러 발생 시간 얻기
+
             if (line.contains(" ERROR ")) {
-                errorDateTIme = line.substring(3, 19).replace(":", ".").replace("-", ".");
+                errorDateTIme = line.substring(2, 19).replace(":", ".").replace("-", ".");
+                System.out.println("errorDateTime" + errorDateTIme);
                 continue;
             }
             // Exception Type 얻기
@@ -117,7 +132,9 @@ public class TroubleAutomation {
                 break;
             }
         }
+
         // 에러 발생 코드 구하기
+        System.out.println("에러 발생 코드 구하기");
         if (errorFilePath == null) {
             System.out.println("errorFilePath == null");
             return;
@@ -158,6 +175,7 @@ public class TroubleAutomation {
     }
 
     private void createErrorHistory(String fileName, String errorLog, String errorCode) {
+        System.out.println("createErrorHistory 시작");
         try {
             String userHomePath = System.getProperty("user.home");
             String directoryPath = userHomePath + "/Documents/TroubleShot1.0-OrientalSalad/error_history";
@@ -213,7 +231,7 @@ public class TroubleAutomation {
         return sb.toString();
     }
 
-    private void setSpringLogFile() {
+    public void setSpringLogFile() {
         String directory = project.getBasePath() + "/" + "src/main/resources";  // 탐색하려는 디렉토리의 경로
         String fileName = "logback-spring.xml";  // 찾으려는 파일의 이름
 

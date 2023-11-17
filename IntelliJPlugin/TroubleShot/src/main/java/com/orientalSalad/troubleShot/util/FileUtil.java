@@ -103,6 +103,7 @@ public class FileUtil {
         try {
             String userHomePath = System.getProperty("user.home");
             String filePath = userHomePath + "/Documents/TroubleShot1.0-OrientalSalad/error_history/" + fileName + ".txt";
+            System.out.println("filePath  : "  + filePath);
             BufferedReader reader = new BufferedReader(new FileReader(filePath));
 
             String line;

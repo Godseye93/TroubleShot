@@ -12,7 +12,6 @@ import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.io.IOException;
-import java.util.List;
 
 import static com.orientalSalad.troubleShot.component.StartPanel.fileUtil;
 import static com.orientalSalad.troubleShot.endpoint.TroubleShotToolWindow.startPanel;
@@ -92,7 +91,7 @@ public class WriteSolution {
         requestSolution.put("selected", true);
 
         OkHttpClient client = new OkHttpClient();
-        HttpUrl.Builder urlBuilder = HttpUrl.parse("https://orientalsalad.kro.kr:8102/trouble-shootings/" + trouble.getSeq() +"/answers").newBuilder();
+        HttpUrl.Builder urlBuilder = HttpUrl.parse("http://orientalsalad.kro.kr:8102/trouble-shootings/" + trouble.getSeq() +"/answers").newBuilder();
         urlBuilder.addQueryParameter("troubleSeq", String.valueOf(trouble.getSeq()));
         String urlWithParameters = urlBuilder.build().toString();
         Request request = new Request.Builder()

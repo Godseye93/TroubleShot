@@ -44,6 +44,11 @@ public class WriteTrouble {
     private JRadioButton privateButton;
     private JLabel publicScopeLabel;
 
+    public WriteTrouble(String a) {
+        this();
+        consoleLogInput.setText(a);
+    }
+
     public WriteTrouble() {
 
 //        wrapperPanel = new JPanel();
@@ -106,7 +111,7 @@ public class WriteTrouble {
     }
 
     private void postTrouble() {
-        System.out.println("post trouble 요청");
+        System.out.println("[post trouble 요청]");
         String selectedButton = publicScopeGroup.getSelection().getActionCommand();
         String title = titleInput.getText();
         String context = makeMDCode();
@@ -132,7 +137,7 @@ public class WriteTrouble {
 
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
-                .url("https://orientalsalad.kro.kr:8102/trouble-shootings")
+                .url("http://orientalsalad.kro.kr:8102/trouble-shootings")
                 .post(RequestBody.create(MediaType.parse("application/json"), requestTroubleShooting.toString()))
                 .build();
 

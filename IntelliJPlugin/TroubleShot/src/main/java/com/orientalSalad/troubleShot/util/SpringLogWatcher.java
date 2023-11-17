@@ -2,16 +2,19 @@ package com.orientalSalad.troubleShot.util;
 
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.PersistentStateComponent;
-import groovyjarjarantlr4.v4.runtime.misc.Nullable;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.*;
 import java.nio.file.*;
+
 
 import static com.orientalSalad.troubleShot.endpoint.TroubleShotToolWindow.project;
 import static com.orientalSalad.troubleShot.util.TroubleAutomation.parsingKey;
 
 public class SpringLogWatcher implements PersistentStateComponent<SpringLogWatcher.State> {
+
+    TroubleAutomation troubleAutomation = new TroubleAutomation();
 
     @Nullable
     @Override
@@ -43,6 +46,8 @@ public class SpringLogWatcher implements PersistentStateComponent<SpringLogWatch
     }
 
     public void watch() {
+        troubleAutomation.debugging("watch 시작");
+
         System.out.println("watch 시작");
         State state = getState();
         if (state != null) {
@@ -52,6 +57,8 @@ public class SpringLogWatcher implements PersistentStateComponent<SpringLogWatch
             if (lastPosition > file.length()) {
                 lastPosition = 0;
             }
+            troubleAutomation.debugging(""+lastPosition);
+
             WatchService watchService = FileSystems.getDefault().newWatchService();
 
             Path path = Paths.get(project.getBasePath());
@@ -78,6 +85,9 @@ public class SpringLogWatcher implements PersistentStateComponent<SpringLogWatch
     }
 
     private void getTroubleInfo() {
+
+        troubleAutomation.debugging("getTroubleInfo진입");
+
         StringBuilder sb = new StringBuilder();
         try {
 
@@ -104,10 +114,10 @@ public class SpringLogWatcher implements PersistentStateComponent<SpringLogWatch
         getState().lastPosition = lastPosition;
         String[] errorLogList = sb.toString().split(parsingKey);
         for (int i = 0; i < errorLogList.length; i++) {
-            System.out.println(i + "번째 에러로그 확인");
+            troubleAutomation.debugging(i + "번째 에러로그 확인");
             final String errorLog = errorLogList[i];
             ApplicationManager.getApplication().invokeLater(() -> {
-                new TroubleAutomation().saveErrorHistory(errorLog);
+                troubleAutomation.saveErrorHistory(errorLog);
             });
             System.out.println();
         }
