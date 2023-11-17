@@ -118,6 +118,8 @@
 
 ## 💻주요 화면 스크린샷, gif
 
+![Animation](https://github.com/Jeongseulho/sh-snippets/assets/110578739/cd9bb990-79cf-4e23-93f6-2d77bd947ae6) !
+
 ### VSCode 확장
 
 #### 에러 로그 검출
@@ -138,4 +140,36 @@
 
 ### IntelliJ 확장
 
+#### AI 솔루션 추천
+
+![AI솔룻션](https://github.com/Jeongseulho/sh-snippets/assets/110578739/b2e10156-f617-4129-929c-97c7878a12ef)
+
+#### 에러 자동 검출
+
+![에러 자동화](https://github.com/Jeongseulho/sh-snippets/assets/110578739/61d797f1-0083-45b8-81ec-c06e8e4d2f90)
+
+#### 리드미 추출
+
+![Readme추출](https://github.com/Jeongseulho/sh-snippets/assets/110578739/b8803093-c486-4ff3-b146-21a8577662c3)
+
 ### 웹
+
+#### AI 솔루션 추천
+
+![ailoading](https://github.com/Jeongseulho/sh-snippets/assets/110578739/82c4d5d1-f888-4eea-919f-434eb2c47c98)
+
+#### 글 작성
+
+![createTrouble](https://github.com/Jeongseulho/sh-snippets/assets/110578739/ce9aaa9f-427e-4816-88e4-b3b6eae6b661)
+
+#### 트러블 슈팅 문서 분석 및 통계
+
+![통계](https://github.com/Jeongseulho/sh-snippets/assets/110578739/a27c0c01-b1a2-4fa7-b031-e799beb02437)
+
+#### 트러블 슈팅 문서 공유 커뮤니티
+
+![커뮤니티](https://github.com/Jeongseulho/sh-snippets/assets/110578739/0024ebfa-cbae-4108-b662-83fd9055bc10)
+
+#### 트러블 슈팅 문서 상세 페이지
+
+![detailTrouble](https://github.com/Jeongseulho/sh-snippets/assets/110578739/a92cad61-c183-4ed4-8bef-11701318af17)
