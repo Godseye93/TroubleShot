@@ -7,7 +7,6 @@ import exImage2 from "../../../public/carousel/exImage2.jpg";
 import exImage3 from "../../../public/carousel/exImage3.jpg";
 import exImage4 from "../../../public/carousel/exImage4.jpg";
 import exImage5 from "../../../public/carousel/exImage5.jpg";
-
 import { IoArrowBackCircleSharp } from "react-icons/io5";
 import { IoArrowForwardCircleSharp } from "react-icons/io5";
 

@@ -1,29 +1,54 @@
-import { useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import Duration from "./Duration";
 import InputTag from "./InputTag";
 import { AiOutlineClose } from "react-icons/ai";
 import SetOptions from "./SetOptions";
-
-export default function Options() {
+import { SearchParams } from "@/types/TroubleType";
+import { useLoginStore } from "@/stores/useLoginStore";
+interface Props {
+  propsSetOption: React.Dispatch<SetStateAction<SearchParams>>;
+}
+export default function Options({ propsSetOption }: Props) {
   const [tags, setTags] = useState<string[]>([]);
-  const [selectAnswer, setSelectAnswer] = useState(0);
+  const [selecSolved, setSelecSolved] = useState<number>(0);
   const [selectSort, setSelectSort] = useState(0);
   const anwerOption = ["전체", "해결된 글", "미해결 글"];
-  const sortOption = ["최신순", "좋아요 순", "댓글 순"];
+  const sortOption = ["최신순", "좋아요 순", "댓글 순", "조회순"];
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+  const [isSelected, setIsSelected] = useState(false);
+  useEffect(() => {
+    propsSetOption({
+      tags: tags,
+      order: selectSort,
+      ...(selecSolved !== 0 && { solved: selecSolved === 1 ? true : false }),
+      ...(isSelected && {
+        startTime: startDate.toISOString().slice(0, -1),
+        endTime: endDate.toISOString().slice(0, -1),
+      }),
+    });
+  }, [tags, selectSort, selecSolved, isSelected, startDate, endDate]);
 
   return (
     <div>
       <div className="mt-7 flex gap-2">
         <div className="w-[50%] border-r-2 pe-2">
-          <Duration />
-          <InputTag setTags={setTags} />
+          <Duration
+            startDate={startDate}
+            endDate={endDate}
+            isSelected={isSelected}
+            setStartDate={setStartDate}
+            setEndDate={setEndDate}
+            setIsSelected={setIsSelected}
+          />
+          <InputTag setTags={setTags} showTitle />
         </div>
         <div className="w-[25%] ps-2 border-r-2 pe-2">
           <SetOptions
             title="해결여부"
             options={anwerOption}
-            selectedOption={selectAnswer}
-            setSelectedOption={setSelectAnswer}
+            selectedOption={selecSolved}
+            setSelectedOption={setSelecSolved}
           />
         </div>
         <div className="w-[25%] ps-2">

@@ -1,30 +1,47 @@
+"use client";
 import BoardItem from "@/components/BoardItem";
+import Searchbar from "@/components/Searchbar/Searchbar";
+import { useLoginStore } from "@/stores/useLoginStore";
+import { SearchParams } from "@/types/TroubleType";
+import React, { useState } from "react";
+import useInfiniteList from "@/hooks/useInfiniteList";
 
-interface user {
-  username: string;
-  userImg: string;
-}
-interface content {
-  seq: number;
-  title: string;
-  tags: string[];
-  likes: number;
-  views: number;
-  comments: number;
-  content: string;
-  img?: string;
-  date: string;
-  user: user;
-}
-interface props {
-  contents: content[];
-}
-export default function BoardList({ contents }: props) {
+export default function BoardList() {
+  const { user } = useLoginStore();
+  const [options, setOptions] = useState<SearchParams>({
+    ...(user && { loginSeq: user.member.seq }),
+    writerSeq: user?.member.seq,
+  });
+  const { data } = useInfiniteList(options, "boards");
+  // const { data, error } = useQuery({
+  //   queryKey: ["boards"],
+  //   queryFn: async () => {
+  //     const data = await getTrouble(options);
+  //     console.log(options);
+  //     return data;
+  //   },
+  // });
+
   return (
-    <div className="bg-white rounded-lg shadow-md px-2">
-      {contents.map((content, idx) => (
-        <BoardItem key={idx} board={content} idx={idx} last={contents.length - 1} />
-      ))}
-    </div>
+    <>
+      <Searchbar setPropsOptions={setOptions} />
+      <div className="bg-white rounded-lg shadow-md px-2 mt-2 flex-col items-center">
+        {data &&
+          data.pages.map((page, i) => (
+            <React.Fragment key={i}>
+              {page.troubleShootingList.map((content, idx) => (
+                <BoardItem
+                  nowUrl="trouble"
+                  key={idx}
+                  board={content}
+                  idx={idx}
+                  last={page.troubleShootingList.length - 1}
+                  queryKey="boards"
+                />
+              ))}
+            </React.Fragment>
+          ))}
+      </div>
+    </>
   );
 }
