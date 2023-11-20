@@ -7,7 +7,7 @@ export interface GetMostTags extends DefaultRespense {
 }
 export interface CreateOptions {
   category: string;
-  scope: 0 | 1 | null;
+  scope: number | null;
   tags: string[];
   solved: boolean | null;
 }
@@ -16,12 +16,13 @@ export interface PostTroubleShooting {
   category: string;
   context: string;
   dependency: string;
-  scope: 0 | 1;
+  scope: number;
   writer: {
     seq: number;
-  };
+  } | null;
   solved: boolean;
   tags: string[];
+  postType: 0;
 }
 export interface RequestTroubleShooting {
   loginSeq: number;
@@ -61,7 +62,7 @@ export interface TroubleShootingBoard {
   context: string;
   dependency: null | string;
   scope: number;
-  writer: Writer;
+  writer: Writer | null;
   solved: boolean;
   viewCount: number;
   likeCount: number;
@@ -92,7 +93,7 @@ export interface Reply {
   updateTime: string;
   context: string;
   writerSeq: number;
-  writer: Writer;
+  writer: Writer | null;
   likeCount: number;
   troubleSeq: number;
   loginLike: boolean;
@@ -104,24 +105,106 @@ export interface Answer {
   deleteTime: null;
   title: string;
   context: string;
-  writer: Writer;
+  writer: Writer | null;
   likeCount: number;
   replyCount: number;
   troubleSeq: number;
   replies: Reply[];
   loginLike: boolean;
+  selected: boolean;
 }
 export interface TroubleShootingAnswer {
   context: string;
   title: string;
   writer: {
     seq: number;
-  };
+  } | null;
+  troubleSeq: number;
+  selected: boolean;
+}
+export interface TroubleShootingAnswerReq {
+  context: string;
+  title: string;
+  writer: {
+    seq: number;
+  } | null;
   troubleSeq: number;
 }
 
 export interface RequestTroubleShootingAnswer {
   loginSeq: number;
   type: 0;
-  troubleShootingAnswer: TroubleShootingAnswer;
+  troubleShootingAnswer: TroubleShootingAnswerReq;
+}
+export interface TroubleShootingReply {
+  context: string;
+  writer: {
+    seq: number;
+  } | null;
+  troubleSeq: number;
+}
+export interface TroubleShootingAnswerReply {
+  context: string;
+  writer: {
+    seq: number;
+  } | null;
+  answerSeq: number;
+}
+export interface RequestTroubleShootingReply {
+  loginSeq: number;
+  type: 0;
+  troubleShootingReply: TroubleShootingReply;
+}
+export interface RequestTroubleShootingAnswerReply {
+  loginSeq: number;
+  type: 0;
+  troubleShootingAnswerReply: TroubleShootingAnswerReply;
+}
+export interface ResponseCategory {
+  success: boolean;
+  message: string;
+  categoryList: Category[];
+  totalCount: number;
+}
+export interface Category {
+  seq: number;
+  createTime: string;
+  updateTime: string;
+  name: string;
+  userSeq: number;
+}
+export interface SearchMember {
+  pageSize?: number;
+  pageNo?: number;
+  nickname: string;
+}
+
+export interface ResponeseSearchMember extends DefaultRespense {
+  memberList: Member[];
+}
+
+export interface Member {
+  seq: number;
+  createTime: string;
+  updateTime: string;
+  email: string;
+  profileImg: string;
+  nickname: string;
+  locale: string;
+}
+
+export interface RequestPostAiAnswer {
+  loginSeq: number;
+  type: 0;
+  context: string;
+}
+export interface ResponsePostAiAnswer extends DefaultRespense {
+  context?: string;
+}
+export interface RequestGetCount {
+  loginSeq: number;
+  type: 0;
+}
+export interface ResponeseGetCount extends DefaultRespense {
+  count: number;
 }

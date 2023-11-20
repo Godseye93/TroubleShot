@@ -9,7 +9,7 @@ interface Props {
 }
 
 const getAccumulation = (userSeq: number) => {
-  const url = `https://orientalsalad.kro.kr:8101/members/${userSeq}/trouble-shootings/history?userSeq=${userSeq}&day=4`;
+  const url = `http://orientalsalad.kro.kr:8101/members/${userSeq}/trouble-shootings/history?userSeq=${userSeq}&day=4`;
   return axios.get(url);
 };
 

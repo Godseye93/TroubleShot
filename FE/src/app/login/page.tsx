@@ -5,8 +5,6 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useLoginStore } from "@/stores/useLoginStore";
 
-import Github_logo from "../../../public/logo/Github_logo.png";
-
 import backgroundImage from "../../../public/background/loginBackground4.jpg";
 
 import { loginSubmit } from "@/api/account";
@@ -106,20 +104,7 @@ export default function Page() {
           >
             로그인
           </button>
-          <div className="w-full flex items-center my-2">
-            <div className="flex-1">
-              <hr />
-            </div>
-            <div className="mx-1 flex items-center">OR</div>
-            <div className="flex-1">
-              <hr />
-            </div>
-          </div>
-          <button className="flex bg-black text-white w-full rounded fcc">
-            <Image src={Github_logo} className="w-10 me-1" alt="" />깃 허브로 로그인하기
-          </button>
         </div>
-
         <Link href="/signUp" className="">
           <p>트러블 샷이 처음이신가요?</p>
         </Link>

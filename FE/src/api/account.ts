@@ -1,8 +1,10 @@
 import {
   BarChartInfo,
   CommonType,
+  EditReq,
   EmailCertResponse,
   EmailCode,
+  Member,
   PieGraphInfo,
   RadarGraphInfo,
   ReqLogin,
@@ -14,9 +16,11 @@ import {
 } from "@/types/CommonType";
 import { apiInstance } from ".";
 import { AxiosRequestConfig } from "axios";
+import { GetTroubleList, ResponeseSearchMember, SearchMember, SearchParams } from "@/types/TroubleType";
+import { troubleApiInstance } from "./troubleApi";
 
 const api = apiInstance();
-
+const troubleApi = troubleApiInstance();
 // 이메일로 인증번호 요청
 export const emailCert = async (email: string): Promise<EmailCertResponse> => {
   const { data } = await api.post("auth/email/send", email);
@@ -71,7 +75,8 @@ export const getPieGraphInfo = async (params: number): Promise<PieGraphInfo> => 
   return { solvedCount, notSolvedCount };
 };
 
-export const getUsedLotTags = async (params: ReqTags) => {
+// 유저가 많이 사용한 태그 요청
+export const getUsedLotTags = async (params: ReqTags): Promise<[]> => {
   const userSeq = params.userSeq;
   const config: AxiosRequestConfig = {
     params: params, // 여기서 나머지 파라미터를 설정
@@ -80,4 +85,30 @@ export const getUsedLotTags = async (params: ReqTags) => {
   const { tagList } = data;
   const filterTagList = tagList.filter((item: string) => item !== "이있어 답할 단어 없습니다");
   return filterTagList;
+};
+
+// 유저가 추가한 북마크 목록
+// 게이트웨이 되면 코드 수정하기
+export const getBookmarkList = async (params: SearchParams): Promise<GetTroubleList> => {
+  const Url = "https://orientalsalad.kro.kr:8102/trouble-shootings";
+  const { data } = await troubleApi.get("/trouble-shootings", { params });
+  return data;
+};
+
+// 유저 pk로 유저의 정보 가져오기
+export const getUserInfo = async (params: number): Promise<Member> => {
+  const { data } = await api.get(`/members/${params}`);
+  const { member } = data;
+  return member;
+};
+
+// 회원정보 수정
+export const putUserInfo = async (params: EditReq) => {
+  const requestBody = params.reqBody;
+  const { data } = await api.put(`/members/${params.userSeq}`, requestBody);
+  return data;
+};
+export const getSearchUser = async (params: SearchMember): Promise<ResponeseSearchMember> => {
+  const { data } = await api.get("/members", { params });
+  return data;
 };
