@@ -1,0 +1,56 @@
+plugins {
+  id 'java'
+  id 'org.jetbrains.kotlin.jvm' version '1.8.21'
+  id 'org.jetbrains.intellij' version '1.16.0'
+}
+
+group = 'com.orientalSalad'
+version = '1.0-SNAPSHOT'
+
+repositories {
+  mavenCentral()
+}
+
+
+dependencies {
+//  implementation 'org.springframework.boot:spring-boot-starter-webflux'
+//  implementation 'org.springframework.boot:spring-boot-starter-webflux'
+//  implementation 'org.springframework:spring-webflux:5.2.7.RELEASE'
+    implementation 'com.squareup.okhttp3:okhttp:4.9.0'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.5'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.0'
+//    implementation 'com.atlassian.commonmark:commonmark:0.13.1'
+//    implementation 'org.apache.logging.log4j:log4j-api:2.14.1'
+
+}
+
+
+intellij {
+  version = '2023.1.3'
+  type = 'IC'
+  plugins = ['com.intellij.java']
+}
+
+tasks.each { task ->
+  if (task instanceof JavaCompile) {
+    task.sourceCompatibility = '17'
+    task.targetCompatibility = '17'
+  } else if (task instanceof org.jetbrains.kotlin.gradle.tasks.KotlinCompile) {
+    task.kotlinOptions.jvmTarget = '17'
+  }
+}
+
+patchPluginXml {
+  sinceBuild = '231'
+  untilBuild = '232.*'
+}
+
+signPlugin {
+  certificateChain = System.getenv('CERTIFICATE_CHAIN')
+  privateKey = System.getenv('PRIVATE_KEY')
+  password = System.getenv('PRIVATE_KEY_PASSWORD')
+}
+
+publishPlugin {
+  token = System.getenv('PUBLISH_TOKEN')
+}

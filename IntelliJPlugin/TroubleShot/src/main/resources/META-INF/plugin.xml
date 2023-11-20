@@ -7,38 +7,37 @@
   <name>TroubleShot</name>
 
   <!-- 회사 정보 -->
-  <vendor email="support@yourcompany.com" url="https://www.yourcompany.com">YourCompany</vendor>
+  <vendor email="yeahleem2@gmail.com" url="http://orientalsalad.kro.kr">Oriental Salad</vendor>
 
   <!-- desciption : 한글 지원 안됨 -->
   <description><![CDATA[
-    Enter short description for your plugin here.<br>
-    <em>most HTML tags may be used</em>
+    We make writing trouble-shooting easy.<br>
+    <em>Try Trouble SHOT!</em>
   ]]></description>
 
   <depends>com.intellij.modules.platform</depends>
 
-    <extensions defaultExtensionNs="com.intellij">
-        <toolWindow id="MyCustomToolWindow"
+  <extensions defaultExtensionNs="com.intellij">
+        <toolWindow id="TroubleShot"
                     anchor="right"
-                    factoryClass="com.orientalSalad.troubleShot.actions.MyToolWindowFactory">
+                    factoryClass="com.orientalSalad.troubleShot.endpoint.TroubleShotToolWindow">
         </toolWindow>
     </extensions>
 
 
     <!--  <extensions defaultExtensionNs="com.intellij">-->
-<!--      <toolWindow id="ToolWindow.TroubleShotAction" anchor="right" factoryClass="com.orientalSalad.troubleShot.actions.TroubleShotToolWindow">-->
+<!--      <toolWindow id="ToolWindow.TroubleShotAction" anchor="right" factoryClass="com.orientalSalad.troubleShot.endpoint.TroubleShotToolWindow">-->
 <!--          <title>Trouble Shot</title>-->
 <!--  </extensions>-->
-
 
     <actions>
     <!-- add-to-group : 기존 메뉴에 버튼, 마우스 단축, 키보드 단축키 등 추가할때 사용
             group-id: 버튼을 추가할 그룹, anchor: 버튼 순서(위치)-->
-        <action id="EditorPopupMenu.TroubleShotAction"
-                class="com.orientalSalad.troubleShot.actions.TroubleShotAction"
-                text="Trouble Shot">
-            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
-            <keyboard-shortcut first-keystroke="shift T" keymap="$default"/>
-        </action>
+<!--        <action id="EditorPopupMenu.TroubleShotAction"-->
+<!--                class="com.orientalSalad.troubleShot.endpoint.TroubleShotAction"-->
+<!--                text="Trouble Shot">-->
+<!--            <add-to-group group-id="EditorPopupMenu" anchor="first"/>-->
+<!--            <keyboard-shortcut first-keystroke="shift T" keymap="$default"/>-->
+<!--        </action>-->
     </actions>
 </idea-plugin>
