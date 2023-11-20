@@ -4,146 +4,189 @@ import {
   VSCodeRadio,
   VSCodeTextArea,
   VSCodeButton,
-  VSCodeDropdown,
-  VSCodeOption,
 } from "@vscode/webview-ui-toolkit/react";
 import { VscCopy } from "react-icons/vsc";
 import { BiUpload } from "react-icons/bi";
 import { useEffect, useState } from "react";
 import { vscode } from "./utilities/vscode";
-import { skill } from "./App";
 
 interface Props {
-  isLogin: boolean;
-  defaultSkills: skill;
+  sessionId: number;
+  defaultSkills: string;
+  errMsg?: string;
+  defaultCode?: string;
 }
 
-const Trouble = ({ isLogin, defaultSkills }: Props) => {
-  const [isTeamOpen, setIsTeamOpen] = useState(false);
+const Trouble = ({ sessionId, defaultSkills, errMsg, defaultCode }: Props) => {
   const [articleInfo, setArticleInfo] = useState({
     title: "",
     skill: "",
     code: "",
-    console: "",
+    errorMsg: "",
     description: "",
   });
+  const [openScope, setOpenScope] = useState("1");
 
   function onChange(e: any) {
     const { name, value } = e.target;
-    setArticleInfo({
-      ...articleInfo,
-      [name]: value,
-    });
+    setArticleInfo((prev) => ({ ...prev, [name]: value }));
   }
 
   function checkValid() {
-    const { title } = articleInfo;
+    const { title, description } = articleInfo;
     if (title.trim().length < 2 || title.trim().length > 20) {
       vscode.postMessage({
-        command: "inValidTitle",
+        command: "showMessage",
+        type: "error",
+        content: "Title must be between 2 and 20 characters",
+      });
+      return false;
+    }
+    if (description.trim().length < 2) {
+      vscode.postMessage({
+        command: "showMessage",
+        type: "error",
+        content: "Description must be at least 2 characters",
       });
       return false;
     }
     return true;
   }
 
-  function onCreateMarkdown() {
-    const { title, skill, code, console, description } = articleInfo;
+  function onCreateMarkdown(upLoad?: boolean) {
+    const { title, skill, code, errorMsg, description } = articleInfo;
 
     let markdownText = `# ${title}\n\n`;
-    markdownText += `## 사용 기술 및 의존성\n\`${skill}\`\n\n`;
-    markdownText += `## 문제 코드\n\`\`\`\n${code}\n\`\`\`\n\n`;
-    markdownText += `## 콘솔 로그\n\`${console}\`\n\n`;
-    markdownText += `## 상세 설명\n${description}\n\n`;
+    markdownText += `## TROUBLE\n\n`;
+    markdownText += `---------------------------------------\n\n`;
+    if (!upLoad) markdownText += `### 사용 기술 및 의존성\n\`${skill}\`\n\n`;
+    markdownText += `### 문제 코드\n\`\`\`ts\n${code}\n\`\`\`\n\n`;
+    markdownText += `### 콘솔 로그\n\`${errorMsg}\`\n\n`;
+    markdownText += `### 문제 설명\n${description}\n\n`;
 
     return markdownText;
   }
 
   async function onCopyMarkdown() {
-    if (!checkValid()) return;
     try {
       await navigator.clipboard.writeText(onCreateMarkdown());
       vscode.postMessage({
-        command: "successCopyMarkdown",
+        command: "showMessage",
+        type: "info",
+        content: "Copied to clipboard!",
       });
     } catch (error) {
       vscode.postMessage({
-        command: "failCopyMarkdown",
+        command: "showMessage",
+        type: "error",
+        content: "Failed to copy to clipboard!",
       });
     }
   }
 
   function onAddTrouble() {
+    if (!checkValid()) return;
     vscode.postMessage({
       command: "addTrouble",
       articleInfo: {
         title: articleInfo.title,
         createTime: new Date(),
-        isSolved: false,
-        creator: "my",
         content: onCreateMarkdown(),
       },
     });
   }
 
-  useEffect(() => {
-    setArticleInfo({
-      ...articleInfo,
-      skill: JSON.stringify(defaultSkills),
+  function onUploadTrouble() {
+    if (!checkValid()) return;
+    vscode.postMessage({
+      command: "uploadTrouble",
+      articleInfo: {
+        title: articleInfo.title,
+        content: onCreateMarkdown(true),
+        scope: openScope,
+        dependency: articleInfo.skill,
+      },
     });
+  }
+
+  useEffect(() => {
+    if (defaultSkills) {
+      setArticleInfo((prev) => ({ ...prev, skill: defaultSkills }));
+    }
   }, [defaultSkills]);
 
-  const { title, skill, code, console, description } = articleInfo;
+  useEffect(() => {
+    if (errMsg) {
+      setArticleInfo((prev) => ({ ...prev, errorMsg: errMsg }));
+    }
+  }, [errMsg]);
+
+  useEffect(() => {
+    if (defaultCode) {
+      setArticleInfo((prev) => ({ ...prev, code: defaultCode }));
+    }
+  }, [defaultCode]);
+
+  function handleRadioChange(event: any) {
+    const selectedValue = event.target.value;
+    setOpenScope(selectedValue);
+  }
+
+  const { title, skill, code, errorMsg, description } = articleInfo;
+  const isOffline = sessionId === -1 || sessionId === undefined;
+
+  console.log("sessionId", sessionId);
 
   return (
-    <section className="flex flex-col gap-1 ">
+    <section className="flex flex-col w-2/3 gap-1 ">
       <VSCodeTextField value={title} onInput={onChange} name="title" className="w-2/3 ">
-        제목
+        Title
       </VSCodeTextField>
-      {isLogin && (
-        <VSCodeRadioGroup>
-          <VSCodeRadio slot="label">공개 범위</VSCodeRadio>
-          <VSCodeRadio>비공개</VSCodeRadio>
-          <VSCodeRadio>전체 공개</VSCodeRadio>
-          <VSCodeRadio checked={isTeamOpen}>팀 공개</VSCodeRadio>
-          <VSCodeDropdown disabled={isTeamOpen}>
-            <VSCodeOption>Option Label #1</VSCodeOption>
-            <VSCodeOption>Option Label #2</VSCodeOption>
-            <VSCodeOption>Option Label #3</VSCodeOption>
-          </VSCodeDropdown>
+      {!isOffline && (
+        <VSCodeRadioGroup onChange={handleRadioChange}>
+          <label slot="label">Open Coverage</label>
+          <VSCodeRadio value="1" checked={openScope === "1"}>
+            Private
+          </VSCodeRadio>
+          <VSCodeRadio value="0" checked={openScope === "0"}>
+            Public
+          </VSCodeRadio>
         </VSCodeRadioGroup>
       )}
 
-      <VSCodeTextArea value={skill} name="skill">
-        사용 기술 스택
+      <VSCodeTextArea value={skill} name="skill" onInput={onChange} rows={4}>
+        Skill & Dependency
       </VSCodeTextArea>
-      <VSCodeTextArea value={code} onInput={onChange} name="code">
-        문제 코드
+      <VSCodeTextArea value={code} onInput={onChange} name="code" rows={7}>
+        Trouble Code
       </VSCodeTextArea>
-      <VSCodeTextArea value={console} name="console">
-        콘솔 로그
+      <VSCodeTextArea value={errorMsg} name="errorMsg" onInput={onChange} rows={1}>
+        Console Error Message
       </VSCodeTextArea>
-      <VSCodeTextArea value={description} name="description">
-        상세 설명
+      <VSCodeTextArea value={description} name="description" onInput={onChange} rows={4}>
+        Trouble Description
       </VSCodeTextArea>
+
       <div className="flex items-center justify-center gap-5 mt-5">
         <div onClick={onCopyMarkdown}>
           <VSCodeButton>
             <VscCopy className="mr-3 " />
-            마크다운 코드 복사
+            Copy Markdown Source
           </VSCodeButton>
         </div>
 
-        {isLogin ? (
-          <VSCodeButton>
-            <BiUpload className="mr-3 " />
-            TROUBLE SHOT 게시물 업로드
-          </VSCodeButton>
+        {!isOffline ? (
+          <div onClick={onUploadTrouble}>
+            <VSCodeButton>
+              <BiUpload className="mr-3 " />
+              Upload to TROUBLE Shot
+            </VSCodeButton>
+          </div>
         ) : (
           <div onClick={onAddTrouble}>
             <VSCodeButton>
               <BiUpload className="mr-3 " />
-              TROUBLE LIST에 추가
+              Add to Trouble List
             </VSCodeButton>
           </div>
         )}

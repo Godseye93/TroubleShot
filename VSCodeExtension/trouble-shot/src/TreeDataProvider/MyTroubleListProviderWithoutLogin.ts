@@ -2,14 +2,15 @@ import { MyTroubleListProvider, Trouble } from "./MyTroubleListProvider";
 import * as vscode from "vscode";
 
 export class MyTroubleListProviderWithoutLogin extends MyTroubleListProvider {
-  constructor(private readonly globalState: vscode.Memento) {
-    super();
+  constructor(readonly globalState: vscode.Memento) {
+    super(globalState);
   }
 
   async getChildren(): Promise<Trouble[]> {
-    const troubleListData = this.globalState.get<Trouble[]>("troubleList");
+    this.updateDesc();
+    const troubleList = this.globalState.get<Trouble[]>("troubleList");
 
-    return troubleListData || [];
+    return troubleList || [];
   }
 
   async deleteTroubleShooting(trouble: Trouble) {

@@ -1,19 +1,19 @@
-import { create } from "zustand";
-import { devtools } from "zustand/middleware";
+// import { create } from "zustand";
+// import { devtools } from "zustand/middleware";
 
-type State = {};
+// type State = {};
 
-type Actions = {
-  reset: () => void;
-};
+// type Actions = {
+//   reset: () => void;
+// };
 
-const initialState: State = {};
+// const initialState: State = {};
 
-const useCountStore = create(
-  devtools<State & Actions>((set) => ({
-    ...initialState,
-    reset: () => set(initialState),
-  }))
-);
+// const useCountStore = create(
+//   devtools<State & Actions>((set) => ({
+//     ...initialState,
+//     reset: () => set(initialState),
+//   }))
+// );
 
-export default useCountStore;
+// export default useCountStore;
