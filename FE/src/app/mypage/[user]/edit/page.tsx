@@ -80,6 +80,7 @@ export default function page() {
         const res = await putUserInfo(params);
         if (res === "success") {
           editStoreNickname(nickname);
+
           // 토스트 띄우고 마이페이지로 돌아가기
           toast.success("닉네임 변경 성공 !");
         }
