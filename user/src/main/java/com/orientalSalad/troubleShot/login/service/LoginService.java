@@ -1,7 +1,5 @@
 package com.orientalSalad.troubleShot.login.service;
 
-import java.time.Duration;
-
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
@@ -39,9 +37,7 @@ public class LoginService {
 
 		//로그인 정보를 reids에 저장
 		ValueOperations valueOperations = redisTemplate.opsForValue();
-		valueOperations.set("login_"+memberDTO.getSeq()+"_"+loginDTO.getType(),
-			loginDTO,
-			Duration.ofMinutes(30));
+		valueOperations.set("login_"+memberDTO.getSeq()+"_"+loginDTO.getType(),loginDTO);
 
 		return memberDTO;
 	}
@@ -60,9 +56,9 @@ public class LoginService {
 
 		LoginDTO loginDTO = (LoginDTO)valueOperations.get(key);
 
-		if(!loginDTO.getIp().equals(logOutDTO.getIp())){
-			throw new Exception("로그인한 기기가 다릅니다.");
-		}
+		// if(!loginDTO.getIp().equals(logOutDTO.getIp())){
+		// 	throw new Exception("로그인한 기기가 다릅니다.");
+		// }
 		
 		//로그인 만료
 		redisTemplate.delete(key);

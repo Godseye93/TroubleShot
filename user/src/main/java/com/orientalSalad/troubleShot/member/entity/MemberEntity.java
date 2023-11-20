@@ -1,6 +1,7 @@
 package com.orientalSalad.troubleShot.member.entity;
 
 import com.orientalSalad.troubleShot.global.entity.BaseEntity;
+import com.orientalSalad.troubleShot.member.dto.MemberDTO;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -28,6 +29,12 @@ public class MemberEntity extends BaseEntity {
 		this.nickname = nickname;
 		this.locale = locale;
 		this.profileImg = profileImg;
+	}
+
+	public void update(MemberDTO memberDTO){
+		this.nickname = memberDTO.getNickname();
+		this.locale = memberDTO.getLocale();
+		this.profileImg = memberDTO.getProfileImg();
 	}
 
 	@Override
