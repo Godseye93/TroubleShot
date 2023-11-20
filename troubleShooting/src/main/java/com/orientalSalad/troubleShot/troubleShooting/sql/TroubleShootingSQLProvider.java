@@ -9,7 +9,7 @@ import com.orientalSalad.troubleShot.troubleShooting.dto.SearchTroubleShootingDT
 
 @Component
 public class TroubleShootingSQLProvider {
-	public String findTroubleShootingList(final SearchTroubleShootingDTO searchParam){
+	public String findTroubleShootingList(SearchTroubleShootingDTO searchParam){
 		String sql = new SQL(){{
 			SELECT("ts.seq AS seq, ts.title AS title, ts.context AS context, ts.solved AS solved, "
 				+ "ts.create_time AS create_time, ts.update_time AS update_time, ts.delete_time AS delete_time, "
@@ -71,7 +71,7 @@ public class TroubleShootingSQLProvider {
 
 		return sql;
 	}
-	public String findTroubleShootingListByUserSeq(final SearchTroubleShootingDTO searchParam,final Long userSeq){
+	public String findTroubleShootingListByUserSeq(SearchTroubleShootingDTO searchParam,Long userSeq){
 		String sql = new SQL(){{
 			SELECT("ts.seq AS seq, ts.title AS title, ts.context AS context, ts.solved AS solved, "
 				+ "ts.create_time AS create_time, ts.update_time AS update_time, ts.delete_time AS delete_time, "
@@ -130,7 +130,7 @@ public class TroubleShootingSQLProvider {
 		return sql;
 	}
 
-	public String countTroubleShootingList(final SearchTroubleShootingDTO searchParam){
+	public String countTroubleShootingList(SearchTroubleShootingDTO searchParam){
 		String sql = new SQL(){{
 			SELECT("count(*) ");
 			FROM("trouble_shooting ts, member m");
@@ -165,7 +165,7 @@ public class TroubleShootingSQLProvider {
 
 		return sql;
 	}
-	public String countTroubleShootingListByUserSeq(final SearchTroubleShootingDTO searchParam,final Long userSeq){
+	public String countTroubleShootingListByUserSeq(SearchTroubleShootingDTO searchParam,Long userSeq){
 		String sql = new SQL(){{
 			SELECT("count(*) ");
 			FROM("trouble_shooting ts, member m");

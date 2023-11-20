@@ -26,11 +26,30 @@ public class TroubleShootingConverter implements ObjectConverter<TroubleShooting
 			.replyCount(troubleShootingDTO.getReplyCount())
 			.solved(troubleShootingDTO.isSolved())
 			.writerSeq(troubleShootingDTO.getWriter().getSeq())
+			.category(troubleShootingDTO.getCategory())
+			.dependency(troubleShootingDTO.getDependency())
+			.postType(troubleShootingDTO.getPostType())
+			.scope(troubleShootingDTO.getScope())
 			.build();
 	}
 
 	@Override
 	public TroubleShootingDTO toDTO(TroubleShootingEntity troubleShootingEntity) {
-		return null;
+		return TroubleShootingDTO.builder()
+			.seq(troubleShootingEntity.getSeq())
+			.context(troubleShootingEntity.getContext())
+			.title(troubleShootingEntity.getTitle())
+			.likeCount(troubleShootingEntity.getLikeCount())
+			.replyCount(troubleShootingEntity.getReplyCount())
+			.viewCount(troubleShootingEntity.getViewCount())
+			.solved(troubleShootingEntity.isSolved())
+			.createTime(troubleShootingEntity.getCreateTime())
+			.updateTime(troubleShootingEntity.getUpdateTime())
+			.deleteTime(troubleShootingEntity.getDeleteTime())
+			.category(troubleShootingEntity.getCategory())
+			.dependency(troubleShootingEntity.getDependency())
+			.postType(troubleShootingEntity.getPostType())
+			.scope(troubleShootingEntity.getScope())
+			.build();
 	}
 }

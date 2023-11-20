@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.orientalSalad.troubleShot.tag.mapper.UserTagMapper">
+    <select id="selectMostUsedTag"
+            parameterType="com.orientalSalad.troubleShot.tag.dto.RequestMostUsedTagDTO"
+            resultType="string">
+        SELECT st.tag
+        FROM search_tag st
+        WHERE st.user_seq = #{request.userSeq}
+        GROUP BY st.tag
+        ORDER BY count(st.tag) DESC, st.tag ASC
+        LIMIT #{request.count};
+    </select>
+</mapper>
