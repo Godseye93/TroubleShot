@@ -2,7 +2,6 @@ package com.orientalSalad.troubleShot.login.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.session.SessionRepository;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,7 +28,7 @@ public class LoginController {
 	private final LoginService loginService;
 	private final IPGetter ipGetter;
 
-	@Operation(summary = "로그인 API")
+	@Operation(summary = "로그인 API",description = "입력 DTO : LoginDTO")
 	@PostMapping("/login")
 	public ResponseEntity<?> login(@RequestBody LoginDTO loginDTO,
 		HttpServletRequest request) throws Exception{
@@ -61,8 +60,8 @@ public class LoginController {
 		return new ResponseEntity<ResponseMemberDTO>(resultDTO, HttpStatus.ACCEPTED);
 	}
 
-	@Operation(summary = "로그아웃 API",
-		description = "로그아웃 할 유저 pk 하나만 보내면 됨")
+	@Operation(summary = "로그아웃 API"
+		,description = "입력 DTO : LogOutDTO")
 	@PostMapping("/logout")
 	public ResponseEntity<?> logout(HttpServletRequest request, @RequestBody LogOutDTO logOutDTO) throws Exception {
 		log.info("=== 로그아웃 시작 ===");

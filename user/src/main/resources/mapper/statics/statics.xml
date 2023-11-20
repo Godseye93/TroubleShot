@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.orientalSalad.troubleShot.statics.mapper.StaticsMapper">
+    <resultMap id="UserRank" type="com.orientalSalad.troubleShot.statics.dto.MemberRankDTO">
+        <id property="userSeq" column="user_seq" />
+        <result property="upperCount" column="upper_count"/>
+        <result property="totalCount" column="total_count"/>
+    </resultMap>
+    <resultMap id="UserTagStatics" type="com.orientalSalad.troubleShot.statics.dto.MemberRankDTO">
+        <id property="userSeq" column="user_seq" />
+        <result property="upperCount" column="upper_count"/>
+        <result property="totalCount" column="total_count"/>
+    </resultMap>
+    <resultMap id="TagHistory" type="com.orientalSalad.troubleShot.statics.dto.TagHistoryDTO">
+        <id property="name" column="tag_name" />
+        <result property="totalCount" column="total_count"/>
+        <result property="dailyHistoryList" column="daily_history"
+                typeHandler="com.orientalSalad.troubleShot.statics.typehandler.JsonToDailyTagHistoryTypeHandler"/>
+    </resultMap>
+
+    <select id="selectTroubleRankBySeq"
+            parameterType="long"
+            resultMap="UserRank">
+        WITH user_trouble_counts AS (
+            SELECT
+                writer_seq,
+                COUNT(*) AS trouble_count
+            FROM
+                trouble_shooting
+            GROUP BY
+                writer_seq
+        )
+        SELECT
+            u.writer_seq as user_seq,
+            (SELECT COUNT(*) FROM user_trouble_counts WHERE trouble_count >= u.trouble_count) AS upper_count,
+            (SELECT COUNT(*) FROM member) AS total_count
+        FROM
+            user_trouble_counts u
+        WHERE
+            u.writer_seq = #{userSeq};
+    </select>
+    <select id="selectAnswerRankBySeq"
+            parameterType="long"
+            resultMap="UserRank">
+        WITH user_answer_counts AS (
+            SELECT
+                writer_seq,
+                COUNT(*) AS answer_count
+            FROM
+                public.trouble_shooting_answer tsa
+            GROUP BY
+                writer_seq
+        )
+        SELECT
+            u.writer_seq as user_seq,
+            (SELECT COUNT(*) FROM user_answer_counts WHERE answer_count >= u.answer_count) AS upper_count,
+            (SELECT COUNT(*) FROM member) AS total_count
+        FROM
+            user_answer_counts u
+        WHERE
+            u.writer_seq = #{userSeq};
+    </select>
+    <select id="selectReplyRankBySeq"
+            parameterType="long"
+            resultMap="UserRank">
+        with total_replies as (
+            select writer_seq,
+                   SUM(reply_count) AS reply_count
+            from
+                ( SELECT
+                      writer_seq,
+                      COUNT(*) AS reply_count
+                  FROM
+                      trouble_shooting_reply tsr
+                  WHERE
+                      writer_seq = 5927 -- 여기에 유저의 아이디를 입력하세요
+                  GROUP BY
+                      writer_seq
+                  UNION ALL
+                  SELECT
+                      writer_seq,
+                      COUNT(*) AS total_count
+                  FROM
+                      trouble_shooting_answer_reply tsar
+                  WHERE
+                      writer_seq = 5927 -- 여기에 유저의 아이디를 입력하세요
+                  GROUP BY
+                      writer_seq
+                ) as union_reply
+            group by writer_seq
+        )
+        SELECT
+            writer_seq,
+            (SELECT COUNT(*) FROM total_replies WHERE reply_count >= tr.reply_count) AS upper_count,
+            (SELECT COUNT(*) FROM member) AS total_count
+        FROM total_replies tr
+        where
+            writer_seq = #{userSeq}
+    </select>
+    <select id="selectTagRankBySeq"
+            parameterType="long"
+            resultMap="UserRank">
+        WITH tag_counts as (
+            select
+                ts.writer_seq as writer_seq,
+                count(distinct t."name")  as tag_count
+            from tag t
+                     left join trouble_tag tt on tt.tag_seq = t.seq
+                     left join trouble_shooting ts on tt.trouble_seq  = ts.seq
+            group by ts.writer_seq
+            )
+        SELECT
+            writer_seq,
+            (SELECT COUNT(*) FROM tag_counts WHERE tag_count >= tc.tag_count) AS upper_count,
+            (SELECT COUNT(*) FROM member) AS total_count
+        FROM tag_counts tc
+        WHERE
+            writer_seq = #{userSeq};
+    </select>
+    <select id="selectDailyPostRankBySeq"
+            parameterType="long"
+            resultMap="UserRank">
+        WITH create_time_group AS (
+            SELECT
+                ts.writer_seq AS writer_seq,
+                count(cast (ts.create_time AS DATE)) AS post_count
+            FROM
+                trouble_shooting ts
+            WHERE
+                writer_seq = 5927
+            GROUP BY
+                ts.writer_seq)
+        SELECT
+            writer_seq,
+            (SELECT COUNT(*) FROM create_time_group WHERE post_count >= create_time_group.post_count) AS upper_count,
+            (SELECT COUNT(*) FROM member) AS total_count
+        FROM create_time_group
+        WHERE
+            writer_seq = #{userSeq};
+    </select>
+    <select id="selectMostUsedTag"
+            parameterType="com.orientalSalad.troubleShot.statics.dto.RequestMostUsedTagDTO"
+            resultType="string">
+        SELECT
+            t.name AS tag_name
+        FROM tag t
+             LEFT JOIN
+                trouble_tag tt ON tt.tag_seq = t.seq
+             LEFT JOIN trouble_shooting ts ON tt.trouble_seq  = ts.seq
+                AND ts.writer_seq = #{searchParam.userSeq}
+        WHERE ts.writer_seq = #{searchParam.userSeq}
+        GROUP BY writer_seq,t."name"
+        ORDER BY COUNT(DISTINCT t."name") DESC
+        limit #{searchParam.count};
+    </select>
+    <select id="selectAllTagsByUserSeq"
+            parameterType="long"
+            resultType="string">
+        SELECT
+            t.name AS tag_name,
+            count(t.name) AS tag_count
+        FROM tag t
+                 LEFT JOIN
+                    trouble_tag tt ON tt.tag_seq = t.seq
+                 LEFT JOIN
+                    trouble_shooting ts ON tt.trouble_seq  = ts.seq
+                    AND ts.writer_seq = #{userSeq}
+        WHERE ts.writer_seq = #{userSeq}
+        GROUP BY writer_seq,t."name"
+        ORDER BY tag_count DESC, t."name" DESC;
+    </select>
+    <select id="selectTopTagHistoryByUserSeq"
+            parameterType="com.orientalSalad.troubleShot.statics.dto.RequestTagHistoryDTO"
+            resultMap="TagHistory">
+        SELECT
+            top_used_tag.tag_name,
+            SUM(tag_count) AS total_count,
+            JSON_AGG(
+                    json_build_object(
+                            'count',top_used_tag.tag_count,
+                            'date', create_time
+                        )
+                ) AS daily_history
+        FROM (
+             SELECT
+                 t.name AS tag_name,
+                 COUNT(t.name) AS tag_count,
+                 DATE(ts.create_time) AS create_time
+            FROM
+                tag t
+            LEFT JOIN
+                trouble_tag tt ON tt.tag_seq = t.seq
+            LEFT JOIN
+                trouble_shooting ts ON tt.trouble_seq  = ts.seq
+            WHERE
+                ts.writer_seq = #{searchParam.userSeq}
+                AND t.name IN
+                    (SELECT
+                        t.name AS tag_name
+                    FROM
+                        tag t
+                    LEFT JOIN
+                        trouble_tag tt ON tt.tag_seq = t.seq
+                    LEFT JOIN
+                        trouble_shooting ts ON tt.trouble_seq  = ts.seq AND ts.writer_seq = #{searchParam.userSeq}
+                    WHERE ts.writer_seq = #{searchParam.userSeq}
+                    <if test="searchParam.day != null">
+                        AND ts.create_time >= NOW() - (#{searchParam.day} || ' DAY')::INTERVAL
+                    </if>
+                    GROUP BY
+                        t.name
+                    ORDER BY
+                        COUNT(t.name) DESC, t.name DESC
+                <if test="searchParam.count != null">
+                    LIMIT #{searchParam.count}
+                </if>
+                )
+                <if test="searchParam.day != null">
+                AND ts.create_time >= now() - (#{searchParam.day} || ' DAY')::INTERVAL
+                </if>
+            GROUP BY writer_seq, t.name, DATE(ts.create_time)
+            ORDER BY tag_name, create_time DESC
+            ) AS top_used_tag
+        GROUP BY tag_name;
+    </select>
+    <select id="selectAllTroubleTagHistoryByUserSeq"
+    parameterType="long"
+    resultMap="TagHistory">
+        SELECT
+            t.name AS tag_name,
+            count(t.name) AS total_count
+        FROM
+            tag t
+        INNER JOIN
+            trouble_tag tt on tt.tag_seq = t.seq
+        INNER JOIN
+            trouble_shooting ts on tt.trouble_seq  = ts.seq
+            AND ts.writer_seq =  #{userSeq}
+        group by
+            t.name
+        order by
+            total_count desc,
+            t.name;
+    </select>
+    <select id="selectAllAnswerTagHistoryByUserSeq"
+            parameterType="long"
+            resultMap="TagHistory">
+        SELECT
+            count(t.name) AS total_count,
+	        t.name AS tag_name
+        FROM
+            tag t
+        INNER JOIN
+            trouble_tag tt ON tt.tag_seq = t.seq
+        INNER JOIN
+            trouble_shooting ts ON tt.trouble_seq  = ts.seq
+        INNER JOIN
+            trouble_shooting_answer tsa ON ts.seq = tsa.trouble_seq
+            AND tsa.writer_seq = #{userSeq}
+        GROUP BY
+             t.name
+        ORDER BY
+            total_count DESC;
+    </select>
+</mapper>

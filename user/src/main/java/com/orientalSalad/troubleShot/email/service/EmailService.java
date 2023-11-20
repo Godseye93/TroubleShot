@@ -27,6 +27,7 @@ public class EmailService {
 	private String title;
 
 	public AuthCodeDTO sendAuthEmail(String email) throws MessagingException {
+		log.info("발송 대상 이메일 : "+email);
 		MimeMessage message = javaMailSender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 

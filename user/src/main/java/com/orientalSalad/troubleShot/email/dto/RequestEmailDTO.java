@@ -14,11 +14,9 @@ import lombok.ToString;
 @Setter
 @Builder
 @ToString
-@NoArgsConstructor
 @AllArgsConstructor
-public class AuthCodeDTO implements Serializable {
-	@Schema(description = "본인 이메일")
+@NoArgsConstructor
+public class RequestEmailDTO implements Serializable {
+	@Schema(description = "이메일")
 	String email;
-	@Schema(description = "인증 번호")
-	String code;
 }
