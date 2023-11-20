@@ -14,3 +14,5 @@
   - api call URL fix
 - 0.0.7 - 20203.11.16
   - rollback api call URL fix
+- 0.1.0 - 20203.11.20
+  - https support

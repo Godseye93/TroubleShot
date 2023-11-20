@@ -14,7 +14,7 @@ export class MyTroubleListProviderLogin extends MyTroubleListProvider {
   async getChildren(): Promise<Trouble[]> {
     const sessionId = this.globalState.get<number>("sessionId");
     const res = await fetch(
-      `http://orientalsalad.kro.kr:8102/trouble-shootings?pageSize=10&writerSeq=${sessionId}&loginSeq=${sessionId}`,
+      `https://orientalsalad.kro.kr/api/troubleshooting/trouble-shootings?pageSize=10&writerSeq=${sessionId}&loginSeq=${sessionId}`,
       {
         method: "GET",
         headers: {
@@ -39,7 +39,7 @@ export class MyTroubleListProviderLogin extends MyTroubleListProvider {
   async deleteTroubleShooting(trouble: Trouble) {
     const sessionId = this.globalState.get<number>("sessionId");
     const res = await fetch(
-      `http://orientalsalad.kro.kr:8102/trouble-shootings/${
+      `https://orientalsalad.kro.kr/api/troubleshooting/trouble-shootings/${
         trouble.id
       }?loginSeq=${sessionId}&type=${2}`,
       {
