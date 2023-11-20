@@ -8,13 +8,33 @@ pipeline {
         stage('Check directory') {
             steps {
                 sh 'ls -al'
+                script {
+                    def commitAuthor = sh(script: 'git log -1 --pretty=%an', returnStdout: true).trim()
+                    env.COMMIT_AUTHOR = commitAuthor
+
+                    def commitMessage = sh(script: 'git log -1 --pretty=%B', returnStdout: true).trim()
+                    env.COMMIT_MESSAGE = commitMessage
+                }
             }
         }
 
         stage('Clone Repository') {
             steps {
+                mattermostSend color: 'warning', message: ":angry_jenkins_face: 배포 시작! :angry_jenkins_face: \n`back/troubleShooting - #${env.BUILD_NUMBER}`\nStarted by GitLab push by ${env.COMMIT_AUTHOR}\n링크: ${env.BUILD_URL}"
                 checkout scm
                 echo 'Checkout Scm'
+            }
+        }
+
+        stage('Remove Old Docker Image') {
+            steps {
+                script {
+                    try {
+                        sh 'docker rmi godseye93/troubleshooting:latest || true'
+                    } catch (e) {
+                        echo 'Failed to remove old Docker image'
+                    }
+                }
             }
         }
 
@@ -28,6 +48,13 @@ pipeline {
                     sh 'docker build -t godseye93/troubleshooting:latest .'
                 }
                 echo 'Build image...'
+            }
+        }
+
+        stage('Push image') {
+            steps {
+                sh 'docker push godseye93/troubleshooting:latest'
+                echo 'Push image to DockerHub...'
             }
         }
 
@@ -45,9 +72,17 @@ pipeline {
         }
         stage('Run New image') {
             steps {
-                sh 'docker run --name troubleshooting -d -p 8104:8104 godseye93/troubleshooting:latest'
+                sh 'docker run --name troubleshooting -d -p 8102:8102 godseye93/troubleshooting:latest'
                 echo 'Run New member image'
             }
+        }
+    }
+    post {
+        success {
+            mattermostSend color: 'good', message: ":jampepebyyeah: 배포 완료! :jampepebyyeah: \n`back/troubleShooting - #${env.BUILD_NUMBER}`\nStarted by changes from ${env.COMMIT_AUTHOR}\n**${env.COMMIT_MESSAGE}** \n링크: ${env.BUILD_URL}"
+        }
+        failure {
+            mattermostSend color: 'danger', message: ":angry_pepe_2: 배포 실패! :angry_pepe_2: \n:angry_pepe_2: :angry_pepe_2: :angry_pepe_2: :angry_pepe_2: :angry_pepe_2: \n:angry_pepe_2: :angry_pepe_2: :angry_pepe_2: :angry_pepe_2: :angry_pepe_2:"
         }
     }
 }

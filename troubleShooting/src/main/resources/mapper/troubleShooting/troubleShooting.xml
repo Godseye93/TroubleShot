@@ -1,0 +1,470 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.orientalSalad.troubleShot.troubleShooting.mapper.TroubleShootingMapper">
+    <resultMap id="TroubleShooting" type="com.orientalSalad.troubleShot.troubleShooting.dto.TroubleShootingDTO">
+        <id property="seq" column="seq" />
+        <result property="title" column="title"/>
+        <result property="context" column="context"/>
+        <result property="dependency" column="dependency"/>
+        <result property="solved" column="solved"/>
+        <result property="scope" column="scope"/>
+        <result property="category" column="category"/>
+        <result property="favorite" column="favorite"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="deleteTime" column="delete_time"/>
+        <result property="viewCount" column="view_count"/>
+        <result property="likeCount" column="like_count"/>
+        <result property="replyCount" column="reply_count"/>
+        <result property="answerCount" column="answer_count"/>
+        <result property="loginLike" column="login_like"/>
+        <result property="postType" column="post_type"/>
+        <result property="tags" column="tag_name"
+                typeHandler="com.orientalSalad.troubleShot.troubleShooting.typehandler.StringToListTypeHandler"/>
+        <result property="replies" column="reply"
+                typeHandler="com.orientalSalad.troubleShot.troubleShooting.typehandler.JsonToListTypeHandler"/>
+        <result property="answers" column="answer"
+                typeHandler="com.orientalSalad.troubleShot.troubleShooting.typehandler.AnswerJsonToListTypeHandler"/>
+        <association property="writer" resultMap="simpleMember"/>
+    </resultMap>
+    <resultMap id="TroubleShootingAnswer" type="com.orientalSalad.troubleShot.troubleShooting.dto.TroubleShootingAnswerDTO">
+        <id property="seq" column="seq"/>
+        <result property="title" column="title"/>
+        <result property="context" column="context"/>
+        <result property="selected" column="selected"/>
+        <result property="replyCount" column="reply_count"/>
+        <association property="writer" resultMap="simpleMember"/>
+    </resultMap>
+    <resultMap id="TroubleShootingAnswerReply" type="com.orientalSalad.troubleShot.troubleShooting.dto.TroubleShootingAnswerReplyDTO">
+        <id property="seq" column="seq" />
+        <result property="context" column="context"/>
+        <association property="writer" resultMap="simpleMember"/>
+    </resultMap>
+    <resultMap id="simpleMember" type="com.orientalSalad.troubleShot.member.dto.SimpleMemberDTO">
+        <id property="seq" column="writer_seq" />
+        <result property="email" column="writer_email" />
+        <result property="profileImg" column="writer_profile_img" />
+        <result property="nickname" column="writer_nickname" />
+    </resultMap>
+
+    <select id="selectTroubleShootingAnswerReplyBySeq"
+            parameterType="Long"
+            resultMap="TroubleShootingAnswer">
+        SELECT
+            tsar.seq AS seq,
+            tsar.context AS context,
+            m.seq AS writer_seq,
+            m.nickname AS writer_nickname,
+            m.email AS writer_email,
+            m.profile_img AS writer_profile_img
+        FROM
+            trouble_shooting_answer_reply tsar
+                LEFT JOIN
+            member m ON tsar.writer_seq = m.seq
+        WHERE
+            a.seq = #{seq}
+    </select>
+    <select id="selectTroubleShootingAnswerBySeq"
+            parameterType="Long"
+            resultMap="TroubleShootingAnswer">
+            SELECT
+                a.seq AS seq,
+                a.title AS title,
+                a.context AS context,
+                a.selected AS selected,
+                m.seq AS writer_seq,
+                m.nickname AS writer_nickname,
+                m.email AS writer_email,
+                m.profile_img AS writer_profile_img
+            FROM
+                 trouble_shooting_answer a
+            LEFT JOIN
+                 member m ON a.writer_seq = m.seq
+            WHERE
+                  a.seq = #{seq}
+    </select>
+    <update id="updateTroubleShootingView"
+            parameterType="Long">
+        UPDATE
+            trouble_shooting
+        SET
+            view_count = view_count+1
+        WHERE
+            seq = #{seq}
+    </update>
+    <select id="selectTroubleShootingBySeq"
+        parameterType="Long"
+        resultMap="TroubleShooting">
+        SELECT  ts.seq AS seq,
+            ts.title AS title,
+            ts.context AS context,
+            ts.dependency AS dependency,
+            ts.scope AS scope,
+            ts.category AS category,
+            ts.solved AS solved,
+            ts.create_time AS create_time,
+            ts.update_time AS update_time,
+            ts.delete_time AS delete_time,
+            ts.view_count AS view_count,
+            ts.post_type AS post_type,
+            COUNT(DISTINCT a.seq) AS answer_count,
+            ts.like_count  AS like_count,
+            COUNT(DISTINCT tsr.seq) AS reply_count,
+            m.seq AS writer_seq,
+            m.nickname AS writer_nickname,
+            m.email AS writer_email,
+            m.profile_img AS writer_profile_img,
+            CASE
+                WHEN f.seq IS NOT NULL THEN true
+                ELSE false
+            END as favorite,
+            CASE
+                WHEN login_tsl.user_seq IS NOT NULL THEN true
+                ELSE false
+            END as login_like,
+            STRING_AGG(distinct t.name, ', ') AS tag_name,
+            JSON_AGG(json_build_object(
+                'seq', tsr.seq,
+                'createTime', tsr.create_time,
+                'updateTime', tsr.update_time,
+                'deleteTime', tsr.delete_time,
+                'context',tsr.context,
+                'writer',json_build_object(
+                'seq', reply_m.seq,
+                'nickname',reply_m.nickname,
+                'email',reply_m.email,
+                'profileImg',reply_m.profile_img),
+                'likeCount',tsr.like_count,
+                'loginLike',
+                    CASE
+                        WHEN login_tsrl.user_seq IS NOT NULL THEN true
+                        ELSE false
+                    END,
+                'troubleSeq', tsr.trouble_seq)) AS reply,
+                    JSON_AGG(json_build_object(
+                    'seq', a.seq,
+                    'title',a.title,
+                    'selected', a.selected,
+                    'context',a.context,
+                    'createTime',a.create_time,
+                    'deleteTime',a.delete_time,
+                    'updateTime',a.update_time,
+                    'likeCount',a.like_count,
+                    'troubleSeq',a.trouble_seq,
+                    'loginLike',
+                        CASE
+                            WHEN login_tsal.user_seq IS NOT NULL THEN TRUE
+                            ELSE FALSE
+                        END,
+                    'writer',json_build_object(
+                        'seq', answer_m.seq,
+                        'nickname',answer_m.nickname,
+                        'email',answer_m.email,
+                        'profileImg',answer_m.profile_img
+                    ),
+                    'replyCount',(
+                        SELECT COUNT(DISTINCT tsar.seq)
+                        FROM trouble_shooting_answer_reply tsar
+                        WHERE tsar.answer_seq = a.seq
+                    ),
+                    'replies', (
+                        SELECT JSON_AGG(
+                            json_build_object(
+                                'seq', ar.seq,
+                                'context', ar.context,
+                                'createTime', ar.create_time,
+                                'deleteTime', ar.delete_time,
+                                'updateTime', ar.update_time,
+                                'likeCount', ar.like_count,
+                                'answerSeq', ar.answer_seq,
+                                'loginLike', CASE
+                                                WHEN login_tsarl.user_seq IS NOT NULL THEN TRUE
+                                                ELSE FALSE
+                                            END,
+                                'writer', json_build_object(
+                                    'seq', arm.seq,
+                                    'nickname', arm.nickname,
+                                    'email', arm.email,
+                                    'profileImg', arm.profile_img
+                                        )
+                                )
+                            )
+                        FROM
+                            trouble_shooting_answer_reply ar
+                                LEFT JOIN
+                            trouble_shooting_answer_reply_like login_tsarl ON ar.seq = login_tsarl.answer_reply_seq
+                                AND login_tsarl.user_seq = #{searchParam.loginSeq}
+                                LEFT JOIN
+                            member arm ON arm.seq = ar.writer_seq
+                        WHERE
+                              a.seq = ar.answer_seq
+                        )
+                    )) AS answer
+        FROM
+            trouble_shooting ts
+        LEFT JOIN
+            trouble_shooting_reply tsr ON ts.seq = tsr.trouble_seq
+        LEFT JOIN
+            trouble_tag tt ON tt.trouble_seq = ts.seq
+        LEFT JOIN
+            tag t ON t.seq = tt.tag_seq
+        LEFT JOIN
+            member m ON ts.writer_seq = m.seq
+        LEFT JOIN
+            trouble_shooting_like tsl ON ts.seq  = tsl.trouble_seq
+        LEFT JOIN
+            member reply_m ON tsr.writer_seq  = reply_m.seq
+        LEFT JOIN
+            trouble_shooting_answer a ON ts.seq  = a.trouble_seq
+        LEFT JOIN
+            member answer_m ON a.writer_seq  = answer_m.seq
+        LEFT JOIN
+            trouble_shooting_answer_like tsal ON tsal.answer_seq  = a.seq
+        LEFT JOIN
+            trouble_shooting_like login_tsl ON ts.seq  = login_tsl.trouble_seq AND login_tsl.user_seq = #{searchParam.loginSeq}
+        LEFT JOIN
+            trouble_shooting_answer_like login_tsal ON a.seq  = login_tsal.answer_seq AND login_tsal.user_seq =#{searchParam.loginSeq}
+      LEFT JOIN
+            trouble_shooting_reply_like login_tsrl ON tsr.seq  = login_tsrl.reply_seq AND login_tsrl.user_seq = #{searchParam.loginSeq}
+        LEFT JOIN
+            favorite f ON ts.seq = f.trouble_seq AND f.user_seq = #{searchParam.loginSeq}
+        WHERE
+            ts.seq =  #{searchParam.troubleSeq}
+        GROUP BY
+            tsl.user_seq,
+            ts.seq,
+            m.seq,
+            login_tsl.seq,
+            f.seq
+    </select>
+    <select id="countTroubleShootingList"
+            parameterType="com.orientalSalad.troubleShot.troubleShooting.dto.SearchTroubleShootingDTO"
+            resultType="java.lang.Long">
+        <if test="tags != null and tags.size() > 0">
+            WITH matched_posts AS (
+                SELECT tt.trouble_seq as seq
+                FROM trouble_tag tt
+                INNER JOIN tag t ON t.seq = tt.tag_seq
+                WHERE t.name IN
+                <foreach collection="tags" item="tag" open="(" close=")" separator=",">
+                    #{tag}
+                </foreach>
+                GROUP BY tt.trouble_seq
+                HAVING COUNT(DISTINCT t.name) >= #{tagSize}-- 검색하려는 태그의 개수
+                )
+        </if>
+            SELECT count(seq_group.seq) AS total_count
+            FROM (
+                    SELECT  ts.seq AS seq
+                    FROM
+                    trouble_shooting ts
+                    <if test="searchParam.tags != null and searchParam.tags.size() > 0">
+                        INNER JOIN
+                        matched_posts mp on mp.seq = ts.seq
+                    </if>
+                    LEFT JOIN
+                    trouble_shooting_reply tsr on ts.seq = tsr.trouble_seq
+                    LEFT JOIN
+                    trouble_tag tt ON tt.trouble_seq = ts.seq
+                    LEFT JOIN
+                    tag t ON t.seq = tt.tag_seq
+                    LEFT JOIN
+                    trouble_shooting_answer a ON ts.seq  = a.trouble_seq
+                    LEFT JOIN
+                    member m ON ts.writer_seq = m.seq
+                    <if test="searchParam.loginSeq != null or searchParam.loginSeq != 0">
+                        LEFT JOIN
+                        trouble_shooting_like tsl ON ts.seq  = tsl.trouble_seq
+                        AND tsl.user_seq = #{searchParam.loginSeq}
+                        LEFT JOIN
+                        favorite f ON f.trouble_seq = ts.seq
+                        AND f.user_seq = #{searchParam.loginSeq}
+                    </if>
+                    WHERE
+                    1 = 1
+                    AND ts.scope in ( 0
+                    <if test="searchParam.loginSeq != null or searchParam.loginSeq != 0">
+                        , #{searchParam.loginSeq}
+                    </if>
+                    )
+                    <if test="searchParam.writer != null and searchParam.writer.trim().length() > 0">
+                        AND m.nickname LIKE CONCAT('%',#{searchParam.writer},'%')
+                    </if>
+                    <if test="searchParam.troubleSeq != null and searchParam.troubleSeq != 0">
+                        AND ts.seq = #{searchParam.troubleSeq}
+                    </if>
+                    <if test="searchParam.solved != null">
+                        AND ts.solved = #{searchParam.solved}
+                    </if>
+                    <if test="searchParam.keyword != null and searchParam.keyword.trim().length() > 0">
+                        AND (ts.title LIKE CONCAT('%',#{searchParam.keyword},'%')
+                        OR ts.context LIKE CONCAT('%',#{searchParam.keyword},'%')
+                        OR ts.dependency LIKE CONCAT('%',#{searchParam.keyword},'%'))
+                    </if>
+                    <if test="searchParam.startTime != null">
+                        AND ts.create_time &gt;=  #{searchParam.startTime}
+                    </if>
+                    <if test="searchParam.category != null and searchParam.category.trim().length() > 0">
+                        AND ts.category = #{searchParam.category}
+                    </if>
+                    <if test="searchParam.endTime != null">
+                        AND ts.create_time &lt;=  #{searchParam.endTime}
+                    </if>
+                    <if test="searchParam.writerSeq != null">
+                        AND ts.writer_seq =  #{searchParam.writerSeq}
+                    </if>
+                    <if test="searchParam.favorite == true">
+                        AND f.user_seq =  #{searchParam.loginSeq}
+                    </if>
+                    GROUP BY
+                    <if test="searchParam.loginSeq != null or searchParam.loginSeq != 0">
+                        tsl.seq,
+                        f.seq,
+                    </if>
+                    ts.seq,
+                    m.seq ) AS seq_group
+    </select>
+    <select id="selectTroubleShootingList"
+            parameterType="com.orientalSalad.troubleShot.troubleShooting.dto.SearchTroubleShootingDTO"
+            resultMap="TroubleShooting">
+        <if test="tags != null and tags.size() > 0">
+        WITH matched_posts AS (
+            SELECT tt.trouble_seq as seq
+            FROM trouble_tag tt
+            INNER JOIN tag t ON t.seq = tt.tag_seq
+            WHERE t.name IN
+            <foreach collection="tags" item="tag" open="(" close=")" separator=",">
+                #{tag}
+            </foreach>
+            GROUP BY tt.trouble_seq
+            HAVING COUNT(DISTINCT t.name) >= #{tagSize}-- 검색하려는 태그의 개수
+        )
+        </if>
+        SELECT  ts.seq AS seq,
+                ts.title AS title,
+                ts.context AS context,
+                ts.category AS category,
+                ts.dependency AS dependency,
+                ts.solved AS solved,
+                ts.scope AS scope,
+			    ts.create_time AS create_time,
+                ts.update_time AS update_time,
+                ts.delete_time AS delete_time,
+				ts.view_count AS view_count,
+                ts.post_type AS post_type,
+                COUNT(distinct tsl.seq) AS like_count,
+                COUNT(distinct tsr.seq) AS reply_count,
+                COUNT(distinct a.seq) AS answer_count,
+				m.seq AS writer_seq,
+                m.nickname AS writer_nickname,
+                m.email AS writer_email,
+                m.profile_img AS writer_profile_img,
+                <if test="searchParam.loginSeq != null or searchParam.loginSeq != 0">
+                    CASE
+                        WHEN tsl.seq IS NOT NULL THEN true
+                        ELSE false
+                    END as login_like,
+                    CASE
+                    WHEN f.seq IS NOT NULL THEN true
+                    ELSE false
+                    END as favorite,
+                </if>
+                STRING_AGG(distinct t.name, ', ') AS tag_name
+        FROM
+            trouble_shooting ts
+        <if test="searchParam.tags != null and searchParam.tags.size() > 0">
+        INNER JOIN
+            matched_posts mp on mp.seq = ts.seq
+        </if>
+        LEFT JOIN
+            trouble_shooting_reply tsr on ts.seq = tsr.trouble_seq
+        LEFT JOIN
+            trouble_tag tt ON tt.trouble_seq = ts.seq
+        LEFT JOIN
+            tag t ON t.seq = tt.tag_seq
+        LEFT JOIN
+            trouble_shooting_answer a ON ts.seq  = a.trouble_seq
+        LEFT JOIN
+            member m ON ts.writer_seq = m.seq
+        <if test="searchParam.loginSeq != null or searchParam.loginSeq != 0">
+        LEFT JOIN
+            trouble_shooting_like tsl ON ts.seq  = tsl.trouble_seq
+            AND tsl.user_seq = #{searchParam.loginSeq}
+        LEFT JOIN
+            favorite f ON f.trouble_seq = ts.seq
+            AND f.user_seq = #{searchParam.loginSeq}
+        </if>
+        WHERE
+        1 = 1
+        AND ts.scope in ( 0
+        <if test="searchParam.loginSeq != null or searchParam.loginSeq != 0">
+            , #{searchParam.loginSeq}
+        </if>
+        )
+        <if test="searchParam.writer != null and searchParam.writer.trim().length() > 0">
+            AND m.nickname LIKE CONCAT('%',#{searchParam.writer},'%')
+        </if>
+        <if test="searchParam.troubleSeq != null and searchParam.troubleSeq != 0">
+            AND ts.seq = #{searchParam.troubleSeq}
+        </if>
+        <if test="searchParam.solved != null">
+            AND ts.solved = #{searchParam.solved}
+        </if>
+        <if test="searchParam.keyword != null and searchParam.keyword.trim().length() > 0">
+            AND (ts.title LIKE CONCAT('%',#{searchParam.keyword},'%')
+            OR ts.context LIKE CONCAT('%',#{searchParam.keyword},'%')
+            OR ts.dependency LIKE CONCAT('%',#{searchParam.keyword},'%'))
+        </if>
+        <if test="searchParam.startTime != null">
+            AND ts.create_time &gt;=  #{searchParam.startTime}
+        </if>
+        <if test="searchParam.category != null and searchParam.category.trim().length() > 0">
+            AND ts.category = #{searchParam.category}
+        </if>
+        <if test="searchParam.endTime != null">
+            AND ts.create_time &lt;=  #{searchParam.endTime}
+        </if>
+        <if test="searchParam.writerSeq != null">
+            AND ts.writer_seq =  #{searchParam.writerSeq}
+        </if>
+        <if test="searchParam.favorite == true">
+            AND f.user_seq =  #{searchParam.loginSeq}
+        </if>
+        GROUP BY
+        <if test="searchParam.loginSeq != null or searchParam.loginSeq != 0">
+            tsl.seq,
+            f.seq,
+        </if>
+            ts.seq,
+            m.seq
+        <choose>
+            <when test="searchParam.order == 1">
+                ORDER BY ts.like_count DESC,
+                        ts.create_time DESC
+            </when>
+            <when test="searchParam.order == 2">
+                ORDER BY ts.reply_count DESC,
+                         ts.create_time DESC
+            </when>
+            <when test="searchParam.order == 3">
+                ORDER BY ts.view_count DESC,
+                        ts.create_time DESC
+            </when>
+            <otherwise>
+                ORDER BY ts.create_time DESC
+            </otherwise>
+        </choose>
+        LIMIT #{searchParam.pageSize, javaType=Integer, jdbcType=INTEGER}
+        OFFSET (#{searchParam.pageNo} - 1)* #{searchParam.pageSize, javaType=Integer, jdbcType=INTEGER}
+    </select>
+    <update id="updateCategory">
+        UPDATE trouble_shooting
+        SET
+            category = #{category.name}
+        WHERE
+            category =  #{original}
+          AND writer_seq =  #{category.userSeq}
+    </update>
+</mapper>
