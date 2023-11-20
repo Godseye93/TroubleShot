@@ -9,6 +9,7 @@ import dynamic from "next/dynamic";
 import SearchbarSkeleton from "@/components/Skeletons/SearchbarSkeleton";
 import Image from "next/image";
 import boxloading from "../../../public/boxloading.gif";
+
 // import Searchbar from "@/components/Searchbar/Searchbar";
 
 const Searchbar = dynamic(() => import("@/components/Searchbar/Searchbar"), {

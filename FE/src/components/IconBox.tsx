@@ -36,27 +36,32 @@ export default function IconBox({ likes, views, comments, m, isLike, troubleSeq,
     }
   };
   return (
-    <div className="flex  items-center gap-1">
-      <div className={`flex items-center max-w-[33%] ${queryKey && "hover:cursor-pointer"}`} onClick={onLike}>
+    <div className="flex  items-center gap-3 rounded-lg">
+      <div
+        className={`flex items-center border border-sub text-sub gap-2 rounded-lg px-2 ${
+          queryKey && "hover:cursor-pointer"
+        }`}
+        onClick={onLike}
+      >
         {isLike ? (
-          <div className={`w-4 ${m && m} text-red-600 hover:text-red-400 transition-colors duration-200`}>
+          <div className="w-4  text-red-600 hover:text-red-400 transition-colors duration-200">
             <AiFillHeart />
           </div>
         ) : (
-          <div className={`w-4 ${m && m} hover:text-red-400 transition-colors duration-200`}>
+          <div className="w-4 hover:text-red-400 transition-colors duration-200">
             <AiOutlineHeart />
           </div>
         )}
         <p className=" line-clamp-1 items-center ">{likes}</p>
       </div>
-      <div className="flex items-center max-w-[33%]">
-        <div className={`w-4 ${m && m}`}>
+      <div className="flex items-center border border-green-600 rounded-lg px-2 gap-2 text-green-600">
+        <div className="w-4">
           <AiOutlineEye />
         </div>
         <p className="line-clamp-1 items-center">{views}</p>
       </div>
-      <div className="flex items-center max-w-[33%]">
-        <div className={`w-4 ${m && m}`}>
+      <div className="flex items-center border border-amber-600 text-amber-600 rounded-lg px-2 gap-2">
+        <div className="w-4">
           <MdComment />
         </div>
         <p className=" line-clamp-1 items-center">{comments}</p>

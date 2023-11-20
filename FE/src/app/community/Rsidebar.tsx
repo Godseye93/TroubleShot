@@ -38,7 +38,9 @@ export default function Rsidebar() {
                     </p>
                     <p className="text-xs">{changeKoTime(content.createTime)}</p>
                   </div>
-                  <div className="line-clamp-2 mt-2 text-sm">{content.context}</div>
+                  <div className={`line-clamp-2 text-sm ${content.tags.length > 0 ? "my-5" : "mt-5"}`}>
+                    {content.context}
+                  </div>
                   <div className="tagbox">
                     <div className="flex tag-scroll overflow-scroll relative">
                       {content.tags.map((tag, idx) => (
@@ -50,7 +52,7 @@ export default function Rsidebar() {
                     <div className="cover-bar"></div>
                   </div>
                   <div className="text-sm">
-                    <IconBox likes={content.likeCount} views={content.viewCount} comments={content.replyCount} />
+                    {/* <IconBox likes={content.likeCount} views={content.viewCount} comments={content.replyCount} /> */}
                   </div>
                 </Link>
               </div>
