@@ -89,38 +89,34 @@ export default function CommunityContents() {
           </div>
         ) : (
           <div className="mt-2">
-            <p className="text-xl font-semibold my-2">자주 이용한 태그</p>
+            <p className="text-xl font-semibold my-5">자주 이용한 태그</p>
 
             <div className="grid grid-cols-2 gap-2">
-              <>
-                <CardContentL
-                  queryKey={["contents1"]}
-                  keyword={tags.tagList[0]}
-                  contents={contents1?.troubleShootingList}
-                />
-                <CardContentL
-                  queryKey={["contents2"]}
-                  keyword={tags.tagList[1]}
-                  contents={contents2?.troubleShootingList}
-                />
-              </>
+              <CardContentL
+                queryKey={["contents1"]}
+                keyword={tags.tagList[0]}
+                contents={contents1?.troubleShootingList}
+              />
+              <CardContentL
+                queryKey={["contents2"]}
+                keyword={tags.tagList[1]}
+                contents={contents2?.troubleShootingList}
+              />
             </div>
           </div>
         ))}
-      <p className="text-xl font-semibold my-2">🔥실시간 인기글 Top 10</p>
-      <div className="bg-white rounded-lg shadow-md px-2 mt-2 flex-col items-center">
+      <p className="text-xl font-semibold my-5">🔥실시간 인기글 Top 10</p>
+      <div className="bg-white rounded-lg shadow-md mt-2 flex-col items-center">
         {hotBoard &&
           hotBoard.troubleShootingList.map((content, idx) => (
-            <>
-              <BoardItem
-                nowUrl="community/posts"
-                key={idx}
-                board={content}
-                idx={idx}
-                last={hotBoard.troubleShootingList.length - 1}
-                queryKey={["hotBoard"]}
-              />
-            </>
+            <BoardItem
+              nowUrl="community/posts"
+              key={idx}
+              board={content}
+              idx={idx}
+              last={hotBoard.troubleShootingList.length - 1}
+              queryKey={["hotBoard"]}
+            />
           ))}
         <Link href={"/community/posts"}>
           <div className="flex justify-center items-center text-xl font-semibold h-20 border-t-2">전체보기</div>

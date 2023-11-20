@@ -51,7 +51,7 @@ export default function Header() {
           <Link
             href="/trouble"
             className={`me-5 text-black hover:text-main duration-200 transition-colors ${
-              path.includes("/trouble") && "font-semibold"
+              path.includes("/trouble") && "font-semibold text-main"
             }`}
           >
             내 트러블 슈팅
@@ -60,7 +60,7 @@ export default function Header() {
             href="/community"
             className={`
         ${
-          path.includes("/community") && " font-semibold"
+          path.includes("/community") && " font-semibold text-main"
         } me-5 text-black hover:text-main duration-200 transition-colors`}
           >
             커뮤니티
