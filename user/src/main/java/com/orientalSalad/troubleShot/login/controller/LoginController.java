@@ -8,11 +8,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.orientalSalad.troubleShot.global.dto.ResultDTO;
+import com.orientalSalad.troubleShot.global.utill.IPGetter;
+import com.orientalSalad.troubleShot.login.dto.LogOutDTO;
 import com.orientalSalad.troubleShot.login.dto.LoginDTO;
 import com.orientalSalad.troubleShot.login.service.LoginService;
 import com.orientalSalad.troubleShot.member.dto.MemberDTO;
+import com.orientalSalad.troubleShot.member.dto.ResponseMemberDTO;
 
-import jakarta.servlet.http.HttpSession;
+import io.swagger.v3.oas.annotations.Operation;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
@@ -22,12 +26,16 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class LoginController {
 	private final LoginService loginService;
+	private final IPGetter ipGetter;
 
+	@Operation(summary = "로그인 API",description = "입력 DTO : LoginDTO")
 	@PostMapping("/login")
-	public ResponseEntity<?> login(@RequestBody LoginDTO loginDTO,HttpSession session) throws Exception{
+	public ResponseEntity<?> login(@RequestBody LoginDTO loginDTO,
+		HttpServletRequest request) throws Exception{
 		log.info("=== 로그인 시작 ===");
 		log.info(loginDTO);
 
+		loginDTO.setIp(ipGetter.getClientIp(request));
 		MemberDTO memberDTO = loginService.login(loginDTO);
 
 		//유저가 없는 경우
@@ -41,40 +49,36 @@ public class LoginController {
 		}
 
 		log.info("로그인 유저 : "+memberDTO);
-		log.info(session.getId());
 
-		session.setAttribute(String.valueOf(memberDTO.getSeq()),memberDTO);
-
-		ResultDTO resultDTO = ResultDTO.builder()
+		ResponseMemberDTO resultDTO = ResponseMemberDTO.builder()
 			.success(true)
 			.message(memberDTO.getEmail()+" 유저의 로그인이 성공했습니다.")
+			.member(memberDTO)
 			.build();
 
 		log.info("=== 로그인 끝 ===");
-		return new ResponseEntity<ResultDTO>(resultDTO, HttpStatus.ACCEPTED);
+		return new ResponseEntity<ResponseMemberDTO>(resultDTO, HttpStatus.ACCEPTED);
 	}
 
+	@Operation(summary = "로그아웃 API"
+		,description = "입력 DTO : LogOutDTO")
 	@PostMapping("/logout")
-	public ResponseEntity<?> logout(@RequestBody Long seq, HttpSession session) throws Exception {
+	public ResponseEntity<?> logout(HttpServletRequest request, @RequestBody LogOutDTO logOutDTO) throws Exception {
 		log.info("=== 로그아웃 시작 ===");
-		log.info("유저 seq : "+seq);
-		
+		log.info(logOutDTO);
+
+		//ip 추출
+		logOutDTO.setIp(ipGetter.getClientIp(request));
+
 		//로그아웃 진행
-		MemberDTO loginMember = (MemberDTO)session.getAttribute(String.valueOf(seq));
+		loginService.logout(logOutDTO);
 
-		if(loginMember == null){
-			throw new Exception(seq+"번 유저는 해당 브라우저에서 로그인 하지 않았습니다.");
-		}
-		//세션 만료
-		session.invalidate();
-
-		String msg = seq+"번 유저의 로그아웃이 성공했습니다.";
+		String msg = logOutDTO.getSeq()+"번 유저의 로그아웃이 성공했습니다.";
 
 		ResultDTO resultDTO = ResultDTO.builder()
 			.success(true)
 			.message(msg)
 			.build();
-
 		log.info("=== 로그아웃 끝 ===");
 		return new ResponseEntity<ResultDTO>(resultDTO, HttpStatus.ACCEPTED);
 	}

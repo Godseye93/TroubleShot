@@ -33,8 +33,6 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 	// MVC 사용
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	//세션에 redis를 등록시키기 위한 의존성
-	implementation 'org.springframework.session:spring-session-data-redis'
 	//swagger
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.4'
 	//lombok
@@ -52,12 +50,28 @@ dependencies {
 	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
 	implementation 'com.fasterxml.jackson.core:jackson-databind'
 
-	// https://mvnrepository.com/artifact/org.springframework.session/spring-session-data-redis
+	//redis-세션 의존성
 	implementation 'org.springframework.session:spring-session-data-redis'
 	implementation 'org.springframework.session:spring-session-core'
 
+	//spring config
+	implementation 'org.springframework.cloud:spring-cloud-starter-config'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'org.springframework.cloud:spring-cloud-starter-bus-amqp'
+
+	//mybatis
+	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.2'
+}
+ext {
+	set('springCloudVersion', "2022.0.3")
 }
 
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
+}
 tasks.named('test') {
 	outputs.dir snippetsDir
 	useJUnitPlatform()

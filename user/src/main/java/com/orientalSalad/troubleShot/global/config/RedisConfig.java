@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @Configuration
-@EnableRedisHttpSession()
+@EnableRedisHttpSession
 public class RedisConfig{
 
 	@Value("${spring.data.redis.host}")
