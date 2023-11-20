@@ -27,6 +27,7 @@ public class MemberConverter implements ObjectConverter<MemberDTO, MemberEntity>
 			.nickname(memberEntity.getNickname())
 			.locale(memberEntity.getLocale())
 			.profileImg(memberEntity.getProfileImg())
+			.profileImg(memberEntity.getProfileImg())
 			.createTime(memberEntity.getCreateTime())
 			.deleteTime(memberEntity.getDeleteTime())
 			.updateTime(memberEntity.getUpdateTime())
