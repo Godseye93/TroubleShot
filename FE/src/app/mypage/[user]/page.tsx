@@ -36,8 +36,8 @@ export default function Page({ params }: { params: { user: number } }) {
     <div className="mt-20 mb-5 flex justify-center w-full">
       <div className="w-7/12 me-4">
         <div className="flex justify-center items-center bg-white rounded-lg mb-4 w-full p-5 shadow-md">
-          <div className="w-1/6 flex flex-col items-center me-5">
-            <img src={userData?.profileImg} alt="trosProfileImg" className="mb-3" />
+          <div className=" flex flex-col items-center me-5">
+            <img src={userData?.profileImg} alt="trosProfileImg" className="mb-3 rounded-full h-36 w-36 mt-5" />
             {userSeq == LoginSeq && (
               <Link href={`/mypage/${userSeq}/edit`} className="text-sub">
                 프로필 수정하기
