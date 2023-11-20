@@ -196,3 +196,66 @@ height: 10px;
   max-height: 40rem;
 
 }
+
+.carousel {
+  overflow: hidden;
+  width: 100%
+}
+
+#carouselIntor:hover {
+  cursor: none
+}
+
+.custom-cursor {
+  width: 5rem;
+  height: 5rem;
+  border: 2px solid var(--color-texta);
+  border-radius: 50%;
+  position: absolute;
+  z-index: 1000;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  transition: all 0.5s ease;
+  transition-property: background, transform;
+  transform-origin: 100% 100%;
+  backdrop-filter: sepia(20%);
+  background-size: cover;
+  background-color: #DF2F5D;
+  opacity: 0.6;
+}
+
+.custom-cursor-left {
+  width: 6rem;
+  height: 6rem;
+  border: 2px solid var(--color-texta);
+  border-radius: 50%;
+  position: absolute;
+  z-index: 1000;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  transition: all 0.3s ease;
+  transition-property: background, transform;
+  transform-origin: 100% 100%;
+  backdrop-filter: sepia(20%);
+  background-size: cover;
+  background-color: #DF2F5D;
+  opacity: 0.6;
+}
+
+.custom-cursor-right {
+  width: 6rem;
+  height: 6rem;
+  border: 2px solid var(--color-texta);
+  border-radius: 50%;
+  position: absolute;
+  z-index: 1000;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  transition: all 0.3s ease;
+  transition-property: background, transform;
+  transform-origin: 100% 100%;
+  backdrop-filter: sepia(20%);
+  background-size: cover;
+  background-color: #DF2F5D;
+  opacity: 0.6;
+}

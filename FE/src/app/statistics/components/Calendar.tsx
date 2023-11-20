@@ -8,7 +8,7 @@ interface Props {
 }
 
 const getCalendar = (userSeq: number) => {
-  const url = `https://orientalsalad.kro.kr:8101/members/${userSeq}/trouble-shootings/history?userSeq=${userSeq}&day=100`;
+  const url = `http://orientalsalad.kro.kr:8101/members/${userSeq}/trouble-shootings/history?userSeq=${userSeq}&day=100`;
   return axios.get(url);
 };
 
@@ -26,35 +26,35 @@ const Calendar = ({ userSeq }: Props) => {
   const beforeDay = new Date();
   beforeDay.setDate(toDay.getDate() - 100);
 
-  return (
-    myData && (
-      <ResponsiveTimeRange
-        data={myData}
-        from={beforeDay.toISOString().split("T")[0]}
-        to={toDay.toISOString().split("T")[0]}
-        emptyColor="#eeeeee"
-        colors={["#61cdbb", "#97e3d5", "#e8c1a0", "#f47560"]}
-        margin={{ top: 40, right: 40, bottom: 100, left: 40 }}
-        dayBorderWidth={2}
-        weekdayTicks={[0, 1, 2, 3, 4, 5, 6]}
-        dayBorderColor="#ffffff"
-        legends={[
-          {
-            anchor: "bottom-right",
-            direction: "row",
-            justify: false,
-            itemCount: 4,
-            itemWidth: 42,
-            itemHeight: 36,
-            itemsSpacing: 14,
-            itemDirection: "right-to-left",
-            translateX: -100,
-            translateY: -90,
-            symbolSize: 20,
-          },
-        ]}
-      />
-    )
+  return myData ? (
+    <ResponsiveTimeRange
+      data={myData}
+      from={beforeDay.toISOString().split("T")[0]}
+      to={toDay.toISOString().split("T")[0]}
+      emptyColor="#eeeeee"
+      colors={["#61cdbb", "#97e3d5", "#e8c1a0", "#f47560"]}
+      margin={{ top: 40, right: 40, bottom: 100, left: 40 }}
+      dayBorderWidth={2}
+      weekdayTicks={[0, 1, 2, 3, 4, 5, 6]}
+      dayBorderColor="#ffffff"
+      legends={[
+        {
+          anchor: "bottom-right",
+          direction: "row",
+          justify: false,
+          itemCount: 4,
+          itemWidth: 42,
+          itemHeight: 36,
+          itemsSpacing: 14,
+          itemDirection: "right-to-left",
+          translateX: -100,
+          translateY: -90,
+          symbolSize: 20,
+        },
+      ]}
+    />
+  ) : (
+    <div>데이터가 없습니다</div>
   );
 };
 

@@ -2,16 +2,19 @@
 import Link from "next/link";
 import Image from "next/image";
 import trous_logo_origin from "/public/logo/trous_logo_origin.png";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useLoginStore } from "@/stores/useLoginStore";
 import { logoutSubmit } from "@/api/account";
 import { useEffect, useState } from "react";
+import { useUserTabStore } from "@/stores/useUserTabStore";
+import { AiOutlineClose } from "react-icons/ai";
 
 export default function Header() {
   const path = usePathname();
   const { user, userLogout } = useLoginStore(); // zustand에서 isLogged 가져와서 헤더 전환
   const [mounted, setMounted] = useState<boolean>(false);
-
+  const { nickname, seq, setDelTabUser } = useUserTabStore();
+  const router = useRouter();
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -26,13 +29,18 @@ export default function Header() {
       });
       if (res.success) {
         userLogout();
+        setDelTabUser();
         window.location.href = "/";
       }
     } catch (err) {
       console.log("Error:", err);
     }
   };
-
+  const onCloseTab = async () => {
+    router.push("/");
+    await new Promise((resolve) => setTimeout(resolve, 0)); // 비동기 작업을 기다림
+    setDelTabUser();
+  };
   return (
     mounted && (
       <div className="bg-white rounded-lg flex text-xl h-12 justify-between fixed top-2 left-2 right-2 shadow-md z-50">
@@ -57,6 +65,23 @@ export default function Header() {
           >
             커뮤니티
           </Link>
+          {seq && nickname && (
+            <div
+              className={`flex items-center ${
+                path.includes("/others") && "bg-main"
+              } rounded-lg py-1 px-2 shadow-md hover:bg-amber-500`}
+            >
+              <Link href={`/others/${seq}`}>
+                <button>{nickname}님의 트러블슈팅</button>
+              </Link>
+              <div
+                className="text-base hover:text-sub transition-colors duration-200 hover:cursor-pointer ms-2"
+                onClick={onCloseTab}
+              >
+                <AiOutlineClose />
+              </div>
+            </div>
+          )}
         </div>
 
         {user ? (

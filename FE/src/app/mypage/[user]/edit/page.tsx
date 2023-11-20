@@ -8,6 +8,8 @@ import { toast } from "react-toastify";
 import { putUserInfo } from "@/api/account";
 import { EditReq } from "@/types/CommonType";
 import FileUploader from "@/components/Create/FileUploader";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 export default function page() {
   const { user, editStoreNickname, changeProfileImg } = useLoginStore();
@@ -78,6 +80,7 @@ export default function page() {
         const res = await putUserInfo(params);
         if (res === "success") {
           editStoreNickname(nickname);
+
           // 토스트 띄우고 마이페이지로 돌아가기
           toast.success("닉네임 변경 성공 !");
         }
@@ -94,46 +97,60 @@ export default function page() {
     setMounted(true);
   }, [user]);
 
-  return (
-    mounted && (
-      <div className="fcc flex-col h-[100vh] mt-6">
-        <div className="bg-white absolute top-1/3 z-10">{showFileUploader && <FileUploader handle={handle} />}</div>
-        <div className="bg-white text-center shadow-md w-2/4 rounded-lg overflow-hidden mb-2">
-          <div className="w-full bg-main p-3">
-            <p className="text-xl">회원정보 수정</p>
+  return mounted ? (
+    <div className="fcc flex-col h-[100vh] mt-6">
+      <div className="bg-white absolute top-1/3 z-10">{showFileUploader && <FileUploader handle={handle} />}</div>
+      <div className="bg-white text-center shadow-md w-2/4 rounded-lg overflow-hidden mb-2">
+        <div className="w-full bg-main p-3">
+          <p className="text-xl">회원정보 수정</p>
+        </div>
+        <div className="w-full">
+          <div className="relative fcc ">
+            <img src={user?.member.profileImg} alt="trosProfileImg" className="my-2 max-w-[20rem]" />
+            <span
+              className="absolute bottom-3 right-10 bg-main p-4 rounded-full cursor-pointer"
+              onClick={showFileUploaderModal}
+            >
+              <MdOutlineModeEditOutline />
+            </span>
           </div>
-          <div className="w-full">
-            <div className="relative fcc ">
-              <img src={user?.member.profileImg} alt="trosProfileImg" className="my-2 " />
-              <span
-                className="absolute bottom-3 right-10 bg-main p-4 rounded-full cursor-pointer"
-                onClick={showFileUploaderModal}
-              >
-                <MdOutlineModeEditOutline />
-              </span>
-            </div>
-            <p className="text-2xl font-bold mb-3">{user?.member.nickname}</p>
+          <p className="text-2xl font-bold mb-3">{user?.member.nickname}</p>
+        </div>
+      </div>
+      <div className="flex flex-col bg-white shadow-md w-2/4 rounded-lg overflow-hidden">
+        <div className="flex w-full items-center justify-between border-b border-gray-300">
+          <BsPerson className="text-3xl m-3" />
+          <input className="text-lg w-2/5" placeholder="수정할 닉네임" onChange={(e) => setNickname(e.target.value)} />
+          <div onClick={editNickname} className="bg-gray-300 rounded-lg text-center me-2 p-1 cursor-pointer">
+            수정
           </div>
         </div>
-        <div className="flex flex-col bg-white shadow-md w-2/4 rounded-lg overflow-hidden">
-          <div className="flex w-full items-center justify-between border-b border-gray-300">
-            <BsPerson className="text-3xl m-3" />
-            <input
-              className="text-lg w-2/5"
-              placeholder="수정할 닉네임"
-              onChange={(e) => setNickname(e.target.value)}
-            />
-            <div onClick={editNickname} className="bg-gray-300 rounded-lg text-center me-2 p-1 cursor-pointer">
-              수정
-            </div>
-          </div>
-          <div className="flex w-full items-center justify-between">
-            <AiOutlineMail className="text-2xl mx-4 my-3" />
-            <p className="text-lg text-left w-2/5">{user?.member.email}</p>
-            <div className="me-2 p-1 w-1"></div>
+        <div className="flex w-full items-center justify-between">
+          <AiOutlineMail className="text-2xl mx-4 my-3" />
+          <p className="text-lg text-left w-2/5">{user?.member.email}</p>
+          <div className="me-2 p-1 w-1"></div>
+        </div>
+      </div>
+    </div>
+  ) : (
+    <div className="fcc flex-col h-[100vh] mt-6">
+      <div className="bg-white text-center shadow-md w-2/4 rounded-lg overflow-hidden mb-2">
+        <div className="w-full bg-main p-6"></div>
+        <div className="w-full">
+          <div className="fcc flex-col p-3">
+            <Skeleton width={260} height={260} circle={true} />
+            <Skeleton width={150} height={30} />
           </div>
         </div>
       </div>
-    )
+      <div className="flex flex-col bg-white shadow-md w-2/4 rounded-lg overflow-hidden">
+        <div className="flex w-full items-center justify-center border-b border-gray-300 p-2">
+          <Skeleton width={400} height={40} />
+        </div>
+        <div className="flex w-full items-center justify-center border-b border-gray-300 p-2">
+          <Skeleton width={400} height={40} />
+        </div>
+      </div>
+    </div>
   );
 }

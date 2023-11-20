@@ -5,8 +5,6 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useLoginStore } from "@/stores/useLoginStore";
 
-import Github_logo from "../../../public/logo/Github_logo.png";
-
 import backgroundImage from "../../../public/background/loginBackground4.jpg";
 
 import { loginSubmit } from "@/api/account";
@@ -107,7 +105,6 @@ export default function Page() {
             로그인
           </button>
         </div>
-
         <Link href="/signUp" className="">
           <p>트러블 샷이 처음이신가요?</p>
         </Link>

@@ -1,28 +1,80 @@
-import { getTrouble } from "@/api/trouble";
+import { getBookmark, getTrouble } from "@/api/trouble";
+import { useLoginStore } from "@/stores/useLoginStore";
 import { SearchParams } from "@/types/TroubleType";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 
-export default function useInfiniteList(options: SearchParams, queryKey: string) {
-  const { data, error, fetchNextPage, hasNextPage, status } = useInfiniteQuery({
-    queryKey: [queryKey],
+interface Props {
+  options: SearchParams;
+  queryKey: string;
+  category?: string;
+  userSeq?: number;
+}
+export default function useInfiniteList({ options, queryKey, category, userSeq }: Props) {
+  const { user } = useLoginStore();
+  const { data, error, isPending, fetchNextPage, hasNextPage, status } = useInfiniteQuery({
+    queryKey: [queryKey, options],
     queryFn: async ({ pageParam = 1 }) => {
-      const data = await getTrouble({ ...options, pageSize: 10, pageNo: pageParam });
+      const data =
+        queryKey === "boards"
+          ? await getTrouble({
+              ...options,
+              pageSize: 10,
+              pageNo: pageParam,
+              ...(user && { loginSeq: user.member.seq }),
+            })
+          : queryKey === "bookmark"
+          ? await getBookmark({ ...options, pageSize: 10, pageNo: pageParam, loginSeq: user?.member.seq })
+          : queryKey === "trouble"
+          ? category
+            ? await getTrouble({
+                ...options,
+                pageSize: 10,
+                pageNo: pageParam,
+                category,
+                ...(user && { loginSeq: user.member.seq, writerSeq: user.member.seq }),
+              })
+            : await getTrouble({
+                ...options,
+                pageSize: 10,
+                pageNo: pageParam,
+                ...(user && { loginSeq: user.member.seq, writerSeq: user.member.seq }),
+              })
+          : queryKey === "others"
+          ? category
+            ? await getTrouble({
+                ...options,
+                pageSize: 10,
+                pageNo: pageParam,
+                ...(user && { loginSeq: user?.member.seq }),
+                writerSeq: userSeq,
+                category,
+              })
+            : await getTrouble({
+                ...options,
+                pageSize: 10,
+                pageNo: pageParam,
+                ...(user && { loginSeq: user?.member.seq }),
+                writerSeq: userSeq,
+              })
+          : await getTrouble({ ...options, pageSize: 10, pageNo: pageParam });
       return data;
     },
     initialPageParam: 1,
-    getNextPageParam: (lastPage, pages) => pages.length + 1,
+    // 이건잘됨
+    getNextPageParam: (lastPage, pages) => {
+      return pages.length < Math.ceil(lastPage.totalCount / 10) ? pages.length + 1 : undefined;
+    },
   });
-  const totalPage = Math.ceil(data ? data.pages[0].totalCount / 10 : 1);
+
   useEffect(() => {
     let fetching = false;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handleScroll = async (e: any) => {
       const { scrollHeight, scrollTop, clientHeight } = e.target.scrollingElement;
-      if (!fetching && scrollHeight - scrollTop <= clientHeight * 1.2) {
+      if (!fetching && scrollHeight - scrollTop <= clientHeight * 1.4) {
         fetching = true;
-        if (data && data.pageParams.length < totalPage) {
-          console.log(data);
+        if (hasNextPage) {
           await fetchNextPage();
         }
         fetching = false;
@@ -34,5 +86,5 @@ export default function useInfiniteList(options: SearchParams, queryKey: string)
     };
   }, [fetchNextPage, hasNextPage]);
 
-  return { data };
+  return { data, isPending, hasNextPage };
 }
