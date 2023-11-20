@@ -1,9 +1,9 @@
 "use client";
 import { useState } from "react";
 import Image from "next/image";
-import trous_favicon_origin from "/public/logo/trous_favicon_origin.png";
-import trous_favicon_black from "/public/logo/trous_favicon_black.png";
-import trous_favicon_white from "/public/logo/trous_favicon_white.png";
+import function1 from "../../../public/functionFolder/function1.gif";
+import function2 from "../../../public/functionFolder/function2.gif";
+import function3 from "../../../public/functionFolder/function3.gif";
 
 export default function FeatureIntro() {
   type MyTabType = 1 | 2 | 3;
@@ -20,43 +20,44 @@ export default function FeatureIntro() {
 
   const [content, setContent] = useState<MyTabType>(MY_TAB.기능1);
 
-  let contentsFile = trous_favicon_origin;
+  let contentsFile = function1;
 
   if (content == 1) {
-    contentsFile = trous_favicon_origin;
+    contentsFile = function1;
   } else if (content == 2) {
-    contentsFile = trous_favicon_black;
+    contentsFile = function2;
   } else if (content == 3) {
-    contentsFile = trous_favicon_white;
+    contentsFile = function3;
   }
 
   return (
-    <div id="featureIntro" className="w-full flex flex-col items-center">
-      <h1 className="text-4xl">트러블 샷의 주요 기능</h1>
-      <div className="flex mt-16 w-full justify-center">
-        <div className="w-3/12 flex flex-col items-center">
+    <div className="w-full h-3/4">
+      <h1 className="w-full text-3xl font-bold m-5 ms-10">트러블 샷의 주요 기능</h1>
+      <div className="flex justify-center w-full">
+        <div className="flex flex-col justify-between w-1/4 py-5">
           <div
-            className="bg-main hover:bg-orange-600 duration-300 w-5/12 h-[70px] text-2xl rounded-lg fcc mb-10"
+            className="bg-main hover:bg-orange-600 duration-300 w-4/5 h-1/4 text-2xl fcc rounded-lg mb-3 shadow-md overflow-hidden cursor-pointer"
             onClick={() => setContent(MY_TAB.기능1)}
           >
-            <div>기능 1</div>
+            <p className="p-4 text-center">플러그인에서 버그 감지와 트러블 슈팅 작성 업로드</p>
           </div>
           <div
-            className="bg-main hover:bg-orange-600 duration-300 w-5/12 h-[70px] text-2xl rounded-lg fcc mb-10"
+            className="bg-main hover:bg-orange-600 duration-300 w-4/5 h-1/4 text-2xl fcc text-center rounded-lg mb-3 shadow-md overflow-hidden cursor-pointer"
             onClick={() => setContent(MY_TAB.기능2)}
           >
-            <div>기능 2</div>
+            <p className="p-4 text-center">마크다운 파일로 추출</p>
           </div>
           <div
-            className="bg-main hover:bg-orange-600 duration-300 w-5/12 h-[70px] text-2xl rounded-lg fcc"
+            className="bg-main hover:bg-orange-600 duration-300 w-4/5 h-1/4 text-2xl fcc text-center rounded-lg shadow-md overflow-hidden cursor-pointer"
             onClick={() => setContent(MY_TAB.기능3)}
           >
-            <div>기능 3</div>
+            <p className="p-4 text-center">버그 검색과 AI를 활용한 문제 해결</p>
           </div>
         </div>
-        <div className=" bg-main w-5/12 rounded-lg fcc">
-          <Image src={contentsFile} alt="" />
-          <div>기능 소개 영상 들어가야 함</div>
+        <div className="w-8/12  bg-main rounded-lg shadow-md overflow-hidden">
+          <div className=" bg-main w-full rounded-lg fcc h-[75vh]">
+            <Image src={contentsFile} alt="" className="w-11/12 h-[70vh] rounded-lg" />
+          </div>
         </div>
       </div>
     </div>

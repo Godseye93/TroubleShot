@@ -7,9 +7,10 @@ import { SearchParams } from "@/types/TroubleType";
 import { useLoginStore } from "@/stores/useLoginStore";
 interface Props {
   propsSetOption: React.Dispatch<SetStateAction<SearchParams>>;
+  propsTags?: string[];
 }
-export default function Options({ propsSetOption }: Props) {
-  const [tags, setTags] = useState<string[]>([]);
+export default function Options({ propsSetOption, propsTags }: Props) {
+  const [tags, setTags] = useState<string[]>(propsTags ?? []);
   const [selecSolved, setSelecSolved] = useState<number>(0);
   const [selectSort, setSelectSort] = useState(0);
   const anwerOption = ["전체", "해결된 글", "미해결 글"];
@@ -19,8 +20,8 @@ export default function Options({ propsSetOption }: Props) {
   const [isSelected, setIsSelected] = useState(false);
   useEffect(() => {
     propsSetOption({
-      tags: tags,
       order: selectSort,
+      ...(tags.length > 0 && { tags }),
       ...(selecSolved !== 0 && { solved: selecSolved === 1 ? true : false }),
       ...(isSelected && {
         startTime: startDate.toISOString().slice(0, -1),

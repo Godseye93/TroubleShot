@@ -1,13 +1,16 @@
-"use client";
 import { ResponsiveRadar } from "@nivo/radar";
-import { useLoginStore } from "@/stores/useLoginStore";
 import { useState, useEffect } from "react";
 import { RadarGraphInfoAddNick, RadarToUseInfo } from "@/types/CommonType";
 import { getRadarGraphInfo } from "@/api/account";
 
-// 아무것도 없을 때 100으로 뜸
+interface Params {
+  userSeq: number;
+  nickname: string | undefined;
+}
 
-export function MyResponsiveRadar() {
+export function MyResponsiveRadar(params: Params) {
+  const { userSeq, nickname } = params;
+
   const average = {
     nickname: "평균",
     질문력: 50,
@@ -16,9 +19,6 @@ export function MyResponsiveRadar() {
     댓글력: 50,
     열정도: 50,
   };
-  const { user } = useLoginStore();
-  const nickname: string = user!.member.nickname;
-  const userSeq = user?.member.seq;
 
   const [userData, setUserData] = useState<RadarToUseInfo | null>(null);
 
@@ -46,7 +46,7 @@ export function MyResponsiveRadar() {
 
   const userDataObj: RadarGraphInfoAddNick = {
     ...(userData || {}),
-    nickname,
+    nickname: nickname ?? "",
     질문력: userData?.질문력 || 0,
     답변력: userData?.답변력 || 0,
     태그다양성: userData?.태그다양성 || 0,
@@ -65,11 +65,11 @@ export function MyResponsiveRadar() {
   return (
     <ResponsiveRadar
       data={totalData}
-      keys={[nickname, "평균"]}
+      keys={[nickname!, "평균"]}
       indexBy="rank"
       maxValue={100}
       valueFormat=">-.2f"
-      margin={{ top: 40, right: 80, bottom: 40, left: 80 }}
+      margin={{ top: 20, bottom: 20 }}
       borderWidth={3}
       borderColor={{ from: "color", modifiers: [] }}
       // gridLevels={10}

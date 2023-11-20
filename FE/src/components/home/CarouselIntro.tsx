@@ -1,76 +1,165 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 
-import exImage1 from "../../../public/carousel/seul.jpg";
-import exImage2 from "../../../public/carousel/exImage2.jpg";
-import exImage3 from "../../../public/carousel/exImage3.jpg";
-import exImage4 from "../../../public/carousel/exImage4.jpg";
-import exImage5 from "../../../public/carousel/exImage5.jpg";
-import { IoArrowBackCircleSharp } from "react-icons/io5";
-import { IoArrowForwardCircleSharp } from "react-icons/io5";
+import seul from "../../../public/carousel/seul.jpg";
+import suhyun from "../../../public/carousel/suhyun.jpg";
+import jinwook from "../../../public/carousel/jinwook.jpg";
+import yerim from "../../../public/carousel/yerim.png";
+import jongryul from "../../../public/carousel/jongryul.jpg";
+import jaehyung from "../../../public/carousel/jaehyung.jpeg";
+import { FaQuoteLeft, FaQuoteRight } from "react-icons/fa";
+import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
+
+type SlideTab = 0 | 1 | 2 | 3 | 4 | 5;
 
 export default function CarouselIntro() {
   const imageList = [
-    { index: 0, Image: exImage1, text: "안녕하세요" },
-    { index: 1, Image: exImage2, text: "정슬호입니다." },
-    { index: 2, Image: exImage3, text: "테스트테스트" },
-    { index: 3, Image: exImage4, text: "원투원투쓰리" },
-    { index: 4, Image: exImage5, text: "다섯번째캐러셀" },
+    {
+      index: 0,
+      Image: seul,
+      name: "슬호",
+      position: "팀장 정슬호",
+      review: "평소에 관심있던 플러그인 개발에 대해 관심이 있었습니다. 이번 기회에 많이 공부해서 좋았습니다.",
+    },
+    {
+      index: 1,
+      Image: yerim,
+      name: "예림",
+      position: "팀원 고예림",
+      review: "평소에 필요하다 느꼈던 부분을 직접 개발해서 뿌듯합니다.",
+    },
+    {
+      index: 2,
+      Image: suhyun,
+      name: "수현",
+      position: "팀원 김수현",
+      review: "쿼리 계산을 통해 백엔드 역량을 키울 수 있었습니다. \n좋은 경험이었어요.",
+    },
+    { index: 3, Image: jongryul, name: "종률", position: "팀원 권종률", review: "트러블 샷은 공짜입니다." },
+    {
+      index: 4,
+      Image: jaehyung,
+      name: "재형",
+      position: "팀원 손재형",
+      review: "전역 상태 관리와 seo 최적화를 할 수 있었어요. 한층 더 성장한 것 같습니다.",
+    },
+    {
+      index: 5,
+      Image: jinwook,
+      name: "진욱",
+      position: "팀원 장진욱",
+      review: "물 흐르듯 유연하고 확장 가능한 쿠버네티스로 효율적인 프로젝트를 경험해서 멋졌습니다",
+    },
   ];
-  const [current, setCurrent] = useState(0);
 
-  const nextHandler = () => {
-    setCurrent(() => {
-      if (current > 3) {
-        return 0;
-      } else {
-        return current + 1;
-      }
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [visible, setVisible] = useState(false);
+  const [cursorText, setCursorText] = useState("오리엔탈 샐러드");
+  const [customCursor, setCustomCursor] = useState("custom-cursor");
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const trackCursor = (event: any) => {
+    setPosition({ x: event.clientX, y: event.clientY });
+    setVisible(true);
+  };
+
+  const hideCursor = () => {
+    setVisible(false); // 마우스가 영역을 벗어났을 때 커서가 보이지 않게 설정
+  };
+
+  const changeCursorText = (text: string) => {
+    setCursorText(text);
+  };
+
+  const changeCss = (css: string) => {
+    setCustomCursor(css);
+  };
+
+  const [curSlideTab, setCurSlideTab] = useState<SlideTab>(0);
+
+  const testNext = () => {
+    setCurSlideTab((prev): SlideTab => {
+      if (prev === 5) return 0;
+      return (prev + 1) as SlideTab;
+    });
+  };
+  const testPrevious = () => {
+    setCurSlideTab((prev) => {
+      if (prev === 0) return 5;
+      return (prev - 1) as SlideTab;
     });
   };
 
-  const prevHandler = () => {
-    setCurrent(() => {
-      if (current === 0) {
-        return imageList.length - 1;
-      } else {
-        return current - 1;
-      }
-    });
-  };
+  useEffect(() => {
+    winRef.current.style.transform = `translateX(-${(curSlideTab * 100) / 6}%)`;
+  }, [curSlideTab]);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const winRef = React.useRef<any>();
   return (
-    <div id="carouselIntor" className="fcc mt-36 bg-softmain w-full">
-      <div className="w-9/12 mt-8">
-        <div className="flex justify-between items-center">
-          <button className="hover:scale-150" onClick={prevHandler}>
-            <IoArrowBackCircleSharp />
-          </button>
-          {imageList.map((item, index) => (
-            <div className=" w-5/12 fcc" key={index} style={{ display: index === current ? "block" : "none" }}>
-              <Image className="w-3/6 h-[300px] rounded-lg" src={item.Image} alt={item.text} />
-            </div>
-          ))}
-          {imageList.map((item, index) => (
-            <div className=" w-5/12 me-5" key={index} style={{ display: index === current ? "block" : "none" }}>
-              <div className="w-7/12">{item.text}</div>
-            </div>
-          ))}
-          <button className=" hover:scale-150" onClick={nextHandler}>
-            <IoArrowForwardCircleSharp />
-          </button>
+    <div className="flex flex-col justify-center w-full h-3/4 overflow-hidden">
+      <h1 className="w-full m-5 text-3xl font-bold ms-10">만든 사람들</h1>
+      {visible && (
+        <div className={`${customCursor} fcc text-center`} style={{ left: `${position.x}px`, top: `${position.y}px` }}>
+          <p className="w-3/4 text-white">{cursorText}</p>
         </div>
-        <ul className="flex w-full justify-center gap-4 mb-2">
-          {imageList.map((_, idx) => (
-            <li
-              key={idx}
-              className={`h-[1.2rem] w-[1.2rem] rounded-full bg-sub ${idx === current ? "opacity-100" : "opacity-50"}`}
-              onClick={() => setCurrent(idx)}
-            />
+      )}
+      <div id="carouselIntor" className="relative h-3/4 bg-main " onMouseMove={trackCursor} onMouseLeave={hideCursor}>
+        <button
+          onClick={testPrevious}
+          className="absolute left-0 z-10 w-1/6 h-full fcc"
+          onMouseEnter={() => {
+            changeCursorText("이전으로");
+            changeCss("custom-cursor-left");
+          }}
+          onMouseLeave={() => {
+            changeCursorText("오리엔탈 샐러드");
+            changeCss("custom-cursor");
+          }}
+        >
+          <IoIosArrowBack />
+        </button>
+        <div className=" w-[600vw] h-full flex relative transition-transform duration-500" ref={winRef}>
+          {imageList.map((value, index) => (
+            <div key={index} className="w-4/6 fcc overflow-hidden">
+              <Image src={value.Image} alt="" className="w-1/6 rounded-lg" />
+              <div className="ms-10 py-6 w-3/6 h-3/4 flex flex-col justify-between">
+                <div className="w-full text-2xl">
+                  <FaQuoteLeft />
+                </div>
+                <p className="text-right font-bold text-xl p-6">{value.position}</p>
+                <p className="p-6 px-5 text-2xl">{value.review}</p>
+                <div className="w-full text-2xl flex justify-end">
+                  <FaQuoteRight />
+                </div>
+              </div>
+            </div>
           ))}
-        </ul>
+        </div>
+
+        <button
+          onClick={testNext}
+          className="absolute top-0 right-0 z-10 w-1/6 h-full fcc"
+          onMouseEnter={() => {
+            changeCursorText("앞으로");
+            changeCss("custom-cursor-right");
+          }}
+          onMouseLeave={() => {
+            changeCursorText("오리엔탈 샐러드");
+            changeCss("custom-cursor");
+          }}
+        >
+          <IoIosArrowForward />
+        </button>
       </div>
+      <ul className="flex justify-center w-full gap-4 mb-2 list-none">
+        {imageList.map((v, idx) => (
+          <li key={idx} className={`text-lg ${idx === curSlideTab ? "opacity-100 font-bold" : "opacity-50"}`}>
+            {v.name}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
