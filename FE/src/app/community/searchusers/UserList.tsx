@@ -34,7 +34,7 @@ export default function UserList() {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handleScroll = async (e: any) => {
       const { scrollHeight, scrollTop, clientHeight } = e.target.scrollingElement;
-      if (!fetching && scrollHeight - scrollTop <= clientHeight * 1.2) {
+      if (!fetching && clientHeight * 1.5 + scrollTop >= scrollHeight) {
         fetching = true;
         if (hasNextPage) {
           await fetchNextPage();
@@ -77,7 +77,7 @@ export default function UserList() {
           </button>
         </div>
       </div>
-      <main className="mt-5 grid grid-cols-2 gap-5 md:grid-cols-3">
+      <main className="mt-5 grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4">
         {data &&
           data.pages.map((page, i) => (
             <React.Fragment key={i}>
@@ -88,7 +88,7 @@ export default function UserList() {
           ))}
       </main>
       {hasNextPage && (
-        <div className="flex justify-center items-center">
+        <div className="flex justify-center items-center mt-20">
           <Image alt="loading..." src={boxloading} width={100} height={100} />
         </div>
       )}

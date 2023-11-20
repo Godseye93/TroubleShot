@@ -40,7 +40,7 @@ export default function PostList() {
         queryKey="boards"
         setPropsOptions={setOptions}
       />
-      <div className="bg-white rounded-lg shadow-md px-2 mt-2 flex-col items-center">
+      <div className="bg-white rounded-lg shadow-md mt-2 flex-col items-center">
         {data &&
           data.pages.map((page, i) => (
             <React.Fragment key={i}>

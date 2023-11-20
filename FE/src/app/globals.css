@@ -76,7 +76,7 @@ height: 10px;
   }
   
   .menu-btn{
-    @apply flex items-center ps-6 h-10 rounded-full
+    @apply flex items-center ps-6 h-10 rounded-lg
   }
   @keyframes waterfall {
     0% {

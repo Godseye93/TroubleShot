@@ -26,7 +26,7 @@ export default function Detail({ id }: { id: number }) {
   const router = useRouter();
   const { user } = useLoginStore();
   const [showAnswerForm, setShowAnswerForm] = useState(false);
-  const [showComments, setShowComments] = useState(false);
+  const [showComments, setShowComments] = useState(true);
   const toggleComments = () => {
     setShowComments((prev) => !prev);
   };
@@ -149,10 +149,14 @@ export default function Detail({ id }: { id: number }) {
             <div className="mt-10">
               <Tagbox tags={board!.tags} />
             </div>
-            <div className="mt-2 shadow-md rounded-lg">
-              <div className="bg-main rounded-t-lg flex items-center ps-5 h-12 font-semibold mt-5">사용 기술 스택</div>
-              <MDEditor.Markdown className="max-w-[65vw]" source={"```ts\n" + board.dependency + "\n```"} />
-            </div>
+            {board.dependency && board.dependency.trim().length > 0 && (
+              <div className="mt-2 shadow-md rounded-lg">
+                <div className="bg-main rounded-t-lg flex items-center ps-5 h-12 font-semibold mt-5">
+                  사용 기술 스택
+                </div>
+                <MDEditor.Markdown className="max-w-[65vw]" source={"```ts\n" + board.dependency + "\n```"} />
+              </div>
+            )}
 
             {user && board.writer?.seq === user.member.seq && (
               <AnswerAi userSeq={user.member.seq} context={board.context} />

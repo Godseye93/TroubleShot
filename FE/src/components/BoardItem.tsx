@@ -94,7 +94,7 @@ export default function BoardItem({
     }
   };
   return (
-    <div className={"border-b-2 py-4 mt-2 w-full flex justify-center px-4"}>
+    <div className={"border-b-2 p-4 mt-2 w-full flex justify-center"}>
       {/* 상단바 */}
       <div className="flex-1">
         <div className="flex justify-between items-center">
@@ -102,7 +102,7 @@ export default function BoardItem({
             <div className="flex items-center">
               <img src={checkWriterImg(board.writer)} className="rounded-full w-10 h-10 shadow-md" />
               <p className="mx-2 font-semibold">{checkWriterName(board.writer)}</p>
-              <p className="text-xs">{getTimeAgo(board.createTime)}</p>
+              <p className="text-xs text-slate-400 ">{getTimeAgo(board.createTime)}</p>
             </div>
           </Link>
           <div
@@ -145,17 +145,15 @@ export default function BoardItem({
           </div>
         </Link>
         <div className="mt-3 text-lg flex justify-between gap-2  items-center">
-          <div className="flex-1">
-            <IconBox
-              queryKey={queryKey}
-              m={"me-1"}
-              comments={board.replyCount}
-              likes={board.likeCount}
-              views={board.viewCount}
-              isLike={board.loginLike}
-              troubleSeq={board.seq}
-            />
-          </div>
+          <IconBox
+            queryKey={queryKey}
+            m={"me-1"}
+            comments={board.replyCount}
+            likes={board.likeCount}
+            views={board.viewCount}
+            isLike={board.loginLike}
+            troubleSeq={board.seq}
+          />
           <p className="font-semibold inline-block">답변 수 {board.answerCount}</p>
         </div>
       </div>

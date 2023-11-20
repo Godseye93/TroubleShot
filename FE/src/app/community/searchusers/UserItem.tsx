@@ -9,7 +9,7 @@ export default function UserItem({ user }: { user: Member }) {
     setTabUser({ nickname: user.nickname, seq: user.seq });
   };
   return (
-    <div className="">
+    <div className="mb-10">
       <Link href={`/mypage/${user.seq}`}>
         <div className="flex items-center gap-2">
           <div>

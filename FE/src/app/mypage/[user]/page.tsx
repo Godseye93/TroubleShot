@@ -4,7 +4,7 @@ import { MyResponsivePie } from "@/components/PieGraph";
 import UsedLotTags from "@/components/UsedLotTags";
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import BookmartList from "@/components/BookmartList";
+import BookmartList from "@/components/BookmarkList";
 import { getUserInfo } from "@/api/account";
 import { Member } from "@/types/CommonType";
 import { useLoginStore } from "@/stores/useLoginStore";

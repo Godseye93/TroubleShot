@@ -27,7 +27,7 @@ export default function AnswerPost({
   boardWriterSeq: number | null;
 }) {
   const [showCreateAnswers, setShowCreateAnswer] = useState(false);
-  const [showComments, setShowComments] = useState(false);
+  const [showComments, setShowComments] = useState(true);
   const [showUpdate, setShowUpdate] = useState(false);
   const [updateTitle, setUpdateTitle] = useState(answer.title);
   const [updateMD, setUpdateMD] = useState(answer.context);
