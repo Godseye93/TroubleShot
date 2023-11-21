@@ -20,6 +20,7 @@ import { checkWriterImg, checkWriterName } from "@/utils/nullWriter";
 import Link from "next/link";
 import { TbRobot } from "react-icons/tb";
 import AnswerAi from "./AnswerAi";
+import { newLine } from "@/utils/newLine";
 
 export default function Detail({ id }: { id: number }) {
   const queryClient = useQueryClient();
@@ -156,7 +157,7 @@ export default function Detail({ id }: { id: number }) {
                 <div className="bg-main rounded-t-lg flex items-center ps-5 h-12 font-semibold mt-5">
                   사용 기술 스택
                 </div>
-                <MDEditor.Markdown className="max-w-[65vw]" source={"```ts\n" + board.dependency + "\n```"} />
+                <MDEditor.Markdown className="max-w-[65vw]" source={"```ts\n" + newLine(board.dependency) + "\n```"} />
               </div>
             )}
 
