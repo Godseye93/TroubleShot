@@ -8,7 +8,7 @@ interface Props {
 }
 
 const getDeviceType = (userSeq: number) => {
-  const url = `http://orientalsalad.kro.kr:8101/members/${userSeq}/trouble-shootings/by-post-type`;
+  const url = `https://orientalsalad.kro.kr/api/user/members/${userSeq}/trouble-shootings/by-post-type`;
   return axios.get(url);
 };
 
