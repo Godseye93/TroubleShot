@@ -166,7 +166,10 @@ export default function Detail({ id }: { id: number }) {
 
             <div className=" border-b-2 pb-2 pt-10">
               <div className="flex  items-center gap-3 mt-5 text-xl">
-                <div className="flex items-center max-w-[33%]  hover:cursor-pointer gap-2" onClick={onLike}>
+                <div
+                  className="flex items-center max-w-[33%]  hover:cursor-pointer gap-2 border-sub text-sub rounded-lg px-2 border"
+                  onClick={onLike}
+                >
                   {board.loginLike ? (
                     <div className="w-4 text-red-600 hover:text-red-400 transition-colors duration-200">
                       <AiFillHeart />
@@ -178,13 +181,13 @@ export default function Detail({ id }: { id: number }) {
                   )}
                   <p className=" line-clamp-1 items-center ">{board.likeCount}</p>
                 </div>
-                <div className="flex items-center max-w-[33%] gap-2">
+                <div className="flex items-center max-w-[33%] gap-2 border-green-600 text-green-600 rounded-lg px-2 border">
                   <div className="w-4 ">
                     <AiOutlineEye />
                   </div>
                   <p className="line-clamp-1 items-center">{board.viewCount}</p>
                 </div>
-                <div className="flex items-center max-w-[33%] gap-2">
+                <div className="flex items-center max-w-[33%] gap-2 border-amber-600 text-amber-600 rounded-lg px-2 border">
                   <div className="w-4 ">
                     <MdComment />
                   </div>

@@ -24,7 +24,7 @@ export default function Rsidebar() {
       {data && (
         <div className="rounded-lg w-60 bg-white shadow-md">
           <div className="w-full h-7 px-2 bg-main rounded-t-lg flex items-center justify-between">
-            <p>미해결 인기글</p>
+            <p className="font-semibold">미해결 인기글</p>
             <Link href={"/community/posts?solved=false"}>
               <p>전체보기 {">"} </p>
             </Link>
@@ -34,11 +34,14 @@ export default function Rsidebar() {
               <div className={`mt-2 w-[95%] ${idx != 2 && "border-b-2"}`} key={idx}>
                 <Link href={`/community/posts/${content.seq}`}>
                   <div className="w-full flex items-center justify-between">
-                    <p className="w-6 me-1 h-6 rounded-lg font-semibold flex justify-center items-center bg-blue-500 text-white">
-                      {idx + 1}
-                    </p>{" "}
-                    {content.title.length < 12 ? content.title : content.title.slice(0, 12) + "..."}
-                    <p className="text-base font-semibold flex-1 "></p>
+                    <div className="flex items-center">
+                      <p className="w-6 me-1 h-6 rounded-lg font-semibold flex justify-center items-center bg-blue-500 text-white">
+                        {idx + 1}
+                      </p>
+                      <p className="font-semibold">
+                        {content.title.length < 12 ? content.title : content.title.slice(0, 12) + "..."}
+                      </p>
+                    </div>
                     <p className="text-xs">{changeKoTime(content.createTime)}</p>
                   </div>
                   <div className={`line-clamp-2 text-sm ${content.tags.length > 0 ? "my-5" : "mt-5 mb-2"}`}>
