@@ -23,8 +23,8 @@ export default function Rsidebar() {
     <div className={`mt-4 ${!path.includes("create") && !path.includes("update") && "lg:block"} hidden`}>
       {data && (
         <div className="rounded-lg w-60 bg-white shadow-md">
-          <div className="w-full h-7 px-2 bg-main rounded-t-lg flex items-center justify-between">
-            <p className="font-semibold">미해결 인기글</p>
+          <div className=" font-semibold w-full h-7 px-2 bg-main rounded-t-lg flex items-center justify-between">
+            <p>미해결 인기글</p>
             <Link href={"/community/posts?solved=false"}>
               <p>전체보기 {">"} </p>
             </Link>
