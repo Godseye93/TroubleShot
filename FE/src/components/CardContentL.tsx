@@ -1,6 +1,4 @@
-import IconBox from "./IconBox";
 import Link from "next/link";
-import Tagbox from "./TagBox";
 import { AiFillTag } from "react-icons/ai";
 import { GetTroubleList, SearchParams, TroubleShootingBoard } from "@/types/TroubleType";
 import { getImageLink } from "@/utils/getImageLink";

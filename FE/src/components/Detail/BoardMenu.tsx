@@ -53,7 +53,7 @@ export default function BoardMenu({
         try {
           await deleteAnswer(userSeq, troubleSeq, answerSeq);
           toast.success("삭제되었습니다");
-          queryClient.invalidateQueries({ queryKey: ["detail"], exact: true });
+          queryClient.invalidateQueries({ queryKey: ["detail", troubleSeq], exact: true });
         } catch (err) {
           toast.error("삭제에 실패했습니다");
           console.log(err);

@@ -35,7 +35,7 @@ export default function Detail({ id }: { id: number }) {
     try {
       await postTroubleLike(user.member.seq, board!.seq, user.member.seq);
       queryClient.invalidateQueries({
-        queryKey: ["detail"],
+        queryKey: ["detail", id],
         exact: true,
       });
     } catch (err) {
@@ -43,7 +43,7 @@ export default function Detail({ id }: { id: number }) {
     }
   };
   const { data, error, isLoading } = useQuery({
-    queryKey: ["detail"],
+    queryKey: ["detail", id],
     queryFn: async () => {
       const data = await getTroubleDetail(user ? user.member.seq : null, id);
       return data;
@@ -67,7 +67,7 @@ export default function Detail({ id }: { id: number }) {
     if (answerContent.trim() === "") return toast.error("내용을 입력해 주세요");
     try {
       await postAnswer(user!.member.seq, board!.seq, answerContent, answerTitle!);
-      queryClient.invalidateQueries({ queryKey: ["detail"], exact: true });
+      queryClient.invalidateQueries({ queryKey: ["detail", id], exact: true });
       toast.success("답변이 등록되었습니다");
       setAnswerTitle("");
       setAnswerContent("");
@@ -85,7 +85,7 @@ export default function Detail({ id }: { id: number }) {
         if (!board.favorite) toast.success("북마크에 저장되었습니다");
         else if (board.favorite) toast.success("북마크에서 제거되었습니다");
         await queryClient.invalidateQueries({
-          queryKey: ["detail"],
+          queryKey: ["detail", id],
           exact: true,
         });
       } catch (err) {
@@ -146,9 +146,11 @@ export default function Detail({ id }: { id: number }) {
             <div className="mt-12 max-w-[65vw]">
               <MDEditor.Markdown source={board?.context} />
             </div>
-            <div className="mt-10">
-              <Tagbox tags={board!.tags} />
-            </div>
+            {board.tags.length > 0 && (
+              <div className="mt-10">
+                <Tagbox tags={board!.tags} />
+              </div>
+            )}
             {board.dependency && board.dependency.trim().length > 0 && (
               <div className="mt-2 shadow-md rounded-lg">
                 <div className="bg-main rounded-t-lg flex items-center ps-5 h-12 font-semibold mt-5">
@@ -203,7 +205,7 @@ export default function Detail({ id }: { id: number }) {
               </div>
               <div>
                 {showComments && (
-                  <div className="border-t-2 mt-5 waterfall-comments ">
+                  <div className={`${board.replyCount > 0 && "border-t-2"} mt-5 waterfall-comments`}>
                     {board.replies?.map((comment, idx) => (
                       <CommentItem key={idx} comment={comment} userSeq={user?.member.seq} troubleSeq={board.seq} />
                     ))}
