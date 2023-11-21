@@ -45,13 +45,13 @@ export default function Header() {
     mounted && (
       <div className="bg-white rounded-lg flex text-xl h-12 justify-between fixed top-2 left-2 right-2 shadow-md z-50">
         <div className="flex items-center">
-          <Link href="/" className=" w-2/12 h-2/12 mx-3">
+          <Link href="/" className=" w-2/12 h-2/12 ms-3 me-5">
             <Image src={trous_logo_origin} alt="" />
           </Link>
           <Link
             href="/trouble"
-            className={`me-5 text-black hover:text-main duration-200 transition-colors ${
-              path.includes("/trouble") && "font-semibold text-main"
+            className={`me-5  hover:text-main duration-200 transition-colors ${
+              path.includes("/trouble") && "font-semibold text-amber-500"
             }`}
           >
             내 트러블 슈팅
@@ -60,8 +60,8 @@ export default function Header() {
             href="/community"
             className={`
         ${
-          path.includes("/community") && " font-semibold text-main"
-        } me-5 text-black hover:text-main duration-200 transition-colors`}
+          path.includes("/community") && " font-semibold text-amber-500"
+        } me-5  hover:text-main duration-200 transition-colors`}
           >
             커뮤니티
           </Link>

@@ -154,7 +154,10 @@ export default function AnswerPost({
             </div>
             <div className=" border-b-2 pb-2 pt-10 px-5">
               <div className="flex  items-center gap-3 mt-2 text-lg">
-                <div className="flex items-center max-w-[33%]  hover:cursor-pointer gap-2" onClick={onLike}>
+                <div
+                  className="flex items-center max-w-[33%]  hover:cursor-pointer gap-2 border-sub text-sub rounded-lg px-2 border"
+                  onClick={onLike}
+                >
                   {answer.loginLike ? (
                     <div className="w-4 text-red-600 hover:text-red-400 transition-colors duration-200">
                       <AiFillHeart />
@@ -168,7 +171,7 @@ export default function AnswerPost({
                 </div>
 
                 <div
-                  className="flex items-center max-w-[33%] gap-2 hover:cursor-pointer hover:text-main duration-200 transition-colors"
+                  className="flex items-center max-w-[33%] gap-2 hover:cursor-pointer border-amber-600 text-amber-600 rounded-lg px-2 border hover:text-main duration-200 transition-colors"
                   onClick={() => setShowComments((prev) => !prev)}
                 >
                   <div className="w-4 ">

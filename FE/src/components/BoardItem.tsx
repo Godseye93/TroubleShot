@@ -127,13 +127,13 @@ export default function BoardItem({
         <Link href={`/${nowUrl + "/" + board.seq}`}>
           <div className=" hover:bg-slate-100 rounded-md duration-300 transition-all">
             <div className="text-lg font-semibold px-1 my-2">{board.title}</div>
-            <div className="flex items-center justify-between ">
+            <div className="flex  justify-between">
               <div
-                className={`text-sm text-start mt-2 h-full px-1 max-w-[60vw]   ${
+                className={`text-sm flex items-start mt-2 h-full px-1 max-w-[60vw]   ${
                   imgList.length === 0 ? "line-clamp-2" : "line-clamp-6"
                 } `}
               >
-                <span>{content}</span>
+                {content}
               </div>
               {imgList.length > 0 && (
                 <div className="w-72">
