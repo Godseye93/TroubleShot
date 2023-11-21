@@ -26,7 +26,7 @@ export default function FirstIntro() {
         </Link>
         <Link
           onClick={handleClick}
-          href="#"
+          href="https://plugins.jetbrains.com/plugin/23143-troubleshot"
           className=" mb-3 w-5/12 bg-gray-500 flex justify-center items-center text-2xl p-3 hvc z-50"
         >
           with IntelliJ <Image src={intelliJ_logo} alt="intelliJ_logo" className=" w-10 ml-5 " />
