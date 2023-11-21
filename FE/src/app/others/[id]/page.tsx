@@ -1,3 +1,4 @@
+"use client";
 import OtherBoardList from "./OtherBoardList";
 
 export default function Page({ params }: { params: { id: string } }) {

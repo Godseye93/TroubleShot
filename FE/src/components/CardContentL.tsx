@@ -1,3 +1,4 @@
+"use client";
 import Link from "next/link";
 import { AiFillTag } from "react-icons/ai";
 import { GetTroubleList, SearchParams, TroubleShootingBoard } from "@/types/TroubleType";

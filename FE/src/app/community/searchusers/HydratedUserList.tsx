@@ -1,3 +1,4 @@
+"use client";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import getQueryClient from "@/app/getQueryClient";
 import { getSearchUser } from "@/api/account";

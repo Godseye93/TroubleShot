@@ -1,3 +1,4 @@
+"use client";
 import { SetStateAction, useEffect, useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import { BsFillCalendarFill } from "react-icons/bs";

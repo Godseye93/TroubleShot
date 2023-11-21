@@ -1,3 +1,4 @@
+"use client";
 import { getBookmarkList } from "@/api/account";
 import { SearchParams, TroubleShootingBoard } from "@/types/TroubleType";
 import Link from "next/link";

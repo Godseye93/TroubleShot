@@ -1,3 +1,4 @@
+"use client";
 import { ResponsiveRadar } from "@nivo/radar";
 import { useState, useEffect } from "react";
 import { RadarGraphInfoAddNick, RadarToUseInfo } from "@/types/CommonType";

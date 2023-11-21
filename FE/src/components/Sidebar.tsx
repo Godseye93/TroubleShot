@@ -1,3 +1,4 @@
+"use client";
 import Link from "next/link";
 import { FaPen } from "react-icons/fa";
 import CategoryBtn from "./CategoryBtn";

@@ -1,3 +1,4 @@
+"use client";
 import { getBarChartInfo } from "@/api/account";
 import { useLoginStore } from "@/stores/useLoginStore";
 import { BarChartInfo } from "@/types/CommonType";

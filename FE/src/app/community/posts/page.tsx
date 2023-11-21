@@ -1,3 +1,4 @@
+"use client";
 import HydratedPosts from "./HydratedPosts";
 
 export default function Page() {

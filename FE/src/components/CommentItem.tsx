@@ -1,3 +1,4 @@
+"use client";
 import { Reply } from "@/types/TroubleType";
 import { getTimeAgo } from "@/utils/getTimeAgo";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
