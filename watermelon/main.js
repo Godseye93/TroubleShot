@@ -62,8 +62,8 @@ let currentFruit = null;
 let disableAction = false;
 let interval = null;
 
-if (localStorage.getItem('highScores')) {
-  highScores = JSON.parse(localStorage.getItem('highScores'));
+if (localStorage.getItem("highScores")) {
+  highScores = JSON.parse(localStorage.getItem("highScores"));
 }
 
 function addFruit() {
@@ -90,11 +90,11 @@ function addFruit() {
 }
 
 function updateHighScores() {
-  const highScoreList = document.getElementById('highScoreList');
-  highScoreList.innerHTML = '';
+  const highScoreList = document.getElementById("highScoreList");
+  highScoreList.innerHTML = "";
 
   highScores.forEach((score, index) => {
-    const li = document.createElement('li');
+    const li = document.createElement("li");
     li.textContent = `#${index + 1} 등: ${score.score} - ${score.name}`;
     highScoreList.appendChild(li);
   });
@@ -109,7 +109,7 @@ function resetGame() {
 
   disableAction = false;
   score = 0;
-  document.getElementById('score').innerText = `Score: ${score}`;
+  document.getElementById("score").innerText = `Score: ${score}`;
 }
 
 window.onkeydown = (event) => {
@@ -195,7 +195,7 @@ Events.on(engine, 'collisionStart', (event) => {
       World.add(world, newBody);
 
       score += FRUITS[index].score;
-      document.getElementById('score').innerText = `Score: ${score}`;
+      document.getElementById("score").innerText = `Score: ${score}`;
     }
 
     if (
@@ -216,7 +216,7 @@ Events.on(engine, 'collisionStart', (event) => {
 
         highScores = highScores.slice(0, 3);
 
-        localStorage.setItem('highScores', JSON.stringify(highScores));
+        localStorage.setItem("highScores", JSON.stringify(highScores));
 
         updateHighScores();
       }
