@@ -27,11 +27,11 @@ export default function UsedLotTags(params: Params) {
   }, []);
 
   return (
-    <div className="flex flex-wrap">
+    <>
       {tags?.length ? (
         tags?.map((tag, i) => (
-          <div key={i} className="w-1/2">
-            <div className="w-11/12 min-w-fit bg-gray-300 rounded-lg fcc shadow-sm">
+          <div key={i} className="mb-4 w-1/2">
+            <div className="w-11/12 bg-gray-300 rounded-lg fcc shadow-sm line-clamp-1">
               <p className="text-lg my-1">{tag}</p>
             </div>
           </div>
@@ -39,6 +39,6 @@ export default function UsedLotTags(params: Params) {
       ) : (
         <div className="w-1/2 py-2">사용한 태그가 없습니다.</div>
       )}
-    </div>
+    </>
   );
 }

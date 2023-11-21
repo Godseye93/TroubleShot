@@ -10,6 +10,9 @@ import { Member } from "@/types/CommonType";
 import { useLoginStore } from "@/stores/useLoginStore";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import { CircularProgressbar } from "react-circular-progressbar";
+import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
 
 export default function Page({ params }: { params: { user: number } }) {
   const { user } = useLoginStore();
@@ -32,25 +35,37 @@ export default function Page({ params }: { params: { user: number } }) {
     setMounted(true);
   }, []);
 
+  const getMyQuestionAndAnswer = (userSeq: number) => {
+    const url = `http://orientalsalad.kro.kr:8101/members/${userSeq}/statics/count-trouble-and-answer`;
+    return axios.get(url);
+  };
+
+  const { data: data2 } = useQuery({
+    queryKey: ["getMyQuestionAndAnswer", Number(params.user)],
+    queryFn: () => getMyQuestionAndAnswer(Number(params.user)),
+  });
+
   return mounted ? (
     <div className="mt-20 mb-5 flex justify-center w-full">
       <div className="w-7/12 me-4">
-        <div className="flex justify-center items-center bg-white rounded-lg mb-4 w-full p-5 shadow-md overflow-hidden">
-          <div className=" flex flex-col items-center me-5">
-            <img
-              src={userData?.profileImg}
-              alt="trosProfileImg"
-              className="mb-3 rounded-full h-36 w-36 mt-5 min-w-fit"
-            />
-            {userSeq == LoginSeq && (
-              <Link href={`/mypage/${userSeq}/edit`} className="text-sub ">
-                프로필 수정하기
-              </Link>
-            )}
-          </div>
-          <div className="me-10">
-            <p className="text-4xl font-bold">{userData?.nickname}</p>
-            <p>{userData?.email}</p>
+        <div className="flex justify-around items-center bg-white rounded-lg mb-4 w-full p-5 shadow-md overflow-hidden">
+          <div className="flex items-center">
+            <div className="me-5">
+              <p className="text-4xl font-bold">{userData?.nickname}</p>
+              <p>{userData?.email}</p>
+            </div>
+            <div className=" flex flex-col items-center">
+              <img
+                src={userData?.profileImg}
+                alt="trosProfileImg"
+                className="mb-3 rounded-full h-36 w-36 mt-5 min-w-fit"
+              />
+              {userSeq == LoginSeq && (
+                <Link href={`/mypage/${userSeq}/edit`} className="text-sub ">
+                  프로필 수정하기
+                </Link>
+              )}
+            </div>
           </div>
           <div className="w-[300px] h-[200px] ms-5">
             <MyResponsiveRadar userSeq={userSeq} nickname={userData?.nickname} />
@@ -63,19 +78,19 @@ export default function Page({ params }: { params: { user: number } }) {
               전체 통계 데이터 확인하기
             </Link>
           </div>
-          <div className="flex w-full rounded-b-lg">
-            <div className="px-3 py-5 flex flex-col justify-center w-5/12">
-              <div className="flex w-3/4 items-baseline">
-                <p className="text-2xl me-3 min-w-fit">내가 많이 사용한 태그</p>
+          <div className="flex w-full rounded-b-lg justify-around my-5">
+            <div className="flex flex-col items-center w-5/12">
+              <div className="flex w-3/4 items-baseline justify-around ">
+                <p className="text-2xl min-w-fit pt-2 me-1 mb-3">내가 많이 사용한 태그</p>
                 <p className=" text-gray-400 min-w-fit">상위 6개</p>
               </div>
-              <div className="flex flex-wrap">
+              <div className="flex flex-wrap w-full">
                 <UsedLotTags userSeq={userSeq} />
               </div>
             </div>
-            <div className="w-1/3 px-3 py-5 flex flex-col items-center">
-              <p className="text-xl pt-2">솔루션 그래프</p>
-              <div className="w-[300px] h-[200px]">
+            <div className="flex flex-col items-center">
+              <p className="text-2xl pt-2">솔루션 그래프</p>
+              <div className="w-[300px] h-[170px]">
                 <MyResponsivePie userSeq={userSeq} />
               </div>
             </div>
@@ -91,7 +106,6 @@ export default function Page({ params }: { params: { user: number } }) {
             </Link>
           </div>
           <BookmartList userSeq={userSeq} />
-          <div className="absolute w-full text-center bottom-0"></div>
         </div>
       )}
     </div>
