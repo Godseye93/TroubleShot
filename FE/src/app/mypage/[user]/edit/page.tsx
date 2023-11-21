@@ -105,14 +105,16 @@ export default function page() {
           <p className="text-xl">회원정보 수정</p>
         </div>
         <div className="w-full">
-          <div className="relative fcc ">
-            <img src={user?.member.profileImg} alt="trosProfileImg" className="my-2 max-w-[20rem]" />
-            <span
-              className="absolute bottom-3 right-10 bg-main p-4 rounded-full cursor-pointer"
-              onClick={showFileUploaderModal}
-            >
-              <MdOutlineModeEditOutline />
-            </span>
+          <div className=" fcc">
+            <div className="relative fcc overflow-hidden my-2">
+              <img src={user?.member.profileImg} alt="trosProfileImg" className="rounded-full w-60 h-60" />
+              <span
+                className="absolute bottom-1 right-3 bg-main p-4 rounded-full cursor-pointer"
+                onClick={showFileUploaderModal}
+              >
+                <MdOutlineModeEditOutline />
+              </span>
+            </div>
           </div>
           <p className="text-2xl font-bold mb-3">{user?.member.nickname}</p>
         </div>
