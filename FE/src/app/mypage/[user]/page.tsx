@@ -35,16 +35,6 @@ export default function Page({ params }: { params: { user: number } }) {
     setMounted(true);
   }, []);
 
-  const getMyQuestionAndAnswer = (userSeq: number) => {
-    const url = `http://orientalsalad.kro.kr:8101/members/${userSeq}/statics/count-trouble-and-answer`;
-    return axios.get(url);
-  };
-
-  const { data: data2 } = useQuery({
-    queryKey: ["getMyQuestionAndAnswer", Number(params.user)],
-    queryFn: () => getMyQuestionAndAnswer(Number(params.user)),
-  });
-
   return mounted ? (
     <div className="mt-20 mb-5 flex justify-center w-full">
       <div className="w-7/12 me-4">
