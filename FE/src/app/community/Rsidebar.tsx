@@ -7,6 +7,7 @@ import { getTrouble } from "@/api/trouble";
 import { useLoginStore } from "@/stores/useLoginStore";
 import { useQuery } from "@tanstack/react-query";
 import { usePathname } from "next/navigation";
+import { AiFillTag } from "react-icons/ai";
 
 export default function Rsidebar() {
   const path = usePathname();
@@ -33,24 +34,32 @@ export default function Rsidebar() {
               <div className={`mt-2 w-[95%] ${idx != 2 && "border-b-2"}`} key={idx}>
                 <Link href={`/community/posts/${content.seq}`}>
                   <div className="w-full flex items-center justify-between">
-                    <p className="text-base font-semibold flex-1 ">
-                      {idx + 1}. {content.title.length < 12 ? content.title : content.title.slice(0, 12) + "..."}
-                    </p>
+                    <p className="w-6 me-1 h-6 rounded-lg font-semibold flex justify-center items-center bg-blue-500 text-white">
+                      {idx + 1}
+                    </p>{" "}
+                    {content.title.length < 12 ? content.title : content.title.slice(0, 12) + "..."}
+                    <p className="text-base font-semibold flex-1 "></p>
                     <p className="text-xs">{changeKoTime(content.createTime)}</p>
                   </div>
-                  <div className={`line-clamp-2 text-sm ${content.tags.length > 0 ? "my-5" : "mt-5"}`}>
+                  <div className={`line-clamp-2 text-sm ${content.tags.length > 0 ? "my-5" : "mt-5 mb-2"}`}>
                     {content.context}
                   </div>
-                  <div className="tagbox">
-                    <div className="flex tag-scroll overflow-scroll relative">
-                      {content.tags.map((tag, idx) => (
-                        <div key={idx} className="bg-silver rounded-lg  text-xs me-2 shadow-sm text-center p-1 mt-1">
-                          {tag}
+
+                  {content.tags && content.tags.length > 0 && (
+                    <div className="tagbox">
+                      <div className="flex items-center tag-scroll overflow-scroll relative">
+                        <div className="me-1">
+                          <AiFillTag />
                         </div>
-                      ))}
+                        {content.tags.map((tag, idx) => (
+                          <div key={idx} className=" bg-silver rounded-lg  text-xs me-2 shadow-sm text-center p-1 mt-1">
+                            {tag}
+                          </div>
+                        ))}
+                      </div>
+                      <div className="cover-bar"></div>
                     </div>
-                    <div className="cover-bar"></div>
-                  </div>
+                  )}
                   <div className="text-sm">
                     {/* <IconBox likes={content.likeCount} views={content.viewCount} comments={content.replyCount} /> */}
                   </div>

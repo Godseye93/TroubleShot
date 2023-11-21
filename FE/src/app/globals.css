@@ -259,3 +259,11 @@ height: 10px;
   background-color: #DF2F5D;
   opacity: 0.6;
 }
+
+#sidebar.on{
+  position: absolute;
+  bottom: 203px;
+}
+#sidebar{
+  position: fixed;
+}

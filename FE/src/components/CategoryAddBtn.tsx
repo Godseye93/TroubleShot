@@ -70,7 +70,7 @@ export default function CategoryAddBtn({ categories, userSeq }: Props) {
     <>
       <div className="w-full fcc relative">
         <button
-          className="fcc bg-sub  text-white rounded-full w-3/4 h-10  shadow-red-600 shadow-md mb-5 flex hover:shadow-md hover:bg-pink-700 transition-all"
+          className="fcc bg-sub  text-white rounded-lg w-3/4 h-10  shadow-red-600 shadow-md mb-5 flex hover:shadow-md hover:bg-pink-700 transition-all"
           onClick={() => setIsShow((prev) => !prev)}
         >
           <AiFillPlusCircle />

@@ -90,7 +90,6 @@ export const getUsedLotTags = async (params: ReqTags): Promise<[]> => {
 // 유저가 추가한 북마크 목록
 // 게이트웨이 되면 코드 수정하기
 export const getBookmarkList = async (params: SearchParams): Promise<GetTroubleList> => {
-  const Url = "https://orientalsalad.kro.kr:8102/trouble-shootings";
   const { data } = await troubleApi.get("/trouble-shootings", { params });
   return data;
 };
