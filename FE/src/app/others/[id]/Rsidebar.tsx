@@ -23,7 +23,7 @@ export default function Rsidebar({ userSeq }: { userSeq: number }) {
     <div className={`mt-4 ${!path.includes("create") && !path.includes("update") && "lg:block"} hidden`}>
       {data && (
         <div className="rounded-lg w-60 bg-white shadow-md">
-          <div className="w-full h-7 px-2 bg-main rounded-t-lg flex items-center justify-between">
+          <div className="w-full font-semibold h-7 px-2 bg-main rounded-t-lg flex items-center justify-between">
             <p>최근글</p>
             <Link href={`/others/${userSeq}`}>
               <p>전체보기 {">"} </p>

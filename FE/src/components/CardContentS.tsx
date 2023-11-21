@@ -12,7 +12,7 @@ interface Props {
 export default function CardContentS({ keyword, contents }: Props) {
   return (
     <div className="rounded-lg w-60 bg-white shadow-md">
-      <div className="w-full h-7 px-2 bg-main rounded-t-lg flex items-center justify-between">
+      <div className="w-full h-7 px-2 font-semibold bg-main rounded-t-lg flex items-center justify-between">
         <p>{keyword}</p>
         <Link href={"/trouble"}>
           <p>전체보기 {">"} </p>
