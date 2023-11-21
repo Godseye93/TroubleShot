@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 
-const StorageKey = "user-info";
+const StorageKey = "user-tab";
 // export let user: ResLogin | undefined;
 interface UserTab {
   nickname: string | null;
