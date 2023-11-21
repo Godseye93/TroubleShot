@@ -27,12 +27,12 @@ export default function UsedLotTags(params: Params) {
   }, []);
 
   return (
-    <div className="flex flex-wrap w-full">
+    <div className="flex flex-wrap">
       {tags?.length ? (
         tags?.map((tag, i) => (
-          <div key={i} className="w-1/2 p-2">
-            <div className="w-full min-w-fit bg-gray-300 rounded-lg fcc">
-              <p className="text-3xl my-1">{tag}</p>
+          <div key={i} className="w-1/2">
+            <div className="w-11/12 min-w-fit bg-gray-300 rounded-lg fcc shadow-sm">
+              <p className="text-lg my-1">{tag}</p>
             </div>
           </div>
         ))

@@ -35,11 +35,15 @@ export default function Page({ params }: { params: { user: number } }) {
   return mounted ? (
     <div className="mt-20 mb-5 flex justify-center w-full">
       <div className="w-7/12 me-4">
-        <div className="flex justify-center items-center bg-white rounded-lg mb-4 w-full p-5 shadow-md">
+        <div className="flex justify-center items-center bg-white rounded-lg mb-4 w-full p-5 shadow-md overflow-hidden">
           <div className=" flex flex-col items-center me-5">
-            <img src={userData?.profileImg} alt="trosProfileImg" className="mb-3 rounded-full h-36 w-36 mt-5" />
+            <img
+              src={userData?.profileImg}
+              alt="trosProfileImg"
+              className="mb-3 rounded-full h-36 w-36 mt-5 min-w-fit"
+            />
             {userSeq == LoginSeq && (
-              <Link href={`/mypage/${userSeq}/edit`} className="text-sub">
+              <Link href={`/mypage/${userSeq}/edit`} className="text-sub ">
                 프로필 수정하기
               </Link>
             )}
@@ -52,40 +56,42 @@ export default function Page({ params }: { params: { user: number } }) {
             <MyResponsiveRadar userSeq={userSeq} nickname={userData?.nickname} />
           </div>
         </div>
-        <div className="w-full bg-white rounded-lg shadow-md">
-          <div className="w-full bg-main rounded-t-lg px-3 py-2">
-            <p className="text-lg">내 트러블 슈팅 요약</p>
+        <div className="w-full bg-white rounded-lg shadow-md overflow-hidden">
+          <div className="w-full bg-main rounded-t-lg px-3 py-2 flex justify-between">
+            <p className="text-lg font-bold">내 트러블 슈팅 요약</p>
+            <Link href={`/statistics/${userSeq}`} className="text-sub">
+              전체 통계 데이터 확인하기
+            </Link>
           </div>
           <div className="flex w-full rounded-b-lg">
-            <div className="w-1/2 px-3 py-5">
-              <p className="text-xl p-2">내가 많이 사용한 태그</p>
-              <div className="flex flex-wrap w-full">
+            <div className="px-3 py-5 flex flex-col justify-center w-5/12">
+              <div className="flex w-3/4 items-baseline">
+                <p className="text-2xl me-3 min-w-fit">내가 많이 사용한 태그</p>
+                <p className=" text-gray-400 min-w-fit">상위 6개</p>
+              </div>
+              <div className="flex flex-wrap">
                 <UsedLotTags userSeq={userSeq} />
               </div>
             </div>
-            <div className="w-1/2 px-3 py-5 flex flex-col items-center">
+            <div className="w-1/3 px-3 py-5 flex flex-col items-center">
               <p className="text-xl pt-2">솔루션 그래프</p>
               <div className="w-[300px] h-[200px]">
                 <MyResponsivePie userSeq={userSeq} />
               </div>
-              <Link href={`/statistics/${userSeq}`} className="text-sub">
-                전체 통계 데이터 확인하기
-              </Link>
             </div>
           </div>
         </div>
       </div>
       {userSeq == LoginSeq && (
         <div className="w-4/12 bg-white rounded-lg relative shadow-md">
-          <div className="w-full bg-main rounded-t-lg px-3 py-2">
-            <p className="text-lg">북마크</p>
-          </div>
-          <BookmartList userSeq={userSeq} />
-          <div className="absolute w-full text-center bottom-0">
+          <div className="w-full bg-main rounded-t-lg px-3 py-2 flex justify-between">
+            <p className="text-lg font-bold">북마크</p>
             <Link href={"/trouble/bookmark"} className="text-sub">
               전체 북마크 보기
             </Link>
           </div>
+          <BookmartList userSeq={userSeq} />
+          <div className="absolute w-full text-center bottom-0"></div>
         </div>
       )}
     </div>
