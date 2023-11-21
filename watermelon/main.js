@@ -1,13 +1,13 @@
-import { Bodies, Body, Engine, Events, Render, Runner, World } from "matter-js";
-import { FRUITS_BASE } from "./fruits";
+import { Bodies, Body, Engine, Events, Render, Runner, World } from 'matter-js';
+import { FRUITS_BASE } from './fruits';
 
-let THEME = "base"; // { base, syhyun }
+let THEME = 'base'; // { base, syhyun }
 let FRUITS = FRUITS_BASE;
 let score = 0;
 let highScores = [];
 
 switch (THEME) {
-  case "syhyun":
+  case 'syhyun':
     FRUITS = FRUITS_syhyun;
     break;
   default:
@@ -22,35 +22,35 @@ const render = Render.create({
   element: document.body,
   options: {
     wireframes: false,
-    background: "#F7F4C8",
+    background: '#F7F4C8',
     width: 620,
     height: 850,
-  }
+  },
 });
 
 const world = engine.world;
 
 const leftWall = Bodies.rectangle(15, 395, 30, 790, {
   isStatic: true,
-  render: { fillStyle: "#E6B143" }
+  render: { fillStyle: '#E6B143' },
 });
 
 const rightWall = Bodies.rectangle(605, 395, 30, 790, {
   isStatic: true,
-  render: { fillStyle: "#E6B143" }
+  render: { fillStyle: '#E6B143' },
 });
 
 const ground = Bodies.rectangle(310, 820, 620, 60, {
   isStatic: true,
-  render: { fillStyle: "#E6B143" }
+  render: { fillStyle: '#E6B143' },
 });
 
 const topLine = Bodies.rectangle(310, 150, 620, 2, {
-  name: "topLine",
+  name: 'topLine',
   isStatic: true,
   isSensor: true,
-  render: { fillStyle: "#E6B143" }
-})
+  render: { fillStyle: '#E6B143' },
+});
 
 World.add(world, [leftWall, rightWall, ground, topLine]);
 
@@ -70,17 +70,17 @@ function addFruit() {
   const index = Math.floor(Math.random() * 5);
   const fruit = FRUITS[index];
 
-  const body = Bodies.circle(300, 50, fruit.radius, {
+  const body = Bodies.circle(300, 100, fruit.radius, {
     index: index,
     isSleeping: true,
     render: {
       sprite: {
         texture: `${fruit.name}.png`,
         xScale: 1.25,
-        yScale: 1.25
+        yScale: 1.25,
       },
     },
-    restitution: 1,
+    restitution: 0.5,
   });
 
   currentBody = body;
@@ -118,9 +118,8 @@ window.onkeydown = (event) => {
   }
 
   switch (event.code) {
-    case "KeyA":
-      if (interval)
-        return;
+    case 'KeyA':
+      if (interval) return;
 
       interval = setInterval(() => {
         if (currentBody.position.x - currentFruit.radius > 30)
@@ -131,41 +130,40 @@ window.onkeydown = (event) => {
       }, 5);
       break;
 
-    case "KeyD":
-      if (interval)
-        return;
+    case 'KeyD':
+      if (interval) return;
 
       interval = setInterval(() => {
         if (currentBody.position.x + currentFruit.radius < 590)
-        Body.setPosition(currentBody, {
-          x: currentBody.position.x + 3,
-          y: currentBody.position.y,
-        });
+          Body.setPosition(currentBody, {
+            x: currentBody.position.x + 3,
+            y: currentBody.position.y,
+          });
       }, 5);
       break;
 
-    case "KeyS":
+    case 'KeyS':
       currentBody.isSleeping = false;
       disableAction = true;
 
       setTimeout(() => {
         addFruit();
         disableAction = false;
-      }, 300);
+      }, 500);
       break;
   }
-}
+};
 
 window.onkeyup = (event) => {
   switch (event.code) {
-    case "KeyA":
-    case "KeyD":
+    case 'KeyA':
+    case 'KeyD':
       clearInterval(interval);
       interval = null;
   }
-}
+};
 
-Events.on(engine, "collisionStart", (event) => {
+Events.on(engine, 'collisionStart', (event) => {
   event.pairs.forEach((collision) => {
     if (collision.bodyA.index === collision.bodyB.index) {
       const index = collision.bodyA.index;
@@ -187,11 +185,11 @@ Events.on(engine, "collisionStart", (event) => {
             sprite: {
               texture: `${newFruit.name}.png`,
               xScale: 1.25,
-              yScale: 1.25
+              yScale: 1.25,
             },
           },
           index: index + 1,
-        }
+        },
       );
 
       World.add(world, newBody);
@@ -200,32 +198,35 @@ Events.on(engine, "collisionStart", (event) => {
       document.getElementById('score').innerText = `Score: ${score}`;
     }
 
-
     if (
       !disableAction &&
-      (collision.bodyA.name === "topLine" || collision.bodyB.name === "topLine")) {
-      alert("Game over");
+      (collision.bodyA.name === 'topLine' || collision.bodyB.name === 'topLine')
+    ) {
+      alert('Game over');
 
       if (highScores.length < 3 || score > highScores[2].score) {
-        const name = prompt("축하합니다! 상위 3등 안에 들었습니다. 소감을 입력해주세요.");
+        const name = prompt(
+          '축하합니다! 상위 3등 안에 들었습니다. 소감을 입력해주세요.',
+        );
         highScores.push({ name: name, score: score });
 
-        highScores.sort(function(a, b) { return b.score - a.score; });
+        highScores.sort(function (a, b) {
+          return b.score - a.score;
+        });
 
         highScores = highScores.slice(0, 3);
 
         localStorage.setItem('highScores', JSON.stringify(highScores));
 
-        updateHighScores()
+        updateHighScores();
       }
 
-      resetGame()
+      resetGame();
     }
   });
 });
 
-
-window.onload = function() {
+window.onload = function () {
   if (localStorage.getItem('highScores')) {
     highScores = JSON.parse(localStorage.getItem('highScores'));
   } else {

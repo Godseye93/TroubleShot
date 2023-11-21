@@ -1,37 +1,56 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>새삼</title>
 
-    <style>
-      body {
-        text-align: center;
-      }
-      #nickname-form {
-        display: none;
-      }
-      #highScoreList {
-        list-style-type: none; /* 추가된 부분 */
-      }
-    </style>
-  </head>
-  <body>
-    <h1>godseye</h1>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>새삼</title>
+
+  <style>
+    #nickname-form {
+      display: none;
+      position: absolute;
+      top: 0;
+    }
+
+    #highScoreList {
+      list-style-type: none;
+      /* 추가된 부분 */
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: beige;
+      gap: 10rem;
+    }
+
+    img {
+      border: 1px solid black;
+    }
+  </style>
+</head>
+
+<body>
+  <div>
+    <img src="./public/base/title.png" alt="title" width="400">
     <h3>
-      A S D
+      게임 설명
     </h3>
     <div id="highScores">
       <ol id="highScoreList"></ol>
     </div>
     <h2 id="score">Score : 0</h2>
+  </div>
 
-    <div id="nickname-form">
-      <input type="text" id="nickname-input" placeholder="Enter your nickname" />
-      <button id="nickname-submit">Submit</button>
-    </div>
 
-    <script type="module" src="/main.js"></script>
-  </body>
+  <div id="nickname-form">
+    <input type="text" id="nickname-input" placeholder="Enter your nickname" />
+    <button id="nickname-submit">Submit</button>
+  </div>
+
+  <script type="module" src="/main.js"></script>
+</body>
+
 </html>
