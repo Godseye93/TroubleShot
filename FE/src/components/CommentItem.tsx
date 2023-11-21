@@ -33,7 +33,7 @@ export default function CommentItem({
       try {
         await putComment(userSeq ?? 0, troubleSeq, putCommentValue, comment.seq);
         toast.success("수정되었습니다");
-        queryClient.invalidateQueries({ queryKey: ["detail"], exact: true });
+        queryClient.invalidateQueries({ queryKey: ["detail", troubleSeq], exact: true });
         setIsUpdate(false);
       } catch (err) {
         console.log(err);
@@ -41,7 +41,7 @@ export default function CommentItem({
     } else if (answerSeq) {
       try {
         await putAnswerComment(userSeq, troubleSeq, answerSeq, putCommentValue, comment.seq);
-        queryClient.invalidateQueries({ queryKey: ["detail"], exact: true });
+        queryClient.invalidateQueries({ queryKey: ["detail", troubleSeq], exact: true });
         setIsUpdate(false);
       } catch (err) {
         console.log(err);
@@ -56,7 +56,7 @@ export default function CommentItem({
       } else if (answerSeq) {
         await postLikeAnswerComment(userSeq, troubleSeq, answerSeq, comment.seq);
       }
-      queryClient.invalidateQueries({ queryKey: ["detail"], exact: true });
+      queryClient.invalidateQueries({ queryKey: ["detail", troubleSeq], exact: true });
     } catch (err) {
       console.log(err);
     }

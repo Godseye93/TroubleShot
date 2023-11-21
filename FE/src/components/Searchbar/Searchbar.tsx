@@ -50,7 +50,7 @@ export default function Searchbar({ PropsOptions, isCommunity, baseUrl, queryKey
 
   return (
     <div
-      className={`w-full bg-white rounded-lg shadow-md px-10 py-5
+      className={`w-full bg-white rounded-lg shadow-md px-5 py-5
       ${showOptions ? "big-on" : isChanged ? "small-on" : "max-h-[5rem]"}
       `}
     >
@@ -62,7 +62,7 @@ export default function Searchbar({ PropsOptions, isCommunity, baseUrl, queryKey
           <option value="제목">제목+내용</option>
           {isCommunity && <option value="작성자">작성자</option>}
         </select>
-        <div className="w-full ms-2">
+        <div className="w-full ms-5">
           <div className="flex justify-center w-full ">
             <div className="relative flex-1">
               <div className="absolute left-4 top-[50%] -translate-y-[50%]">

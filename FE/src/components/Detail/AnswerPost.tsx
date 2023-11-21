@@ -38,7 +38,7 @@ export default function AnswerPost({
     try {
       await postAnswerLike(user.member.seq, troubleSeq, answer.seq);
       queryClient.invalidateQueries({
-        queryKey: ["detail"],
+        queryKey: ["detail", troubleSeq],
         exact: true,
       });
     } catch (err) {
@@ -50,7 +50,7 @@ export default function AnswerPost({
       await putAnswer(user!.member.seq, troubleSeq, updateMD, updateTitle, answer.seq);
       toast.success("수정되었습니다");
       queryClient.invalidateQueries({
-        queryKey: ["detail"],
+        queryKey: ["detail", troubleSeq],
         exact: true,
       });
       setShowUpdate(false);
@@ -64,7 +64,7 @@ export default function AnswerPost({
       try {
         await putSelectAnswer(user!.member.seq, troubleSeq, answer.seq);
         toast.success("답변이 채택되었습니다");
-        queryClient.invalidateQueries({ queryKey: ["detail"], exact: true });
+        queryClient.invalidateQueries({ queryKey: ["detail", troubleSeq], exact: true });
       } catch (err) {
         console.log(err);
       }
@@ -181,7 +181,7 @@ export default function AnswerPost({
                 </div>
               </div>
               <p
-                className="font-semibold text-lg mt-5 hover:cursor-pointer inline-block hover:text-main duration-200 transition-colors w-"
+                className="font-semibold text-lg mt-5 hover:cursor-pointer inline-block hover:text-main duration-200 transition-colors"
                 onClick={() => setShowCreateAnswer((prev) => !prev)}
               >
                 댓글 달기
@@ -193,7 +193,7 @@ export default function AnswerPost({
                   setShowCreateAnswer={setShowCreateAnswer}
                 />
               )}
-              {showComments && (
+              {showComments && answer.replyCount > 0 && (
                 <div className="mt-3 pt-3 border-t-2">
                   {answer.replies &&
                     answer.replies.map((comment, idx) => (
