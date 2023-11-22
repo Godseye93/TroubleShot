@@ -196,7 +196,7 @@ export default function Detail({ id }: { id: number }) {
                     <p className=" line-clamp-1 items-center hover:cursor-pointer" onClick={toggleComments}>
                       {board.replyCount}
                       <span className="text-base font-semibold hover:text-main transition-all duration-200">
-                        개의 댓글 더보기
+                        {showComments ? " 댓글 숨기기" : "개의 댓글 더보기"}
                       </span>
                     </p>
                   ) : (
