@@ -194,7 +194,7 @@ height: 10px;
   }
 .code-highlight{
   max-height: 40rem;
-
+  width: 100%;
 }
 
 .carousel {
