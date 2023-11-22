@@ -28,16 +28,28 @@ export default function Duration({ startDate, endDate, isSelected, setStartDate,
           >
             기간
           </button>
-          <div className="flex border-2 pe-2  rounded-lg text-sm items-center ms-1">
+          <div
+            className={`flex border border-black pe-2 border-opacity-50  rounded-lg text-sm items-center ms-1 ${
+              !isSelected && "bg-slate-200"
+            }`}
+          >
             <div className="ms-2">
               <BsFillCalendarFill />
             </div>
-            <div className="hover:bg-softestmain hover:cursor-pointer transition-colors duration-300 rounded-md py-1 px-2">
-              <UseDatePicker date={startDate} setDate={setStartDate} />
+            <div
+              className={`${
+                isSelected && "hover:bg-softestmain hover:cursor-pointer"
+              } transition-colors duration-300 rounded-md py-1 px-2`}
+            >
+              <UseDatePicker date={startDate} setDate={setStartDate} disable={!isSelected} />
             </div>
             <p className="mx-1"> ~ </p>
-            <div className="hover:bg-softestmain hover:cursor-pointer transition-colors duration-300 rounded-md py-1 px-2">
-              <UseDatePicker date={endDate} setDate={setEndDate} />
+            <div
+              className={`${
+                isSelected && "hover:bg-softestmain hover:cursor-pointer"
+              }  transition-colors duration-300 rounded-md py-1 px-2`}
+            >
+              <UseDatePicker date={endDate} setDate={setEndDate} disable={!isSelected} />
             </div>
           </div>
         </div>

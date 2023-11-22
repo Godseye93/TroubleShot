@@ -7,7 +7,7 @@ import { BsSearch } from "react-icons/bs";
 import { RiEqualizerLine } from "react-icons/ri";
 import { useLoginStore } from "@/stores/useLoginStore";
 import { useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 interface Props {
   PropsOptions?: SearchParams;
@@ -18,14 +18,14 @@ interface Props {
 }
 export default function Searchbar({ PropsOptions, isCommunity, baseUrl, queryKey, setPropsOptions }: Props) {
   const [showOptions, setShowOptions] = useState(false);
+  const searchParams = useSearchParams();
   const [isChanged, setIsChanged] = useState(false);
   const [keyword, setKeyword] = useState(PropsOptions?.keyword ?? "");
-  const [searchCriteria, setSearchCriteria] = useState("제목");
+  const [searchCriteria, setSearchCriteria] = useState(searchParams.get("criteria") ?? "제목");
   const [options, setOptions] = useState<SearchParams>(PropsOptions ?? {});
   const { user } = useLoginStore();
   const queryClient = useQueryClient();
   const router = useRouter();
-
   const onSearch = () => {
     const searchOption: SearchParams = {
       ...options,
@@ -45,7 +45,7 @@ export default function Searchbar({ PropsOptions, isCommunity, baseUrl, queryKey
       }
     });
     setPropsOptions(searchOption);
-    router.push(`/${baseUrl}?${params.toString()}`);
+    router.push(`/${baseUrl}?${params.toString()}&criteria=${searchCriteria}`);
   };
 
   return (
@@ -56,6 +56,7 @@ export default function Searchbar({ PropsOptions, isCommunity, baseUrl, queryKey
     >
       <div className="flex justify-center">
         <select
+          value={searchCriteria}
           className="p-1 rounded-lg border shadow-slate-600 hover:cursor-pointer shadow-sm h-10"
           onChange={(e) => setSearchCriteria(e.target.value)}
         >
