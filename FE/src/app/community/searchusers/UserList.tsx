@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { BsSearch } from "react-icons/bs";
@@ -12,11 +11,12 @@ export default function UserList() {
   const searchParams = useSearchParams();
   const [nickname, setNickname] = useState<string>(searchParams.get("nickname") ?? "");
   const [searchName, setSearchName] = useState(searchParams.get("nickname") ?? "");
-  const { data, error, fetchNextPage, hasNextPage, status } = useInfiniteQuery({
+  const [fetching, setFetching] = useState(false);
+  const { data, error, fetchNextPage, isFetching, hasNextPage, status } = useInfiniteQuery({
     queryKey: ["userList", searchName],
     queryFn: async ({ pageParam = 1 }) => {
       const data = await getSearchUser({
-        pageSize: 36,
+        pageSize: 56,
         pageNo: pageParam,
         nickname: searchName,
       });
@@ -25,26 +25,28 @@ export default function UserList() {
     },
     initialPageParam: 1,
     getNextPageParam: (lastPage, pages) => {
-      return lastPage.memberList.length > 35 ? pages.length + 1 : undefined;
+      return lastPage.memberList.length > 47 ? pages.length + 1 : undefined;
     },
   });
 
   useEffect(() => {
-    let fetching = false;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const handleScroll = async (e: any) => {
+    const handleScrollSide = async (e: any) => {
       const { scrollHeight, scrollTop, clientHeight } = e.target.scrollingElement;
       if (!fetching && clientHeight * 1.5 + scrollTop >= scrollHeight) {
-        fetching = true;
+        setFetching(true);
         if (hasNextPage) {
           await fetchNextPage();
+          const footer = document.getElementById("footer");
+          const sidebar = document.getElementById("sidebar");
+          if (footer && sidebar) sidebar.classList.remove("on");
         }
-        fetching = false;
+        setFetching(false);
       }
     };
-    document.addEventListener("scroll", handleScroll);
+    document.addEventListener("scroll", handleScrollSide);
     return () => {
-      document.removeEventListener("scroll", handleScroll);
+      document.removeEventListener("scroll", handleScrollSide);
     };
   }, [fetchNextPage, hasNextPage]);
 
