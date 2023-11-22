@@ -144,7 +144,7 @@ export default function Detail({ id }: { id: number }) {
                 )}
               </div>
             </div>
-            <div className="mt-12 max-w-[65vw]">
+            <div className="mt-12 max-w-[63vw]">
               <MDEditor.Markdown source={board?.context} />
             </div>
             {board.tags.length > 0 && (
