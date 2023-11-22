@@ -21,6 +21,7 @@ export default function FirstIntro() {
           with VSC <Image src={vscode_logo} alt="vscode_logo" className=" w-10 ml-5" />
         </Link>
         <Link
+          target="_blank"
           href="https://plugins.jetbrains.com/plugin/23143-troubleshot"
           className=" mb-3 w-5/12 bg-gray-500 flex justify-center items-center text-2xl p-3 hvc z-50"
         >
