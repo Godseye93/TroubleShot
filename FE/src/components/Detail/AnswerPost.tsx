@@ -178,8 +178,9 @@ export default function AnswerPost({
                     <MdComment />
                   </div>
                   <p className=" line-clamp-1 items-center ">
-                    {answer.replyCount}
-                    {answer.replyCount > 0 && "개의 댓글 더보기"}
+                    <span className="text-base font-semibold hover:text-main transition-all duration-200">
+                      {showComments ? `${answer.replyCount} 댓글 숨기기` : `${answer.replyCount}개의 댓글 더보기`}
+                    </span>
                   </p>
                 </div>
               </div>
