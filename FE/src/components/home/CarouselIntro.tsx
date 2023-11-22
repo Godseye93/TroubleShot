@@ -20,7 +20,7 @@ export default function CarouselIntro() {
       Image: seul,
       name: "슬호",
       position: "팀장 정슬호",
-      review: "평소에 관심있던 플러그인 개발에 대해 관심이 있었습니다. 이번 기회에 많이 공부해서 좋았습니다.",
+      review: "플러그인 개발에 대해 관심이 있었습니다. 이번 기회에 많이 공부해서 좋았습니다.",
     },
     {
       index: 1,
