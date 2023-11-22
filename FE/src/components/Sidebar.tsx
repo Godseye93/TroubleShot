@@ -15,11 +15,10 @@ interface Props {
 
 export default function Sidebar({ menus, categories, link, isLogged, userSeq }: Props) {
   useEffect(() => {
-    const handleScroll = () => {
+    const handleScrollSide = () => {
       const footer = document.getElementById("footer");
       const sidebar = document.getElementById("sidebar");
       if (!footer || !sidebar) return;
-
       const sT = window.scrollY;
       const val = document.documentElement.scrollHeight - window.innerHeight - footer.offsetHeight;
 
@@ -29,16 +28,17 @@ export default function Sidebar({ menus, categories, link, isLogged, userSeq }: 
         sidebar.classList.remove("on");
       }
     };
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScrollSide);
 
     return () => {
-      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("scroll", handleScrollSide);
     };
   }, []);
+
   return (
     <div className="w-[14%] min-h-[91vh] md:flex hidden">
       <div
-        className="z-50 w-[14%] h-[91vh] bg-white shadow-lg mt-4 rounded-lg pt-5  flex-col justify-between text-lg md:flex hidden"
+        className="z-30 w-[14%] h-[91vh] bg-white shadow-lg mt-4 rounded-lg pt-5  flex-col justify-between text-lg md:flex hidden"
         id="sidebar"
       >
         <div>
