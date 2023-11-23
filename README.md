@@ -145,6 +145,9 @@
 ![AI솔룻션](https://github.com/Jeongseulho/sh-snippets/assets/110578739/b2e10156-f617-4129-929c-97c7878a12ef)
 
 #### 에러 자동 검출
+![에러자동화!](https://github.com/Jeongseulho/sh-snippets/assets/110578739/d71395e5-0651-4f0f-9a8f-31bd68813390)
+
+#### 트러블슈팅 작성 자동화
 
 ![에러 자동화](https://github.com/Jeongseulho/sh-snippets/assets/110578739/61d797f1-0083-45b8-81ec-c06e8e4d2f90)
 
