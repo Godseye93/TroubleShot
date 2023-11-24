@@ -163,7 +163,7 @@
 
 #### AI 솔루션 추천
 
-![ailoading](https://github.com/Jeongseulho/sh-snippets/assets/110578739/82c4d5d1-f888-4eea-919f-434eb2c47c98)
+![Ai답변](https://github.com/KwonJongryul/inbest/assets/122791001/8ff44fab-3b13-4821-92df-1c7a86dc2956)
 
 #### 글 작성
 ![createTrouble](./글작성-3.gif)
@@ -174,8 +174,16 @@
 
 #### 트러블 슈팅 문서 공유 커뮤니티
 
-![커뮤니티](https://github.com/Jeongseulho/sh-snippets/assets/110578739/0024ebfa-cbae-4108-b662-83fd9055bc10)
+![트러블 목록 페이지](https://github.com/KwonJongryul/inbest/assets/122791001/cdf139d0-c376-469c-834d-5cecdc4fd2ae)
 
 #### 트러블 슈팅 문서 상세 페이지
 
-![detailTrouble](https://github.com/Jeongseulho/sh-snippets/assets/110578739/a92cad61-c183-4ed4-8bef-11701318af17)
+![디테일 페이지](https://github.com/KwonJongryul/inbest/assets/122791001/ff21e366-6c98-447b-a17a-ecfadb2ecb43)
+
+### 게시글 검색
+
+![검색](https://github.com/KwonJongryul/inbest/assets/122791001/72894e08-345a-4c7d-bda0-ff5269f54c74)
+
+### 유저 검색
+
+![유저검색](https://github.com/KwonJongryul/inbest/assets/122791001/f6c80a09-d9b9-4a80-bbef-74d244a85e58)
