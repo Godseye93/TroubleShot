@@ -122,7 +122,10 @@
 
 ## 💻주요 화면 스크린샷, gif
 
-![Animation](https://github.com/Jeongseulho/sh-snippets/assets/110578739/cd9bb990-79cf-4e23-93f6-2d77bd947ae6) !
+![Animation](https://github.com/Jeongseulho/sh-snippets/assets/110578739/cd9bb990-79cf-4e23-93f6-2d77bd947ae6) 
+
+### 로그인 화면
+![로그인페이지](./login.gif)
 
 ### VSCode 확장
 
