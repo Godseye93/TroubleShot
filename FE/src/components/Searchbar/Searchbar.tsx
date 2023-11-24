@@ -7,7 +7,7 @@ import { BsSearch } from "react-icons/bs";
 import { RiEqualizerLine } from "react-icons/ri";
 import { useLoginStore } from "@/stores/useLoginStore";
 import { useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 interface Props {
   PropsOptions?: SearchParams;
@@ -18,14 +18,14 @@ interface Props {
 }
 export default function Searchbar({ PropsOptions, isCommunity, baseUrl, queryKey, setPropsOptions }: Props) {
   const [showOptions, setShowOptions] = useState(false);
+  const searchParams = useSearchParams();
   const [isChanged, setIsChanged] = useState(false);
   const [keyword, setKeyword] = useState(PropsOptions?.keyword ?? "");
-  const [searchCriteria, setSearchCriteria] = useState("제목");
+  const [searchCriteria, setSearchCriteria] = useState(searchParams.get("criteria") ?? "제목");
   const [options, setOptions] = useState<SearchParams>(PropsOptions ?? {});
   const { user } = useLoginStore();
   const queryClient = useQueryClient();
   const router = useRouter();
-
   const onSearch = () => {
     const searchOption: SearchParams = {
       ...options,
@@ -45,24 +45,25 @@ export default function Searchbar({ PropsOptions, isCommunity, baseUrl, queryKey
       }
     });
     setPropsOptions(searchOption);
-    router.push(`/${baseUrl}?${params.toString()}`);
+    router.push(`/${baseUrl}?${params.toString()}&criteria=${searchCriteria}`);
   };
 
   return (
     <div
-      className={`w-full bg-white rounded-lg shadow-md px-10 py-5
+      className={`w-full bg-white rounded-lg shadow-md px-5 py-5
       ${showOptions ? "big-on" : isChanged ? "small-on" : "max-h-[5rem]"}
       `}
     >
       <div className="flex justify-center">
         <select
+          value={searchCriteria}
           className="p-1 rounded-lg border shadow-slate-600 hover:cursor-pointer shadow-sm h-10"
           onChange={(e) => setSearchCriteria(e.target.value)}
         >
           <option value="제목">제목+내용</option>
           {isCommunity && <option value="작성자">작성자</option>}
         </select>
-        <div className="w-full ms-2">
+        <div className="w-full ms-5">
           <div className="flex justify-center w-full ">
             <div className="relative flex-1">
               <div className="absolute left-4 top-[50%] -translate-y-[50%]">

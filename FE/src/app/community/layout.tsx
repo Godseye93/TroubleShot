@@ -17,9 +17,7 @@ export default function Layout({ children }: Props) {
     <>
       <div className="h-12"></div>
       <div className="px-2 flex justify-between">
-        <div className="w-[14%] h-10"></div>
         <UseCommunitySidebar />
-
         {children}
         <Rsidebar />
         <ScrollTop />

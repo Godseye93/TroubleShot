@@ -6,9 +6,9 @@ import UserList from "./UserList";
 export default async function HydratedUserList() {
   const queryClient = getQueryClient();
   await queryClient.prefetchInfiniteQuery({
-    queryKey: ["userList"],
+    queryKey: ["userList", ""],
     queryFn: async ({ pageParam = 1 }) => {
-      const data = await getSearchUser({ pageNo: pageParam, pageSize: 36, nickname: "" });
+      const data = await getSearchUser({ pageNo: pageParam, pageSize: 56, nickname: "" });
       return data;
     },
     initialPageParam: 1,

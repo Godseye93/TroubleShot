@@ -89,7 +89,7 @@ export default function CommunityContents() {
           </div>
         ) : (
           <div className="mt-2">
-            <p className="text-xl font-semibold my-5">자주 이용한 태그</p>
+            <p className="text-xl font-semibold my-5">🏷️ 자주 이용한 태그의 인기 게시물</p>
 
             <div className="grid grid-cols-2 gap-2">
               <CardContentL

@@ -39,7 +39,7 @@ export default function CategoryBtn({ categories }: Props) {
           {categories.map((category, idx) => (
             <Link href={`/trouble/category/${category.name}`} key={idx}>
               <div
-                className={`h-8 ps-[3.5rem] w-full  line-clamp-1 pe-2 hover:bg-slate-200 transition-colors duration-200 rounded-full hover:shadow-sm ${
+                className={`h-8 ps-[3.5rem] w-full  line-clamp-1 pe-2 hover:bg-slate-200 transition-colors duration-200 rounded-lg hover:shadow-sm ${
                   category.name === name && "bg-slate-200"
                 }`}
               >

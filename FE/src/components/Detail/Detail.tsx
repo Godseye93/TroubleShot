@@ -20,6 +20,7 @@ import { checkWriterImg, checkWriterName } from "@/utils/nullWriter";
 import Link from "next/link";
 import { TbRobot } from "react-icons/tb";
 import AnswerAi from "./AnswerAi";
+import { newLine } from "@/utils/newLine";
 
 export default function Detail({ id }: { id: number }) {
   const queryClient = useQueryClient();
@@ -35,7 +36,7 @@ export default function Detail({ id }: { id: number }) {
     try {
       await postTroubleLike(user.member.seq, board!.seq, user.member.seq);
       queryClient.invalidateQueries({
-        queryKey: ["detail"],
+        queryKey: ["detail", id],
         exact: true,
       });
     } catch (err) {
@@ -43,7 +44,7 @@ export default function Detail({ id }: { id: number }) {
     }
   };
   const { data, error, isLoading } = useQuery({
-    queryKey: ["detail"],
+    queryKey: ["detail", id],
     queryFn: async () => {
       const data = await getTroubleDetail(user ? user.member.seq : null, id);
       return data;
@@ -67,7 +68,7 @@ export default function Detail({ id }: { id: number }) {
     if (answerContent.trim() === "") return toast.error("내용을 입력해 주세요");
     try {
       await postAnswer(user!.member.seq, board!.seq, answerContent, answerTitle!);
-      queryClient.invalidateQueries({ queryKey: ["detail"], exact: true });
+      queryClient.invalidateQueries({ queryKey: ["detail", id], exact: true });
       toast.success("답변이 등록되었습니다");
       setAnswerTitle("");
       setAnswerContent("");
@@ -85,7 +86,7 @@ export default function Detail({ id }: { id: number }) {
         if (!board.favorite) toast.success("북마크에 저장되었습니다");
         else if (board.favorite) toast.success("북마크에서 제거되었습니다");
         await queryClient.invalidateQueries({
-          queryKey: ["detail"],
+          queryKey: ["detail", id],
           exact: true,
         });
       } catch (err) {
@@ -143,18 +144,20 @@ export default function Detail({ id }: { id: number }) {
                 )}
               </div>
             </div>
-            <div className="mt-12 max-w-[65vw]">
+            <div className="mt-12 max-w-[63vw]">
               <MDEditor.Markdown source={board?.context} />
             </div>
-            <div className="mt-10">
-              <Tagbox tags={board!.tags} />
-            </div>
+            {board.tags.length > 0 && (
+              <div className="mt-10">
+                <Tagbox tags={board!.tags} />
+              </div>
+            )}
             {board.dependency && board.dependency.trim().length > 0 && (
               <div className="mt-2 shadow-md rounded-lg">
                 <div className="bg-main rounded-t-lg flex items-center ps-5 h-12 font-semibold mt-5">
                   사용 기술 스택
                 </div>
-                <MDEditor.Markdown className="max-w-[65vw]" source={"```ts\n" + board.dependency + "\n```"} />
+                <MDEditor.Markdown className="max-w-[65vw]" source={"```ts\n" + newLine(board.dependency) + "\n```"} />
               </div>
             )}
 
@@ -164,7 +167,10 @@ export default function Detail({ id }: { id: number }) {
 
             <div className=" border-b-2 pb-2 pt-10">
               <div className="flex  items-center gap-3 mt-5 text-xl">
-                <div className="flex items-center max-w-[33%]  hover:cursor-pointer gap-2" onClick={onLike}>
+                <div
+                  className="flex items-center max-w-[33%]  hover:cursor-pointer gap-2 border-sub text-sub rounded-lg px-2 border"
+                  onClick={onLike}
+                >
                   {board.loginLike ? (
                     <div className="w-4 text-red-600 hover:text-red-400 transition-colors duration-200">
                       <AiFillHeart />
@@ -176,13 +182,13 @@ export default function Detail({ id }: { id: number }) {
                   )}
                   <p className=" line-clamp-1 items-center ">{board.likeCount}</p>
                 </div>
-                <div className="flex items-center max-w-[33%] gap-2">
+                <div className="flex items-center max-w-[33%] gap-2 border-green-600 text-green-600 rounded-lg px-2 border">
                   <div className="w-4 ">
                     <AiOutlineEye />
                   </div>
                   <p className="line-clamp-1 items-center">{board.viewCount}</p>
                 </div>
-                <div className="flex items-center max-w-[33%] gap-2">
+                <div className="flex items-center max-w-[33%] gap-2 border-amber-600 text-amber-600 rounded-lg px-2 border">
                   <div className="w-4 ">
                     <MdComment />
                   </div>
@@ -190,7 +196,7 @@ export default function Detail({ id }: { id: number }) {
                     <p className=" line-clamp-1 items-center hover:cursor-pointer" onClick={toggleComments}>
                       {board.replyCount}
                       <span className="text-base font-semibold hover:text-main transition-all duration-200">
-                        개의 댓글 더보기
+                        {showComments ? " 댓글 숨기기" : "개의 댓글 더보기"}
                       </span>
                     </p>
                   ) : (
@@ -203,7 +209,7 @@ export default function Detail({ id }: { id: number }) {
               </div>
               <div>
                 {showComments && (
-                  <div className="border-t-2 mt-5 waterfall-comments ">
+                  <div className={`${board.replyCount > 0 && "border-t-2"} mt-5 waterfall-comments`}>
                     {board.replies?.map((comment, idx) => (
                       <CommentItem key={idx} comment={comment} userSeq={user?.member.seq} troubleSeq={board.seq} />
                     ))}

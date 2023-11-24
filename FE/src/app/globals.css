@@ -194,7 +194,7 @@ height: 10px;
   }
 .code-highlight{
   max-height: 40rem;
-
+  width: 100%;
 }
 
 .carousel {
@@ -258,4 +258,12 @@ height: 10px;
   background-size: cover;
   background-color: #DF2F5D;
   opacity: 0.6;
+}
+
+#sidebar.on{
+  position: absolute;
+  bottom: 203px;
+}
+#sidebar{
+  position: fixed;
 }

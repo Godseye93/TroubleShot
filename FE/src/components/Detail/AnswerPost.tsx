@@ -38,7 +38,7 @@ export default function AnswerPost({
     try {
       await postAnswerLike(user.member.seq, troubleSeq, answer.seq);
       queryClient.invalidateQueries({
-        queryKey: ["detail"],
+        queryKey: ["detail", troubleSeq],
         exact: true,
       });
     } catch (err) {
@@ -50,7 +50,7 @@ export default function AnswerPost({
       await putAnswer(user!.member.seq, troubleSeq, updateMD, updateTitle, answer.seq);
       toast.success("수정되었습니다");
       queryClient.invalidateQueries({
-        queryKey: ["detail"],
+        queryKey: ["detail", troubleSeq],
         exact: true,
       });
       setShowUpdate(false);
@@ -64,7 +64,7 @@ export default function AnswerPost({
       try {
         await putSelectAnswer(user!.member.seq, troubleSeq, answer.seq);
         toast.success("답변이 채택되었습니다");
-        queryClient.invalidateQueries({ queryKey: ["detail"], exact: true });
+        queryClient.invalidateQueries({ queryKey: ["detail", troubleSeq], exact: true });
       } catch (err) {
         console.log(err);
       }
@@ -154,7 +154,10 @@ export default function AnswerPost({
             </div>
             <div className=" border-b-2 pb-2 pt-10 px-5">
               <div className="flex  items-center gap-3 mt-2 text-lg">
-                <div className="flex items-center max-w-[33%]  hover:cursor-pointer gap-2" onClick={onLike}>
+                <div
+                  className="flex items-center max-w-[33%]  hover:cursor-pointer gap-2 border-sub text-sub rounded-lg px-2 border"
+                  onClick={onLike}
+                >
                   {answer.loginLike ? (
                     <div className="w-4 text-red-600 hover:text-red-400 transition-colors duration-200">
                       <AiFillHeart />
@@ -168,20 +171,21 @@ export default function AnswerPost({
                 </div>
 
                 <div
-                  className="flex items-center max-w-[33%] gap-2 hover:cursor-pointer hover:text-main duration-200 transition-colors"
+                  className="flex items-center max-w-[33%] gap-2 hover:cursor-pointer border-amber-600 text-amber-600 rounded-lg px-2 border hover:text-main duration-200 transition-colors"
                   onClick={() => setShowComments((prev) => !prev)}
                 >
                   <div className="w-4 ">
                     <MdComment />
                   </div>
                   <p className=" line-clamp-1 items-center ">
-                    {answer.replyCount}
-                    {answer.replyCount > 0 && "개의 댓글 더보기"}
+                    <span className="text-base font-semibold hover:text-main transition-all duration-200">
+                      {showComments ? `${answer.replyCount} 댓글 숨기기` : `${answer.replyCount}개의 댓글 더보기`}
+                    </span>
                   </p>
                 </div>
               </div>
               <p
-                className="font-semibold text-lg mt-5 hover:cursor-pointer inline-block hover:text-main duration-200 transition-colors w-"
+                className="font-semibold text-lg mt-5 hover:cursor-pointer inline-block hover:text-main duration-200 transition-colors"
                 onClick={() => setShowCreateAnswer((prev) => !prev)}
               >
                 댓글 달기
@@ -193,7 +197,7 @@ export default function AnswerPost({
                   setShowCreateAnswer={setShowCreateAnswer}
                 />
               )}
-              {showComments && (
+              {showComments && answer.replyCount > 0 && (
                 <div className="mt-3 pt-3 border-t-2">
                   {answer.replies &&
                     answer.replies.map((comment, idx) => (
