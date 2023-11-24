@@ -19,8 +19,12 @@
 <img src="https://img.shields.io/badge/reactquery-FF4154?styleflat&logo=reactquery&logoColor=white">
 <img src="https://img.shields.io/badge/tailwindcss-06B6D4?styleflat&logo=tailwindcss&logoColor=white">
 
-<img src="https://img.shields.io/badge/springboot-6DB33F?styleflat&logo=springboot&logoColor=white">
-<img src="https://img.shields.io/badge/springsecurity-6DB33F?styleflat&logo=springsecurity&logoColor=white">
+<img src="https://img.shields.io/badge/Springboot-6DB33F?styleflat&logo=springboot&logoColor=white">
+<img src="https://img.shields.io/badge/Redis-DC382D?styleflat&logo=redis&logoColor=white">
+<img src="https://img.shields.io/badge/Postgresql-4169E1?styleflat&logo=postgresql&logoColor=white">
+<img src="https://img.shields.io/badge/Jmeter-D22128?styleflat&logo=apachejmeter&logoColor=white">
+<img src="https://img.shields.io/badge/RabbitMQ-FF6600?styleflat&logo=rabbitmq&logoColor=white">
+
 
 ### 📌협업 및 배포 툴
 
@@ -162,8 +166,7 @@
 ![ailoading](https://github.com/Jeongseulho/sh-snippets/assets/110578739/82c4d5d1-f888-4eea-919f-434eb2c47c98)
 
 #### 글 작성
-
-![createTrouble](https://github.com/Jeongseulho/sh-snippets/assets/110578739/ce9aaa9f-427e-4816-88e4-b3b6eae6b661)
+![createTrouble](./글작성-3.gif)
 
 #### 트러블 슈팅 문서 분석 및 통계
 
