@@ -24,6 +24,7 @@
 <img src="https://img.shields.io/badge/Postgresql-4169E1?styleflat&logo=postgresql&logoColor=white">
 <img src="https://img.shields.io/badge/Jmeter-D22128?styleflat&logo=apachejmeter&logoColor=white">
 <img src="https://img.shields.io/badge/RabbitMQ-FF6600?styleflat&logo=rabbitmq&logoColor=white">
+<img src="https://img.shields.io/badge/kubernetes-326CE5?styleflat&logo=kubernetes&logoColor=white">
 
 
 ### 📌협업 및 배포 툴
