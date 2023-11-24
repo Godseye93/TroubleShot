@@ -109,7 +109,6 @@ public class LogoutVersionList {
         JScrollPane scrollPane = new JScrollPane(panel);
         scrollPane.setBorder(null);
         wrapperPanel.add(scrollPane, BorderLayout.CENTER);
-
     }
 
     private void showDeleteDialog(String fileName) {

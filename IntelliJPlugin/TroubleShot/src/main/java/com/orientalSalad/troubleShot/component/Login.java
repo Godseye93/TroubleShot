@@ -47,7 +47,8 @@ public class Login {
             // login 요청
             OkHttpClient client = new OkHttpClient();
             Request request = new Request.Builder()
-                    .url("http://orientalsalad.kro.kr:8101/login/login")
+//                    .url("http://orientalsalad.kro.kr:8101/login/login")
+                    .url("https://orientalsalad.kro.kr/api/user/login/login")
                     .post(RequestBody.create(MediaType.parse("application/json"), requestbody.toString()))
                     .build();
 
