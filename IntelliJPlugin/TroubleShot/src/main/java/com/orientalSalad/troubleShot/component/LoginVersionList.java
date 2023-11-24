@@ -130,7 +130,8 @@ public class LoginVersionList {
         System.out.println("[troubleshooting 삭제 요청]");
 
         OkHttpClient client = new OkHttpClient();
-        HttpUrl.Builder urlBuilder = HttpUrl.parse("http://orientalsalad.kro.kr:8102/trouble-shootings/" + trouble.getSeq()).newBuilder();
+//        HttpUrl.Builder urlBuilder = HttpUrl.parse("http://orientalsalad.kro.kr:8102/trouble-shootings/" + trouble.getSeq()).newBuilder();
+        HttpUrl.Builder urlBuilder = HttpUrl.parse("https://orientalsalad.kro.kr/api/troubleshooting/trouble-shootings/" + trouble.getSeq()).newBuilder();
         urlBuilder.addQueryParameter("loginSeq", String.valueOf(loginManager.getLoginUserSeq()));
         urlBuilder.addQueryParameter("type", String.valueOf(1));
         String urlWithParameters = urlBuilder.build().toString();
@@ -159,7 +160,8 @@ public class LoginVersionList {
         Long userSeq = loginManager.getLoginUserSeq();
         List<TroubleShootingDTO> troubleShootingDTOList = null;
 
-        HttpUrl.Builder urlBuilder = HttpUrl.parse("http://orientalsalad.kro.kr:8102/trouble-shootings").newBuilder();
+//        HttpUrl.Builder urlBuilder = HttpUrl.parse("http://orientalsalad.kro.kr:8102/trouble-shootings").newBuilder();\
+        HttpUrl.Builder urlBuilder = HttpUrl.parse("https://orientalsalad.kro.kr/api/troubleshooting/trouble-shootings").newBuilder();
         urlBuilder.addQueryParameter("writerSeq", String.valueOf(userSeq));
         urlBuilder.addQueryParameter("pageSize", String.valueOf(100));
         String urlWithParameters = urlBuilder.build().toString();

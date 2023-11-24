@@ -195,7 +195,15 @@ public class TroubleAutomation {
             TechStackAutomation techStackAutomation = new TechStackAutomation();
             writer.write(techStackAutomation.extractTechStack());
 
+            writer.flush();
             writer.close();
+
+            // debug : 파일 내용 변경 확인용
+            BufferedReader br = new BufferedReader(new FileReader(filePath));
+            String line;
+            while ((line = br.readLine()) != null) {
+                debugging(line);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -223,7 +231,6 @@ public class TroubleAutomation {
                 if (errorLine) {
                     sb.append(line).append("\n");
                 }
-
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -266,6 +273,7 @@ public class TroubleAutomation {
                         "        </rollingPolicy>\n" +
                         "        <encoder>\n" +
                         "            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>\n" +
+//                        "               <immediateFlush>true</immediateFlush>\n" +
                         "        </encoder>\n" +
                         "    </appender>\n" +
                         "\n" +
