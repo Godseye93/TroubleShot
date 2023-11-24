@@ -8,7 +8,7 @@ interface Props {
 }
 
 const getCalendar = (userSeq: number) => {
-  const url = `http://orientalsalad.kro.kr:8101/members/${userSeq}/trouble-shootings/history?userSeq=${userSeq}&day=100`;
+  const url = `https://orientalsalad.kro.kr/api/user/members/${userSeq}/trouble-shootings/history?userSeq=${userSeq}&day=100`;
   return axios.get(url);
 };
 

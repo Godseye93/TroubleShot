@@ -40,7 +40,7 @@ export default function CommentMenu({
           await deleteAnswerComment(userSeq, troubleSeq, answerSeq, commentSeq);
           toast.success("삭제되었습니다");
         }
-        queryClient.invalidateQueries({ queryKey: ["detail"], exact: true });
+        queryClient.invalidateQueries({ queryKey: ["detail", troubleSeq], exact: true });
       } catch (err) {
         console.log(err);
       }

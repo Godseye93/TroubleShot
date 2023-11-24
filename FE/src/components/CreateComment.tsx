@@ -45,7 +45,7 @@ export default function CreateComment({
     if (!answerSeq) {
       try {
         await postComment(user!.member.seq, troubleSeq, comment);
-        queryClient.invalidateQueries({ queryKey: ["detail"], exact: true });
+        queryClient.invalidateQueries({ queryKey: ["detail", troubleSeq], exact: true });
         toast.success("댓글이 등록되었습니다.");
         setShowCreate(false);
         setComment("");
@@ -57,7 +57,7 @@ export default function CreateComment({
     } else if (answerSeq) {
       try {
         await postAnswerComment(user.member.seq, troubleSeq, answerSeq, comment);
-        queryClient.invalidateQueries({ queryKey: ["detail"], exact: true });
+        queryClient.invalidateQueries({ queryKey: ["detail", troubleSeq], exact: true });
         toast.success("댓글이 등록되었습니다.");
 
         setShowCreateAnswer!(false);

@@ -76,6 +76,9 @@ export default function useInfiniteList({ options, queryKey, category, userSeq }
         fetching = true;
         if (hasNextPage) {
           await fetchNextPage();
+          const footer = document.getElementById("footer");
+          const sidebar = document.getElementById("sidebar");
+          if (footer && sidebar) sidebar.classList.remove("on");
         }
         fetching = false;
       }

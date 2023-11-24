@@ -8,7 +8,7 @@ interface Props {
 }
 
 const getAllTag = (userSeq: number) => {
-  const url = `http://orientalsalad.kro.kr:8101/members/${userSeq}/tags/most-used-history?userSeq=${userSeq}`;
+  const url = `https://orientalsalad.kro.kr/api/user/members/${userSeq}/tags/most-used-history?userSeq=${userSeq}`;
   return axios.get(url);
 };
 

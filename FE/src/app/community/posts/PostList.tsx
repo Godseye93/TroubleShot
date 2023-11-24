@@ -8,6 +8,7 @@ import useInfiniteList from "@/hooks/useInfiniteList";
 import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import boxloading from "../../../../public/boxloading.gif";
+import { divider } from "@uiw/react-md-editor";
 export default function PostList() {
   const searchParams = useSearchParams();
   const keyword = searchParams.get("keyword");
@@ -22,7 +23,7 @@ export default function PostList() {
   const order = Number(searchParams.get("order"));
   const [options, setOptions] = useState<SearchParams>({
     ...(keyword && { keyword }),
-    ...(writer && { keyword: writer }),
+    ...(writer && { writer }),
     ...(solved !== null && { solved: solved === "true" ? true : false }),
     ...(tags && { tags }),
     ...(startTime && { startTime }),
@@ -40,6 +41,7 @@ export default function PostList() {
         queryKey="boards"
         setPropsOptions={setOptions}
       />
+
       <div className="bg-white rounded-lg shadow-md mt-2 flex-col items-center">
         {data &&
           data.pages.map((page, i) => (
@@ -62,6 +64,12 @@ export default function PostList() {
           </div>
         )}
       </div>
+
+      {data && data.pages[0].totalCount === 0 && (
+        <div className="flex justify-center items-center w-full mt-20 text-2xl font-semibold">
+          ❌ 검색 결과가 없습니다
+        </div>
+      )}
     </>
   );
 }

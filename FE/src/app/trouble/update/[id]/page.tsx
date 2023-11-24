@@ -19,7 +19,7 @@ export default function Page({ params }: { params: { id: string } }) {
   });
   const queryClient = useQueryClient();
   const { data: getData } = useQuery({
-    queryKey: ["detail"],
+    queryKey: ["detail", Number(params.id)],
     queryFn: async () => {
       const data = await getTroubleDetail(user ? user.member.seq : null, Number(params.id));
       return data;
