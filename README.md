@@ -171,6 +171,9 @@
 #### 글 작성
 ![createTrouble](./글작성-3.gif)
 
+#### 마이 페이지
+![마이페이지](./mypage.png)
+
 #### 트러블 슈팅 문서 분석 및 통계
 
 ![통계](https://github.com/Jeongseulho/sh-snippets/assets/110578739/a27c0c01-b1a2-4fa7-b031-e799beb02437)
