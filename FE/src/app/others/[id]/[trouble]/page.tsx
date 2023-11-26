@@ -1,3 +1,4 @@
+"use client";
 import Detail from "@/components/Detail/Detail";
 type PageParams = {
   trouble: string;

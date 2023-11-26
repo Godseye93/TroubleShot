@@ -36,6 +36,7 @@ export default function Header() {
       console.log("Error:", err);
     }
   };
+
   const onCloseTab = async () => {
     router.push("/");
     await new Promise((resolve) => setTimeout(resolve, 0)); // 비동기 작업을 기다림

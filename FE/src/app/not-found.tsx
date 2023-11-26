@@ -1,3 +1,4 @@
+"use client";
 import Link from "next/link";
 import img404 from "../../public/404Img.png";
 import Image from "next/image";

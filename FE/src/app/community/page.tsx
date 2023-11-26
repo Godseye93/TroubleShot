@@ -1,3 +1,4 @@
+"use client";
 import CommunityContents from "./CommunityContents";
 
 export default function Page() {

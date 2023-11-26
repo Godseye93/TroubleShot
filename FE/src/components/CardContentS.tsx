@@ -1,3 +1,4 @@
+"use client";
 import Link from "next/link";
 import IconBox from "./IconBox";
 import { GetTroubleList } from "@/types/TroubleType";

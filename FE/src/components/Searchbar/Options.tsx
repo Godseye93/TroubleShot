@@ -1,3 +1,4 @@
+"use client";
 import { SetStateAction, useEffect, useState } from "react";
 import Duration from "./Duration";
 import InputTag from "./InputTag";

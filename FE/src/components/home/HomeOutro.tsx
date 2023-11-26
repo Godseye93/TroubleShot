@@ -1,3 +1,4 @@
+"use client";
 export default function HomeOutro() {
   return (
     <div id="homeOutro" className="flex flex-col items-center">

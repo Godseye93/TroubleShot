@@ -1,3 +1,4 @@
+"use client";
 import { useUserTabStore } from "@/stores/useUserTabStore";
 import { Member } from "@/types/TroubleType";
 import { checkWriterImg } from "@/utils/nullWriter";

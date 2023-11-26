@@ -1,3 +1,4 @@
+"use client";
 import HydratedUserList from "./HydratedUserList";
 
 export default function Page() {

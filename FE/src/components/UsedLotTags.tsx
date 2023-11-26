@@ -1,3 +1,4 @@
+"use client";
 import { getUsedLotTags } from "@/api/account";
 import { useState, useEffect } from "react";
 

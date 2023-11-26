@@ -1,3 +1,4 @@
+"use client";
 import { AiFillTag } from "react-icons/ai";
 
 export default function Tagbox({ tags }: { tags: string[] }) {

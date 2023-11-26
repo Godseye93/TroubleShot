@@ -1,3 +1,4 @@
+"use client";
 import ScrollTop from "@/components/ScrollTop";
 // import UseCommunitySidebar from "./UseCommunitySidebar";
 import RsidebarSkeleton from "@/components/Skeletons/RsidebarSkeleton";

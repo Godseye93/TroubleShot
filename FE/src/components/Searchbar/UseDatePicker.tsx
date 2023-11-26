@@ -1,3 +1,4 @@
+"use client";
 import { forwardRef } from "react";
 import { getYear, getMonth } from "date-fns";
 import DatePicker from "react-datepicker";

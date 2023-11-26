@@ -1,3 +1,4 @@
+"use client";
 import { getBarChartInfo } from "@/api/account";
 import { PieGraphInfo } from "@/types/CommonType";
 import { ResponsivePie } from "@nivo/pie";
