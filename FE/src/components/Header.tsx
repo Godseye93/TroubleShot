@@ -107,8 +107,24 @@ export default function Header() {
               로그인
             </button>
           </Link>
-        )}
-      </div>
-    )
+          <div
+            onClick={() => {
+              logout();
+            }}
+            className=""
+          >
+            <button className="bg-main hover:bg-yellow-700 duration-300 line-clamp-1  text-white font-bold w-20 p-1 rounded me-2">
+              로그아웃
+            </button>
+          </div>
+        </div>
+      ) : (
+        <Link href="/login" className="w-2/12 h-2/12 flex items-center justify-end">
+          <button className="bg-main hover:bg-yellow-700 duration-300 line-clamp-1  text-white font-bold w-20 p-1 rounded fcc me-2">
+            로그인
+          </button>
+        </Link>
+      )}
+    </div>
   );
 }
