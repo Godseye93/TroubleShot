@@ -137,7 +137,8 @@ public class WriteTrouble {
 
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
-                .url("http://orientalsalad.kro.kr:8102/trouble-shootings")
+                .url("https://orientalsalad.kro.kr/api/troubleshooting/trouble-shootings")
+//                .url("http://orientalsalad.kro.kr:8102/trouble-shootings")
                 .post(RequestBody.create(MediaType.parse("application/json"), requestTroubleShooting.toString()))
                 .build();
 
@@ -193,13 +194,23 @@ public class WriteTrouble {
     }
 
     public void setAutomaticTrouble(String title, String[] troubleInfo) {
-        String errorLog = troubleInfo[0];
-        String errorCode = troubleInfo[1];
-        String techStack = troubleInfo[2];
         titleInput.setText(title);
-        consoleLogInput.setText(errorLog);
-        troubleCodeInput.setText(errorCode);
-        techStackInput.setText(techStack);
+
+        if (troubleInfo.length >= 1) {
+            String errorLog = troubleInfo[0];
+            consoleLogInput.setText(errorLog);
+        }
+
+        if (troubleInfo.length >= 2) {
+            String errorCode = troubleInfo[1];
+            troubleCodeInput.setText(errorCode);
+        }
+
+        if (troubleInfo.length >= 3) {
+            String techStack = troubleInfo[2];
+            techStackInput.setText(techStack);
+        }
+
     }
 
 }

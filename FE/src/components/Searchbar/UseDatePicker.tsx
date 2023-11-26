@@ -1,6 +1,7 @@
+"use client";
 import { forwardRef } from "react";
 import { getYear, getMonth } from "date-fns";
-import DatePicker, { ReactDatePicker, ReactDatePickerProps } from "react-datepicker";
+import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { AiFillCaretLeft, AiFillCaretRight } from "react-icons/ai";
 import { ko } from "date-fns/locale";
@@ -8,9 +9,11 @@ import { ko } from "date-fns/locale";
 export default function UseDatePicker({
   date,
   setDate,
+  disable,
 }: {
   date: Date;
   setDate: React.Dispatch<React.SetStateAction<Date>>;
+  disable: boolean;
 }) {
   const years = Array.from({ length: getYear(new Date()) + 1 - 1900 }, (_, i) => getYear(new Date()) - i);
   const months = ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"];
@@ -21,12 +24,16 @@ export default function UseDatePicker({
       </div>
     )
   );
+  CustomInput.displayName = "CustomInput";
   return (
     <DatePicker
+      disabled={disable}
       maxDate={new Date()}
       dateFormat="yyyy년 MM월 dd일"
       selected={date}
-      onChange={(date) => setDate(date!)}
+      onChange={(date) => {
+        setDate(date!);
+      }}
       customInput={<CustomInput />}
       locale={ko}
       renderCustomHeader={({

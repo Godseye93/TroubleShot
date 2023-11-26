@@ -1,13 +1,17 @@
-import { useState } from "react";
+"use client";
+import { SetStateAction, useEffect, useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import { BsFillCalendarFill } from "react-icons/bs";
 import UseDatePicker from "./UseDatePicker";
-export default function Duration() {
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
-
-  const [isSelected, setIsSelected] = useState(false);
-
+interface Props {
+  startDate: Date;
+  endDate: Date;
+  isSelected: boolean;
+  setStartDate: React.Dispatch<SetStateAction<Date>>;
+  setEndDate: React.Dispatch<SetStateAction<Date>>;
+  setIsSelected: React.Dispatch<SetStateAction<boolean>>;
+}
+export default function Duration({ startDate, endDate, isSelected, setStartDate, setEndDate, setIsSelected }: Props) {
   return (
     <div className="flex border-b-2 pb-5">
       <div className="w-20 font-semibold">기간별</div>
@@ -25,16 +29,28 @@ export default function Duration() {
           >
             기간
           </button>
-          <div className="flex border-2 pe-2  rounded-lg text-sm items-center ms-1">
+          <div
+            className={`flex border border-black pe-2 border-opacity-50  rounded-lg text-sm items-center ms-1 ${
+              !isSelected && "bg-slate-200"
+            }`}
+          >
             <div className="ms-2">
               <BsFillCalendarFill />
             </div>
-            <div className="hover:bg-softestmain hover:cursor-pointer transition-colors duration-300 rounded-md py-1 px-2">
-              <UseDatePicker date={startDate} setDate={setStartDate} />
+            <div
+              className={`${
+                isSelected && "hover:bg-softestmain hover:cursor-pointer"
+              } transition-colors duration-300 rounded-md py-1 px-2`}
+            >
+              <UseDatePicker date={startDate} setDate={setStartDate} disable={!isSelected} />
             </div>
             <p className="mx-1"> ~ </p>
-            <div className="hover:bg-softestmain hover:cursor-pointer transition-colors duration-300 rounded-md py-1 px-2">
-              <UseDatePicker date={endDate} setDate={setEndDate} />
+            <div
+              className={`${
+                isSelected && "hover:bg-softestmain hover:cursor-pointer"
+              }  transition-colors duration-300 rounded-md py-1 px-2`}
+            >
+              <UseDatePicker date={endDate} setDate={setEndDate} disable={!isSelected} />
             </div>
           </div>
         </div>

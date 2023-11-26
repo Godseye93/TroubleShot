@@ -19,8 +19,13 @@
 <img src="https://img.shields.io/badge/reactquery-FF4154?styleflat&logo=reactquery&logoColor=white">
 <img src="https://img.shields.io/badge/tailwindcss-06B6D4?styleflat&logo=tailwindcss&logoColor=white">
 
-<img src="https://img.shields.io/badge/springboot-6DB33F?styleflat&logo=springboot&logoColor=white">
-<img src="https://img.shields.io/badge/springsecurity-6DB33F?styleflat&logo=springsecurity&logoColor=white">
+<img src="https://img.shields.io/badge/Springboot-6DB33F?styleflat&logo=springboot&logoColor=white">
+<img src="https://img.shields.io/badge/Redis-DC382D?styleflat&logo=redis&logoColor=white">
+<img src="https://img.shields.io/badge/Postgresql-4169E1?styleflat&logo=postgresql&logoColor=white">
+<img src="https://img.shields.io/badge/Jmeter-D22128?styleflat&logo=apachejmeter&logoColor=white">
+<img src="https://img.shields.io/badge/RabbitMQ-FF6600?styleflat&logo=rabbitmq&logoColor=white">
+<img src="https://img.shields.io/badge/kubernetes-326CE5?styleflat&logo=kubernetes&logoColor=white">
+
 
 ### 📌협업 및 배포 툴
 
@@ -118,7 +123,10 @@
 
 ## 💻주요 화면 스크린샷, gif
 
-![Animation](https://github.com/Jeongseulho/sh-snippets/assets/110578739/cd9bb990-79cf-4e23-93f6-2d77bd947ae6) !
+![Animation](https://github.com/Jeongseulho/sh-snippets/assets/110578739/cd9bb990-79cf-4e23-93f6-2d77bd947ae6) 
+
+### 로그인 화면
+![로그인페이지](./login.gif)
 
 ### VSCode 확장
 
@@ -145,6 +153,9 @@
 ![AI솔룻션](https://github.com/Jeongseulho/sh-snippets/assets/110578739/b2e10156-f617-4129-929c-97c7878a12ef)
 
 #### 에러 자동 검출
+![에러자동화!](https://github.com/Jeongseulho/sh-snippets/assets/110578739/d71395e5-0651-4f0f-9a8f-31bd68813390)
+
+#### 트러블슈팅 작성 자동화
 
 ![에러 자동화](https://github.com/Jeongseulho/sh-snippets/assets/110578739/61d797f1-0083-45b8-81ec-c06e8e4d2f90)
 
@@ -156,11 +167,13 @@
 
 #### AI 솔루션 추천
 
-![ailoading](https://github.com/Jeongseulho/sh-snippets/assets/110578739/82c4d5d1-f888-4eea-919f-434eb2c47c98)
+![Ai답변](https://github.com/KwonJongryul/inbest/assets/122791001/8ff44fab-3b13-4821-92df-1c7a86dc2956)
 
 #### 글 작성
+![createTrouble](./글작성-3.gif)
 
-![createTrouble](https://github.com/Jeongseulho/sh-snippets/assets/110578739/ce9aaa9f-427e-4816-88e4-b3b6eae6b661)
+#### 마이 페이지
+![마이페이지](./mypage.png)
 
 #### 트러블 슈팅 문서 분석 및 통계
 
@@ -168,8 +181,16 @@
 
 #### 트러블 슈팅 문서 공유 커뮤니티
 
-![커뮤니티](https://github.com/Jeongseulho/sh-snippets/assets/110578739/0024ebfa-cbae-4108-b662-83fd9055bc10)
+![트러블 목록 페이지](https://github.com/KwonJongryul/inbest/assets/122791001/cdf139d0-c376-469c-834d-5cecdc4fd2ae)
 
 #### 트러블 슈팅 문서 상세 페이지
 
-![detailTrouble](https://github.com/Jeongseulho/sh-snippets/assets/110578739/a92cad61-c183-4ed4-8bef-11701318af17)
+![디테일 페이지](https://github.com/KwonJongryul/inbest/assets/122791001/ff21e366-6c98-447b-a17a-ecfadb2ecb43)
+
+### 게시글 검색
+
+![검색](https://github.com/KwonJongryul/inbest/assets/122791001/72894e08-345a-4c7d-bda0-ff5269f54c74)
+
+### 유저 검색
+
+![유저검색](https://github.com/KwonJongryul/inbest/assets/122791001/f6c80a09-d9b9-4a80-bbef-74d244a85e58)

@@ -48,7 +48,6 @@ public class MainPanel {
         detailPanel.add(errorHistory.getPanel(), "Error History");
 
         loginManager = ServiceManager.getService(LoginManager.class);
-        loginManager.setLoginUserSeq(null);
         System.out.println("loginManager : " + loginManager.getLoginUserSeq());
 
         // 비로그인
@@ -107,7 +106,8 @@ public class MainPanel {
 
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
-                .url("http://orientalsalad.kro.kr:8101/login/logout")
+//                .url("http://orientalsalad.kro.kr:8101/login/logout")
+                .url("https://orientalsalad.kro.kr/api/user/login/logout")
                 .post(RequestBody.create(MediaType.parse("application/json"), requestLogout.toString()))
                 .build();
 
@@ -201,7 +201,8 @@ public class MainPanel {
                 .readTimeout(30, TimeUnit.SECONDS)
                 .build();
         Request request = new Request.Builder()
-                .url("http://orientalsalad.kro.kr:8102/gpt/error-feedback")
+//                .url("http://orientalsalad.kro.kr:8102/gpt/error-feedback")
+                .url("https://orientalsalad.kro.kr/api/troubleshooting/gpt/error-feedback")
                 .post(RequestBody.create(MediaType.parse("application/json"), requestFeedback.toString()))
                 .build();
 
@@ -238,7 +239,8 @@ public class MainPanel {
                 .readTimeout(30, TimeUnit.SECONDS)
                 .build();
         Request request = new Request.Builder()
-                .url("http://orientalsalad.kro.kr:8102/gpt/readme-feedback")
+//                .url("http://orientalsalad.kro.kr:8102/gpt/readme-feedback")
+                .url("https://orientalsalad.kro.kr/api/troubleshooting/gpt/readme-feedback")
                 .post(RequestBody.create(MediaType.parse("application/json"), requestFeedback.toString()))
                 .build();
 

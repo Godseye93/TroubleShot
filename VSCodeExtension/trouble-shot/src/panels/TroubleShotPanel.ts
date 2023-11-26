@@ -1,3 +1,4 @@
+import { isOffLineTrouble } from "./../utilities/isOnline";
 import { Disposable, Webview, WebviewPanel, window, Uri, ViewColumn } from "vscode";
 import { getUri } from "../utilities/getUri";
 import { getNonce } from "../utilities/getNonce";
@@ -5,8 +6,12 @@ import * as vscode from "vscode";
 import { NodeDependenciesProvider } from "../TreeDataProvider/NodeDependenciesProvider";
 import { Trouble } from "../TreeDataProvider/MyTroubleListProvider";
 import { v4 as uuidv4 } from "uuid";
+import { TROUBLE_SHOOTING_TYPE } from "../extension";
+import { Err } from "../TreeDataProvider/ErrHistoryProvider";
+import { getCode } from "../utilities/getCode";
+import { MyTroubleListProviderLogin } from "../TreeDataProvider/MyTroubleListProviderLogin";
 
-type TroubleShootingType = 0 | 1;
+type TroubleShootingType = typeof TROUBLE_SHOOTING_TYPE[keyof typeof TROUBLE_SHOOTING_TYPE];
 
 /**
  * This class manages the state and behavior of HelloWorld webview panels.
@@ -22,9 +27,10 @@ export class TroubleShotPanel {
   public static currentPanel: TroubleShotPanel | undefined;
   private readonly _panel: WebviewPanel;
   private _disposables: Disposable[] = [];
-  private readonly _isLogin: boolean;
   private readonly _troubleShootingType: TroubleShootingType;
   private readonly _globalState: vscode.Memento;
+  private readonly _troubleId?: string;
+  private readonly _errorId?: string;
 
   /**
    * The HelloWorldPanel class private constructor (called only from the render method).
@@ -35,9 +41,10 @@ export class TroubleShotPanel {
   private constructor(
     panel: WebviewPanel,
     extensionUri: Uri,
-    isLogin: boolean,
     troubleShootingType: TroubleShootingType,
-    globalState: vscode.Memento
+    globalState: vscode.Memento,
+    troubleId?: string,
+    errorId?: string
   ) {
     this._panel = panel;
 
@@ -51,12 +58,13 @@ export class TroubleShotPanel {
     // Set an event listener to listen for messages passed from the webview context
     this._setWebviewMessageListener(this._panel.webview);
 
-    // Set the isLogin property
-    this._isLogin = isLogin;
-
     this._troubleShootingType = troubleShootingType;
 
     this._globalState = globalState;
+
+    this._troubleId = troubleId;
+
+    this._errorId = errorId;
   }
 
   /**
@@ -67,9 +75,10 @@ export class TroubleShotPanel {
    */
   public static render(
     extensionUri: Uri,
-    isLogin: boolean,
     troubleShootingType: TroubleShootingType,
-    globalState: vscode.Memento
+    globalState: vscode.Memento,
+    troubleId?: string,
+    errorId?: string
   ) {
     if (TroubleShotPanel.currentPanel) {
       // If the webview panel already exists reveal it
@@ -98,9 +107,10 @@ export class TroubleShotPanel {
       TroubleShotPanel.currentPanel = new TroubleShotPanel(
         panel,
         extensionUri,
-        isLogin,
         troubleShootingType,
-        globalState
+        globalState,
+        troubleId,
+        errorId
       );
     }
   }
@@ -149,7 +159,9 @@ export class TroubleShotPanel {
         <head>
           <meta charset="UTF-8" />
           <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-          <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource}; script-src 'nonce-${nonce}';">
+          <meta http-equiv="Content-Security-Policy" content="default-src 'none';
+          style-src 'self' ${webview.cspSource} 'nonce-${nonce}'; 
+          script-src 'nonce-${nonce}';">
           <link rel="stylesheet" type="text/css" href="${stylesUri}">
           <title>Trouble Shot</title>
         </head>
@@ -174,45 +186,260 @@ export class TroubleShotPanel {
         const command = message.command;
 
         switch (command) {
-          case "getStatus":
-            // Code that should run in response to the hello message command
-            webview.postMessage({
-              command: "getStatus",
-              isLogin: this._isLogin,
-              troubleShootingType: this._troubleShootingType,
-              defaultSkills: NodeDependenciesProvider.allDependencies,
-            });
+          case "getInitialStatus":
+            if (this._troubleShootingType === TROUBLE_SHOOTING_TYPE.TROUBLE) {
+              webview.postMessage({
+                command: "getInitialStatus",
+                troubleShootingType: this._troubleShootingType,
+                sessionId: this._globalState.get<string>("sessionId"),
+                defaultSkills: JSON.stringify(NodeDependenciesProvider.allDependencies),
+              });
+            }
+
+            if (this._troubleShootingType === TROUBLE_SHOOTING_TYPE.SOLUTION) {
+              webview.postMessage({
+                command: "getInitialStatus",
+                troubleShootingType: this._troubleShootingType,
+                sessionId: this._globalState.get<string>("sessionId"),
+                troubleId: this._troubleId,
+              });
+            }
+
+            if (this._troubleShootingType === TROUBLE_SHOOTING_TYPE.LOGIN_FORM) {
+              webview.postMessage({
+                command: "getInitialStatus",
+                troubleShootingType: this._troubleShootingType,
+              });
+            }
+
+            if (this._troubleShootingType === TROUBLE_SHOOTING_TYPE.TROUBLE_WITH_ERROR) {
+              const allErrors = this._globalState.get<Err[]>("errHistory");
+              const error = allErrors?.find((error) => error.id === this._errorId);
+              webview.postMessage({
+                command: "getInitialStatus",
+                troubleShootingType: this._troubleShootingType,
+                sessionId: this._globalState.get<string>("sessionId"),
+                defaultSkills: JSON.stringify(NodeDependenciesProvider.allDependencies),
+                defaultErrorMsg: error?.errMsg.replace(/\n/g, " "),
+                defaultCode: await getCode(error?.errMsg),
+              });
+            }
+
             return;
-          case "inValidTitle":
-            vscode.window.showErrorMessage("Title length should be between 2 and 25 characters!");
-            return;
-          case "successCopyMarkdown":
-            vscode.window.showInformationMessage("Copied to clipboard!");
-            return;
-          case "failCopyMarkdown":
-            vscode.window.showErrorMessage("Failed to copy to clipboard!");
+          case "showMessage":
+            if (message.type === "error") {
+              vscode.window.showErrorMessage(message.content);
+            }
+            if (message.type === "info") {
+              vscode.window.showInformationMessage(message.content);
+            }
             return;
           case "addTrouble":
             try {
               const newTrouble = new Trouble(
                 message.articleInfo.title,
                 message.articleInfo.createTime,
-                message.articleInfo.isSolved,
-                "my",
                 message.articleInfo.content,
-                uuidv4()
+                uuidv4(),
+                "unSolved"
               );
               const prevTroubleList = this._globalState.get<Trouble[]>("troubleList");
               await this._globalState.update(
                 "troubleList",
                 prevTroubleList ? [...prevTroubleList, newTrouble] : [newTrouble]
               );
-              vscode.commands.executeCommand("refresh.trouble");
+              vscode.commands.executeCommand("refresh.trouble.list.without.login");
               vscode.window.showInformationMessage("Added to trouble list!");
+              this.dispose();
             } catch (error) {
               vscode.window.showErrorMessage("Failed to add to trouble list!");
             }
             return;
+          case "solveTrouble":
+            if (isOffLineTrouble(message.articleInfo.troubleId)) {
+              try {
+                const prevTroubleList = this._globalState.get<Trouble[]>("troubleList");
+                const newTroubleList = prevTroubleList?.map((trouble) => {
+                  if (trouble.id === message.articleInfo.troubleId) {
+                    trouble.content += "\n\n";
+                    trouble.content += message.articleInfo.content;
+                    trouble.contextValue = "solved";
+                  }
+                  return trouble;
+                });
+                await this._globalState.update("troubleList", newTroubleList);
+                vscode.commands.executeCommand("refresh.trouble.list.without.login");
+                vscode.window.showInformationMessage("Trouble solved!");
+                this.dispose();
+              } catch (error) {
+                vscode.window.showErrorMessage("Failed to solve!");
+              }
+            } else {
+              const sessionId = this._globalState.get<string>("sessionId");
+              const res = await fetch(
+                `https://orientalsalad.kro.kr/api/troubleshooting/trouble-shootings/${message.articleInfo.troubleId}/answers`,
+                {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({
+                    loginSeq: sessionId,
+                    type: 2,
+                    troubleShootingAnswer: {
+                      title: message.articleInfo.title,
+                      context: message.articleInfo.content,
+                      writer: {
+                        seq: sessionId,
+                      },
+                      troubleSeq: message.articleInfo.troubleId,
+                      selected: true,
+                    },
+                  }),
+                }
+              );
+              const resJson = await res.json();
+              if (resJson.success) {
+                vscode.commands.executeCommand("refresh.trouble.list");
+                vscode.window.showInformationMessage("Trouble solved!");
+                this.dispose();
+              } else {
+                vscode.window.showErrorMessage("Failed to solve!");
+              }
+            }
+            return;
+          case "onLogin":
+            fetch("https://orientalsalad.kro.kr/api/user/login/login", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(message.body),
+            })
+              .then((res) => {
+                if (!res.ok) {
+                  throw new Error("Network response was not ok");
+                }
+                return res.json();
+              })
+              .then((data) => {
+                if (data.success) {
+                  this._globalState.update("sessionId", data.member.seq);
+                  vscode.commands.executeCommand("setContext", "isLogin", true);
+                  vscode.window.showInformationMessage("Login success!");
+                  vscode.commands.executeCommand("refresh.trouble.list");
+                  this.dispose();
+                } else {
+                  vscode.window.showErrorMessage("Invalid Email or Password!");
+                }
+              })
+              .catch((error) => {
+                console.error("Error:", error);
+              });
+            return;
+          case "uploadTrouble":
+            const body = {
+              loginSeq: this._globalState.get<string>("sessionId"),
+              type: 2,
+              troubleShooting: {
+                title: message.articleInfo.title,
+                category: "VSCode",
+                context: message.articleInfo.content,
+                dependency: message.articleInfo.dependency,
+                scope:
+                  message.articleInfo.scope === "1"
+                    ? this._globalState.get<string>("sessionId")
+                    : 0,
+                writer: {
+                  seq: this._globalState.get<string>("sessionId"),
+                },
+                solved: false,
+                tags: [],
+              },
+            };
+            fetch("https://orientalsalad.kro.kr/api/troubleshooting/trouble-shootings", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(body),
+            })
+              .then((res) => {
+                if (!res.ok) {
+                  throw new Error("Network response was not ok");
+                }
+                return res.json();
+              })
+              .then((data) => {
+                if (data.success) {
+                  vscode.window.showInformationMessage("Trouble uploaded!");
+                  vscode.commands.executeCommand("refresh.trouble.list");
+                  this.dispose();
+                } else {
+                  vscode.window.showErrorMessage("Failed to upload!");
+                }
+              })
+              .catch((error) => {
+                console.error("Error:", error);
+              });
+            return;
+          case "getSolution":
+            if (isOffLineTrouble(message.troubleId)) {
+              // const troubleList = this._globalState.get<Trouble[]>("troubleList");
+              // const trouble = troubleList?.find((trouble) => trouble.id === message.troubleId);
+              // if (!trouble) return;
+              // const res = await fetch("https://orientalsalad.kro.kr:8102/gpt/error-feedback", {
+              //   method: "POST",
+              //   headers: {
+              //     "Content-Type": "application/json",
+              //   },
+              //   body: JSON.stringify({
+              //     context: trouble.content,
+              //     loginSeq: this._globalState.get<string>("sessionId"),
+              //     type: 2,
+              //   }),
+              // });
+              // const resJson = await res.json();
+              // if (resJson.success) {
+              //   webview.postMessage({
+              //     command: "setSolution",
+              //     solution: resJson.context,
+              //   });
+              //   return;
+              // }
+              // vscode.window.showErrorMessage("Failed to get solution!");
+              webview.postMessage({
+                command: "setSolution",
+                solution: "AI service need to be logged in!",
+              });
+              vscode.window.showErrorMessage("AI service need to be logged in!");
+            } else {
+              const context = MyTroubleListProviderLogin.getTroubleContent(message.troubleId);
+              if (!context) return;
+              const res = await fetch(
+                "https://orientalsalad.kro.kr/api/troubleshooting/gpt/error-feedback",
+                {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({
+                    context,
+                    loginSeq: this._globalState.get<string>("sessionId"),
+                    type: 2,
+                  }),
+                }
+              );
+              const resJson = await res.json();
+              if (resJson.success) {
+                webview.postMessage({
+                  command: "setSolution",
+                  solution: resJson.context,
+                });
+                return;
+              }
+              vscode.window.showErrorMessage("Failed to get solution!");
+            }
           // Add more switch case statements here as more webview message commands
           // are created within the webview context (i.e. inside media/main.js)
         }

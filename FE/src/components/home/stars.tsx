@@ -1,3 +1,4 @@
+"use client";
 import { useState, useEffect } from "react";
 import styles from "../../styles/Home.module.css";
 
@@ -11,7 +12,7 @@ export default function Stars() {
   const [stars, setStars] = useState<Star[]>([]);
 
   useEffect(() => {
-    const newStars = Array.from({ length: 50 }).map(() => ({
+    const newStars = Array.from({ length: 20 }).map(() => ({
       top: `${Math.random() * 100}%`,
       left: `${Math.random() * 100}%`,
       animationDelay: `${Math.random() * 10}s`,

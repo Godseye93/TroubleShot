@@ -91,7 +91,8 @@ public class WriteSolution {
         requestSolution.put("selected", true);
 
         OkHttpClient client = new OkHttpClient();
-        HttpUrl.Builder urlBuilder = HttpUrl.parse("http://orientalsalad.kro.kr:8102/trouble-shootings/" + trouble.getSeq() +"/answers").newBuilder();
+//        HttpUrl.Builder urlBuilder = HttpUrl.parse("http://orientalsalad.kro.kr:8102/trouble-shootings/" + trouble.getSeq() +"/answers").newBuilder();
+        HttpUrl.Builder urlBuilder = HttpUrl.parse("https://orientalsalad.kro.kr/api/troubleshooting/trouble-shootings/" + trouble.getSeq() +"/answers").newBuilder();
         urlBuilder.addQueryParameter("troubleSeq", String.valueOf(trouble.getSeq()));
         String urlWithParameters = urlBuilder.build().toString();
         Request request = new Request.Builder()

@@ -20,6 +20,7 @@
     font-weight: 400;
     font-style: normal;
 }
+
 .fcc{
     @apply flex items-center justify-center
 }
@@ -59,7 +60,7 @@ height: 10px;
 /* 스크롤바 전체 기본 꾸미기 */
 ::-webkit-scrollbar {
     width: 10px;  /* 세로축 스크롤바 폭 너비 */
-    height: 20px;  /* 가로축 스크롤바 폭 너비 */
+    height: 10px;  /* 가로축 스크롤바 폭 너비 */
   }
   
   /* 스크롤바 막대 꾸미기 */
@@ -75,7 +76,7 @@ height: 10px;
   }
   
   .menu-btn{
-    @apply flex items-center ps-6 h-10 rounded-full
+    @apply flex items-center ps-6 h-10 rounded-lg
   }
   @keyframes waterfall {
     0% {
@@ -152,3 +153,117 @@ height: 10px;
   .react-datepicker__triangle{
     @apply hidden
   }
+
+  @keyframes waterfall2 {
+    0% {
+        opacity: 0;
+        transform: translateY(-50%) scaleY(0);
+        max-height: 0;
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0%) scaleY(1);
+        max-height: 20rem;
+    }
+  }
+
+  @keyframes waterfall2re {
+    0% {
+        opacity: 1;
+        transform: translateY(0%) scaleY(1);
+        max-height: 20rem;
+      }
+      to {
+        opacity: 0;
+        transform: translateY(-50%) scaleY(0);
+        max-height: 0;
+    }
+  }
+  .waterfall{
+    animation-name: waterfall2;
+    animation-duration: 0.4s;
+    animation-fill-mode: forwards;
+    top: 100%;
+  }
+
+  .waterfall2re{
+    animation-name: waterfall2re;
+    animation-duration: 0.4s;
+    animation-fill-mode: forwards;
+    top: 100%;
+  }
+.code-highlight{
+  max-height: 40rem;
+  width: 100%;
+}
+
+.carousel {
+  overflow: hidden;
+  width: 100%
+}
+
+#carouselIntor:hover {
+  cursor: none
+}
+
+.custom-cursor {
+  width: 5rem;
+  height: 5rem;
+  border: 2px solid var(--color-texta);
+  border-radius: 50%;
+  position: absolute;
+  z-index: 1000;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  transition: all 0.5s ease;
+  transition-property: background, transform;
+  transform-origin: 100% 100%;
+  backdrop-filter: sepia(20%);
+  background-size: cover;
+  background-color: #DF2F5D;
+  opacity: 0.6;
+}
+
+.custom-cursor-left {
+  width: 6rem;
+  height: 6rem;
+  border: 2px solid var(--color-texta);
+  border-radius: 50%;
+  position: absolute;
+  z-index: 1000;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  transition: all 0.3s ease;
+  transition-property: background, transform;
+  transform-origin: 100% 100%;
+  backdrop-filter: sepia(20%);
+  background-size: cover;
+  background-color: #DF2F5D;
+  opacity: 0.6;
+}
+
+.custom-cursor-right {
+  width: 6rem;
+  height: 6rem;
+  border: 2px solid var(--color-texta);
+  border-radius: 50%;
+  position: absolute;
+  z-index: 1000;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  transition: all 0.3s ease;
+  transition-property: background, transform;
+  transform-origin: 100% 100%;
+  backdrop-filter: sepia(20%);
+  background-size: cover;
+  background-color: #DF2F5D;
+  opacity: 0.6;
+}
+
+#sidebar.on{
+  position: absolute;
+  bottom: 203px;
+}
+#sidebar{
+  position: fixed;
+}

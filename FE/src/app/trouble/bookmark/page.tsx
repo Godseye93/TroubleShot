@@ -1,11 +1,10 @@
-import CommonComponent from "@/components/CommonComponent";
-import Sidebar from "@/components/Sidebar";
+"use client";
+import BoardList from "./BoardList";
 
 export default function Page() {
   return (
-    <main>
-      <div>this page is Trouble, id is</div>
-      <CommonComponent />
+    <main className="mt-4 mx-3 flex-1">
+      <BoardList />
     </main>
   );
 }

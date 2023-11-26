@@ -54,8 +54,9 @@ public class TroubleShootingAnswerController {
 		//트러블슈팅 솔루션 등록
 		TroubleShootingAnswerDTO answerDTO = troubleShootingAnswerService.insertTroubleShootingAnswer(requestTroubleShootingAnswerDTO);
 
-		//웹이 아닌경우 자동 채택처리
-		if(!requestTroubleShootingAnswerDTO.getType().equals(Long.valueOf(0L))){
+		//웹이 아닌겨우 자동 채택처리
+		if(!requestTroubleShootingAnswerDTO.getType().equals(0)){
+
 			troubleShootingService.solveTroubleShooting(requestTroubleShootingAnswerDTO.getTroubleShootingAnswer().getTroubleSeq());
 		}
 		
@@ -64,7 +65,6 @@ public class TroubleShootingAnswerController {
 			.message("트러블 슈팅 솔루션 등록이 성공했습니다.")
 			.troubleShootingAnswer(answerDTO)
 			.build();
-
 		log.info("====== 트러블 슈팅 솔루션 등록 끝 =====");
 		return new ResponseEntity<ResultDTO>(resultDTO, HttpStatus.OK);
 	}
