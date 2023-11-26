@@ -1,3 +1,4 @@
+"use client";
 /* eslint-disable */
 import React, { SetStateAction } from "react";
 

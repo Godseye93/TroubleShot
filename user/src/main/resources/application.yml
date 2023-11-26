@@ -1,0 +1,7 @@
+spring:
+  profiles:
+    active: prod
+  application:
+    name: member
+  config:
+    import: configserver:http://43.200.130.229:9090

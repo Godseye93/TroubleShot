@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.orientalSalad.troubleShot.statics.mapper.StaticsMapper">
+    <resultMap id="TroubleShootingHistory"
+               type="com.orientalSalad.troubleShot.statics.dto.TroubleShootingHistoryDTO">
+        <result property="count" column="count"/>
+        <result property="date" column="date"/>
+    </resultMap>
+    <resultMap id="TroubleShootingTypeGroup"
+               type="com.orientalSalad.troubleShot.statics.dto.TroubleShootingTypeGroupDTO">
+        <result property="count" column="count"/>
+        <result property="type" column="type"/>
+    </resultMap>
+    <select id="countAllTroubleByUserSeq"
+            parameterType="long"
+            resultType="Long">
+        select
+            count(*) as solved_count
+        from trouble_shooting ts
+        where writer_seq = #{userSeq}
+        group by writer_seq;
+    </select>
+    <select id="countSolvedTroubleByUserSeq"
+            parameterType="long"
+            resultType="Long">
+        select
+            count(*) as solved_count
+        from trouble_shooting ts
+        where writer_seq = #{userSeq} and ts.solved = true
+        group by writer_seq;
+    </select>
+    <select id="countAllTroubleByUserSeqAndCreateDate"
+            parameterType="com.orientalSalad.troubleShot.statics.dto.RequestTroubleHistoryDTO"
+            resultMap="TroubleShootingHistory">
+        select
+            count(*) as count,
+            date(create_time) as date
+        from
+            trouble_shooting ts
+        where
+            writer_seq = #{searchParam.userSeq}
+          and date(ts.create_time) >= NOW() -(#{searchParam.day} ||  ' DAY')::INTERVAL
+        group by date(ts.create_time)
+        order by date(ts.create_time) asc
+    </select>
+    <select id="countNotSolvedTroubleByUserSeq"
+            parameterType="long"
+            resultType="Long">
+        select
+            count(*) as not_solved_count
+        from
+             trouble_shooting ts
+        where
+              writer_seq = #{userSeq} and ts.solved = false
+        group by writer_seq;
+    </select>
+    <select id="countAllTroubleByPostType"
+            parameterType="long"
+            resultMap="TroubleShootingTypeGroup">
+        select
+            post_type as type,
+            count(post_type) as count
+        from
+            trouble_shooting ts
+        where
+            writer_seq = #{userSeq}
+        group by
+            post_type;
+    </select>
+</mapper>

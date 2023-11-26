@@ -1,3 +1,4 @@
+"use client";
 import { AiFillTag } from "react-icons/ai";
 
 export default function Tagbox({ tags }: { tags: string[] }) {
@@ -7,7 +8,7 @@ export default function Tagbox({ tags }: { tags: string[] }) {
         <AiFillTag />
       </div>
       {tags.map((tag, idx) => (
-        <div key={idx} className="bg-silver rounded-lg text-xs shadow-sm text-center p-1">
+        <div key={idx} className="bg-silver rounded-lg text-xs shadow-lg text-center p-1 min-w-[2rem] ">
           {tag}
         </div>
       ))}
